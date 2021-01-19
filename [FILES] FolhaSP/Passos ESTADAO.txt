@@ -1,0 +1,2 @@
+paywall-wrapper-iframe-estadao --> EXCLUIR
+html --> overflow: auto, width: auto, position: unset

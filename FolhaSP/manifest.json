@@ -1,0 +1,11 @@
+{
+    "manifest_version": 2,
+    "version": "1.0.3",
+    "name": "Quero Ler - Beta 3",
+    "description": "Notícias Ilimitadas no site Folha SP e Estadão",
+    "author": "Thomaz Ferreira Neves dos Santos",
+    "content_scripts": [{
+        "js":["js/script.js"],
+    "matches":["https://*.folha.uol.com.br/*", "https://*.estadao.com.br/*"]
+    }]
+}
