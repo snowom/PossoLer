@@ -6,7 +6,85 @@ if(currentURL.includes("folha.uol.com.br")){
 
 }else if(currentURL.includes("estadao.com.br")){
     modifyESTADAO();
+
+}else if(currentURL.includes("oglobo.globo.com")){
+    modifyGLOBO();
 }
+
+
+
+/* ====================== O GLOBO ================================ */
+
+function modifyGLOBO()
+{
+     let rotina = setInterval(()=>{
+         if(verificaComponentsGLOBO()){
+             clearInterval(rotina);
+             
+             let divNoticia = getNoticeBlock();
+
+             let rotinaVerificaBloqueio = setInterval(()=>{
+
+                if(verificaDivBloqueio()){
+                    clearInterval(rotinaVerificaBloqueio);
+                    removeBloqueioGLOBO();
+                    getFatherElement().appendChild(divNoticia);
+                }
+             }, 800);
+
+         }
+     }, 800)
+}
+
+
+function verificaComponentsGLOBO()
+{
+    if(document.querySelector(".article__content-container")!=null){
+        return true;
+    }
+
+    return false;
+}
+
+
+function getNoticeBlock()
+{
+    return document.querySelector('.article__content-container');
+}
+
+
+function verificaDivBloqueio()
+{
+    if(document.querySelector('.paywall-cpt')!=null){
+        return true
+    }
+
+    return false;
+}
+
+
+function removeBloqueioGLOBO()
+{
+    document.querySelector('.paywall-cpt').remove();
+    document.body.style.overflow = 'auto';
+    document.body.style.position = 'unset';
+}
+
+
+function getFatherElement()
+{
+    return document.querySelector('.article');
+}
+
+/* function getNativeCode()
+{
+    fetch(document.location.href)
+    .then(response => response.text())
+    .then(pageSource => {return pageSource})
+        //console.clear();
+        //console.log(pageSource);
+} */
+
 
 /* ====================== ESTADAO ================================ */
 
