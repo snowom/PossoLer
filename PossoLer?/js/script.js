@@ -10,7 +10,13 @@ if(currentURL.includes("folha.uol.com.br")){
 }else if(currentURL.includes("oglobo.globo.com")){
     modifyGLOBO();
 }
+else if(currentURL.includes("gazetadopovo.com.br")){
+    
+}
 
+
+
+/* ====================== GAZETA ================================= */
 
 
 /* ====================== O GLOBO ================================ */
@@ -22,13 +28,14 @@ function modifyGLOBO()
              clearInterval(rotina);
              
              let divNoticia = getNoticeBlock();
+             let elementoPai = getFatherElement();
 
              let rotinaVerificaBloqueio = setInterval(()=>{
 
                 if(verificaDivBloqueio()){
                     clearInterval(rotinaVerificaBloqueio);
                     removeBloqueioGLOBO();
-                    getFatherElement().appendChild(divNoticia);
+                    elementoPai.appendChild(divNoticia);
                 }
              }, 800);
 
@@ -65,9 +72,19 @@ function verificaDivBloqueio()
 
 function removeBloqueioGLOBO()
 {
+    //REMOVE ANUNCIO BLOQUEIO
     document.querySelector('.paywall-cpt').remove();
+
+    //PERMITE MOVIMENTAÇÃO DA PAGINA
     document.body.style.overflow = 'auto';
     document.body.style.position = 'unset';
+
+    //REMOVE FOOTER ANUNCIO
+    try{
+        document.querySelector('.banner-bottom-fixed-cpnt').remove();
+    }catch(erro){
+        console.log('ERRO AO REMOVER FOOTER = ' + erro);
+    }
 }
 
 
