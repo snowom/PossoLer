@@ -11,13 +11,68 @@ if(currentURL.includes("folha.uol.com.br")){
     modifyGLOBO();
 }
 else if(currentURL.includes("gazetadopovo.com.br")){
-    
+    modifyGAZETA();
 }
 
 
 
 /* ====================== GAZETA ================================= */
 
+function modifyGAZETA()
+{
+
+    fetch(document.location.href)
+    .then(response => response.text())
+    .then(pageSource => {
+
+        console.clear();
+
+        let blocoNoticia = new DOMParser().parseFromString(pageSource,"text/html").getElementById("tp-post-content");
+        let pai = getFatherElementGAZETA();
+
+        let rotina = setInterval(()=>{
+            if(verificaBloqueioGAZETA()){
+                clearInterval(rotina);
+    
+                removeBlockGAZETA();
+                document.getElementById("tp-post-content").remove();
+                pai.appendChild(blocoNoticia);
+                removeFooterGAZETA();
+            }
+        },800);
+    });
+}
+
+
+function verificaBloqueioGAZETA()
+{
+    console.log('LOOP BLOQUEIO')
+    return document.querySelector(".tp-container-inner")!=null ? true : false;
+}
+
+
+function getFatherElementGAZETA()
+{
+    console.log('LOOP GET FATHER')
+    return document.querySelector(".tpl-post");
+}
+
+
+function removeBlockGAZETA()
+{
+    document.querySelector(".tp-container-inner").remove();
+}
+
+
+function removeFooterGAZETA()
+{
+    let rotina = setInterval(()=>{
+        if(document.getElementById("d-pos-footer")!=null){
+            clearInterval(rotina);
+            document.getElementById("d-pos-footer").remove();
+        }
+    }, 800);
+}
 
 /* ====================== O GLOBO ================================ */
 
@@ -92,15 +147,6 @@ function getFatherElement()
 {
     return document.querySelector('.article');
 }
-
-/* function getNativeCode()
-{
-    fetch(document.location.href)
-    .then(response => response.text())
-    .then(pageSource => {return pageSource})
-        //console.clear();
-        //console.log(pageSource);
-} */
 
 
 /* ====================== ESTADAO ================================ */
