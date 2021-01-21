@@ -25,8 +25,6 @@ function modifyGAZETA()
     .then(response => response.text())
     .then(pageSource => {
 
-        console.clear();
-
         let blocoNoticia = new DOMParser().parseFromString(pageSource,"text/html").getElementById("tp-post-content");
         let pai = getFatherElementGAZETA();
 
@@ -46,14 +44,12 @@ function modifyGAZETA()
 
 function verificaBloqueioGAZETA()
 {
-    console.log('LOOP BLOQUEIO')
     return document.querySelector(".tp-container-inner")!=null ? true : false;
 }
 
 
 function getFatherElementGAZETA()
 {
-    console.log('LOOP GET FATHER')
     return document.querySelector(".tpl-post");
 }
 
@@ -73,6 +69,7 @@ function removeFooterGAZETA()
         }
     }, 800);
 }
+
 
 /* ====================== O GLOBO ================================ */
 
@@ -101,11 +98,7 @@ function modifyGLOBO()
 
 function verificaComponentsGLOBO()
 {
-    if(document.querySelector(".article__content-container")!=null){
-        return true;
-    }
-
-    return false;
+    return (document.querySelector(".article__content-container")!=null) ? true : false;
 }
 
 
@@ -117,11 +110,7 @@ function getNoticeBlock()
 
 function verificaDivBloqueio()
 {
-    if(document.querySelector('.paywall-cpt')!=null){
-        return true
-    }
-
-    return false;
+    return (document.querySelector('.paywall-cpt')!=null) ? true : false;
 }
 
 
@@ -164,11 +153,7 @@ function modifyESTADAO()
 
 function verificaComponentsEST()
 {
-    if(document.getElementById('paywall-wrapper-iframe-estadao') != null){
-        return true;
-    }
-
-    return false;
+    return (document.getElementById('paywall-wrapper-iframe-estadao') != null) ? true : false;
 }
 
 
@@ -195,11 +180,7 @@ function modifyFLSP()
 
 function verificaComponents()
 {
-    if(document.getElementById('paywall-flutuante') != null && document.getElementById('paywall-content') != null && document.getElementById('paywall-fill') != null){
-        return true;
-    }
-
-    return false;
+    return (document.getElementById('paywall-flutuante') != null && document.getElementById('paywall-content') != null && document.getElementById('paywall-fill') != null) ? true : false;
 }
 
 
