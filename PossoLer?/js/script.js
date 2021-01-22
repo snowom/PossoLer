@@ -26,15 +26,17 @@ function modifyGAZETA()
     .then(pageSource => {
 
         let blocoNoticia = new DOMParser().parseFromString(pageSource,"text/html").getElementById("tp-post-content");
-        let pai = getFatherElementGAZETA();
 
         let rotina = setInterval(()=>{
             if(verificaBloqueioGAZETA()){
                 clearInterval(rotina);
     
                 removeBlockGAZETA();
-                document.getElementById("tp-post-content").remove();
-                pai.appendChild(blocoNoticia);
+
+                if(getFatherElementGAZETA()){
+                    remountDivNoticiaGAZETA(blocoNoticia);
+                }
+
                 removeFooterGAZETA();
             }
         },800);
@@ -59,6 +61,11 @@ function removeBlockGAZETA()
     document.querySelector(".tp-container-inner").remove();
 }
 
+
+function remountDivNoticiaGAZETA(blocoNoticia)
+{
+    document.getElementById("tp-post-content").innerHTML = blocoNoticia.outerHTML;
+}
 
 function removeFooterGAZETA()
 {
