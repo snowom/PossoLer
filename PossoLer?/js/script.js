@@ -146,12 +146,13 @@ function getFatherElement()
 
 
 /* ====================== ESTADAO ================================ */
+var currentY;
 
 function modifyESTADAO()
 {
-    let rotina = setInterval(()=>{
-        if(verificaComponentsEST()){
-            clearInterval(rotina);
+    let u = setInterval(()=>{
+        if(verificaComponentsEST()===true){
+            clearInterval(u);
             removeBloqueioEST();
         }
     }, 800)
@@ -160,16 +161,26 @@ function modifyESTADAO()
 
 function verificaComponentsEST()
 {
-    return (document.getElementById('paywall-wrapper-iframe-estadao') != null) ? true : false;
+    return (document.getElementById('paywall-wrapper-iframe-estadao') != null) ? true : currentY = window.pageYOffset;
 }
 
 
 function removeBloqueioEST()
 {
+
     document.getElementById('paywall-wrapper-iframe-estadao').remove();
-    document.querySelector('html').style.overflow = 'auto';
-    document.querySelector('html').style.width = 'auto';
-    document.querySelector('html').style.position = 'unset';
+
+    let y = setInterval(()=>{
+        if(document.querySelector('html').style.overflow != 'auto'){
+            clearInterval(y);
+            document.querySelector('html').style.overflow = 'auto';
+            document.querySelector('html').style.width = 'auto';
+            document.querySelector('html').style.position = 'unset';
+            window.scrollTo(0,currentY);
+        }
+    },800);
+    
+    modifyESTADAO();
 }
 
 /* ====================== FOLHA DE SP ============================ */
