@@ -1,4 +1,0 @@
-PASSO A PASSO - O GLOBO
-
-paywall-cpt --> EXCLUIR
-body --> overflow: auto !important, position: unset !important
