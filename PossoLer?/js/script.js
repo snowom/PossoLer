@@ -83,11 +83,11 @@ function removeFooterGAZETA()
 function modifyGLOBO()
 {
      let rotina = setInterval(()=>{
-         if(verificaComponentsGLOBO()){
+         if(verificaComponentsGLOBO(".article__content-container")){
              clearInterval(rotina);
              
-             let divNoticia = getNoticeBlock();
-             let elementoPai = getFatherElement();
+             let divNoticia = getNoticeBlock('.article__content-container');
+             let elementoPai = getFatherElement('.article__content-container');
 
              let rotinaVerificaBloqueio = setInterval(()=>{
 
@@ -103,15 +103,15 @@ function modifyGLOBO()
 }
 
 
-function verificaComponentsGLOBO()
+function verificaComponentsGLOBO(elemento)
 {
-    return (document.querySelector(".article__content-container")!=null) ? true : false;
+    return (document.querySelector(elemento)!=null) ? true : false;
 }
 
 
-function getNoticeBlock()
+function getNoticeBlock(elemento)
 {
-    return document.querySelector('.article__content-container');
+    return document.querySelector(elemento);
 }
 
 
@@ -139,9 +139,9 @@ function removeBloqueioGLOBO()
 }
 
 
-function getFatherElement()
+function getFatherElement(elementoFilho)
 {
-    return document.querySelector('.article');
+    return document.querySelector(elementoFilho).parentElement;
 }
 
 
