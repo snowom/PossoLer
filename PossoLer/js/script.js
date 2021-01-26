@@ -1,3 +1,17 @@
+/* ====================== METODOS GLOBAIS ======================== */
+
+//Aqui estão todas as funções utilizadas em mais de um caso;
+
+
+function verificaElemento(elemento)
+{
+    return (document.querySelector(elemento)!=null) ? true : false;
+}
+
+/* ================================================================== */
+
+
+
 let currentURL = window.location.hostname;
 
 
@@ -13,8 +27,32 @@ if(currentURL.includes("folha.uol.com.br")){
 else if(currentURL.includes("gazetadopovo.com.br")){
     modifyGAZETA();
 }
+else if(currentURL.includes("super.abril.com.br")){
+    modifySUPINTERESSANTE();
+}
 
 
+
+
+/* ====================== SUPER INTERESSANTE ===================== */
+
+function modifySUPINTERESSANTE()
+{
+    let rotina = setInterval(()=>{
+        if(verificaElemento(".piano-offer-overlay") && verificaElemento("#piano_offer")){
+            clearInterval(rotina);
+            removeBloqueioSPRINTERESSANTE();
+        }
+    },800);
+}
+
+
+function removeBloqueioSPRINTERESSANTE()
+{
+    document.getElementById("piano_offer").remove();
+    document.querySelector(".piano-offer-overlay").remove();
+    document.body.classList.remove("disabledByPaywall");
+}
 
 /* ====================== GAZETA ================================= */
 
@@ -83,7 +121,7 @@ function removeFooterGAZETA()
 function modifyGLOBO()
 {
      let rotina = setInterval(()=>{
-         if(verificaComponentsGLOBO(".article__content-container")){
+         if(verificaElemento(".article__content-container")){
              clearInterval(rotina);
              
              let divNoticia = getNoticeBlock('.article__content-container');
@@ -91,7 +129,7 @@ function modifyGLOBO()
 
              let rotinaVerificaBloqueio = setInterval(()=>{
 
-                if(verificaDivBloqueio()){
+                if(verificaElemento('.paywall-cpt')){
                     clearInterval(rotinaVerificaBloqueio);
                     removeBloqueioGLOBO();
                     elementoPai.appendChild(divNoticia);
@@ -103,22 +141,11 @@ function modifyGLOBO()
 }
 
 
-function verificaComponentsGLOBO(elemento)
-{
-    return (document.querySelector(elemento)!=null) ? true : false;
-}
-
-
 function getNoticeBlock(elemento)
 {
     return document.querySelector(elemento);
 }
 
-
-function verificaDivBloqueio()
-{
-    return (document.querySelector('.paywall-cpt')!=null) ? true : false;
-}
 
 
 function removeBloqueioGLOBO()
