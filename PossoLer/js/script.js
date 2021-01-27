@@ -105,8 +105,8 @@ function removeBlur()
     let blurElements = document.querySelectorAll(".blur");
 
     for (let i=0; i<blurElements.length; i++){
-        blurElements[i].classList.remove("blur"); //Remove Classe blur de todos os elementos
-        blurElements[i].style.filter = 'none'; //Remove todos os filtros dos elementos
+        blurElements[i].classList.remove("blur");
+        blurElements[i].style.filter = 'none';
     }
 }
 
@@ -269,14 +269,12 @@ function getNoticeBlock(elemento)
 
 function removeBloqueioGLOBO()
 {
-    //REMOVE ANUNCIO BLOQUEIO
+
     document.querySelector('.paywall-cpt').remove();
 
-    //PERMITE MOVIMENTAÇÃO DA PAGINA
     document.body.style.overflow = 'auto';
     document.body.style.position = 'unset';
 
-    //REMOVE FOOTER ANUNCIO
     try{
         document.querySelector('.banner-bottom-fixed-cpnt').remove();
     }catch(erro){
