@@ -30,8 +30,14 @@ else if(currentURL.includes("gazetadopovo.com.br")){
 else if(currentURL.includes("super.abril.com.br")){
     modifySUPINTERESSANTE();
 }
-
-
+else if(currentURL.includes("quatrorodas.abril.com.br")){
+    // --> Usa mesmo bloquio da Super Interessante
+    modifySUPINTERESSANTE();
+}
+else if(currentURL.includes("veja.abril.com.br") || (currentURL.includes("vejasp.abril"))){
+    // --> Usa mesmo bloquio da Super Interessante
+    modifySUPINTERESSANTE();
+}
 
 
 /* ====================== SUPER INTERESSANTE ===================== */

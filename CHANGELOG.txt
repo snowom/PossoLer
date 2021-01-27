@@ -1,13 +1,16 @@
 v1.0.3  [19/01/2021]
 --> Versão Inicial;
-#Suporte ao Jornal Folha de São Paulo e Estadão
+# Suporte ao Jornal Folha de São Paulo;
+# Suporte ao Jornal Estadão;
 
 
-v1.0.4  [23/01/2021]
+v1.0.4  [26/01/2021]
 # Adicionado Jornal Gazeta do Povo;
 # Adicionado Jornal O Globo;
 # Correção Scroll Infinito Jornal Estadão;
 
 
 v1.0.5 [??/??/????]
-# Adicionado Revista SuperInteressante;
+# Adicionado SuperInteressante;
+# Adicionado Quatro Rodas;
+# Adicionado VEJA;
