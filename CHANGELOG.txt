@@ -10,7 +10,7 @@ v1.0.4  [26/01/2021]
 # Correção Scroll Infinito Jornal Estadão;
 
 
-v1.0.5 [??/??/????]
+v1.0.5 [27/01/2021]
 # Adicionado SuperInteressante;
 # Adicionado Quatro Rodas;
 # Adicionado VEJA;
