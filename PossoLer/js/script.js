@@ -48,16 +48,33 @@ else if(currentURL.includes("respondeai.com.br")){
 function modifyRESPAI()
 {
 
-    fetch(document.location.href)
+    window.addEventListener('load', ()=>{
+
+        const TIMEOUT = 3000;
+
+        setTimeout(()=>{
+            let codigoSemBloqueio = document.querySelector("html");
+            let scripts = codigoSemBloqueio.querySelectorAll("script");
+
+            removeScriptObserver(scripts, codigoSemBloqueio);
+        },TIMEOUT);
+        
+    });
+
+    /* fetch(document.location.href)
     .then(response => response.text())
     .then(pageSource => {
 
+        console.clear();
+        console.log(pageSource);
         let codigoSemBloqueio = new DOMParser().parseFromString(pageSource, "text/html");
         let scripts = codigoSemBloqueio.querySelectorAll("script");
 
         removeScriptObserver(scripts, codigoSemBloqueio);
 
-    });
+        //.documentElement
+
+    }); */
 }
 
 
@@ -79,7 +96,7 @@ function removeScriptObserver(s, codigoSemBloqueio)
 
 function remountPage(elemento, codigoBase)
 {
-    document.querySelector(elemento).innerHTML = codigoBase.documentElement.outerHTML;
+    document.querySelector(elemento).innerHTML = codigoBase.outerHTML;
 }
 
 
