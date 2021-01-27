@@ -73,6 +73,7 @@ function removeScriptObserver(s, codigoSemBloqueio)
 
     removeBlur();
     removeAllBtnShowSolucao();
+    removeBloqueioTeoria();
 }
 
 
@@ -105,6 +106,31 @@ function removeAllBtnShowSolucao()
         let btns = document.querySelectorAll(".exercise-theory-expand-button");
         for(let i=0; i<btns.length; i++){
             btns[i].remove();
+        }
+    }
+}
+
+
+function removeBloqueioTeoria()
+{
+    let elementosPaywall = document.querySelectorAll(".paywall");
+    if(elementosPaywall.length>0){
+        for(let i=0; i<elementosPaywall.length; i++){
+            elementosPaywall[i].classList.remove("paywall");
+        }
+    }
+
+    let elementosTheory = document.querySelectorAll(".theory-container");
+    if(elementosTheory.length>0){
+        for(let i=0; i<elementosTheory.length; i++){
+            elementosTheory[i].classList.remove("theory-container");
+        }
+    }
+
+    let btnExpandir = document.querySelectorAll(".expand-overlay");
+    if(btnExpandir.length>0){
+        for(let i=0; i<btnExpandir.length; i++){
+            btnExpandir[i].remove();
         }
     }
 }
