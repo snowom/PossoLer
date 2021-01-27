@@ -38,6 +38,76 @@ else if(currentURL.includes("veja.abril.com.br") || (currentURL.includes("vejasp
     // --> Usa mesmo bloquio da Super Interessante
     modifySUPINTERESSANTE();
 }
+else if(currentURL.includes("respondeai.com.br")){
+    modifyRESPAI();
+}
+
+
+/* ====================== RESPONDE AI ===========================  */
+
+function modifyRESPAI()
+{
+
+    fetch(document.location.href)
+    .then(response => response.text())
+    .then(pageSource => {
+
+        let codigoSemBloqueio = new DOMParser().parseFromString(pageSource, "text/html");
+        let scripts = codigoSemBloqueio.querySelectorAll("script");
+
+        removeScriptObserver(scripts, codigoSemBloqueio);
+
+    });
+}
+
+
+function removeScriptObserver(s, codigoSemBloqueio)
+{
+    for(let i=0; i<s.length; i++){
+        if(s[i].textContent.includes(`new MutationObserver((changes)`)){
+            s[i].remove();
+            remountPage("html", codigoSemBloqueio);
+            break;
+        }
+    }
+
+    removeBlur();
+    removeAllBtnShowSolucao();
+}
+
+
+function remountPage(elemento, codigoBase)
+{
+    document.querySelector(elemento).innerHTML = codigoBase.documentElement.outerHTML;
+}
+
+
+function removeBlur()
+{
+    let blurElements = document.querySelectorAll(".blur");
+
+    for (let i=0; i<blurElements.length; i++){
+        blurElements[i].classList.remove("blur"); //Remove Classe blur de todos os elementos
+        blurElements[i].style.filter = 'none'; //Remove todos os filtros dos elementos
+    }
+}
+
+
+function removeAllBtnShowSolucao()
+{
+    let btnSolucaoCompleta = document.querySelectorAll("#exercise-expand-button");
+    if(btnSolucaoCompleta.length>0){
+        for(let i=0; i<btnSolucaoCompleta.length; i++){
+            btnSolucaoCompleta[i].remove();
+        }
+    }
+    else{
+        let btns = document.querySelectorAll(".exercise-theory-expand-button");
+        for(let i=0; i<btns.length; i++){
+            btns[i].remove();
+        }
+    }
+}
 
 
 /* ====================== SUPER INTERESSANTE ===================== */
