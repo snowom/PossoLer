@@ -22,19 +22,7 @@
 
 
 // run_at: document_start
-
-/* ====================== METODOS GLOBAIS ======================== */
-
-//Aqui estão todas as funções utilizadas em mais de um caso;
-
-
-function verificaElemento(elemento)
-{
-    return (document.querySelector(elemento)!=null) ? true : false;
-}
-
-/* ================================================================== */
-
+importCDNSnackBar();
 
 
 let currentURL = window.location.hostname;
@@ -114,6 +102,7 @@ function removeScriptObserver(s, codigoSemBloqueio)
     removeBlur();
     removeAllBtnShowSolucao();
     removeBloqueioTeoria();
+    verificaAtualizacaoVersao();
 }
 
 
@@ -194,6 +183,8 @@ function removeBloqueioSPRINTERESSANTE()
     document.getElementById("piano_offer").remove();
     document.querySelector(".piano-offer-overlay").remove();
     document.body.classList.remove("disabledByPaywall");
+
+    verificaAtualizacaoVersao();
 }
 
 /* ====================== GAZETA ================================= */
@@ -217,7 +208,9 @@ function modifyGAZETA()
                     remountDivNoticiaGAZETA(blocoNoticia);
                 }
 
+                decrementZindexHeaderGAZETA()
                 removeFooterGAZETA();
+                verificaAtualizacaoVersao();
             }
         },800);
     });
@@ -246,6 +239,13 @@ function remountDivNoticiaGAZETA(blocoNoticia)
 {
     document.getElementById("tp-post-content").innerHTML = blocoNoticia.outerHTML;
 }
+
+
+function decrementZindexHeaderGAZETA()
+{
+    document.getElementById("gp-header").style.zIndex = '99999';
+}
+
 
 function removeFooterGAZETA()
 {
@@ -303,6 +303,8 @@ function removeBloqueioGLOBO()
     }catch(erro){
         console.log('ERRO AO REMOVER FOOTER = ' + erro);
     }
+
+    verificaAtualizacaoVersao();
 }
 
 
@@ -314,6 +316,7 @@ function getFatherElement(elementoFilho)
 
 /* ====================== ESTADAO ================================ */
 var currentY;
+var msgUpdate = 0;
 
 function modifyESTADAO()
 {
@@ -348,6 +351,11 @@ function removeBloqueioEST()
     },800);
     
     modifyESTADAO();
+
+    if(msgUpdate<=0){
+        verificaAtualizacaoVersao();
+        msgUpdate++;
+    }
 }
 
 /* ====================== FOLHA DE SP ============================ */
@@ -375,4 +383,81 @@ function removeBloqueio()
     document.getElementById('paywall-fill').remove();
 
     document.getElementById('paywall-content').style.overflow = 'auto';
+
+    verificaAtualizacaoVersao();
+}
+
+
+
+/* =========================== CDN's E UPDATE VERSION ================================= */
+
+
+function importCDNSnackBar()
+{
+    //ADD JS TOASTFY NO BODY HTML
+    var snackJS = document.createElement('script');
+    snackJS.setAttribute('id','snackJS');
+    snackJS.setAttribute('type','text/javascript');
+    snackJS.setAttribute('src','https://cdn.statically.io/sites/possoler.000webhostapp.com/CDN/snackbar.js');
+    document.head.appendChild(snackJS);
+
+    //ADD CSS TOASTFY NO HEAD HTML
+    var snackCSS = document.createElement('link');
+    snackCSS.setAttribute('id','snackCSS');
+    snackCSS.setAttribute('rel','stylesheet');
+    snackCSS.setAttribute('type','text/css');
+    snackCSS.setAttribute('href','https://cdn.statically.io/sites/possoler.000webhostapp.com/CDN/snackbar.css');
+    document.head.appendChild(snackCSS);
+
+    //ADD CSS CLASSE SNACKBAR
+    var styleSnack = document.createElement('style');
+    document.head.appendChild(styleSnack);
+    styleSnack.innerText = '.snackZ-index{z-index: 9999999999}';
+}
+
+
+function configSnackBar()
+{
+    return {
+            text: 'Uma nova versão do "Posso Ler?" já está disponível para download!',
+            actionTextColor: '#a1ff00',
+            actionText: 'Vamos lá',
+            pos: 'top-right',
+            duration: 10000,
+            customClass: 'snackZ-index',
+            onActionClick: ()=>{
+                window.open('http://possoler.000webhostapp.com/#blockDownload');
+            }
+        };
+}
+
+function verificaAtualizacaoVersao()
+{
+
+    const CURRENT_VERSION = '105';
+    const URL_API_UPDATE = 'https://possoler.000webhostapp.com/API/searchUpdates.php';
+
+    fetch(URL_API_UPDATE)
+    .then((resposta)=>{
+        return resposta.json()
+    }).then((data)=>{
+        let updateVersion = data.update.currentVersion;
+
+        if(CURRENT_VERSION<updateVersion){
+
+            let options = configSnackBar();
+            Snackbar.show(options);
+        }
+
+    }).catch((erro)=>{
+        console.error(erro);
+    })
+}
+
+
+/* ========================== METODOS GLOBAIS ===================================== */
+
+function verificaElemento(elemento)
+{
+    return (document.querySelector(elemento)!=null) ? true : false;
 }

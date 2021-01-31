@@ -1,15 +1,7 @@
-/* ====================== METODOS GLOBAIS ======================== */
-
-//Aqui estão todas as funções utilizadas em mais de um caso;
-
-
 function verificaElemento(elemento)
 {
     return (document.querySelector(elemento)!=null) ? true : false;
 }
-
-/* ================================================================== */
-
 
 
 let currentURL = window.location.hostname;
@@ -350,4 +342,12 @@ function removeBloqueio()
     document.getElementById('paywall-fill').remove();
 
     document.getElementById('paywall-content').style.overflow = 'auto';
+
+    setTimeout(()=>{
+        try{
+            verificaAtualizacaoVersao();
+        }catch(erro){
+            alert(erro);
+        }
+    },5000)
 }
