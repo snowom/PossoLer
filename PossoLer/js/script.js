@@ -75,7 +75,6 @@ function removeScriptObserver(s, codigoSemBloqueio)
     removeBlur();
     removeAllBtnShowSolucao();
     removeBloqueioTeoria();
-    verificaAtualizacaoVersao();
 }
 
 
@@ -156,8 +155,6 @@ function removeBloqueioSPRINTERESSANTE()
     document.getElementById("piano_offer").remove();
     document.querySelector(".piano-offer-overlay").remove();
     document.body.classList.remove("disabledByPaywall");
-
-    verificaAtualizacaoVersao();
 }
 
 /* ====================== GAZETA ================================= */
@@ -183,7 +180,6 @@ function modifyGAZETA()
 
                 decrementZindexHeaderGAZETA()
                 removeFooterGAZETA();
-                verificaAtualizacaoVersao();
             }
         },800);
     });
@@ -276,8 +272,6 @@ function removeBloqueioGLOBO()
     }catch(erro){
         console.log('ERRO AO REMOVER FOOTER = ' + erro);
     }
-
-    verificaAtualizacaoVersao();
 }
 
 
@@ -324,11 +318,6 @@ function removeBloqueioEST()
     },800);
     
     modifyESTADAO();
-
-    if(msgUpdate<=0){
-        verificaAtualizacaoVersao();
-        msgUpdate++;
-    }
 }
 
 /* ====================== FOLHA DE SP ============================ */
@@ -356,8 +345,6 @@ function removeBloqueio()
     document.getElementById('paywall-fill').remove();
 
     document.getElementById('paywall-content').style.overflow = 'auto';
-
-    verificaAtualizacaoVersao();
 }
 
 
