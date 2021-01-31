@@ -4,8 +4,8 @@
 // @version      1.0.5
 // @description  Tenha acesso a notícias ilimitadas de forma gratuita e segura
 // @author       Thomaz Ferreira Neves dos Santos
-// @supportURL   ?????
-// @icon         ???
+// @supportURL   http://possoler.000webhostapp.com/
+// @icon         http://possoler.000webhostapp.com/img/128.png
 // Atenção:      Caso algum site não funcione logo após a instalação, limpe o cache do navegador.
 // @match        *://*.folha.uol.com.br/*
 // @match        *://*.estadao.com.br/*
