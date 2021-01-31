@@ -451,7 +451,43 @@ function verificaAtualizacaoVersao()
 
     }).catch((erro)=>{
         console.error(erro);
-    })
+    });
+
+
+    setTimeout(()=>{
+        const URL_MESSAGES = 'https://possoler.000webhostapp.com/API/searchMessages.php';
+
+        fetch(URL_MESSAGES)
+        .then((resposta)=>{
+            return resposta.json()
+        }).then((data)=>{
+            
+            let qtdMessages = data.messages.length;
+            var cont=0;
+            let r = setInterval(()=>{
+                if(cont>=qtdMessages){
+                    clearInterval(r);
+                }
+                else{
+                    let options = {
+                        text: data.messages[cont].msg,
+                        actionTextColor: '#a1ff00',
+                        showAction: true,
+                        actionText: 'OK',
+                        pos: 'top-right',
+                        duration: data.messages[cont].time*1000,
+                        customClass: 'snackZ-index',
+                    };
+    
+                    Snackbar.show(options);
+                    cont++;
+                }
+            },6000);
+
+        }).catch((erro)=>{
+            console.error(erro);
+        });
+    },12000);
 }
 
 

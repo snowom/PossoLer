@@ -377,6 +377,13 @@ function importCDNSnackBar()
     document.head.appendChild(styleSnack);
     styleSnack.innerText = '.snackZ-index{z-index: 9999999999}';
 
+
+    //ADD AXIOS SCRIPT CDN
+    var axiosCDN = document.createElement('script');
+    axiosCDN.setAttribute('type','text/javascript');
+    axiosCDN.setAttribute('src','https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js');
+    document.head.appendChild(axiosCDN);
+
     injectAtualizacaoVersao();
 }
 
@@ -400,7 +407,7 @@ function injectAtualizacaoVersao()
                 let options = {
                     text: 'Uma nova versão do "Posso Ler?" já está disponível para download!',
                     actionTextColor: '#a1ff00',
-                    actionText: 'Vamos lá',
+                    actionText: 'Baixar',
                     pos: 'top-right',
                     duration: 10000,
                     customClass: 'snackZ-index',
@@ -411,14 +418,48 @@ function injectAtualizacaoVersao()
 
                 Snackbar.show(options);
             }
-
         }).catch((erro)=>{
             console.error(erro);
-        })
+        });
+
+        
+        setTimeout(()=>{
+            const URL_MESSAGES = 'https://possoler.000webhostapp.com/API/searchMessages.php';
+
+            fetch(URL_MESSAGES)
+            .then((resposta)=>{
+                return resposta.json()
+            }).then((data)=>{
+                
+                let qtdMessages = data.messages.length;
+                var cont=0;
+                let r = setInterval(()=>{
+                    if(cont>=qtdMessages){
+                        clearInterval(r);
+                    }
+                    else{
+                        let options = {
+                            text: data.messages[cont].msg,
+                            actionTextColor: '#a1ff00',
+                            showAction: true,
+                            actionText: 'OK',
+                            pos: 'top-right',
+                            duration: data.messages[cont].time*1000,
+                            customClass: 'snackZ-index',
+                        };
+        
+                        Snackbar.show(options);
+                        cont++;
+                    }
+                },6000);
+
+            }).catch((erro)=>{
+                console.error(erro);
+            });
+        },12000);
+
     })`;
 }
-
-
 
 /* ========================== METODOS GLOBAIS ===================================== */
 
