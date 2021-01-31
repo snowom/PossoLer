@@ -1,9 +1,3 @@
-function verificaElemento(elemento)
-{
-    return (document.querySelector(elemento)!=null) ? true : false;
-}
-
-
 let currentURL = window.location.hostname;
 
 
@@ -81,6 +75,7 @@ function removeScriptObserver(s, codigoSemBloqueio)
     removeBlur();
     removeAllBtnShowSolucao();
     removeBloqueioTeoria();
+    verificaAtualizacaoVersao();
 }
 
 
@@ -161,6 +156,8 @@ function removeBloqueioSPRINTERESSANTE()
     document.getElementById("piano_offer").remove();
     document.querySelector(".piano-offer-overlay").remove();
     document.body.classList.remove("disabledByPaywall");
+
+    verificaAtualizacaoVersao();
 }
 
 /* ====================== GAZETA ================================= */
@@ -184,7 +181,9 @@ function modifyGAZETA()
                     remountDivNoticiaGAZETA(blocoNoticia);
                 }
 
+                decrementZindexHeaderGAZETA()
                 removeFooterGAZETA();
+                verificaAtualizacaoVersao();
             }
         },800);
     });
@@ -213,6 +212,13 @@ function remountDivNoticiaGAZETA(blocoNoticia)
 {
     document.getElementById("tp-post-content").innerHTML = blocoNoticia.outerHTML;
 }
+
+
+function decrementZindexHeaderGAZETA()
+{
+    document.getElementById("gp-header").style.zIndex = '99999';
+}
+
 
 function removeFooterGAZETA()
 {
@@ -270,6 +276,8 @@ function removeBloqueioGLOBO()
     }catch(erro){
         console.log('ERRO AO REMOVER FOOTER = ' + erro);
     }
+
+    verificaAtualizacaoVersao();
 }
 
 
@@ -281,6 +289,7 @@ function getFatherElement(elementoFilho)
 
 /* ====================== ESTADAO ================================ */
 var currentY;
+var msgUpdate = 0;
 
 function modifyESTADAO()
 {
@@ -315,6 +324,11 @@ function removeBloqueioEST()
     },800);
     
     modifyESTADAO();
+
+    if(msgUpdate<=0){
+        verificaAtualizacaoVersao();
+        msgUpdate++;
+    }
 }
 
 /* ====================== FOLHA DE SP ============================ */
@@ -343,11 +357,13 @@ function removeBloqueio()
 
     document.getElementById('paywall-content').style.overflow = 'auto';
 
-    setTimeout(()=>{
-        try{
-            verificaAtualizacaoVersao();
-        }catch(erro){
-            alert(erro);
-        }
-    },5000)
+    verificaAtualizacaoVersao();
+}
+
+
+/* ========================== METODOS GLOBAIS ===================================== */
+
+function verificaElemento(elemento)
+{
+    return (document.querySelector(elemento)!=null) ? true : false;
 }
