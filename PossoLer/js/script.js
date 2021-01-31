@@ -1,3 +1,7 @@
+const EXTENSION_VERSION = '105';
+importCDNSnackBar();
+
+
 let currentURL = window.location.hostname;
 
 
@@ -346,6 +350,74 @@ function removeBloqueio()
 
     document.getElementById('paywall-content').style.overflow = 'auto';
 }
+
+
+/* =========================== CDN's E UPDATE VERSION ================================= */
+
+
+function importCDNSnackBar()
+{
+    //ADD JS TOASTFY NO BODY HTML
+    var snackJS = document.createElement('script');
+    snackJS.setAttribute('id','snackJS');
+    snackJS.setAttribute('type','text/javascript');
+    snackJS.setAttribute('src','https://cdn.statically.io/sites/possoler.000webhostapp.com/CDN/snackbar.js');
+    document.head.appendChild(snackJS);
+
+    //ADD CSS TOASTFY NO HEAD HTML
+    var snackCSS = document.createElement('link');
+    snackCSS.setAttribute('id','snackCSS');
+    snackCSS.setAttribute('rel','stylesheet');
+    snackCSS.setAttribute('type','text/css');
+    snackCSS.setAttribute('href','https://cdn.statically.io/sites/possoler.000webhostapp.com/CDN/snackbar.css');
+    document.head.appendChild(snackCSS);
+
+    //ADD CSS CLASSE SNACKBAR
+    var styleSnack = document.createElement('style');
+    document.head.appendChild(styleSnack);
+    styleSnack.innerText = '.snackZ-index{z-index: 9999999999}';
+
+    injectAtualizacaoVersao();
+}
+
+
+function injectAtualizacaoVersao()
+{
+    let s = document.createElement('script');
+    document.head.appendChild(s); 
+    s.innerText = `window.addEventListener('load',()=>{
+        const CURRENT_VERSION = ${EXTENSION_VERSION};
+        const URL_API_UPDATE = 'https://possoler.000webhostapp.com/API/searchUpdates.php';
+
+        fetch(URL_API_UPDATE)
+        .then((resposta)=>{
+            return resposta.json()
+        }).then((data)=>{
+            let updateVersion = data.update.currentVersion;
+
+            if(CURRENT_VERSION<updateVersion){
+
+                let options = {
+                    text: 'Uma nova versão do "Posso Ler?" já está disponível para download!',
+                    actionTextColor: '#a1ff00',
+                    actionText: 'Vamos lá',
+                    pos: 'top-right',
+                    duration: 10000,
+                    customClass: 'snackZ-index',
+                    onActionClick: ()=>{
+                        window.open('http://possoler.000webhostapp.com/#blockDownload');
+                    }
+                };
+
+                Snackbar.show(options);
+            }
+
+        }).catch((erro)=>{
+            console.error(erro);
+        })
+    })`;
+}
+
 
 
 /* ========================== METODOS GLOBAIS ===================================== */
