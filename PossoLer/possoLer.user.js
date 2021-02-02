@@ -4,8 +4,8 @@
 // @version      1.0.5
 // @description  Tenha acesso a notícias ilimitadas de forma gratuita e segura
 // @author       Thomaz Ferreira Neves dos Santos
-// @supportURL   http://possoler.000webhostapp.com/
-// @icon         http://possoler.000webhostapp.com/img/128.png
+// @supportURL   https://possoler.tech/
+// @icon         https://possoler.tech/img/128.png
 // Atenção:      Caso algum site não funcione logo após a instalação, limpe o cache do navegador.
 // @match        *://*.folha.uol.com.br/*
 // @match        *://*.estadao.com.br/*
@@ -419,7 +419,7 @@ function importCDNSnackBar()
     var snackJS = document.createElement('script');
     snackJS.setAttribute('id','snackJS');
     snackJS.setAttribute('type','text/javascript');
-    snackJS.setAttribute('src','https://cdn.statically.io/sites/possoler.000webhostapp.com/CDN/snackbar.js');
+    snackJS.setAttribute('src','https://possoler.tech/CDN/snackbar.js');
     document.head.appendChild(snackJS);
 
     //ADD CSS TOASTFY NO HEAD HTML
@@ -427,13 +427,20 @@ function importCDNSnackBar()
     snackCSS.setAttribute('id','snackCSS');
     snackCSS.setAttribute('rel','stylesheet');
     snackCSS.setAttribute('type','text/css');
-    snackCSS.setAttribute('href','https://cdn.statically.io/sites/possoler.000webhostapp.com/CDN/snackbar.css');
+    snackCSS.setAttribute('href','https://possoler.tech/CDN/snackbar.css');
     document.head.appendChild(snackCSS);
 
     //ADD CSS CLASSE SNACKBAR
     var styleSnack = document.createElement('style');
     document.head.appendChild(styleSnack);
     styleSnack.innerText = '.snackZ-index{z-index: 9999999999}';
+
+    //ADD AXIOS JS
+    var axiosJS = document.createElement('script');
+    axiosJS.setAttribute('id','axiosJS');
+    axiosJS.setAttribute('type','text/javascript');
+    axiosJS.setAttribute('src','https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js');
+    document.head.appendChild(axiosJS);
 }
 
 
@@ -447,7 +454,7 @@ function configSnackBar()
             duration: 10000,
             customClass: 'snackZ-index',
             onActionClick: ()=>{
-                window.open('http://possoler.000webhostapp.com/#blockDownload');
+                window.open('https://possoler.tech/#blockDownload');
             }
         };
 }
@@ -456,34 +463,35 @@ function verificaAtualizacaoVersao()
 {
 
     const CURRENT_VERSION = '105';
-    const URL_API_UPDATE = 'https://possoler.000webhostapp.com/API/searchUpdates.php';
+    const URL_API_UPDATE = 'https://possoler.tech/API/searchUpdates.php';
 
-    fetch(URL_API_UPDATE)
-    .then((resposta)=>{
-        return resposta.json()
-    }).then((data)=>{
-        let updateVersion = data.update.currentVersion;
+    axios({
+        method: 'get',
+        url: URL_API_UPDATE,
+        timeout: 10000,
+    }).then((resposta)=>{
+        let updateVersion = resposta.data.update.currentVersion;
 
         if(CURRENT_VERSION<updateVersion){
 
             let options = configSnackBar();
             Snackbar.show(options);
         }
-
     }).catch((erro)=>{
         console.error(erro);
     });
 
 
     setTimeout(()=>{
-        const URL_MESSAGES = 'https://possoler.000webhostapp.com/API/searchMessages.php';
+        const URL_MESSAGES = 'https://possoler.tech/API/searchMessages.php';
 
-        fetch(URL_MESSAGES)
-        .then((resposta)=>{
-            return resposta.json()
-        }).then((data)=>{
-            
-            let qtdMessages = data.messages.length;
+        axios({
+            method: 'get',
+            url: URL_MESSAGES,
+            timeout: 10000,
+        }).then((resposta)=>{
+
+            let qtdMessages = resposta.data.messages.length;
             var cont=0;
             let r = setInterval(()=>{
                 if(cont>=qtdMessages){
@@ -491,12 +499,12 @@ function verificaAtualizacaoVersao()
                 }
                 else{
                     let options = {
-                        text: data.messages[cont].msg,
+                        text: resposta.data.messages[cont].msg,
                         actionTextColor: '#a1ff00',
                         showAction: true,
                         actionText: 'OK',
                         pos: 'top-right',
-                        duration: data.messages[cont].time*1000,
+                        duration: resposta.data.messages[cont].time*1000,
                         customClass: 'snackZ-index',
                     };
     
@@ -504,7 +512,6 @@ function verificaAtualizacaoVersao()
                     cont++;
                 }
             },6000);
-
         }).catch((erro)=>{
             console.error(erro);
         });

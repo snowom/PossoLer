@@ -382,7 +382,7 @@ function importCDNSnackBar()
     var snackJS = document.createElement('script');
     snackJS.setAttribute('id','snackJS');
     snackJS.setAttribute('type','text/javascript');
-    snackJS.setAttribute('src','https://cdn.statically.io/sites/possoler.000webhostapp.com/CDN/snackbar.js');
+    snackJS.setAttribute('src','https://possoler.tech/CDN/snackbar.js');
     document.head.appendChild(snackJS);
 
     //ADD CSS TOASTFY NO HEAD HTML
@@ -390,7 +390,7 @@ function importCDNSnackBar()
     snackCSS.setAttribute('id','snackCSS');
     snackCSS.setAttribute('rel','stylesheet');
     snackCSS.setAttribute('type','text/css');
-    snackCSS.setAttribute('href','https://cdn.statically.io/sites/possoler.000webhostapp.com/CDN/snackbar.css');
+    snackCSS.setAttribute('href','https://possoler.tech/CDN/snackbar.css');
     document.head.appendChild(snackCSS);
 
     //ADD CSS CLASSE SNACKBAR
@@ -415,69 +415,70 @@ function injectAtualizacaoVersao()
     document.head.appendChild(s); 
     s.innerText = `window.addEventListener('load',()=>{
         const CURRENT_VERSION = ${EXTENSION_VERSION};
-        const URL_API_UPDATE = 'https://possoler.000webhostapp.com/API/searchUpdates.php';
+        const URL_API_UPDATE = 'https://possoler.tech/API/searchUpdates.php';
 
-        fetch(URL_API_UPDATE)
-        .then((resposta)=>{
-            return resposta.json()
-        }).then((data)=>{
-            let updateVersion = data.update.currentVersion;
-
-            if(CURRENT_VERSION<updateVersion){
-
-                let options = {
-                    text: 'Uma nova versão do "Posso Ler?" já está disponível para download!',
-                    actionTextColor: '#a1ff00',
-                    actionText: 'Baixar',
-                    pos: 'top-right',
-                    duration: 10000,
-                    customClass: 'snackZ-index',
-                    onActionClick: ()=>{
-                        window.open('http://possoler.000webhostapp.com/#blockDownload');
-                    }
-                };
-
-                Snackbar.show(options);
-            }
-        }).catch((erro)=>{
-            console.error(erro);
-        });
-
+            axios({
+                method: 'get',
+                url: URL_API_UPDATE,
+                timeout: 10000,
+            }).then((resposta)=>{
+                let updateVersion = resposta.data.update.currentVersion;
         
-        setTimeout(()=>{
-            const URL_MESSAGES = 'https://possoler.000webhostapp.com/API/searchMessages.php';
+                if(CURRENT_VERSION<updateVersion){
 
-            fetch(URL_MESSAGES)
-            .then((resposta)=>{
-                return resposta.json()
-            }).then((data)=>{
-                
-                let qtdMessages = data.messages.length;
-                var cont=0;
-                let r = setInterval(()=>{
-                    if(cont>=qtdMessages){
-                        clearInterval(r);
-                    }
-                    else{
-                        let options = {
-                            text: data.messages[cont].msg,
-                            actionTextColor: '#a1ff00',
-                            showAction: true,
-                            actionText: 'OK',
-                            pos: 'top-right',
-                            duration: data.messages[cont].time*1000,
-                            customClass: 'snackZ-index',
-                        };
+                    let options = {
+                        text: 'Uma nova versão do "Posso Ler?" já está disponível para download!',
+                        actionTextColor: '#a1ff00',
+                        actionText: 'Baixar',
+                        pos: 'top-right',
+                        duration: 10000,
+                        customClass: 'snackZ-index',
+                        onActionClick: ()=>{
+                            window.open('https://possoler.tech/#blockDownload');
+                        }
+                    };
         
-                        Snackbar.show(options);
-                        cont++;
-                    }
-                },6000);
-
+                    Snackbar.show(options);
+                }
             }).catch((erro)=>{
                 console.error(erro);
             });
-        },12000);
+        
+        
+            setTimeout(()=>{
+                const URL_MESSAGES = 'https://possoler.tech/API/searchMessages.php';
+        
+                axios({
+                    method: 'get',
+                    url: URL_MESSAGES,
+                    timeout: 10000,
+                }).then((resposta)=>{
+        
+                    let qtdMessages = resposta.data.messages.length;
+                    var cont=0;
+                    let r = setInterval(()=>{
+                        if(cont>=qtdMessages){
+                            clearInterval(r);
+                        }
+                        else{
+                            let options = {
+                                text: resposta.data.messages[cont].msg,
+                                actionTextColor: '#a1ff00',
+                                showAction: true,
+                                actionText: 'OK',
+                                pos: 'top-right',
+                                duration: resposta.data.messages[cont].time*1000,
+                                customClass: 'snackZ-index',
+                            };
+            
+                            Snackbar.show(options);
+                            cont++;
+                        }
+                    },6000);
+                }).catch((erro)=>{
+                    console.error(erro);
+                });
+            },12000);
 
     })`;
 }
