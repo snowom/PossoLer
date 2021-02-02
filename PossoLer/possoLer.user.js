@@ -99,16 +99,37 @@ function removeScriptObserver(s, codigoSemBloqueio)
         }
     }
 
+    removeHeaderLogin();
     removeBlur();
     removeAllBtnShowSolucao();
     removeBloqueioTeoria();
     verificaAtualizacaoVersao();
+
+    //LOOP Para remover bloqueios caso haja atualização dos iframes
+    setInterval(()=>{
+        removeHeaderLogin();
+        removeBlur();
+        removeAllBtnShowSolucao();
+        removeBloqueioTeoria();
+    },800);
 }
 
 
 function remountPage(elemento, codigoBase)
 {
     document.querySelector(elemento).innerHTML = codigoBase.outerHTML;
+}
+
+
+function removeHeaderLogin()
+{
+    let header = document.querySelectorAll(".global_menu__fixed_header");
+    
+    if(header.length>0){
+        for(let i=0; i<header.length; i++){
+            header[i].remove();
+        }
+    }
 }
 
 
