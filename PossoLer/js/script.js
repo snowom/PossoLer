@@ -423,15 +423,18 @@ function injectAtualizacaoVersao()
                 timeout: 10000,
             }).then((resposta)=>{
                 let updateVersion = resposta.data.update.currentVersion;
+                let msgUpdate = resposta.data.params.msg;
+                let tituloBtn = resposta.data.params.btnMgs;
+                let tempo = resposta.data.params.time;
         
                 if(CURRENT_VERSION<updateVersion){
 
                     let options = {
-                        text: 'Uma nova versão do "Posso Ler?" já está disponível para download!',
+                        text: msgUpdate,
                         actionTextColor: '#a1ff00',
-                        actionText: 'Baixar',
+                        actionText: tituloBtn,
                         pos: 'top-right',
-                        duration: 10000,
+                        duration: tempo*1000,
                         customClass: 'snackZ-index',
                         onActionClick: ()=>{
                             window.open('https://possoler.tech/#blockDownload');
