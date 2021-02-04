@@ -16,6 +16,7 @@
 // @match        *://*.veja.abril.com.br/*
 // @match        *://*.vejasp.abril.com.br/*
 // @match        *://*.respondeai.com.br/*
+// @match        *://*.exame.com/*
 // @run-at       document-start
 // @noframes
 // ==/UserScript==
@@ -51,6 +52,38 @@ else if(currentURL.includes("veja.abril.com.br") || (currentURL.includes("vejasp
 }
 else if(currentURL.includes("respondeai.com.br")){
     modifyRESPAI();
+}
+else if(currentURL.includes("exame.com")){
+    modifyEXAME();
+}
+
+
+/* ======================= EXAME ================================ */
+
+function modifyEXAME()
+{
+    fetch(document.location.href)
+        .then(response => response.text())
+        .then(pageSource => {
+
+            let codigoFonte = new DOMParser().parseFromString(pageSource, 'text/html');
+
+            let interval = setInterval(()=>{
+                if(verificaElemento('#adid')){
+                    clearInterval(interval);
+
+                    let articleNotice = codigoFonte.getElementById(`post-${codigoFonte.getElementById('adid').textContent}`);
+                    const NAME_DIV_ARTICLE = `post-${codigoFonte.getElementById('adid').textContent}`;
+    
+                    let rotina = setInterval(()=>{
+                        if(verificaElemento(`#${NAME_DIV_ARTICLE}`)){
+                            clearInterval(rotina);
+                            document.getElementById(`${NAME_DIV_ARTICLE}`).innerHTML = articleNotice.outerHTML;
+                        }
+                    },800);
+                }
+            },800)
+    });
 }
 
 
@@ -433,7 +466,7 @@ function importCDNSnackBar()
     //ADD CSS CLASSE SNACKBAR
     var styleSnack = document.createElement('style');
     document.head.appendChild(styleSnack);
-    styleSnack.innerText = '.snackZ-index{z-index: 9999999999}';
+    styleSnack.innerText = '.snackZ-index{z-index: 9999999999; white-space: pre-wrap}';
 
     //ADD AXIOS JS
     var axiosJS = document.createElement('script');
@@ -462,7 +495,7 @@ function configSnackBar(msg, tituloBtn, tempo)
 function verificaAtualizacaoVersao()
 {
 
-    const CURRENT_VERSION = '105';
+    const CURRENT_VERSION = '106';
     const URL_API_UPDATE = 'https://possoler.tech/API/searchUpdates.php';
 
     axios({

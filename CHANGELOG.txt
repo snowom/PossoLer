@@ -1,17 +1,34 @@
-v1.0.3  [19/01/2021]
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-= v1.0.3 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+[19/01/2021]
 --> Versão Inicial;
 # Suporte ao Jornal Folha de São Paulo;
 # Suporte ao Jornal Estadão;
 
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-= v1.0.4 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-v1.0.4  [26/01/2021]
+[26/01/2021]
 # Adicionado Jornal Gazeta do Povo;
 # Adicionado Jornal O Globo;
 # Correção Scroll Infinito Jornal Estadão;
 
 
-v1.0.5 [27/01/2021]
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-= v1.0.5 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+[27/01/2021]
 # Adicionado SuperInteressante;
 # Adicionado Quatro Rodas;
 # Adicionado VEJA;
 # Adicionado Responde Ai
+
+[02/02/2021]
+# Implementação de Notificações via OTA;
+# Implementação SnackBar;
+# Lançamento Oficial do Site;
+
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-= v1.0.6 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+[04/02/2021]
+# Adicionado Exame;
+# Add suporte quebra de linha SnackBar;

@@ -1,4 +1,4 @@
-const EXTENSION_VERSION = '105';
+const EXTENSION_VERSION = '106';
 importCDNSnackBar();
 
 
@@ -28,6 +28,38 @@ else if(currentURL.includes("veja.abril.com.br") || (currentURL.includes("vejasp
 }
 else if(currentURL.includes("respondeai.com.br")){
     modifyRESPAI();
+}
+else if(currentURL.includes("exame.com")){
+    modifyEXAME();
+}
+
+
+/* ======================= EXAME ================================ */
+
+function modifyEXAME()
+{
+    fetch(document.location.href)
+        .then(response => response.text())
+        .then(pageSource => {
+
+            let codigoFonte = new DOMParser().parseFromString(pageSource, 'text/html');
+
+            let interval = setInterval(()=>{
+                if(verificaElemento('#adid')){
+                    clearInterval(interval);
+                    
+                    let articleNotice = codigoFonte.getElementById(`post-${codigoFonte.getElementById('adid').textContent}`);
+                    const NAME_DIV_ARTICLE = `post-${codigoFonte.getElementById('adid').textContent}`;
+    
+                    let rotina = setInterval(()=>{
+                        if(verificaElemento(`#${NAME_DIV_ARTICLE}`)){
+                            clearInterval(rotina);
+                            document.getElementById(`${NAME_DIV_ARTICLE}`).innerHTML = articleNotice.outerHTML;
+                        }
+                    },800);
+                }
+            },800)
+    });
 }
 
 
@@ -396,7 +428,7 @@ function importCDNSnackBar()
     //ADD CSS CLASSE SNACKBAR
     var styleSnack = document.createElement('style');
     document.head.appendChild(styleSnack);
-    styleSnack.innerText = '.snackZ-index{z-index: 9999999999}';
+    styleSnack.innerText = '.snackZ-index{z-index: 9999999999; white-space: pre-wrap}';
 
 
     //ADD AXIOS SCRIPT CDN
