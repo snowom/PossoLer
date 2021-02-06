@@ -26,6 +26,9 @@ else if(currentURL.includes("quatrorodas.abril.com.br")){
 else if(currentURL.includes("veja.abril.com.br") || (currentURL.includes("vejasp.abril"))){
     modifySUPINTERESSANTE();
 }
+else if(currentURL.includes("guiadoestudante.abril.com.br")){
+    modifySUPINTERESSANTE();
+}
 else if(currentURL.includes("respondeai.com.br")){
     modifyRESPAI();
 }

@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         Posso Ler?
 // @namespace    URL
-// @version      1.0.5
+// @version      1.0.6
 // @description  Tenha acesso a notícias ilimitadas de forma gratuita e segura
-// @author       Thomaz Ferreira Neves dos Santos
+// @author       Thomaz Ferreira
 // @supportURL   https://possoler.tech/
 // @icon         https://possoler.tech/img/128.png
 // Atenção:      Caso algum site não funcione logo após a instalação, limpe o cache do navegador.
@@ -15,6 +15,7 @@
 // @match        *://*.quatrorodas.abril.com.br/*
 // @match        *://*.veja.abril.com.br/*
 // @match        *://*.vejasp.abril.com.br/*
+// @match        *://*.guiadoestudante.abril.com.br/*
 // @match        *://*.respondeai.com.br/*
 // @match        *://*.exame.com/*
 // @run-at       document-start
@@ -48,6 +49,9 @@ else if(currentURL.includes("quatrorodas.abril.com.br")){
     modifySUPINTERESSANTE();
 }
 else if(currentURL.includes("veja.abril.com.br") || (currentURL.includes("vejasp.abril"))){
+    modifySUPINTERESSANTE();
+}
+else if(currentURL.includes("guiadoestudante.abril.com.br")){
     modifySUPINTERESSANTE();
 }
 else if(currentURL.includes("respondeai.com.br")){

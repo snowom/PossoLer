@@ -31,4 +31,5 @@
 
 [04/02/2021]
 # Adicionado Exame;
+# Adicionado Guia do Estudante;
 # Add suporte quebra de linha SnackBar;
