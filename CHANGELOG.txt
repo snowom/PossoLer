@@ -33,3 +33,7 @@
 # Adicionado Exame;
 # Adicionado Guia do Estudante;
 # Add suporte quebra de linha SnackBar;
+
+[09/02/2021]
+# Fix Delay Mensagem de Update e Mensagens API;
+# Add verificaAtualizacaoVersao() em modifyExame();

@@ -83,6 +83,7 @@ function modifyEXAME()
                         if(verificaElemento(`#${NAME_DIV_ARTICLE}`)){
                             clearInterval(rotina);
                             document.getElementById(`${NAME_DIV_ARTICLE}`).innerHTML = articleNotice.outerHTML;
+                            verificaAtualizacaoVersao();
                         }
                     },800);
                 }
@@ -501,6 +502,7 @@ function verificaAtualizacaoVersao()
 
     const CURRENT_VERSION = '106';
     const URL_API_UPDATE = 'https://possoler.tech/API/searchUpdates.php';
+    let tempoAwait = 5
 
     axios({
         method: 'get',
@@ -514,52 +516,69 @@ function verificaAtualizacaoVersao()
 
         if(CURRENT_VERSION<updateVersion){
 
+            tempoAwait = 12;
             let options = configSnackBar(msgUpdate,tituloBtn,tempo);
             Snackbar.show(options);
         }
+
+        verificaMensagensAPI(tempoAwait);
+
     }).catch((erro)=>{
         console.error(erro);
+        verificaMensagensAPI(tempoAwait);
     });
-
-
-    setTimeout(()=>{
-        const URL_MESSAGES = 'https://possoler.tech/API/searchMessages.php';
-
-        axios({
-            method: 'get',
-            url: URL_MESSAGES,
-            timeout: 10000,
-        }).then((resposta)=>{
-
-            let qtdMessages = resposta.data.messages.length;
-            var cont=0;
-            let r = setInterval(()=>{
-                if(cont>=qtdMessages){
-                    clearInterval(r);
-                }
-                else{
-                    let options = {
-                        text: resposta.data.messages[cont].msg,
-                        actionTextColor: '#a1ff00',
-                        showAction: true,
-                        actionText: 'OK',
-                        pos: 'top-right',
-                        duration: resposta.data.messages[cont].time*1000,
-                        customClass: 'snackZ-index',
-                    };
-    
-                    Snackbar.show(options);
-                    cont++;
-                }
-            },6000);
-        }).catch((erro)=>{
-            console.error(erro);
-        });
-    },12000);
 }
 
 
-/* ========================== METODOS GLOBAIS ===================================== */
+function verificaMensagensAPI(time)
+{
+    const URL_MESSAGES = 'https://possoler.tech/API/searchMessages.php';
+
+    axios({
+        method: 'get',
+        url: URL_MESSAGES,
+        timeout: 10000,
+    }).then((resposta)=>{
+
+        setTimeout(()=>{
+            let qtdMessages = resposta.data.messages.length;
+            showSnackMessages(resposta, qtdMessages);
+        }, time*1000);
+
+    }).catch((erro)=>{
+        console.error(erro);
+    });
+}
+
+
+function showSnackMessages(resposta, qtdMessages)
+{
+    let tempoMensagemAPI = resposta.data.messages[contMessageIndex].time;
+
+    let options = {
+        text: resposta.data.messages[contMessageIndex].msg,
+        actionTextColor: '#a1ff00',
+        showAction: true,
+        actionText: 'OK',
+        pos: 'top-right',
+        duration: tempoMensagemAPI*1000,
+        customClass: 'snackZ-index',
+    };
+
+    Snackbar.show(options);
+    contMessageIndex++;
+    tempoMensagemAPI++;
+
+    setTimeout(()=>{
+        if(contMessageIndex>=qtdMessages) return;
+        showSnackMessages(resposta, qtdMessages);
+    }, tempoMensagemAPI*1000);
+}
+
+
+/* ========================== METODOS E VARIAVEIS GLOBAIS ===================================== */
+
+var contMessageIndex=0;
 
 function verificaElemento(elemento)
 {
