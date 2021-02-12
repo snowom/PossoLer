@@ -37,3 +37,7 @@
 [09/02/2021]
 # Fix Delay Mensagem de Update e Mensagens API;
 # Add verificaAtualizacaoVersao() em modifyExame();
+
+[12/02/2021]
+# Add API de contagem de conteúdos desbloqueados pela Extensão;
+# Remoção de todas CDN's da extensão e todos arquivos estão sendo carregados localmente;

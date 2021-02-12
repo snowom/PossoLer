@@ -84,6 +84,7 @@ function modifyEXAME()
                             clearInterval(rotina);
                             document.getElementById(`${NAME_DIV_ARTICLE}`).innerHTML = articleNotice.outerHTML;
                             verificaAtualizacaoVersao();
+                            incrementaConteudoAPI();
                         }
                     },800);
                 }
@@ -179,6 +180,8 @@ function removeBlur()
         blurElements[i].classList.remove("blur");
         blurElements[i].style.filter = 'none';
     }
+
+    if(blurElements.length>0) incrementaConteudoAPI();
 }
 
 
@@ -244,6 +247,7 @@ function removeBloqueioSPRINTERESSANTE()
     document.body.classList.remove("disabledByPaywall");
 
     verificaAtualizacaoVersao();
+    incrementaConteudoAPI();
 }
 
 /* ====================== GAZETA ================================= */
@@ -270,6 +274,7 @@ function modifyGAZETA()
                 decrementZindexHeaderGAZETA()
                 removeFooterGAZETA();
                 verificaAtualizacaoVersao();
+                incrementaConteudoAPI();
             }
         },800);
     });
@@ -364,6 +369,7 @@ function removeBloqueioGLOBO()
     }
 
     verificaAtualizacaoVersao();
+    incrementaConteudoAPI();
 }
 
 
@@ -409,12 +415,13 @@ function removeBloqueioEST()
         }
     },800);
     
-    modifyESTADAO();
-
     if(msgUpdate<=0){
         verificaAtualizacaoVersao();
         msgUpdate++;
+        incrementaConteudoAPI();
     }
+
+    modifyESTADAO();
 }
 
 /* ====================== FOLHA DE SP ============================ */
@@ -444,6 +451,7 @@ function removeBloqueio()
     document.getElementById('paywall-content').style.overflow = 'auto';
 
     verificaAtualizacaoVersao();
+    incrementaConteudoAPI();
 }
 
 
@@ -540,10 +548,12 @@ function verificaMensagensAPI(time)
         timeout: 10000,
     }).then((resposta)=>{
 
-        setTimeout(()=>{
-            let qtdMessages = resposta.data.messages.length;
-            showSnackMessages(resposta, qtdMessages);
-        }, time*1000);
+        if(resposta.data.messages.length>0){
+            setTimeout(()=>{
+                let qtdMessages = resposta.data.messages.length;
+                showSnackMessages(resposta, qtdMessages);
+            }, time*1000);
+        }
 
     }).catch((erro)=>{
         console.error(erro);
@@ -575,6 +585,22 @@ function showSnackMessages(resposta, qtdMessages)
     }, tempoMensagemAPI*1000);
 }
 
+
+/* ========================== API INCREMENTO DE NOTICIAS E CONTEUDOS LIBERADOS ====================== */
+
+function incrementaConteudoAPI()
+{
+    axios({
+        method: 'post',
+        url: 'https://possoler.tech/API/incrementViewsConteudos.php',
+        timeout: 10000
+    }).then((resposta)=>{
+        console.log('Contabilizar noticia API = ' + resposta.data.status);
+    }).catch((erro)=>{
+        console.log('ERRO Contabilizar noticia API');
+        console.log(erro);
+    });
+}
 
 /* ========================== METODOS E VARIAVEIS GLOBAIS ===================================== */
 

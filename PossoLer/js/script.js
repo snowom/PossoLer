@@ -1,7 +1,3 @@
-const EXTENSION_VERSION = '106';
-importCDNSnackBar();
-
-
 let currentURL = window.location.hostname;
 
 
@@ -58,6 +54,8 @@ function modifyEXAME()
                         if(verificaElemento(`#${NAME_DIV_ARTICLE}`)){
                             clearInterval(rotina);
                             document.getElementById(`${NAME_DIV_ARTICLE}`).innerHTML = articleNotice.outerHTML;
+                            verificaAtualizacaoVersao();
+                            incrementaConteudoAPI();
                         }
                     },800);
                 }
@@ -115,6 +113,7 @@ function removeScriptObserver(s, codigoSemBloqueio)
     removeBlur();
     removeAllBtnShowSolucao();
     removeBloqueioTeoria();
+    verificaAtualizacaoVersao();
 
     //LOOP Para remover bloqueios caso haja atualização dos iframes
     setInterval(()=>{
@@ -152,6 +151,8 @@ function removeBlur()
         blurElements[i].classList.remove("blur");
         blurElements[i].style.filter = 'none';
     }
+
+    if(blurElements.length>0) incrementaConteudoAPI();
 }
 
 
@@ -215,6 +216,9 @@ function removeBloqueioSPRINTERESSANTE()
     document.getElementById("piano_offer").remove();
     document.querySelector(".piano-offer-overlay").remove();
     document.body.classList.remove("disabledByPaywall");
+
+    verificaAtualizacaoVersao();
+    incrementaConteudoAPI();
 }
 
 /* ====================== GAZETA ================================= */
@@ -240,6 +244,8 @@ function modifyGAZETA()
 
                 decrementZindexHeaderGAZETA()
                 removeFooterGAZETA();
+                verificaAtualizacaoVersao();
+                incrementaConteudoAPI();
             }
         },800);
     });
@@ -332,6 +338,9 @@ function removeBloqueioGLOBO()
     }catch(erro){
         console.log('ERRO AO REMOVER FOOTER = ' + erro);
     }
+
+    verificaAtualizacaoVersao();
+    incrementaConteudoAPI();
 }
 
 
@@ -376,6 +385,12 @@ function removeBloqueioEST()
             window.scrollTo(0,currentY);
         }
     },800);
+
+    if(msgUpdate<=0){
+        verificaAtualizacaoVersao();
+        msgUpdate++;
+        incrementaConteudoAPI();
+    }
     
     modifyESTADAO();
 }
@@ -405,131 +420,130 @@ function removeBloqueio()
     document.getElementById('paywall-fill').remove();
 
     document.getElementById('paywall-content').style.overflow = 'auto';
+
+    verificaAtualizacaoVersao();
+    incrementaConteudoAPI();
 }
 
 
 /* =========================== CDN's E UPDATE VERSION ================================= */
 
-
-function importCDNSnackBar()
+function configSnackBar(msg, tituloBtn, tempo)
 {
-    //ADD JS TOASTFY NO BODY HTML
-    var snackJS = document.createElement('script');
-    snackJS.setAttribute('id','snackJS');
-    snackJS.setAttribute('type','text/javascript');
-    snackJS.setAttribute('src','https://possoler.tech/CDN/snackbar.js');
-    document.head.appendChild(snackJS);
-
-    //ADD CSS TOASTFY NO HEAD HTML
-    var snackCSS = document.createElement('link');
-    snackCSS.setAttribute('id','snackCSS');
-    snackCSS.setAttribute('rel','stylesheet');
-    snackCSS.setAttribute('type','text/css');
-    snackCSS.setAttribute('href','https://possoler.tech/CDN/snackbar.css');
-    document.head.appendChild(snackCSS);
-
-    //ADD CSS CLASSE SNACKBAR
-    var styleSnack = document.createElement('style');
-    document.head.appendChild(styleSnack);
-    styleSnack.innerText = '.snackZ-index{z-index: 9999999999; white-space: pre-wrap}';
-
-
-    //ADD AXIOS SCRIPT CDN
-    var axiosCDN = document.createElement('script');
-    axiosCDN.setAttribute('type','text/javascript');
-    axiosCDN.setAttribute('src','https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js');
-    document.head.appendChild(axiosCDN);
-
-    injectAtualizacaoVersao();
+    return {
+            text: msg,
+            actionTextColor: '#a1ff00',
+            actionText: tituloBtn,
+            pos: 'top-right',
+            duration: tempo*1000,
+            customClass: 'snackZ-index',
+            onActionClick: ()=>{
+                window.open('https://possoler.tech/#blockDownload');
+            }
+        };
 }
 
 
-function injectAtualizacaoVersao()
+function verificaAtualizacaoVersao()
 {
-    let s = document.createElement('script');
-    document.head.appendChild(s); 
-    s.innerText = `
-        
-        var contMessageIndex=0;
+    const CURRENT_VERSION = '106';
+    const URL_API_UPDATE = 'https://possoler.tech/API/searchUpdates.php';
+    let tempoAwait = 5;
 
-        window.addEventListener('load',()=>{
-            const CURRENT_VERSION = ${EXTENSION_VERSION};
-            const URL_API_UPDATE = 'https://possoler.tech/API/searchUpdates.php';
-            let tempoAwait = 5;
+    axios({
+        method: 'get',
+        url: URL_API_UPDATE,
+        timeout: 10000,
+    }).then((resposta)=>{
+        let updateVersion = resposta.data.update.currentVersion;
+        let msgUpdate = resposta.data.params.msg;
+        let tituloBtn = resposta.data.params.btnMgs;
+        let tempo = resposta.data.params.time;
 
-            axios({
-                method: 'get',
-                url: URL_API_UPDATE,
-                timeout: 10000,
-            }).then((resposta)=>{
-                let updateVersion = resposta.data.update.currentVersion;
-                let msgUpdate = resposta.data.params.msg;
-                let tituloBtn = resposta.data.params.btnMgs;
-                let tempo = resposta.data.params.time;
-        
-                if(CURRENT_VERSION<updateVersion){
-        
-                    tempoAwait = 12;
-                    let options = configSnackBar(msgUpdate,tituloBtn,tempo);
-                    Snackbar.show(options);
-                }
-        
-                verificaMensagensAPI(tempoAwait);
-        
-            }).catch((erro)=>{
-                console.error(erro);
-                verificaMensagensAPI(tempoAwait);
-            });
-        });
-        
+        if(CURRENT_VERSION<updateVersion){
 
-        function verificaMensagensAPI(time)
-        {
-            const URL_MESSAGES = 'https://possoler.tech/API/searchMessages.php';
-
-            axios({
-                method: 'get',
-                url: URL_MESSAGES,
-                timeout: 10000,
-            }).then((resposta)=>{
-
-                setTimeout(()=>{
-                    let qtdMessages = resposta.data.messages.length;
-                    showSnackMessages(resposta, qtdMessages);
-                }, time*1000);
-
-            }).catch((erro)=>{
-                console.error(erro);
-            });
+            tempoAwait = 12;
+            let options = configSnackBar(msgUpdate,tituloBtn,tempo);
+            Snackbar.show(options);
         }
 
+        verificaMensagensAPI(tempoAwait);
 
-        function showSnackMessages(resposta, qtdMessages)
-        {
-            let tempoMensagemAPI = resposta.data.messages[contMessageIndex].time;
-
-            let options = {
-                text: resposta.data.messages[contMessageIndex].msg,
-                actionTextColor: '#a1ff00',
-                showAction: true,
-                actionText: 'OK',
-                pos: 'top-right',
-                duration: tempoMensagemAPI*1000,
-                customClass: 'snackZ-index',
-            };
-
-            Snackbar.show(options);
-            contMessageIndex++;
-            tempoMensagemAPI++;
-
-            setTimeout(()=>{
-                if(contMessageIndex>=qtdMessages) return;
-                showSnackMessages(resposta, qtdMessages);
-            }, tempoMensagemAPI*1000);
-        }`;
+    }).catch((erro)=>{
+        console.error(erro);
+        verificaMensagensAPI(tempoAwait);
+    });
 }
 
+
+function verificaMensagensAPI(time)
+{
+    const URL_MESSAGES = 'https://possoler.tech/API/searchMessages.php';
+
+    axios({
+        method: 'get',
+        url: URL_MESSAGES,
+        timeout: 10000,
+    }).then((resposta)=>{
+
+        if(resposta.data.messages.length>0){
+            setTimeout(()=>{
+                let qtdMessages = resposta.data.messages.length;
+                showSnackMessages(resposta, qtdMessages);
+            }, time*1000);
+        }
+
+    }).catch((erro)=>{
+        console.error(erro);
+    });
+}
+
+
+function showSnackMessages(resposta, qtdMessages)
+{
+    let tempoMensagemAPI = resposta.data.messages[contMessageIndex].time;
+
+    let options = {
+        text: resposta.data.messages[contMessageIndex].msg,
+        actionTextColor: '#a1ff00',
+        showAction: true,
+        actionText: 'OK',
+        pos: 'top-right',
+        duration: tempoMensagemAPI*1000,
+        customClass: 'snackZ-index',
+    };
+
+    Snackbar.show(options);
+    contMessageIndex++;
+    tempoMensagemAPI++;
+
+    setTimeout(()=>{
+        if(contMessageIndex>=qtdMessages) return;
+        showSnackMessages(resposta, qtdMessages);
+    }, tempoMensagemAPI*1000);
+}
+
+
+/* ========================== API INCREMENTO DE NOTICIAS E CONTEUDOS LIBERADOS ====================== */
+
+function incrementaConteudoAPI()
+{
+    axios({
+        method: 'post',
+        url: 'https://possoler.tech/API/incrementViewsConteudos.php',
+        timeout: 10000
+    }).then((resposta)=>{
+        console.log('Contabilizar noticia API = ' + resposta.data.status);
+    }).catch((erro)=>{
+        console.log('ERRO Contabilizar noticia API');
+        console.log(erro);
+    });
+}
+
+
 /* ========================== METODOS GLOBAIS ===================================== */
+
+var contMessageIndex=0;
 
 function verificaElemento(elemento)
 {
