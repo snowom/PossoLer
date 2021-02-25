@@ -20,6 +20,6 @@
     "content_scripts": [{
         "js":["js/axios.js", "js/snackbar.js", "js/script.js"],
         "css":["css/snackbar.css", "css/styleSnackBar.css"],
-    "matches":["https://*.folha.uol.com.br/*", "https://*.estadao.com.br/*", "https://*.oglobo.globo.com/*", "https://*.gazetadopovo.com.br/*", "https://*.super.abril.com.br/*", "https://*.quatrorodas.abril.com.br/*", "https://*.veja.abril.com.br/*", "https://*.vejasp.abril.com.br/*", "https://*.respondeai.com.br/*", "https://*.exame.com/*", "https://*.guiadoestudante.abril.com.br/*"]
+    "matches":["https://*.folha.uol.com.br/*", "https://*.estadao.com.br/*", "https://*.oglobo.globo.com/*", "https://*.gazetadopovo.com.br/*", "https://*.super.abril.com.br/*", "https://*.quatrorodas.abril.com.br/*", "https://*.veja.abril.com.br/*", "https://*.vejasp.abril.com.br/*", "https://*.respondeai.com.br/*", "https://*.exame.com/*", "https://*.guiadoestudante.abril.com.br/*", "https://*.epoca.globo.com/*"]
     }]
 }

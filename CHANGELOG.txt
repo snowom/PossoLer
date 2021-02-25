@@ -18,7 +18,7 @@
 [27/01/2021]
 # Adicionado SuperInteressante;
 # Adicionado Quatro Rodas;
-# Adicionado VEJA;
+# Adicionado VEJA e VEJA SP;
 # Adicionado Responde Ai
 
 [02/02/2021]
@@ -41,3 +41,14 @@
 [12/02/2021]
 # Add API de contagem de conteúdos desbloqueados pela Extensão;
 # Remoção de todas CDN's da extensão e todos arquivos estão sendo carregados localmente;
+
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-= v1.0.7 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+[19/02/2021]
+# Adicionado Revista Época;
+
+[25/02/2021]
+# Adicionado Revista Época definitivo no CRX;
+# FIXED BUG não mostra imagem notícia Revista Época;
+# FIXED BUG não mostra imagem notícia Gazeta do Povo;

@@ -18,6 +18,7 @@
 // @match        *://*.guiadoestudante.abril.com.br/*
 // @match        *://*.respondeai.com.br/*
 // @match        *://*.exame.com/*
+// @match        *://*.epoca.globo.com/*
 // @run-at       document-start
 // @noframes
 // ==/UserScript==
@@ -59,6 +60,54 @@ else if(currentURL.includes("respondeai.com.br")){
 }
 else if(currentURL.includes("exame.com")){
     modifyEXAME();
+}
+else if(currentURL.includes("epoca.globo.com")){
+    modifyEPOCA();
+}
+
+
+
+/* ======================= REVISTA EPOCA ======================== */
+
+function modifyEPOCA()
+{
+    let codigoPage;
+
+    fetch(document.location.href)
+    .then(response => response.text())
+    .then(pageSource => {
+        console.clear();
+        console.log(pageSource);
+        codigoPage = new DOMParser().parseFromString(pageSource, "text/html");
+    });
+
+    let rotina = setInterval(()=>{
+        if(verificaElemento(".paywall-cpt")){
+            clearInterval(rotina);
+
+            let divNoticia = codigoPage.querySelector('.article__content-container');
+            let elementoPai = document.querySelector(".article");
+
+            removeBloqueioGLOBO();
+            elementoPai.appendChild(divNoticia);
+            restauraImgs(elementoPai);
+        }
+    },800);
+}
+
+
+function restauraImgs(bodyNoticia)
+{
+    let imgsNoticia = bodyNoticia.querySelectorAll("img");
+
+    for(let i=0; i<imgsNoticia.length; i++){
+        let linkImg = imgsNoticia[i].getAttribute("data-src");
+
+        if(linkImg!=null){
+            imgsNoticia[i].removeAttribute("data-src");
+            imgsNoticia[i].setAttribute("src",linkImg);
+        }
+    }
 }
 
 
@@ -269,6 +318,7 @@ function modifyGAZETA()
 
                 if(getFatherElementGAZETA()){
                     remountDivNoticiaGAZETA(blocoNoticia);
+                    restauraImgsGAZETA(document.getElementById("tp-post-content"));
                 }
 
                 decrementZindexHeaderGAZETA()
@@ -319,6 +369,30 @@ function removeFooterGAZETA()
             document.getElementById("d-pos-footer").remove();
         }
     }, 800);
+}
+
+
+function restauraImgsGAZETA(bodyNoticia)
+{
+    //REMOVE CLASSE QUE BLOQUEIA IMGs
+    let classBloqueioImg = bodyNoticia.querySelectorAll(".img-fallback");
+
+    for(let i=0; i<classBloqueioImg.length; i++){
+        classBloqueioImg[i].classList.remove("img-fallback")
+    }
+
+
+    //REMONTA AS IMAGENS
+    let sourceNoticia = bodyNoticia.querySelectorAll("source");
+
+    for(let i=0; i<sourceNoticia.length; i++){
+        let linkImg = sourceNoticia[i].getAttribute("data-srcset");
+
+        if(linkImg!=null){
+            sourceNoticia[i].removeAttribute("data-srcset");
+            sourceNoticia[i].setAttribute("srcset",linkImg);
+        }
+    }
 }
 
 
