@@ -191,6 +191,7 @@ function removeScriptObserver(s, codigoSemBloqueio)
     removeBlur();
     removeAllBtnShowSolucao();
     removeBloqueioTeoria();
+    removeBloqueioConteudoExclusivo();
     verificaAtualizacaoVersao();
 
     //LOOP Para remover bloqueios caso haja atualização dos iframes
@@ -199,6 +200,7 @@ function removeScriptObserver(s, codigoSemBloqueio)
         removeBlur();
         removeAllBtnShowSolucao();
         removeBloqueioTeoria();
+        removeBloqueioConteudoExclusivo();
     },800);
 }
 
@@ -211,7 +213,7 @@ function remountPage(elemento, codigoBase)
 
 function removeHeaderLogin()
 {
-    let header = document.querySelectorAll(".global_menu__fixed_header");
+    let header = document.querySelectorAll(".global_menu__fixed_header__login_container");
     
     if(header.length>0){
         for(let i=0; i<header.length; i++){
@@ -273,6 +275,45 @@ function removeBloqueioTeoria()
             btnExpandir[i].remove();
         }
     }
+}
+
+
+function removeBloqueioConteudoExclusivo()
+{
+    let bloqueioOverlay = false;
+    let bloqueioWrapper = false;
+
+    let loginOverlay = document.querySelectorAll(".login-overlay");
+    if(loginOverlay.length>0){
+        for(let i=0; i<loginOverlay.length; i++){
+
+            let elementAttributes = loginOverlay[i].attributes;
+            for(let j=0; j<elementAttributes.length; j++){
+                if(elementAttributes[j].name == "style"){
+                    loginOverlay[i].removeAttribute("style");
+                    bloqueioOverlay = true;
+                    break;
+                }
+            }
+        }
+    }
+
+    let mainWrapper = document.querySelectorAll(".main-wrapper");
+    if(mainWrapper.length>0){
+        for(let i=0; i<mainWrapper.length; i++){
+            
+            let elementAttributes = mainWrapper[i].attributes;
+            for(let j=0; j<elementAttributes.length; j++){
+                if(elementAttributes[j].name == "style"){
+                    mainWrapper[i].removeAttribute("style");
+                    bloqueioWrapper = true;
+                    break;
+                }
+            }
+        }
+    }
+
+    if(bloqueioOverlay && bloqueioWrapper) incrementaConteudoAPI();
 }
 
 

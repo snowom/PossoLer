@@ -52,3 +52,7 @@
 # Adicionado Revista Época definitivo no CRX;
 # FIXED BUG não mostra imagem notícia Revista Época;
 # FIXED BUG não mostra imagem notícia Gazeta do Povo;
+
+[31/03/2021]
+# Ajuste Header Responde Aí - Exclui apenas botões de login;
+# FIXED BUG Responde Aí - Mostra tela de Conteúdo Exclusivo;
