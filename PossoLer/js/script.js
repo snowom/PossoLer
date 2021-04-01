@@ -34,7 +34,38 @@ else if(currentURL.includes("exame.com")){
 else if(currentURL.includes("epoca.globo.com")){
     modifyEPOCA();
 }
+else if(currentURL.includes("revistagalileu.globo.com")){
+    modifyGALILEU();
+}
 
+
+/* ======================= REVISTA GALILEU ====================== */
+
+function modifyGALILEU()
+{
+    let codigoPage;
+
+    fetch(document.location.href)
+    .then(response => response.text())
+    .then(pageSource => {
+        console.clear();
+        console.log(pageSource);
+        codigoPage = new DOMParser().parseFromString(pageSource, "text/html");
+    });
+
+    let rotina = setInterval(()=>{
+        if(verificaElemento(".paywall-cpt")){
+            clearInterval(rotina);
+
+            let divNoticia = codigoPage.querySelector('.protected-content');
+            let elementoPai = document.querySelector("article");
+
+            removeBloqueioGLOBO();
+            elementoPai.appendChild(divNoticia);
+            restauraImgs(elementoPai);
+        }
+    },800);
+}
 
 
 /* ======================= REVISTA EPOCA ======================== */

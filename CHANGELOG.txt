@@ -56,3 +56,7 @@
 [31/03/2021]
 # Ajuste Header Responde Aí - Exclui apenas botões de login;
 # FIXED BUG Responde Aí - Mostra tela de Conteúdo Exclusivo;
+
+[01/04/2021]
+# Adicionado Revista Galileu;
+# Adicionado Revista Galileu definitivo no CRX;
