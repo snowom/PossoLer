@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Posso Ler?
 // @namespace    URL
-// @version      1.0.6
+// @version      1.0.7
 // @description  Tenha acesso a notícias ilimitadas de forma gratuita e segura
 // @author       Thomaz Ferreira
 // @supportURL   https://possoler.tech/
@@ -20,6 +20,11 @@
 // @match        *://*.exame.com/*
 // @match        *://*.epoca.globo.com/*
 // @match        *://*.revistagalileu.globo.com/*
+// @match        *://*.epocanegocios.globo.com/*
+// @match        *://*.revistamarieclaire.globo.com/*
+// @match        *://*.revistagloborural.globo.com/*
+// @match        *://*.autoesporte.globo.com/*
+// @match        *://*.revistapegn.globo.com/*
 // @run-at       document-start
 // @noframes
 // ==/UserScript==
@@ -65,7 +70,10 @@ else if(currentURL.includes("exame.com")){
 else if(currentURL.includes("epoca.globo.com")){
     modifyEPOCA();
 }
-else if(currentURL.includes("revistagalileu.globo.com")){
+else if(currentURL.includes("revistagalileu.globo.com") ||
+ currentURL.includes("epocanegocios.globo.com") || currentURL.includes("revistamarieclaire.globo.com") ||
+ currentURL.includes("revistagloborural.globo.com") || currentURL.includes("autoesporte.globo.com") || 
+ currentURL.includes("revistapegn.globo.com")){
     modifyGALILEU();
 }
 
@@ -79,12 +87,11 @@ function modifyGALILEU()
     fetch(document.location.href)
     .then(response => response.text())
     .then(pageSource => {
-        console.clear();
-        console.log(pageSource);
         codigoPage = new DOMParser().parseFromString(pageSource, "text/html");
     });
 
     let rotina = setInterval(()=>{
+        removeFooter();
         if(verificaElemento(".paywall-cpt")){
             clearInterval(rotina);
 
@@ -94,10 +101,39 @@ function modifyGALILEU()
             removeBloqueioGLOBO();
             elementoPai.appendChild(divNoticia);
             restauraImgs(elementoPai);
+            restauraPodcast(divNoticia);
         }
     },800);
 }
 
+
+function removeFooter()
+{
+    let footer = document.querySelectorAll(".banner-bottom-fixed-cpnt");
+
+    if(footer.length>0){
+        for(let i=0; i<footer.length; i++){
+            footer[i].remove();
+        }
+    }
+}
+
+
+function restauraPodcast(codeBody)
+{
+    let podcastElements = codeBody.querySelectorAll("iframe");
+
+    if(podcastElements.length>0){
+        for(let i=0; i<podcastElements.length; i++){
+            let linkPdct = podcastElements[i].getAttribute("data-src");
+
+            if(linkPdct != null){
+                podcastElements[i].removeAttribute("data-src");
+                podcastElements[i].setAttribute("src", linkPdct);
+            }
+        }
+    }
+}
 
 /* ======================= REVISTA EPOCA ======================== */
 
@@ -108,12 +144,11 @@ function modifyEPOCA()
     fetch(document.location.href)
     .then(response => response.text())
     .then(pageSource => {
-        console.clear();
-        console.log(pageSource);
         codigoPage = new DOMParser().parseFromString(pageSource, "text/html");
     });
 
     let rotina = setInterval(()=>{
+        removeFooter();
         if(verificaElemento(".paywall-cpt")){
             clearInterval(rotina);
 
@@ -655,7 +690,7 @@ function configSnackBar(msg, tituloBtn, tempo)
 function verificaAtualizacaoVersao()
 {
 
-    const CURRENT_VERSION = '106';
+    const CURRENT_VERSION = '107';
     const URL_API_UPDATE = 'https://possoler.tech/API/searchUpdates.php';
     let tempoAwait = 5
 

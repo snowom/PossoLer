@@ -59,4 +59,9 @@
 
 [01/04/2021]
 # Adicionado Revista Galileu;
-# Adicionado Revista Galileu definitivo no CRX;
+# Adicionado Revista Época Negocios;
+# Adicionado Revista Marie Claire;
+# Adicionado Globo Rural;
+# Adicionado Auto Esporte;
+# Adicionado Pequenas Empresas e Grandes Negocios
+# CRX atualizado;
