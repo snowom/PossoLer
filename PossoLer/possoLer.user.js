@@ -211,8 +211,15 @@ function modifyEXAME()
 
 /* ====================== RESPONDE AI ===========================  */
 
+/* DESBLOQUEIA PAGINA EXCLUSIVA FACULDADE
+
+1) SETAR CHAVE COMO TRUE => _current_user.hasAccess;
+*/
+
 function modifyRESPAI()
 {
+
+    unlockPaidContent();
 
     window.addEventListener('load', ()=>{
 
@@ -254,7 +261,7 @@ function removeScriptObserver(s, codigoSemBloqueio)
         }
     }
 
-    removeHeaderLogin();
+    //removeHeaderLogin();
     removeBlur();
     removeAllBtnShowSolucao();
     removeBloqueioTeoria();
@@ -263,11 +270,22 @@ function removeScriptObserver(s, codigoSemBloqueio)
 
     //LOOP Para remover bloqueios caso haja atualização dos iframes
     setInterval(()=>{
-        removeHeaderLogin();
+        //removeHeaderLogin();
         removeBlur();
         removeAllBtnShowSolucao();
         removeBloqueioTeoria();
         removeBloqueioConteudoExclusivo();
+    },800);
+}
+
+
+function unlockPaidContent()
+{
+    let i = setInterval(()=>{
+        if(typeof(_current_user) != 'undefined')
+        {
+            if(_current_user.hasAccess == false) _current_user.hasAccess = true;
+        }
     },800);
 }
 

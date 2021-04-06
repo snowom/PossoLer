@@ -178,6 +178,8 @@ function modifyEXAME()
 function modifyRESPAI()
 {
 
+    unlockPaidContent();
+
     window.addEventListener('load', ()=>{
 
         const TIMEOUT = 3000;
@@ -208,6 +210,17 @@ function modifyRESPAI()
 }
 
 
+function unlockPaidContent()
+{
+    let i = setInterval(()=>{
+        if(typeof(_current_user) != 'undefined')
+        {
+            if(_current_user.hasAccess == false) _current_user.hasAccess = true;
+        }
+    },800);
+}
+
+
 function removeScriptObserver(s, codigoSemBloqueio)
 {
     for(let i=0; i<s.length; i++){
@@ -218,7 +231,7 @@ function removeScriptObserver(s, codigoSemBloqueio)
         }
     }
 
-    removeHeaderLogin();
+    //removeHeaderLogin();
     removeBlur();
     removeAllBtnShowSolucao();
     removeBloqueioTeoria();
@@ -227,7 +240,7 @@ function removeScriptObserver(s, codigoSemBloqueio)
 
     //LOOP Para remover bloqueios caso haja atualização dos iframes
     setInterval(()=>{
-        removeHeaderLogin();
+        //removeHeaderLogin();
         removeBlur();
         removeAllBtnShowSolucao();
         removeBloqueioTeoria();
