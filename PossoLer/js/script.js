@@ -221,6 +221,7 @@ function removeScriptObserver(s, codigoSemBloqueio)
     }
 
     //removeHeaderLogin();
+    removeBloqueioExercicioLivro()
     removeBlur();
     removeAllBtnShowSolucao();
     removeBloqueioTeoria();
@@ -230,11 +231,47 @@ function removeScriptObserver(s, codigoSemBloqueio)
     //LOOP Para remover bloqueios caso haja atualização dos iframes
     setInterval(()=>{
         //removeHeaderLogin();
+        removeBloqueioExercicioLivro()
         removeBlur();
         removeAllBtnShowSolucao();
         removeBloqueioTeoria();
         removeBloqueioConteudoExclusivo();
     },800);
+}
+
+
+function removeBloqueioExercicioLivro()
+{
+    let keys = [false, false, false];
+
+    let divBlock = document.querySelectorAll(".ReactModalPortal");
+    if(divBlock.length>0)
+    {
+        for(let i=0; i<divBlock.length; i++){
+            divBlock[i].remove();
+        }
+        keys[0] = true;
+    }
+
+    let body = document.querySelectorAll(".ReactModal__Body--open");
+    if(body.length>0)
+    {
+        for(let i=0; i<body.length; i++){
+            body[i].classList.remove("ReactModal__Body--open");
+        }
+        keys[1] = true;
+    }
+
+    let containerBlock = document.querySelectorAll(".NoAccessDisclaimer__Container-sc-6er3z1-0");
+    if(containerBlock.length>0)
+    {
+        for(let i=0; i<containerBlock.length; i++){
+            containerBlock[i].remove();
+        }
+        keys[2] = true;
+    }
+
+    if(keys[0] && keys[1] && keys[2]) incrementaConteudoAPI();
 }
 
 
