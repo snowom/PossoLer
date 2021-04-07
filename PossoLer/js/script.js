@@ -178,7 +178,7 @@ function modifyEXAME()
 function modifyRESPAI()
 {
 
-    unlockPaidContent();
+    injectPayloadRespondeAI();
 
     window.addEventListener('load', ()=>{
 
@@ -210,17 +210,6 @@ function modifyRESPAI()
 }
 
 
-function unlockPaidContent()
-{
-    let i = setInterval(()=>{
-        if(typeof(_current_user) != 'undefined')
-        {
-            if(_current_user.hasAccess == false) _current_user.hasAccess = true;
-        }
-    },800);
-}
-
-
 function removeScriptObserver(s, codigoSemBloqueio)
 {
     for(let i=0; i<s.length; i++){
@@ -246,6 +235,34 @@ function removeScriptObserver(s, codigoSemBloqueio)
         removeBloqueioTeoria();
         removeBloqueioConteudoExclusivo();
     },800);
+}
+
+
+function injectPayloadRespondeAI()
+{
+    let payload = `window.onload = ()=>{
+            setInterval(()=>{
+                if(typeof(_current_user) != 'undefined')
+                {
+                    if(_current_user.hasAccess == false)
+                    {
+                        _current_user.hasAccess = true;
+                        ${incrementaConteudoAPI()};
+                    }
+                }
+            },800);
+        }`;
+
+    let script = document.createElement("script");
+    script.type = "text/javascript";
+
+    try{
+        script.appendChild(document.createTextNode(payload));
+    }catch(e){
+        script.text = payload;
+    }finally{
+        document.head.appendChild(script);
+    }
 }
 
 

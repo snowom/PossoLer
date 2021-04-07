@@ -281,10 +281,14 @@ function removeScriptObserver(s, codigoSemBloqueio)
 
 function unlockPaidContent()
 {
-    let i = setInterval(()=>{
+    setInterval(()=>{
         if(typeof(_current_user) != 'undefined')
         {
-            if(_current_user.hasAccess == false) _current_user.hasAccess = true;
+            if(_current_user.hasAccess == false)
+            {
+                _current_user.hasAccess = true;
+                incrementaConteudoAPI();
+            }
         }
     },800);
 }
