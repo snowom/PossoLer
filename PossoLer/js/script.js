@@ -40,6 +40,25 @@ else if(currentURL.includes("revistagalileu.globo.com") ||
  currentURL.includes("revistapegn.globo.com")){
     modifyGALILEU();
 }
+else if(currentURL.includes("possoler.tech")){
+
+    const codigo = 
+    `if(typeof(VERSAO_ATUAL) == 'undefined')
+    {
+       var VERSAO_ATUAL = '107';
+    }`;
+
+    let script = document.createElement("script");
+    script.type = "text/javascript";
+
+    try{
+        script.appendChild(document.createTextNode(codigo));
+    }catch(e){
+        script.text = codigo;
+    }finally{
+        document.head.appendChild(script);
+    }
+}
 
 
 /* ======================= REVISTA GALILEU ====================== */
@@ -68,6 +87,8 @@ function modifyGALILEU()
             restauraPodcast(divNoticia);
         }
     },800);
+
+    verificaAtualizacaoVersao();
 }
 
 
@@ -124,6 +145,8 @@ function modifyEPOCA()
             restauraImgs(elementoPai);
         }
     },800);
+
+    verificaAtualizacaoVersao();
 }
 
 
@@ -168,7 +191,9 @@ function modifyEXAME()
                         }
                     },800);
                 }
-            },800)
+            },800);
+
+            verificaAtualizacaoVersao();
     });
 }
 
@@ -190,6 +215,8 @@ function modifyRESPAI()
 
             removeScriptObserver(scripts, codigoSemBloqueio);
         },TIMEOUT);
+
+        verificaAtualizacaoVersao();
         
     });
 
@@ -226,7 +253,6 @@ function removeScriptObserver(s, codigoSemBloqueio)
     removeAllBtnShowSolucao();
     removeBloqueioTeoria();
     removeBloqueioConteudoExclusivo();
-    verificaAtualizacaoVersao();
 
     //LOOP Para remover bloqueios caso haja atualização dos iframes
     setInterval(()=>{
@@ -283,8 +309,15 @@ function injectPayloadRespondeAI()
                 {
                     if(_current_user.hasAccess == false)
                     {
-                        _current_user.hasAccess = true;
-                        ${incrementaConteudoAPI()};
+                        try{
+                            _current_user.hasAccess = true;
+                            document.getElementById("body-wrapper").click();
+                        }catch(e){
+                            console.log("ERRO ATUALIZA FRAME CADEADOS AFTER UNLOCK");
+                        }
+                        finally{
+                            ${incrementaConteudoAPI()};
+                        }
                     }
                 }
             },800);

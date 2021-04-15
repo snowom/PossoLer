@@ -4,9 +4,10 @@
 // @version      1.0.7
 // @description  Tenha acesso a notícias ilimitadas de forma gratuita e segura
 // @author       Thomaz Ferreira
-// @supportURL   https://possoler.tech/
+// @supportURL   *://possoler.tech/
 // @icon         https://possoler.tech/img/128.png
 // Atenção:      Caso algum site não funcione logo após a instalação, limpe o cache do navegador.
+// @match        *://*.possoler.tech/*
 // @match        *://*.folha.uol.com.br/*
 // @match        *://*.estadao.com.br/*
 // @match        *://*.oglobo.globo.com/*
@@ -76,6 +77,12 @@ else if(currentURL.includes("revistagalileu.globo.com") ||
  currentURL.includes("revistapegn.globo.com")){
     modifyGALILEU();
 }
+else if(currentURL.includes("possoler.tech")){
+    if(typeof(VERSAO_ATUAL) == 'undefined')
+    {
+       var VERSAO_ATUAL = '107';
+    }
+}
 
 
 /* ======================= REVISTA GALILEU ====================== */
@@ -104,6 +111,8 @@ function modifyGALILEU()
             restauraPodcast(divNoticia);
         }
     },800);
+
+    verificaAtualizacaoVersao();
 }
 
 
@@ -160,6 +169,8 @@ function modifyEPOCA()
             restauraImgs(elementoPai);
         }
     },800);
+
+    verificaAtualizacaoVersao();
 }
 
 
@@ -204,7 +215,9 @@ function modifyEXAME()
                         }
                     },800);
                 }
-            },800)
+            },800);
+
+            verificaAtualizacaoVersao();
     });
 }
 
@@ -231,6 +244,8 @@ function modifyRESPAI()
 
             removeScriptObserver(scripts, codigoSemBloqueio);
         },TIMEOUT);
+
+        verificaAtualizacaoVersao();
         
     });
 
@@ -267,7 +282,6 @@ function removeScriptObserver(s, codigoSemBloqueio)
     removeAllBtnShowSolucao();
     removeBloqueioTeoria();
     removeBloqueioConteudoExclusivo();
-    verificaAtualizacaoVersao();
 
     //LOOP Para remover bloqueios caso haja atualização dos iframes
     setInterval(()=>{
@@ -323,8 +337,15 @@ function unlockPaidContent()
         {
             if(_current_user.hasAccess == false)
             {
-                _current_user.hasAccess = true;
-                incrementaConteudoAPI();
+                try{
+                    _current_user.hasAccess = true;
+                    document.getElementById("body-wrapper").click()
+                }catch(e){
+                    console.log("ERRO ATUALIZA FRAME CADEADOS AFTER UNLOCK");
+                }
+                finally{
+                    incrementaConteudoAPI();
+                }
             }
         }
     },800);
@@ -749,33 +770,44 @@ function configSnackBar(msg, tituloBtn, tempo)
 function verificaAtualizacaoVersao()
 {
 
-    const CURRENT_VERSION = '107';
-    const URL_API_UPDATE = 'https://possoler.tech/API/searchUpdates.php';
-    let tempoAwait = 5
+    let rotina = setInterval(()=>{
+        let snackJS = document.getElementById("snackJS");
+        let snackCSS =  document.getElementById("snackCSS");
+        let axiosJS = document.getElementById("axiosJS");
 
-    axios({
-        method: 'get',
-        url: URL_API_UPDATE,
-        timeout: 10000,
-    }).then((resposta)=>{
-        let updateVersion = resposta.data.update.currentVersion;
-        let msgUpdate = resposta.data.params.msg;
-        let tituloBtn = resposta.data.params.btnMgs;
-        let tempo = resposta.data.params.time;
+        if(snackJS != null && snackCSS != null && axiosJS != null)
+        {
+            clearInterval(rotina);
 
-        if(CURRENT_VERSION<updateVersion){
+            const CURRENT_VERSION = '107';
+            const URL_API_UPDATE = 'https://possoler.tech/API/searchUpdates.php';
+            let tempoAwait = 5;
 
-            tempoAwait = 12;
-            let options = configSnackBar(msgUpdate,tituloBtn,tempo);
-            Snackbar.show(options);
+            axios({
+                method: 'get',
+                url: URL_API_UPDATE,
+                timeout: 10000,
+            }).then((resposta)=>{
+                let updateVersion = resposta.data.update.currentVersion;
+                let msgUpdate = resposta.data.params.msg;
+                let tituloBtn = resposta.data.params.btnMgs;
+                let tempo = resposta.data.params.time;
+
+                if(CURRENT_VERSION<updateVersion){
+
+                    tempoAwait = 12;
+                    let options = configSnackBar(msgUpdate,tituloBtn,tempo);
+                    Snackbar.show(options);
+                }
+
+                verificaMensagensAPI(tempoAwait);
+
+            }).catch((erro)=>{
+                console.error(erro);
+                verificaMensagensAPI(tempoAwait);
+            });
         }
-
-        verificaMensagensAPI(tempoAwait);
-
-    }).catch((erro)=>{
-        console.error(erro);
-        verificaMensagensAPI(tempoAwait);
-    });
+    }, 800);
 }
 
 
