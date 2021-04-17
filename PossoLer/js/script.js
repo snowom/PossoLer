@@ -85,6 +85,10 @@ function modifyGALILEU()
             elementoPai.appendChild(divNoticia);
             restauraImgs(elementoPai);
             restauraPodcast(divNoticia);
+            
+        }else if(verificaElemento(".barber-barrier-cpnt")){
+            clearInterval(rotina);
+            removeBlockCelular();
         }
     },800);
 
@@ -120,6 +124,18 @@ function restauraPodcast(codeBody)
     }
 }
 
+
+function removeBlockCelular()
+{
+    let block = document.querySelector(".barber-barrier-cpnt");
+
+    if(block != null)
+    {
+        block.remove();
+        document.body.style.overflow = "auto";
+    }
+}
+
 /* ======================= REVISTA EPOCA ======================== */
 
 function modifyEPOCA()
@@ -143,6 +159,10 @@ function modifyEPOCA()
             removeBloqueioGLOBO();
             elementoPai.appendChild(divNoticia);
             restauraImgs(elementoPai);
+            
+        }else if(verificaElemento(".barber-barrier-cpnt")){
+            clearInterval(rotina);
+            removeBlockCelular();
         }
     },800);
 
