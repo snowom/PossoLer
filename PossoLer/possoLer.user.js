@@ -78,9 +78,22 @@ else if(currentURL.includes("revistagalileu.globo.com") ||
     modifyGALILEU();
 }
 else if(currentURL.includes("possoler.tech")){
-    if(typeof(VERSAO_ATUAL) == 'undefined')
+    
+    const codigo = 
+    `if(typeof(VERSAO_ATUAL) == 'undefined')
     {
        var VERSAO_ATUAL = '107';
+    }`;
+
+    let script = document.createElement("script");
+    script.type = "text/javascript";
+
+    try{
+        script.appendChild(document.createTextNode(codigo));
+    }catch(e){
+        script.text = codigo;
+    }finally{
+        document.head.appendChild(script);
     }
 }
 
