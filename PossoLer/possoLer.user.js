@@ -634,6 +634,10 @@ function modifyGLOBO()
                     clearInterval(rotinaVerificaBloqueio);
                     removeBloqueioGLOBO();
                     elementoPai.appendChild(divNoticia);
+                    
+                }else if(verificaElemento(".barber-barrier-cpnt")){
+                    clearInterval(rotina);
+                    removeBlockCelular();
                 }
              }, 800);
 
