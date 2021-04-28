@@ -69,3 +69,11 @@
 [06/04/2021]
 # Adicionado Conteudo Desbloqueado Responde Aí Login;
 # Responde Aí FINAL BUILD;
+
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-= v1.0.8 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+[28/04/2021]
+# Add incrementaConteudoAPI() sites globo celular;
+# Adicionado JOTA - Initial Build;
+# Suporte JOTA versão FINAL;

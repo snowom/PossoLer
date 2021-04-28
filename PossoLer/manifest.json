@@ -1,6 +1,6 @@
 {
     "manifest_version": 2,
-    "version": "1.0.7",
+    "version": "1.0.8",
     "name": "Posso Ler?",
     "description": "Tenha acesso a notícias ilimitadas de forma gratuita e segura",
     "author": "Thomaz Ferreira Neves dos Santos",
@@ -20,6 +20,6 @@
     "content_scripts": [{
         "js":["js/axios.js", "js/snackbar.js", "js/script.js"],
         "css":["css/snackbar.css", "css/styleSnackBar.css"],
-    "matches":["*://*.folha.uol.com.br/*", "*://*.estadao.com.br/*", "*://*.oglobo.globo.com/*", "*://*.gazetadopovo.com.br/*", "*://*.super.abril.com.br/*", "*://*.quatrorodas.abril.com.br/*", "*://*.veja.abril.com.br/*", "*://*.vejasp.abril.com.br/*", "*://*.respondeai.com.br/*", "*://*.exame.com/*", "*://*.guiadoestudante.abril.com.br/*", "*://*.epoca.globo.com/*", "*://*.revistagalileu.globo.com/*", "*://*.epocanegocios.globo.com/*", "*://*.revistamarieclaire.globo.com/*", "*://*.revistagloborural.globo.com/*", "*://*.autoesporte.globo.com/*", "*://*.revistapegn.globo.com/*", "*://possoler.tech/*"]
+    "matches":["*://*.folha.uol.com.br/*", "*://*.estadao.com.br/*", "*://*.oglobo.globo.com/*", "*://*.gazetadopovo.com.br/*", "*://*.super.abril.com.br/*", "*://*.quatrorodas.abril.com.br/*", "*://*.veja.abril.com.br/*", "*://*.vejasp.abril.com.br/*", "*://*.respondeai.com.br/*", "*://*.exame.com/*", "*://*.guiadoestudante.abril.com.br/*", "*://*.epoca.globo.com/*", "*://*.revistagalileu.globo.com/*", "*://*.epocanegocios.globo.com/*", "*://*.revistamarieclaire.globo.com/*", "*://*.revistagloborural.globo.com/*", "*://*.autoesporte.globo.com/*", "*://*.revistapegn.globo.com/*", "*://possoler.tech/*", "*://*.jota.info/*"]
     }]
 }
