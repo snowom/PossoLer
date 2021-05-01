@@ -75,5 +75,5 @@
 
 [28/04/2021]
 # Add incrementaConteudoAPI() sites globo celular;
-# Adicionado JOTA - Initial Build;
-# Suporte JOTA versão FINAL;
+# Adicionado JOTA;
+# Adicionado NSC Total;

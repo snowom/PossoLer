@@ -62,6 +62,44 @@ else if(currentURL.includes("possoler.tech")){
 else if(currentURL.includes("jota.info")){
     modifyJOTA();
 }
+else if(currentURL.includes("nsctotal.com.br")){
+    modifyNSC();
+}
+
+
+/* ========================= NSC TOTAL =============================== */
+
+function modifyNSC()
+{
+    fetch(document.location.href)
+    .then(response => response.text())
+    .then(pageSource => {
+
+		let sourceCode = new DOMParser().parseFromString(pageSource, "text/html");
+
+        let r = setInterval(()=>{
+            if(sourceCode != null || sourceCode != undefined){
+                clearInterval(r);
+
+                let blocoNoticia = sourceCode.querySelector(".paywall-content");
+
+                let rotina = setInterval(()=>{
+                    if(verificaElemento("#signwall-template") && verificaElemento(".ContentFadeOut__Wrapper-sc-164tfq8-0") && (blocoNoticia != null || blocoNoticia != undefined)){
+                        clearInterval(rotina);
+
+                        let contentNoticia = document.querySelector(".ContentFadeOut__Wrapper-sc-164tfq8-0");
+                        contentNoticia.innerHTML = blocoNoticia.outerHTML;
+                        contentNoticia.style.maxHeight = "none";
+                        document.querySelector("#signwall-template").remove();
+
+                        incrementaConteudoAPI();
+                        verificaAtualizacaoVersao();
+                    }
+                },800);
+            }
+        },800);
+	});
+}
 
 
 /* ======================= JOTA ================================= */
