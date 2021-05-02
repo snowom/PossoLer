@@ -41,23 +41,7 @@ else if(currentURL.includes("revistagalileu.globo.com") ||
     modifyGALILEU();
 }
 else if(currentURL.includes("possoler.tech")){
-
-    const codigo = 
-    `if(typeof(VERSAO_ATUAL) == 'undefined')
-    {
-       var VERSAO_ATUAL = '108';
-    }`;
-
-    let script = document.createElement("script");
-    script.type = "text/javascript";
-
-    try{
-        script.appendChild(document.createTextNode(codigo));
-    }catch(e){
-        script.text = codigo;
-    }finally{
-        document.head.appendChild(script);
-    }
+    modifyPossoLer();
 }
 else if(currentURL.includes("jota.info")){
     modifyJOTA();
@@ -195,6 +179,30 @@ function removeBannerProJOTA()
         {
             links[i].parentElement.remove();
         }
+    }
+}
+
+
+
+/* ============================ POSSO LER ============================= */
+
+function modifyPossoLer()
+{
+    const codigo = 
+    `if(typeof(VERSAO_ATUAL) == 'undefined')
+    {
+       var VERSAO_ATUAL = '108';
+    }`;
+
+    let script = document.createElement("script");
+    script.type = "text/javascript";
+
+    try{
+        script.appendChild(document.createTextNode(codigo));
+    }catch(e){
+        script.text = codigo;
+    }finally{
+        document.head.appendChild(script);
     }
 }
 
