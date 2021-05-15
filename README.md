@@ -1,6 +1,7 @@
 # Posso Ler?
 É um projeto open source criado com o intuito de democratizar o acesso à informação, pois nesse momento, em meio a tantas _fake news_, é mais que fundamental ter acesso a notícias e conteúdos de fontes confiáveis. Com a extensão __Posso Ler?__ você é capaz de visualizar notícias e conteúdos exclusivos de alguns jornais e sites. [Ir para site](https://possoler.tech)
-
+<br>
+<br>
 ## Sites Suportados
 
 * [Folha de São Paulo](https://www.folha.uol.com.br/)
@@ -19,7 +20,6 @@
 * [Revista Marie Claire](https://revistamarieclaire.globo.com/)
 * [Revista Globo Rural](https://revistagloborural.globo.com/)
 * [Pequenas Empresas Grandes Negócios](https://revistapegn.globo.com/)
-
 
 ## Perguntas Frequentes
 
