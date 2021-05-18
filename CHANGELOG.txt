@@ -77,3 +77,6 @@
 # Add incrementaConteudoAPI() sites globo celular;
 # Adicionado JOTA;
 # Adicionado NSC Total;
+
+[18/05/2021]
+# Adicionado New York Times;

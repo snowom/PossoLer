@@ -28,6 +28,7 @@
 // @match        *://*.revistapegn.globo.com/*
 // @match        *://*.jota.info/*
 // @match        *://*.nsctotal.com.br/*
+// @match        *://*.nytimes.com/*
 // @run-at       document-start
 // @noframes
 // ==/UserScript==
@@ -88,7 +89,31 @@ else if(currentURL.includes("jota.info")){
 else if(currentURL.includes("nsctotal.com.br")){
     modifyNSC();
 }
+else if(currentURL.includes("nytimes.com")){
+    modifyNYTIMES();
+}
 
+
+
+/* ========================= NEWYORK TIMES =========================== */
+
+function modifyNYTIMES()
+{
+    let r = setInterval(()=>{
+        if(verificaElemento("#gateway-content")){
+            clearInterval(r);
+            document.querySelector("#gateway-content").remove();
+            document.querySelector(".css-1bd8bfl").remove();
+            
+            let article = document.querySelector(".css-mcm29f");
+            article.style.position = "unset";
+            article.style.overflow = "auto";
+
+            incrementaConteudoAPI();
+            verificaAtualizacaoVersao();
+        }
+    }, 800);
+}
 
 /* ========================= NSC TOTAL =============================== */
 
