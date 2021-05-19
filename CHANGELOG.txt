@@ -80,3 +80,5 @@
 
 [18/05/2021]
 # Adicionado New York Times;
+# Adicionado El País Brasil;
+# Correção Imports CDN's Internet Lenta;

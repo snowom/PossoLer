@@ -52,7 +52,59 @@ else if(currentURL.includes("nsctotal.com.br")){
 else if(currentURL.includes("nytimes.com")){
     modifyNYTIMES();
 }
+else if(currentURL.includes("elpais.com")){
+    modifyELPAIS();
+}
 
+
+
+/* ====================== EL PAIS =========================== */
+
+function modifyELPAIS()
+{
+    let passei = false;
+    let sourceCode;
+
+    fetch(document.location.href)
+    .then(response => response.text())
+    .then(pageSource => {
+        sourceCode = new DOMParser().parseFromString(pageSource, "text/html");
+    });
+
+    let r = setInterval(()=>{
+        if((verificaElemento("#ctn_closed_article") || verificaElemento(".paywallModal")) && sourceCode != null){
+            if(verificaElemento(".paywallModal")) document.querySelector(".paywallModal").remove();
+            
+            let blocoNoticia = document.querySelector("article");
+            blocoNoticia.innerHTML = (sourceCode.querySelector("article")).outerHTML;
+            removeSubscriptionBanners();
+
+            if(passei==false){
+                incrementaConteudoAPI();
+                verificaAtualizacaoVersao();
+                passei = true;
+            }
+        }
+    }, 800);
+
+    window.addEventListener("load", ()=>{
+        clearInterval(r);
+    })
+}
+
+
+function removeSubscriptionBanners()
+{
+    let subscriptionsDivs = document.querySelectorAll(".suscripcion");
+    for(let i=0; i<subscriptionsDivs.length; i++){
+        subscriptionsDivs[i].remove();
+    }
+
+    window.addEventListener("load", ()=>{
+        let bannerPaywallOfferBig = document.querySelector("#paywallOfferBig");
+        if(bannerPaywallOfferBig != null) bannerPaywallOfferBig.remove();
+    })
+}
 
 
 /* ========================= NEWYORK TIMES =========================== */

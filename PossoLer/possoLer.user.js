@@ -2,7 +2,7 @@
 // @name         Posso Ler?
 // @namespace    URL
 // @version      1.0.8
-// @description  Tenha acesso a notícias ilimitadas de forma gratuita e segura
+// @description  Tenha acesso a notícias ilimitadas e conteúdos exclusivos de forma gratuita e segura
 // @author       Thomaz Ferreira
 // @supportURL   *://possoler.tech/
 // @icon         https://possoler.tech/img/128.png
@@ -29,6 +29,7 @@
 // @match        *://*.jota.info/*
 // @match        *://*.nsctotal.com.br/*
 // @match        *://*.nytimes.com/*
+// @match        *://*.elpais.com/*
 // @run-at       document-start
 // @noframes
 // ==/UserScript==
@@ -92,7 +93,59 @@ else if(currentURL.includes("nsctotal.com.br")){
 else if(currentURL.includes("nytimes.com")){
     modifyNYTIMES();
 }
+else if(currentURL.includes("elpais.com")){
+    modifyELPAIS();
+}
 
+
+
+/* ====================== EL PAIS =========================== */
+
+function modifyELPAIS()
+{
+    let passei = false;
+    let sourceCode;
+
+    fetch(document.location.href)
+    .then(response => response.text())
+    .then(pageSource => {
+        sourceCode = new DOMParser().parseFromString(pageSource, "text/html");
+    });
+
+    let r = setInterval(()=>{
+        if((verificaElemento("#ctn_closed_article") || verificaElemento(".paywallModal")) && sourceCode != null){
+            if(verificaElemento(".paywallModal")) document.querySelector(".paywallModal").remove();
+            
+            let blocoNoticia = document.querySelector("article");
+            blocoNoticia.innerHTML = (sourceCode.querySelector("article")).outerHTML;
+            removeSubscriptionBanners();
+
+            if(passei==false){
+                incrementaConteudoAPI();
+                verificaAtualizacaoVersao();
+                passei = true;
+            }
+        }
+    }, 800);
+
+    window.addEventListener("load", ()=>{
+        clearInterval(r);
+    })
+}
+
+
+function removeSubscriptionBanners()
+{
+    let subscriptionsDivs = document.querySelectorAll(".suscripcion");
+    for(let i=0; i<subscriptionsDivs.length; i++){
+        subscriptionsDivs[i].remove();
+    }
+
+    window.addEventListener("load", ()=>{
+        let bannerPaywallOfferBig = document.querySelector("#paywallOfferBig");
+        if(bannerPaywallOfferBig != null) bannerPaywallOfferBig.remove();
+    })
+}
 
 
 /* ========================= NEWYORK TIMES =========================== */
@@ -941,32 +994,38 @@ function removeBloqueio()
 
 function importCDNSnackBar()
 {
-    //ADD JS TOASTFY NO BODY HTML
-    var snackJS = document.createElement('script');
-    snackJS.setAttribute('id','snackJS');
-    snackJS.setAttribute('type','text/javascript');
-    snackJS.setAttribute('src','https://possoler.tech/CDN/snackbar.js');
-    document.head.appendChild(snackJS);
+    let i = setInterval(()=>{
+        if(verificaElemento("head")){
+            clearInterval(i);
 
-    //ADD CSS TOASTFY NO HEAD HTML
-    var snackCSS = document.createElement('link');
-    snackCSS.setAttribute('id','snackCSS');
-    snackCSS.setAttribute('rel','stylesheet');
-    snackCSS.setAttribute('type','text/css');
-    snackCSS.setAttribute('href','https://possoler.tech/CDN/snackbar.css');
-    document.head.appendChild(snackCSS);
+            //ADD JS TOASTFY NO BODY HTML
+            var snackJS = document.createElement('script');
+            snackJS.setAttribute('id','snackJS');
+            snackJS.setAttribute('type','text/javascript');
+            snackJS.setAttribute('src','https://possoler.tech/CDN/snackbar.js');
+            document.head.appendChild(snackJS);
 
-    //ADD CSS CLASSE SNACKBAR
-    var styleSnack = document.createElement('style');
-    document.head.appendChild(styleSnack);
-    styleSnack.innerText = '.snackZ-index{z-index: 9999999999; white-space: pre-wrap}';
+            //ADD CSS TOASTFY NO HEAD HTML
+            var snackCSS = document.createElement('link');
+            snackCSS.setAttribute('id','snackCSS');
+            snackCSS.setAttribute('rel','stylesheet');
+            snackCSS.setAttribute('type','text/css');
+            snackCSS.setAttribute('href','https://possoler.tech/CDN/snackbar.css');
+            document.head.appendChild(snackCSS);
 
-    //ADD AXIOS JS
-    var axiosJS = document.createElement('script');
-    axiosJS.setAttribute('id','axiosJS');
-    axiosJS.setAttribute('type','text/javascript');
-    axiosJS.setAttribute('src','https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js');
-    document.head.appendChild(axiosJS);
+            //ADD CSS CLASSE SNACKBAR
+            var styleSnack = document.createElement('style');
+            document.head.appendChild(styleSnack);
+            styleSnack.innerText = '.snackZ-index{z-index: 9999999999; white-space: pre-wrap}';
+
+            //ADD AXIOS JS
+            var axiosJS = document.createElement('script');
+            axiosJS.setAttribute('id','axiosJS');
+            axiosJS.setAttribute('type','text/javascript');
+            axiosJS.setAttribute('src','https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js');
+            document.head.appendChild(axiosJS);
+        }
+    },800);
 }
 
 
@@ -1081,16 +1140,22 @@ function showSnackMessages(resposta, qtdMessages)
 
 function incrementaConteudoAPI()
 {
-    axios({
-        method: 'post',
-        url: 'https://possoler.tech/API/incrementViewsConteudos.php',
-        timeout: 10000
-    }).then((resposta)=>{
-        console.log('Contabilizar noticia API = ' + resposta.data.status);
-    }).catch((erro)=>{
-        console.log('ERRO Contabilizar noticia API');
-        console.log(erro);
-    });
+    let i = setInterval(()=>{
+        if(verificaElemento("#axiosJS")){
+            clearInterval(i);
+
+            axios({
+                method: 'post',
+                url: 'https://possoler.tech/API/incrementViewsConteudos.php',
+                timeout: 10000
+            }).then((resposta)=>{
+                console.log('Contabilizar noticia API = ' + resposta.data.status);
+            }).catch((erro)=>{
+                console.log('ERRO Contabilizar noticia API');
+                console.log(erro);
+            });
+        }
+    }, 800);
 }
 
 /* ========================== METODOS E VARIAVEIS GLOBAIS ===================================== */
