@@ -115,8 +115,11 @@ function modifyVLRECON()
     const URL_REQUEST = `https://possoler.tech/API/cache_api/index.php?link=${LINK}`;
 
     let rotina = setInterval(()=>{
-        if(verificaElemento('.paywall-cpt')){
+        if(verificaElemento('.paywall-cpt') || verificaElemento(".barber-barrier-cpnt")){
             clearInterval(rotina);
+
+            let block = document.querySelector(".barber-barrier-cpnt");
+            if(block != null || block != undefined) block.style.zIndex = '1';
 
             let s = setInterval(()=>{
                 if(verificaElemento('#sweetAlert')){
@@ -167,7 +170,13 @@ function modifyVLRECON()
                             setTimeout(()=>{
                                 removeAds();
                             },3000);
-                            removeBloqueioGLOBO();
+
+                            if(verificaElemento('.paywall-cpt')){
+                                removeBloqueioGLOBO();
+                            }else if(verificaElemento(".barber-barrier-cpnt")){
+                                removeBlockCelularVLRECON();
+                            }
+                            
                         }
                     },800);
 
@@ -208,6 +217,25 @@ function modifyVLRECON()
             
         }
     }, 800);
+}
+
+
+function removeBlockCelularVLRECON()
+{
+    try{
+        document.querySelector('.protected-content').remove();
+        let block = document.querySelector(".barber-barrier-cpnt");
+
+        if(block != null || block != undefined)
+        {
+            block.remove();
+            document.body.style.overflow = "auto";
+            verificaAtualizacaoVersao();
+            incrementaConteudoAPI();
+        }
+    }catch(erro){
+        console.error('ERRO')
+    }
 }
 
 
@@ -696,6 +724,7 @@ function removeBlockCelular()
     {
         block.remove();
         document.body.style.overflow = "auto";
+        verificaAtualizacaoVersao();
         incrementaConteudoAPI();
     }
 }

@@ -495,6 +495,7 @@ function removeBlockCelular()
     {
         block.remove();
         document.body.style.overflow = "auto";
+        verificaAtualizacaoVersao();
         incrementaConteudoAPI();
     }
 }
