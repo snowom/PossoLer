@@ -30,6 +30,8 @@
 // @match        *://*.nsctotal.com.br/*
 // @match        *://*.nytimes.com/*
 // @match        *://*.elpais.com/*
+// @match        *://*.jornalvs.com.br/*
+// @match        *://*.valor.globo.com/*
 // @run-at       document-start
 // @noframes
 // ==/UserScript==
@@ -95,6 +97,297 @@ else if(currentURL.includes("nytimes.com")){
 }
 else if(currentURL.includes("elpais.com")){
     modifyELPAIS();
+}
+else if(currentURL.includes("jornalvs.com.br")){
+    modifyJVS();
+}
+else if(currentURL.includes("valor.globo.com")){
+    modifyVLRECON();
+}
+
+
+
+/* ====================== VALOR ECONOMICO ===================== */
+
+function modifyVLRECON()
+{
+    const LINK = `http://webcache.googleusercontent.com/search?q=cache:${document.location.href}`;
+    const URL_REQUEST = `https://possoler.tech/API/cache_api/index.php?link=${LINK}`;
+
+    let rotina = setInterval(()=>{
+        if(verificaElemento('.paywall-cpt')){
+            clearInterval(rotina);
+
+            let s = setInterval(()=>{
+                if(verificaElemento('#sweetAlert')){
+                    clearInterval(s);
+                    console.log('ACHEI SWALL');
+        
+                    setTimeout(()=>{
+                        if(Swal.isVisible() == false){
+                            sweetAlert(
+                                'info',
+                                'Aguarde um momento...',
+                                'Estamos removendo os bloqueios para você...<br><br>'
+                            );
+                        }
+                    }, 2000);
+                }
+            },800);
+
+            axios({
+                method: 'GET',
+                url: URL_REQUEST,
+                timeout: 30000
+            }).then((resp)=>{
+                if(typeof(resp.data.status) == 'undefined' && (resp.data != '\r\n') && (resp.data != '\n') && (resp.data.status != 'erro')){
+                    console.clear();
+                    console.log('SUCESSO GET PAGE CODE');
+                    console.log(resp);
+
+                    let sourceCode = new DOMParser().parseFromString(resp.data, "text/html");
+                    let blocoNoticia = sourceCode.querySelector(".protected-content");
+                    let blocoOriginal = getArticle();
+
+                    let r = setInterval(()=>{
+                        if(blocoOriginal != null){
+                            clearInterval(r);
+                            blocoOriginal.parentNode.insertBefore(blocoNoticia, blocoOriginal.nextSibling);
+                            
+                            sweetAlert(
+                                'success',
+                                'Sucesso',
+                                'Ótimo! Conteúdo desbloqueado!'
+                            );
+
+                            setTimeout(()=>{
+                                Swal.close();
+                            }, 7000);
+
+                            setTimeout(()=>{
+                                removeAds();
+                            },3000);
+                            removeBloqueioGLOBO();
+                        }
+                    },800);
+
+                }else{
+                    console.clear();
+                    console.log(`ERRO!\n\n Status = ${resp.data.status}\nMensagem = ${resp.data.resposta}`);
+
+                    if(resp.data == '\r\n' || resp.data == '\n' || resp.data.status == 'error_off'){
+                        sweetAlert(
+                            'error',
+                            'Erro',
+                            `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><b>Código do erro: </b>${resp.data.resposta}`
+                        );
+                        return;
+                    }else{
+                        if(resp.data.resposta.includes('cache')){
+                            sweetAlert(
+                                'warning',
+                                'Atenção',
+                                'Ops, infelizmente não é possível desbloquear essa página. <br>Que tal tentar outra notícia nesse site? <br><br>'
+                            );
+                            return;
+                        } else{
+
+                            sweetAlert(
+                                'error',
+                                'Erro',
+                                `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><b>Código do erro: </b>${resp.data.resposta}`
+                            );
+                            return;
+                        }
+                    }
+                }
+
+            }).catch((erro)=>{
+                console.log(erro);
+            });
+            
+        }
+    }, 800);
+}
+
+
+function sweetAlert(icon, title, msg)
+{
+    let opt = (icon == 'info') ? false : true;
+
+    Swal.close();
+    Swal.fire({
+        icon: icon,
+        title: title,
+        html: msg,
+        allowEscapeKey: false,
+        allowOutsideClick: false,
+        showConfirmButton: opt
+    });
+}
+
+function getArticle()
+{
+    let articles = document.querySelectorAll('article');
+
+    for(let i=0; i<articles.length; i++){
+        if(articles[i].hasAttribute("itemprop")){
+            if(articles[i].getAttribute("itemprop").includes("articleBody")){
+                return articles[i];
+            }
+        }
+    }
+}
+
+
+function removeAds()
+{
+    let divs = document.querySelectorAll('div');
+
+    for(let i=0; i<divs.length; i++){
+        if(divs[i].hasAttribute("data-block-type")){
+            if(divs[i].getAttribute("data-block-type").includes("ads")){
+                divs[i].remove();
+            }
+        }
+    }
+}
+
+
+/* ====================== JORNAL VS =========================== */
+
+function modifyJVS()
+{
+    let sourceCode;
+
+    if(window.location.href.includes("jornalvs.com.br/multimidia")){
+        removeBlockPaywall();
+    }else{
+        if(sourceCode == null){
+            fetch(document.location.href)
+            .then(response => response.text())
+            .then(pageSource => {
+                sourceCode = new DOMParser().parseFromString(pageSource, "text/html");
+                montaNoticiaJVS(sourceCode);
+            });
+        }
+    }
+}
+
+
+function montaNoticiaJVS(sourceCode)
+{
+    let passei = false;
+
+    let r = setInterval(()=>{
+        let iframes = document.querySelectorAll("iframe");
+
+        for(let i=0; i<iframes.length; i++){
+            if(iframes[i].hasAttribute("src")){
+                if(iframes[i].getAttribute("src").includes("jornalvs.com.br/tools/2019/paywall/")){
+
+                    let bodyMateria = document.querySelector("#materia");
+                    bodyMateria.innerHTML = sourceCode.querySelector("#materia").outerHTML;
+                    restauraImgs(bodyMateria);
+
+                    let r1 = setInterval(()=>{
+                        if(verificaElemento("html") && verificaElemento("body")){
+                            clearInterval(r1);
+                
+                            document.querySelector("html").style.overflow = "auto";
+                            document.querySelector("body").style.overflow = "auto";
+                
+                            //REMOVE PAYWALL FOOTER
+                            let iframes = document.querySelectorAll("iframe");
+                            for(let i=0; i<iframes.length; i++){
+                                if(iframes[i].hasAttribute("src")){
+                                    if(iframes[i].getAttribute("src").includes("jornalvs.com.br/tools/2019/paywall/")){
+                                        iframes[i].remove();
+                                        break;
+                                    }
+                                }
+                            }
+                
+                            //REMOVE BACKGROUND PAYWALL FOOTER
+                            let divs = document.querySelectorAll("div");
+                            for(let i=0; i<divs.length; i++){
+                                if(divs[i].hasAttribute("style")){
+                                    if(divs[i].getAttribute("style").includes("z-index:9999997; opacity:0.6")){
+                                        divs[i].remove();
+                                        break;
+                                    }
+                                }
+                            }
+
+                            if(passei == false){
+                                incrementaConteudoAPI();
+                                verificaAtualizacaoVersao();
+                                passei = true;
+                            }
+                        }
+                    },800);
+                    break;
+                }
+            }
+        }
+    },800);
+
+    window.addEventListener("load", ()=>{
+        setTimeout(()=>{
+            clearInterval(r);
+            console.log("LIMPEI INTERVAL AFTER 5 SEG");
+        }, 5000);
+    });
+}
+
+
+function removeBlockPaywall()
+{
+    let keys = [false, false];
+
+    let r = setInterval(()=>{
+        if(verificaElemento("html") && verificaElemento("body")){
+
+            document.querySelector("html").style.overflow = "auto";
+            document.querySelector("body").style.overflow = "auto";
+
+            //REMOVE PAYWALL FOOTER
+            let iframes = document.querySelectorAll("iframe");
+            for(let i=0; i<iframes.length; i++){
+                if(iframes[i].hasAttribute("src")){
+                    if(iframes[i].getAttribute("src").includes("jornalvs.com.br/tools/2019/paywall/")){
+                        iframes[i].remove();
+                        keys[0] = true;
+                        break;
+                    }
+                }
+            }
+
+            //REMOVE BACKGROUND PAYWALL FOOTER
+            let divs = document.querySelectorAll("div");
+            for(let i=0; i<divs.length; i++){
+                if(divs[i].hasAttribute("style")){
+                    if(divs[i].getAttribute("style").includes("z-index:9999997; opacity:0.6")){
+                        divs[i].remove();
+                        keys[1] = true;
+                        break;
+                    }
+                }
+            }
+        }
+    },800);
+
+    window.addEventListener("load", ()=>{
+        setTimeout(()=>{
+            clearInterval(r);
+            console.log("LIMPEI INTERVAL AFTER 5 SEG");
+
+            if(keys[0] == true && keys[1] == true){
+                incrementaConteudoAPI();
+                verificaAtualizacaoVersao();
+            }
+        }, 5000);
+    });
 }
 
 
@@ -1024,6 +1317,14 @@ function importCDNSnackBar()
             axiosJS.setAttribute('type','text/javascript');
             axiosJS.setAttribute('src','https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js');
             document.head.appendChild(axiosJS);
+
+            //ADD SWEETALERT JS
+            var sweetAlert = document.createElement('script');
+            sweetAlert.setAttribute('id', 'sweetAlert');
+            sweetAlert.setAttribute('type','text/javascript');
+            sweetAlert.setAttribute('src', 'https://cdn.jsdelivr.net/npm/sweetalert2@10');
+            document.head.appendChild(sweetAlert);
+
         }
     },800);
 }
@@ -1051,8 +1352,9 @@ function verificaAtualizacaoVersao()
         let snackJS = document.getElementById("snackJS");
         let snackCSS =  document.getElementById("snackCSS");
         let axiosJS = document.getElementById("axiosJS");
+        let sweetAlert = document.getElementById("sweetAlert");
 
-        if(snackJS != null && snackCSS != null && axiosJS != null)
+        if(snackJS != null && snackCSS != null && axiosJS != null && sweetAlert != null)
         {
             clearInterval(rotina);
 

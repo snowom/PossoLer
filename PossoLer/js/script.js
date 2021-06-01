@@ -55,6 +55,147 @@ else if(currentURL.includes("nytimes.com")){
 else if(currentURL.includes("elpais.com")){
     modifyELPAIS();
 }
+else if(currentURL.includes("jornalvs.com.br")){
+    modifyJVS();
+}
+
+
+
+/* ====================== JORNAL VS =========================== */
+
+function modifyJVS()
+{
+    let sourceCode;
+
+    if(window.location.href.includes("jornalvs.com.br/multimidia")){
+        removeBlockPaywall();
+    }else{
+        if(sourceCode == null){
+            fetch(document.location.href)
+            .then(response => response.text())
+            .then(pageSource => {
+                sourceCode = new DOMParser().parseFromString(pageSource, "text/html");
+                montaNoticiaJVS(sourceCode);
+            });
+        }
+    }
+}
+
+
+function montaNoticiaJVS(sourceCode)
+{
+    let passei = false;
+
+    let r = setInterval(()=>{
+        let iframes = document.querySelectorAll("iframe");
+
+        for(let i=0; i<iframes.length; i++){
+            if(iframes[i].hasAttribute("src")){
+                if(iframes[i].getAttribute("src").includes("jornalvs.com.br/tools/2019/paywall/")){
+
+                    let bodyMateria = document.querySelector("#materia");
+                    bodyMateria.innerHTML = sourceCode.querySelector("#materia").outerHTML;
+                    restauraImgs(bodyMateria);
+
+                    let r1 = setInterval(()=>{
+                        if(verificaElemento("html") && verificaElemento("body")){
+                            clearInterval(r1);
+                
+                            document.querySelector("html").style.overflow = "auto";
+                            document.querySelector("body").style.overflow = "auto";
+                
+                            //REMOVE PAYWALL FOOTER
+                            let iframes = document.querySelectorAll("iframe");
+                            for(let i=0; i<iframes.length; i++){
+                                if(iframes[i].hasAttribute("src")){
+                                    if(iframes[i].getAttribute("src").includes("jornalvs.com.br/tools/2019/paywall/")){
+                                        iframes[i].remove();
+                                        break;
+                                    }
+                                }
+                            }
+                
+                            //REMOVE BACKGROUND PAYWALL FOOTER
+                            let divs = document.querySelectorAll("div");
+                            for(let i=0; i<divs.length; i++){
+                                if(divs[i].hasAttribute("style")){
+                                    if(divs[i].getAttribute("style").includes("z-index:9999997; opacity:0.6")){
+                                        divs[i].remove();
+                                        break;
+                                    }
+                                }
+                            }
+
+                            if(passei == false){
+                                incrementaConteudoAPI();
+                                verificaAtualizacaoVersao();
+                                passei = true;
+                            }
+                        }
+                    },800);
+                    break;
+                }
+            }
+        }
+    },800);
+
+    window.addEventListener("load", ()=>{
+        setTimeout(()=>{
+            clearInterval(r);
+            console.log("LIMPEI INTERVAL AFTER 5 SEG");
+        }, 5000);
+    });
+}
+
+
+function removeBlockPaywall()
+{
+    let keys = [false, false];
+
+    let r = setInterval(()=>{
+        if(verificaElemento("html") && verificaElemento("body")){
+
+            document.querySelector("html").style.overflow = "auto";
+            document.querySelector("body").style.overflow = "auto";
+
+            //REMOVE PAYWALL FOOTER
+            let iframes = document.querySelectorAll("iframe");
+            for(let i=0; i<iframes.length; i++){
+                if(iframes[i].hasAttribute("src")){
+                    if(iframes[i].getAttribute("src").includes("jornalvs.com.br/tools/2019/paywall/")){
+                        iframes[i].remove();
+                        keys[0] = true;
+                        break;
+                    }
+                }
+            }
+
+            //REMOVE BACKGROUND PAYWALL FOOTER
+            let divs = document.querySelectorAll("div");
+            for(let i=0; i<divs.length; i++){
+                if(divs[i].hasAttribute("style")){
+                    if(divs[i].getAttribute("style").includes("z-index:9999997; opacity:0.6")){
+                        divs[i].remove();
+                        keys[1] = true;
+                        break;
+                    }
+                }
+            }
+        }
+    },800);
+
+    window.addEventListener("load", ()=>{
+        setTimeout(()=>{
+            clearInterval(r);
+            console.log("LIMPEI INTERVAL AFTER 5 SEG");
+
+            if(keys[0] == true && keys[1] == true){
+                incrementaConteudoAPI();
+                verificaAtualizacaoVersao();
+            }
+        }, 5000);
+    });
+}
 
 
 

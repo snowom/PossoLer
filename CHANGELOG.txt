@@ -82,3 +82,9 @@
 # Adicionado New York Times;
 # Adicionado El País Brasil;
 # Correção Imports CDN's Internet Lenta;
+
+[24/05/2021]
+# Adicionado Jornal VS;
+
+[01/06/2021]
+# Adicionado Valor Economico;
