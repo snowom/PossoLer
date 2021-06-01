@@ -150,35 +150,45 @@ function modifyVLRECON()
 
                     let sourceCode = new DOMParser().parseFromString(resp.data, "text/html");
                     let blocoNoticia = sourceCode.querySelector(".protected-content");
-                    let blocoOriginal = getArticle();
+                    
+                    if(blocoNoticia != null || blocoNoticia != undefined){
+                        let blocoOriginal = getArticle();
 
-                    let r = setInterval(()=>{
-                        if(blocoOriginal != null){
-                            clearInterval(r);
-                            blocoOriginal.parentNode.insertBefore(blocoNoticia, blocoOriginal.nextSibling);
-                            
-                            sweetAlert(
-                                'success',
-                                'Sucesso',
-                                'Ótimo! Conteúdo desbloqueado!'
-                            );
+                        let r = setInterval(()=>{
+                            if(blocoOriginal != null){
+                                clearInterval(r);
+                                blocoOriginal.parentNode.insertBefore(blocoNoticia, blocoOriginal.nextSibling);
+                                
+                                sweetAlert(
+                                    'success',
+                                    'Sucesso',
+                                    'Ótimo! Conteúdo desbloqueado!'
+                                );
 
-                            setTimeout(()=>{
-                                Swal.close();
-                            }, 7000);
+                                setTimeout(()=>{
+                                    Swal.close();
+                                }, 7000);
 
-                            setTimeout(()=>{
-                                removeAds();
-                            },3000);
+                                setTimeout(()=>{
+                                    removeAds();
+                                },3000);
 
-                            if(verificaElemento('.paywall-cpt')){
-                                removeBloqueioGLOBO();
-                            }else if(verificaElemento(".barber-barrier-cpnt")){
-                                removeBlockCelularVLRECON();
+                                if(verificaElemento('.paywall-cpt')){
+                                    removeBloqueioGLOBO();
+                                }else if(verificaElemento(".barber-barrier-cpnt")){
+                                    removeBlockCelularVLRECON();
+                                }
+                                
                             }
-                            
-                        }
-                    },800);
+                        },800);
+                    }else{
+                        sweetAlert(
+                            'warning',
+                            'Atenção',
+                            'Ops, infelizmente não é possível desbloquear essa página. <br>Que tal tentar outra notícia nesse site? <br><br>'
+                        );
+                        return;
+                    }
 
                 }else{
                     console.clear();
@@ -196,7 +206,7 @@ function modifyVLRECON()
                             sweetAlert(
                                 'warning',
                                 'Atenção',
-                                'Ops, infelizmente não é possível desbloquear essa página. <br>Que tal tentar outra notícia nesse site? <br><br>'
+                                'Ops, infelizmente não foi possível desbloquear essa página. <br>Que tal tentar um pouco mais tarde ou tentar outra notícia? <br><br>'
                             );
                             return;
                         } else{
@@ -1284,17 +1294,11 @@ function removeBloqueioEST()
 function modifyFLSP()
 {
     let rotina = setInterval(() => {
-        if(verificaComponents()){
+        if(verificaElemento('#paywall-flutuante') && verificaElemento('#paywall-content') && verificaElemento('#paywall-fill')){
             clearInterval(rotina);
             removeBloqueio();
         }
     }, 800);
-}
-
-
-function verificaComponents()
-{
-    return (document.getElementById('paywall-flutuante') != null && document.getElementById('paywall-content') != null && document.getElementById('paywall-fill') != null) ? true : false;
 }
 
 

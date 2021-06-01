@@ -87,4 +87,8 @@
 # Adicionado Jornal VS;
 
 [01/06/2021]
-# Adicionado Valor Economico;
+# Adicionado Valor Economico BETA;
+# Correção API's Valor Economico;
+# Correção Sweet Alert bug;
+# Valor Econômico FINAL BUILD;
+# CRX atualizado;

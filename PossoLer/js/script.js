@@ -58,7 +58,188 @@ else if(currentURL.includes("elpais.com")){
 else if(currentURL.includes("jornalvs.com.br")){
     modifyJVS();
 }
+else if(currentURL.includes("valor.globo.com")){
+    modifyVLRECON();
+}
 
+
+/* ====================== VALOR ECONOMICO ===================== */
+
+function modifyVLRECON()
+{
+    const LINK = `http://webcache.googleusercontent.com/search?q=cache:${document.location.href}`;
+    const URL_REQUEST = `https://possoler.tech/API/cache_api/index.php?link=${LINK}`;
+
+    let rotina = setInterval(()=>{
+        if(verificaElemento('.paywall-cpt') || verificaElemento(".barber-barrier-cpnt")){
+            clearInterval(rotina);
+
+            let block = document.querySelector(".barber-barrier-cpnt");
+            if(block != null || block != undefined) block.style.zIndex = '1';
+
+            setTimeout(()=>{
+                if(Swal.isVisible() == false){
+                    sweetAlert(
+                        'info',
+                        'Aguarde um momento...',
+                        'Estamos removendo os bloqueios para você...<br><br>'
+                    );
+                }
+            }, 2000);
+
+            axios({
+                method: 'GET',
+                url: URL_REQUEST,
+                timeout: 30000
+            }).then((resp)=>{
+                if(typeof(resp.data.status) == 'undefined' && (resp.data != '\r\n') && (resp.data != '\n') && (resp.data.status != 'erro')){
+                    console.clear();
+                    console.log('SUCESSO GET PAGE CODE');
+                    console.log(resp);
+
+                    let sourceCode = new DOMParser().parseFromString(resp.data, "text/html");
+                    let blocoNoticia = sourceCode.querySelector(".protected-content");
+                    
+                    if(blocoNoticia != null || blocoNoticia != undefined){
+                        let blocoOriginal = getArticle();
+
+                        let r = setInterval(()=>{
+                            if(blocoOriginal != null){
+                                clearInterval(r);
+                                blocoOriginal.parentNode.insertBefore(blocoNoticia, blocoOriginal.nextSibling);
+                                
+                                sweetAlert(
+                                    'success',
+                                    'Sucesso',
+                                    'Ótimo! Conteúdo desbloqueado!'
+                                );
+
+                                setTimeout(()=>{
+                                    Swal.close();
+                                }, 7000);
+
+                                setTimeout(()=>{
+                                    removeAds();
+                                },3000);
+
+                                if(verificaElemento('.paywall-cpt')){
+                                    removeBloqueioGLOBO();
+                                }else if(verificaElemento(".barber-barrier-cpnt")){
+                                    removeBlockCelularVLRECON();
+                                }
+                                
+                            }
+                        },800);
+                    }else{
+                        sweetAlert(
+                            'warning',
+                            'Atenção',
+                            'Ops, infelizmente não é possível desbloquear essa página. <br>Que tal tentar outra notícia nesse site? <br><br>'
+                        );
+                        return;
+                    }
+
+                }else{
+                    console.clear();
+                    console.log(`ERRO!\n\n Status = ${resp.data.status}\nMensagem = ${resp.data.resposta}`);
+
+                    if(resp.data == '\r\n' || resp.data == '\n' || resp.data.status == 'error_off'){
+                        sweetAlert(
+                            'error',
+                            'Erro',
+                            `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><b>Código do erro: </b>${resp.data.resposta}`
+                        );
+                        return;
+                    }else{
+                        if(resp.data.resposta.includes('cache')){
+                            sweetAlert(
+                                'warning',
+                                'Atenção',
+                                'Ops, infelizmente não foi possível desbloquear essa página. <br>Que tal tentar um pouco mais tarde ou tentar outra notícia? <br><br>'
+                            );
+                            return;
+                        } else{
+
+                            sweetAlert(
+                                'error',
+                                'Erro',
+                                `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><b>Código do erro: </b>${resp.data.resposta}`
+                            );
+                            return;
+                        }
+                    }
+                }
+
+            }).catch((erro)=>{
+                console.log(erro);
+            });
+            
+        }
+    }, 800);
+}
+
+
+function removeBlockCelularVLRECON()
+{
+    try{
+        document.querySelector('.protected-content').remove();
+        let block = document.querySelector(".barber-barrier-cpnt");
+
+        if(block != null || block != undefined)
+        {
+            block.remove();
+            document.body.style.overflow = "auto";
+            verificaAtualizacaoVersao();
+            incrementaConteudoAPI();
+        }
+    }catch(erro){
+        console.error('ERRO')
+    }
+}
+
+
+function sweetAlert(icon, title, msg)
+{
+    let opt = (icon == 'info') ? false : true;
+
+    Swal.close();
+    Swal.fire({
+        icon: icon,
+        title: title,
+        html: msg,
+        allowEscapeKey: false,
+        allowOutsideClick: false,
+        showConfirmButton: opt
+    });
+}
+
+
+function getArticle()
+{
+    let articles = document.querySelectorAll('article');
+
+    for(let i=0; i<articles.length; i++){
+        if(articles[i].hasAttribute("itemprop")){
+            if(articles[i].getAttribute("itemprop").includes("articleBody")){
+                return articles[i];
+            }
+        }
+    }
+}
+
+
+function removeAds()
+{
+    let divs = document.querySelectorAll('div');
+
+    for(let i=0; i<divs.length; i++){
+        if(divs[i].hasAttribute("data-block-type")){
+            if(divs[i].getAttribute("data-block-type").includes("ads")){
+                divs[i].remove();
+            }
+        }
+    }
+}
 
 
 /* ====================== JORNAL VS =========================== */
@@ -1063,17 +1244,11 @@ function removeBloqueioEST()
 function modifyFLSP()
 {
     let rotina = setInterval(() => {
-        if(verificaComponents()){
+        if(verificaElemento('#paywall-flutuante') && verificaElemento('#paywall-content') && verificaElemento('#paywall-fill')){
             clearInterval(rotina);
             removeBloqueio();
         }
     }, 800);
-}
-
-
-function verificaComponents()
-{
-    return (document.getElementById('paywall-flutuante') != null && document.getElementById('paywall-content') != null && document.getElementById('paywall-fill') != null) ? true : false;
 }
 
 
