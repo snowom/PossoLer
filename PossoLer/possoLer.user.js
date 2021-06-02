@@ -1430,7 +1430,7 @@ function verificaMensagensAPI(time)
     axios({
         method: 'get',
         url: URL_MESSAGES,
-        timeout: 10000,
+        timeout: 40000,
     }).then((resposta)=>{
 
         if(resposta.data.messages.length>0){
@@ -1482,7 +1482,7 @@ function incrementaConteudoAPI()
             axios({
                 method: 'post',
                 url: 'https://possoler.tech/API/incrementViewsConteudos.php',
-                timeout: 10000
+                timeout: 60000
             }).then((resposta)=>{
                 console.log('Contabilizar noticia API = ' + resposta.data.status);
             }).catch((erro)=>{

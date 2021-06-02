@@ -91,4 +91,5 @@
 # Correção API's Valor Economico;
 # Correção Sweet Alert bug;
 # Valor Econômico FINAL BUILD;
+# Aumentado tempo de timeout requests API para conexões lentas;
 # CRX atualizado;
