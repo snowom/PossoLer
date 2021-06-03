@@ -150,17 +150,20 @@ function modifyVLRECON()
                                 console.log('SUCESSO GET PAGE CODE');
                                 console.log(resp);
             
-                                let sourceCode = new DOMParser().parseFromString(resp.data, "text/html");
-                                let blocoNoticia = sourceCode.querySelector(".protected-content");
+                                let cacheSourceCode = new DOMParser().parseFromString(resp.data, "text/html");
+                                let blocoNoticia = getArticle(cacheSourceCode);
+                                let blocoOriginal = getArticle(document);
                                 
-                                if(blocoNoticia != null && blocoNoticia != undefined){
-                                    let blocoOriginal = getArticle();
-            
-                                    let r = setInterval(()=>{
-                                        if(blocoOriginal != null){
-                                            clearInterval(r);
-                                            blocoOriginal.parentNode.insertBefore(blocoNoticia, blocoOriginal.nextSibling);
-                                            
+                                let u = setInterval(()=>{
+                                    if(blocoNoticia != null && blocoOriginal != null){
+                                        clearInterval(u);
+
+                                        console.log(`CODE CACHE = ${blocoNoticia.outerHTML}`);
+                                        console.log(`CODE ORIGINAL = ${blocoOriginal.outerHTML}`);
+
+                                        if(blocoNoticia != false && blocoOriginal != false){
+
+                                            blocoOriginal.innerHTML = blocoNoticia.outerHTML;
                                             sweetAlert(
                                                 'success',
                                                 'Sucesso',
@@ -168,14 +171,11 @@ function modifyVLRECON()
                                             );
             
                                             setTimeout(()=>{
-                                                Swal.close();
-                                            }, 7000);
-            
-                                            setTimeout(()=>{
                                                 removeAds();
+                                                corrigeImgsCache();
                                             },3000);
     
-                                            //VERIFICA SOFT PAYWALLS E REMOVE ELES
+                                            //VERIFICA E REMOVE SOFT PAYWALLS
                                             let f = setInterval(()=>{
                                                 if(verificaElemento('.paywall-cpt') || verificaElemento(".barber-barrier-cpnt")){
                                                     clearInterval(f);
@@ -186,16 +186,16 @@ function modifyVLRECON()
                                                     }
                                                 }
                                             },800);
+                                        }else{
+                                            sweetAlert(
+                                                'warning',
+                                                'Atenção',
+                                                'Ops, infelizmente não é possível desbloquear essa página. <br>Que tal tentar outra notícia nesse site? <br><br>'
+                                            );
+                                            return;
                                         }
-                                    },800);
-                                }else{
-                                    sweetAlert(
-                                        'warning',
-                                        'Atenção',
-                                        'Ops, infelizmente não é possível desbloquear essa página. <br>Que tal tentar outra notícia nesse site? <br><br>'
-                                    );
-                                    return;
-                                }
+                                    }
+                                },800);
             
                             }else{
                                 console.clear();
@@ -248,16 +248,27 @@ function modifyVLRECON()
                     }, 2000);
                 }
             }, 800);
-            
         }
     }, 800);
+}
+
+
+function corrigeImgsCache()
+{
+    let divs = document.querySelectorAll('div');
+
+    for(let i=0; i<divs.length; i++){
+        if(divs[i].classList.contains("glb-skeleton-box")){
+            divs[i].classList.remove("glb-skeleton-box");
+            divs[i].style.cssText += 'padding-top: 0 !important;';
+        }
+    }
 }
 
 
 function removeBlockCelularVLRECON()
 {
     try{
-        document.querySelector('.protected-content').remove();
         let block = document.querySelector(".barber-barrier-cpnt");
 
         if(block != null || block != undefined)
@@ -278,6 +289,26 @@ function sweetAlert(icon, title, msg)
     let opt = (icon == 'info') ? false : true;
 
     Swal.close();
+
+    if(icon == 'success'){
+        Swal.fire({
+            icon: icon,
+            title: title,
+            html: msg,
+            allowEscapeKey: false,
+            allowOutsideClick: false,
+            showConfirmButton: opt,
+            timer: 7000,
+            timerProgressBar: true,
+            customClass: {
+                popup: 'snackZ-index',
+                container: 'snackZ-index'
+            }
+        });
+        window.stop();
+        return;
+    }
+
     Swal.fire({
         icon: icon,
         title: title,
@@ -293,9 +324,9 @@ function sweetAlert(icon, title, msg)
 }
 
 
-function getArticle()
+function getArticle(scope)
 {
-    let articles = document.querySelectorAll('article');
+    let articles = scope.querySelectorAll('article');
 
     for(let i=0; i<articles.length; i++){
         if(articles[i].hasAttribute("itemprop")){
@@ -304,6 +335,8 @@ function getArticle()
             }
         }
     }
+
+    return false;
 }
 
 

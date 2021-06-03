@@ -91,120 +91,131 @@ function modifyVLRECON()
             },800);
 
             //AQUI A MAGICA ACONTECE
-            axios({
-                method: 'GET',
-                url: URL_REQUEST,
-                timeout: 30000
-            }).then((resp)=>{
-                if(typeof(resp.data.status) == 'undefined' && (resp.data != '\r\n') && (resp.data != '\n') && (resp.data.status != 'erro')){
-                    console.clear();
-                    console.log('SUCESSO GET PAGE CODE');
-                    console.log(resp);
+            setTimeout(()=>{
+                axios({
+                    method: 'GET',
+                    url: URL_REQUEST,
+                    timeout: 30000
+                }).then((resp)=>{
+                    if(typeof(resp.data.status) == 'undefined' && (resp.data != '\r\n') && (resp.data != '\n') && (resp.data.status != 'erro')){
+                        console.clear();
+                        console.log('SUCESSO GET PAGE CODE');
+                        console.log(resp);
+    
+                        let cacheSourceCode = new DOMParser().parseFromString(resp.data, "text/html");
+                        let blocoNoticia = getArticle(cacheSourceCode);
+                        let blocoOriginal = getArticle(document);
+                        
+                        let u = setInterval(()=>{
+                            if(blocoNoticia != null && blocoOriginal != null){
+                                clearInterval(u);
 
-                    let sourceCode = new DOMParser().parseFromString(resp.data, "text/html");
-                    let blocoNoticia = sourceCode.querySelector(".protected-content");
-                    
-                    if(blocoNoticia != null && blocoNoticia != undefined){
-                        let blocoOriginal = getArticle();
+                                if(blocoNoticia != false && blocoOriginal != false){
 
-                        let r = setInterval(()=>{
-                            if(blocoOriginal != null){
-                                clearInterval(r);
-                                blocoOriginal.parentNode.insertBefore(blocoNoticia, blocoOriginal.nextSibling);
-                                
-                                sweetAlert(
-                                    'success',
-                                    'Sucesso',
-                                    'Ótimo! Conteúdo desbloqueado!'
-                                );
+                                    blocoOriginal.innerHTML = blocoNoticia.outerHTML;
+                                    sweetAlert(
+                                        'success',
+                                        'Sucesso',
+                                        'Ótimo! Conteúdo desbloqueado!'
+                                    );
+    
+                                    setTimeout(()=>{
+                                        removeAds();
+                                        corrigeImgsCache();
+                                    },3000);
 
-                                setTimeout(()=>{
-                                    Swal.close();
-                                }, 7000);
-
-                                setTimeout(()=>{
-                                    removeAds();
-                                },3000);
-
-                                //VERIFICA SOFT PAYWALLS E REMOVE ELES
-                                let f = setInterval(()=>{
-                                    if(verificaElemento('.paywall-cpt') || verificaElemento(".barber-barrier-cpnt")){
-                                        clearInterval(f);
-                                        if(verificaElemento('.paywall-cpt')){
-                                            removeBloqueioGLOBO();
-                                        }else if(verificaElemento(".barber-barrier-cpnt")){
-                                            removeBlockCelularVLRECON();
+                                    //VERIFICA E REMOVE SOFT PAYWALLS
+                                    let f = setInterval(()=>{
+                                        if(verificaElemento('.paywall-cpt') || verificaElemento(".barber-barrier-cpnt")){
+                                            clearInterval(f);
+                                            if(verificaElemento('.paywall-cpt')){
+                                                removeBloqueioGLOBO();
+                                            }else if(verificaElemento(".barber-barrier-cpnt")){
+                                                removeBlockCelularVLRECON();
+                                            }
                                         }
-                                    }
-                                },800);
+                                    },800);
+                                }else{
+                                    sweetAlert(
+                                        'warning',
+                                        'Atenção',
+                                        'Ops, infelizmente não é possível desbloquear essa página. <br>Que tal tentar outra notícia nesse site? <br><br>'
+                                    );
+                                    return;
+                                }
                             }
                         },800);
+    
                     }else{
-                        sweetAlert(
-                            'warning',
-                            'Atenção',
-                            'Ops, infelizmente não é possível desbloquear essa página. <br>Que tal tentar outra notícia nesse site? <br><br>'
-                        );
-                        return;
-                    }
-
-                }else{
-                    console.clear();
-                    console.log(`ERRO!\n\n Status = ${resp.data.status}\nMensagem = ${resp.data.resposta}`);
-
-                    if(resp.data == '\r\n' || resp.data == '\n' || resp.data.status == 'error_off'){
-                        sweetAlert(
-                            'error',
-                            'Erro',
-                            `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${resp.data.resposta}`
-                        );
-                        return;
-                    }else{
-                        if(resp.data.resposta.includes('cache')){
-                            sweetAlert(
-                                'warning',
-                                'Atenção',
-                                'Ops, infelizmente não foi possível desbloquear essa página. <br>Que tal tentar um pouco mais tarde ou tentar outra notícia? <br><br>'
-                            );
-                            return;
-                        } else{
-
+                        console.clear();
+                        console.log(`ERRO!\n\n Status = ${resp.data.status}\nMensagem = ${resp.data.resposta}`);
+    
+                        if(resp.data == '\r\n' || resp.data == '\n' || resp.data.status == 'error_off'){
                             sweetAlert(
                                 'error',
                                 'Erro',
                                 `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${resp.data.resposta}`
                             );
                             return;
+                        }else{
+                            if(resp.data.resposta.includes('cache')){
+                                sweetAlert(
+                                    'warning',
+                                    'Atenção',
+                                    'Ops, infelizmente não foi possível desbloquear essa página. <br>Que tal tentar um pouco mais tarde ou tentar outra notícia? <br><br>'
+                                );
+                                return;
+                            } else{
+    
+                                sweetAlert(
+                                    'error',
+                                    'Erro',
+                                    `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${resp.data.resposta}`
+                                );
+                                return;
+                            }
                         }
                     }
-                }
+    
+                }).catch((erro)=>{
+                    console.log(erro);
 
-            }).catch((erro)=>{
-                console.log(erro);
-
-                if(erro.toString().includes('timeout')){
-                    sweetAlert(
-                        'error',
-                        'Erro',
-                        `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`
-                    );
-                }else{
-                    sweetAlert(
-                        'error',
-                        'Erro',
-                        `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`
-                    );
-                }
-            });
+                    if(erro.toString().includes('timeout')){
+                        sweetAlert(
+                            'error',
+                            'Erro',
+                            `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`
+                        );
+                    }else{
+                        sweetAlert(
+                            'error',
+                            'Erro',
+                            `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`
+                        );
+                    }
+                });
+            }, 2000);
         }
     }, 800);
+}
+
+
+function corrigeImgsCache()
+{
+    let divs = document.querySelectorAll('div');
+
+    for(let i=0; i<divs.length; i++){
+        if(divs[i].classList.contains("glb-skeleton-box")){
+            divs[i].classList.remove("glb-skeleton-box");
+            divs[i].style.cssText += 'padding-top: 0 !important;';
+        }
+    }
 }
 
 
 function removeBlockCelularVLRECON()
 {
     try{
-        document.querySelector('.protected-content').remove();
         let block = document.querySelector(".barber-barrier-cpnt");
 
         if(block != null || block != undefined)
@@ -225,6 +236,26 @@ function sweetAlert(icon, title, msg)
     let opt = (icon == 'info') ? false : true;
 
     Swal.close();
+
+    if(icon == 'success'){
+        Swal.fire({
+            icon: icon,
+            title: title,
+            html: msg,
+            allowEscapeKey: false,
+            allowOutsideClick: false,
+            showConfirmButton: opt,
+            timer: 7000,
+            timerProgressBar: true,
+            customClass: {
+                popup: 'snackZ-index',
+                container: 'snackZ-index'
+            }
+        });
+        window.stop();
+        return;
+    }
+
     Swal.fire({
         icon: icon,
         title: title,
@@ -240,9 +271,9 @@ function sweetAlert(icon, title, msg)
 }
 
 
-function getArticle()
+function getArticle(scope)
 {
-    let articles = document.querySelectorAll('article');
+    let articles = scope.querySelectorAll('article');
 
     for(let i=0; i<articles.length; i++){
         if(articles[i].hasAttribute("itemprop")){
@@ -251,6 +282,8 @@ function getArticle()
             }
         }
     }
+
+    return false;
 }
 
 
