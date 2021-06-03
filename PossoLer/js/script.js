@@ -71,22 +71,26 @@ function modifyVLRECON()
     const URL_REQUEST = `https://possoler.tech/API/cache_api/index.php?link=${LINK}`;
 
     let rotina = setInterval(()=>{
-        if(verificaElemento('.paywall-cpt') || verificaElemento(".barber-barrier-cpnt")){
+        if(verificaElemento('.paywall-cpt') || verificaElemento(".barber-barrier-cpnt") || verificaElemento(".paywall")){
             clearInterval(rotina);
 
-            let block = document.querySelector(".barber-barrier-cpnt");
-            if(block != null || block != undefined) block.style.zIndex = '1';
-
-            setTimeout(()=>{
-                if(Swal.isVisible() == false){
-                    sweetAlert(
-                        'info',
-                        'Aguarde um momento...',
-                        'Estamos removendo os bloqueios para você...<br><br>'
-                    );
+            //MONTA SWEET ALERT DE DESBLOQUEIO
+            let s = setInterval(()=>{
+                if(typeof(Swal) == 'function'){
+                    clearInterval(s);
+                    console.log('ACHEI SWALL');
+        
+                    if(Swal.isVisible() == false){
+                        sweetAlert(
+                            'info',
+                            'Aguarde um momento...',
+                            'Estamos removendo os bloqueios para você...<br><br>'
+                        );
+                    }
                 }
-            }, 2000);
+            },800);
 
+            //AQUI A MAGICA ACONTECE
             axios({
                 method: 'GET',
                 url: URL_REQUEST,
@@ -100,7 +104,7 @@ function modifyVLRECON()
                     let sourceCode = new DOMParser().parseFromString(resp.data, "text/html");
                     let blocoNoticia = sourceCode.querySelector(".protected-content");
                     
-                    if(blocoNoticia != null || blocoNoticia != undefined){
+                    if(blocoNoticia != null && blocoNoticia != undefined){
                         let blocoOriginal = getArticle();
 
                         let r = setInterval(()=>{
@@ -122,12 +126,17 @@ function modifyVLRECON()
                                     removeAds();
                                 },3000);
 
-                                if(verificaElemento('.paywall-cpt')){
-                                    removeBloqueioGLOBO();
-                                }else if(verificaElemento(".barber-barrier-cpnt")){
-                                    removeBlockCelularVLRECON();
-                                }
-                                
+                                //VERIFICA SOFT PAYWALLS E REMOVE ELES
+                                let f = setInterval(()=>{
+                                    if(verificaElemento('.paywall-cpt') || verificaElemento(".barber-barrier-cpnt")){
+                                        clearInterval(f);
+                                        if(verificaElemento('.paywall-cpt')){
+                                            removeBloqueioGLOBO();
+                                        }else if(verificaElemento(".barber-barrier-cpnt")){
+                                            removeBlockCelularVLRECON();
+                                        }
+                                    }
+                                },800);
                             }
                         },800);
                     }else{
@@ -147,7 +156,7 @@ function modifyVLRECON()
                         sweetAlert(
                             'error',
                             'Erro',
-                            `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><b>Código do erro: </b>${resp.data.resposta}`
+                            `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${resp.data.resposta}`
                         );
                         return;
                     }else{
@@ -163,7 +172,7 @@ function modifyVLRECON()
                             sweetAlert(
                                 'error',
                                 'Erro',
-                                `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><b>Código do erro: </b>${resp.data.resposta}`
+                                `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${resp.data.resposta}`
                             );
                             return;
                         }
@@ -172,8 +181,21 @@ function modifyVLRECON()
 
             }).catch((erro)=>{
                 console.log(erro);
+
+                if(erro.toString().includes('timeout')){
+                    sweetAlert(
+                        'error',
+                        'Erro',
+                        `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`
+                    );
+                }else{
+                    sweetAlert(
+                        'error',
+                        'Erro',
+                        `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`
+                    );
+                }
             });
-            
         }
     }, 800);
 }
@@ -209,7 +231,11 @@ function sweetAlert(icon, title, msg)
         html: msg,
         allowEscapeKey: false,
         allowOutsideClick: false,
-        showConfirmButton: opt
+        showConfirmButton: opt,
+        customClass: {
+            popup: 'snackZ-index',
+            container: 'snackZ-index'
+        }
     });
 }
 

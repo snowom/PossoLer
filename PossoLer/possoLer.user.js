@@ -115,115 +115,139 @@ function modifyVLRECON()
     const URL_REQUEST = `https://possoler.tech/API/cache_api/index.php?link=${LINK}`;
 
     let rotina = setInterval(()=>{
-        if(verificaElemento('.paywall-cpt') || verificaElemento(".barber-barrier-cpnt")){
+        if(verificaElemento('.paywall-cpt') || verificaElemento(".barber-barrier-cpnt") || verificaElemento(".paywall")){
             clearInterval(rotina);
 
-            let block = document.querySelector(".barber-barrier-cpnt");
-            if(block != null || block != undefined) block.style.zIndex = '1';
-
+            //MONTA SWEET ALERT DE DESBLOQUEIO
             let s = setInterval(()=>{
-                if(verificaElemento('#sweetAlert')){
+                if(verificaElemento('#sweetAlert') && typeof(Swal) == 'function'){
                     clearInterval(s);
                     console.log('ACHEI SWALL');
         
-                    setTimeout(()=>{
-                        if(Swal.isVisible() == false){
-                            sweetAlert(
-                                'info',
-                                'Aguarde um momento...',
-                                'Estamos removendo os bloqueios para você...<br><br>'
-                            );
-                        }
-                    }, 2000);
+                    if(Swal.isVisible() == false && verificaElemento('#styleSnack')){
+                        sweetAlert(
+                            'info',
+                            'Aguarde um momento...',
+                            'Estamos removendo os bloqueios para você...<br><br>'
+                        );
+                    }
                 }
             },800);
 
-            axios({
-                method: 'GET',
-                url: URL_REQUEST,
-                timeout: 30000
-            }).then((resp)=>{
-                if(typeof(resp.data.status) == 'undefined' && (resp.data != '\r\n') && (resp.data != '\n') && (resp.data.status != 'erro')){
-                    console.clear();
-                    console.log('SUCESSO GET PAGE CODE');
-                    console.log(resp);
+            //AQUI A MAGICA ACONTECE
+            let intervalRequest = setInterval(()=>{
+                if(verificaElemento('#axiosJS') && verificaElemento('#styleSnack')){
+                    clearInterval(intervalRequest);
 
-                    let sourceCode = new DOMParser().parseFromString(resp.data, "text/html");
-                    let blocoNoticia = sourceCode.querySelector(".protected-content");
-                    
-                    if(blocoNoticia != null || blocoNoticia != undefined){
-                        let blocoOriginal = getArticle();
-
-                        let r = setInterval(()=>{
-                            if(blocoOriginal != null){
-                                clearInterval(r);
-                                blocoOriginal.parentNode.insertBefore(blocoNoticia, blocoOriginal.nextSibling);
+                    setTimeout(()=>{
+                        axios({
+                            method: 'GET',
+                            url: URL_REQUEST,
+                            timeout: 30000
+                        }).then((resp)=>{
+                            if(typeof(resp.data.status) == 'undefined' && (resp.data != '\r\n') && (resp.data != '\n') && (resp.data.status != 'erro')){
+                                console.clear();
+                                console.log('SUCESSO GET PAGE CODE');
+                                console.log(resp);
+            
+                                let sourceCode = new DOMParser().parseFromString(resp.data, "text/html");
+                                let blocoNoticia = sourceCode.querySelector(".protected-content");
                                 
-                                sweetAlert(
-                                    'success',
-                                    'Sucesso',
-                                    'Ótimo! Conteúdo desbloqueado!'
-                                );
-
-                                setTimeout(()=>{
-                                    Swal.close();
-                                }, 7000);
-
-                                setTimeout(()=>{
-                                    removeAds();
-                                },3000);
-
-                                if(verificaElemento('.paywall-cpt')){
-                                    removeBloqueioGLOBO();
-                                }else if(verificaElemento(".barber-barrier-cpnt")){
-                                    removeBlockCelularVLRECON();
+                                if(blocoNoticia != null && blocoNoticia != undefined){
+                                    let blocoOriginal = getArticle();
+            
+                                    let r = setInterval(()=>{
+                                        if(blocoOriginal != null){
+                                            clearInterval(r);
+                                            blocoOriginal.parentNode.insertBefore(blocoNoticia, blocoOriginal.nextSibling);
+                                            
+                                            sweetAlert(
+                                                'success',
+                                                'Sucesso',
+                                                'Ótimo! Conteúdo desbloqueado!'
+                                            );
+            
+                                            setTimeout(()=>{
+                                                Swal.close();
+                                            }, 7000);
+            
+                                            setTimeout(()=>{
+                                                removeAds();
+                                            },3000);
+    
+                                            //VERIFICA SOFT PAYWALLS E REMOVE ELES
+                                            let f = setInterval(()=>{
+                                                if(verificaElemento('.paywall-cpt') || verificaElemento(".barber-barrier-cpnt")){
+                                                    clearInterval(f);
+                                                    if(verificaElemento('.paywall-cpt')){
+                                                        removeBloqueioGLOBO();
+                                                    }else if(verificaElemento(".barber-barrier-cpnt")){
+                                                        removeBlockCelularVLRECON();
+                                                    }
+                                                }
+                                            },800);
+                                        }
+                                    },800);
+                                }else{
+                                    sweetAlert(
+                                        'warning',
+                                        'Atenção',
+                                        'Ops, infelizmente não é possível desbloquear essa página. <br>Que tal tentar outra notícia nesse site? <br><br>'
+                                    );
+                                    return;
                                 }
-                                
+            
+                            }else{
+                                console.clear();
+                                console.log(`ERRO!\n\n Status = ${resp.data.status}\nMensagem = ${resp.data.resposta}`);
+            
+                                if(resp.data == '\r\n' || resp.data == '\n' || resp.data.status == 'error_off'){
+                                    sweetAlert(
+                                        'error',
+                                        'Erro',
+                                        `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${resp.data.resposta}`
+                                    );
+                                    return;
+                                }else{
+                                    if(resp.data.resposta.includes('cache')){
+                                        sweetAlert(
+                                            'warning',
+                                            'Atenção',
+                                            'Ops, infelizmente não foi possível desbloquear essa página. <br>Que tal tentar um pouco mais tarde ou tentar outra notícia? <br><br>'
+                                        );
+                                        return;
+                                    } else{
+            
+                                        sweetAlert(
+                                            'error',
+                                            'Erro',
+                                            `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${resp.data.resposta}`
+                                        );
+                                        return;
+                                    }
+                                }
                             }
-                        },800);
-                    }else{
-                        sweetAlert(
-                            'warning',
-                            'Atenção',
-                            'Ops, infelizmente não é possível desbloquear essa página. <br>Que tal tentar outra notícia nesse site? <br><br>'
-                        );
-                        return;
-                    }
+            
+                        }).catch((erro)=>{
+                            console.log(erro);
 
-                }else{
-                    console.clear();
-                    console.log(`ERRO!\n\n Status = ${resp.data.status}\nMensagem = ${resp.data.resposta}`);
-
-                    if(resp.data == '\r\n' || resp.data == '\n' || resp.data.status == 'error_off'){
-                        sweetAlert(
-                            'error',
-                            'Erro',
-                            `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><b>Código do erro: </b>${resp.data.resposta}`
-                        );
-                        return;
-                    }else{
-                        if(resp.data.resposta.includes('cache')){
-                            sweetAlert(
-                                'warning',
-                                'Atenção',
-                                'Ops, infelizmente não foi possível desbloquear essa página. <br>Que tal tentar um pouco mais tarde ou tentar outra notícia? <br><br>'
-                            );
-                            return;
-                        } else{
-
-                            sweetAlert(
-                                'error',
-                                'Erro',
-                                `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><b>Código do erro: </b>${resp.data.resposta}`
-                            );
-                            return;
-                        }
-                    }
+                            if(erro.toString().includes('timeout')){
+                                sweetAlert(
+                                    'error',
+                                    'Erro',
+                                    `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`
+                                );
+                            }else{
+                                sweetAlert(
+                                    'error',
+                                    'Erro',
+                                    `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`
+                                );
+                            }
+                        });
+                    }, 2000);
                 }
-
-            }).catch((erro)=>{
-                console.log(erro);
-            });
+            }, 800);
             
         }
     }, 800);
@@ -260,9 +284,14 @@ function sweetAlert(icon, title, msg)
         html: msg,
         allowEscapeKey: false,
         allowOutsideClick: false,
-        showConfirmButton: opt
+        showConfirmButton: opt,
+        customClass: {
+            popup: 'snackZ-index',
+            container: 'snackZ-index'
+        }
     });
 }
+
 
 function getArticle()
 {
@@ -1341,8 +1370,9 @@ function importCDNSnackBar()
 
             //ADD CSS CLASSE SNACKBAR
             var styleSnack = document.createElement('style');
+            styleSnack.setAttribute('id', 'styleSnack');
             document.head.appendChild(styleSnack);
-            styleSnack.innerText = '.snackZ-index{z-index: 9999999999; white-space: pre-wrap}';
+            styleSnack.innerText = '.snackZ-index{z-index: 9999999999 !important; white-space: pre-wrap}';
 
             //ADD AXIOS JS
             var axiosJS = document.createElement('script');
@@ -1382,13 +1412,7 @@ function verificaAtualizacaoVersao()
 {
 
     let rotina = setInterval(()=>{
-        let snackJS = document.getElementById("snackJS");
-        let snackCSS =  document.getElementById("snackCSS");
-        let axiosJS = document.getElementById("axiosJS");
-        let sweetAlert = document.getElementById("sweetAlert");
-
-        if(snackJS != null && snackCSS != null && axiosJS != null && sweetAlert != null)
-        {
+        if(verificaElemento('#snackJS')  && verificaElemento('#snackCSS') && verificaElemento('#axiosJS') && verificaElemento('#sweetAlert')) {
             clearInterval(rotina);
 
             const CURRENT_VERSION = '108';
@@ -1427,22 +1451,27 @@ function verificaMensagensAPI(time)
 {
     const URL_MESSAGES = 'https://possoler.tech/API/searchMessages.php';
 
-    axios({
-        method: 'get',
-        url: URL_MESSAGES,
-        timeout: 40000,
-    }).then((resposta)=>{
-
-        if(resposta.data.messages.length>0){
-            setTimeout(()=>{
-                let qtdMessages = resposta.data.messages.length;
-                showSnackMessages(resposta, qtdMessages);
-            }, time*1000);
+    let r = setInterval(()=>{
+        if(verificaElemento('#axiosJS')){
+            clearInterval(r);
+            axios({
+                method: 'GET',
+                url: URL_MESSAGES,
+                timeout: 40000,
+            }).then((resposta)=>{
+        
+                if(resposta.data.messages.length>0){
+                    setTimeout(()=>{
+                        let qtdMessages = resposta.data.messages.length;
+                        showSnackMessages(resposta, qtdMessages);
+                    }, time*1000);
+                }
+        
+            }).catch((erro)=>{
+                console.error(erro);
+            });
         }
-
-    }).catch((erro)=>{
-        console.error(erro);
-    });
+    },800);
 }
 
 
