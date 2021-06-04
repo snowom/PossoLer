@@ -25,7 +25,7 @@
 * [New York Times](https://www.nytimes.com/)
 * [El País](http://elpais.com/)
 * [Jornal VS](https://www.jornalvs.com.br/)
-* [Valor Econômico](https://valor.globo.com/) - Ler sobre **Cache Mock** na seção de <i>Perguntas Frequentes</i>
+* [Valor Econômico](https://valor.globo.com/) - Ler sobre <i>**Cache Mock**</i> na seção de <i>Perguntas Frequentes</i>
 
 ## Perguntas Frequentes
 
@@ -42,6 +42,17 @@ As empresas responsáveis pelos sites poderiam adotar outras formas mais eficaze
 <br>
 ### Como faço para reportar um bug ou dar uma sugestão/feedback?
 Caso tenha encontrado um bug ou queira dar uma sugestão/feedback, escreva um email para **thomazf.dev@gmail.com**. Tentarei responder o mais rápido possível, pois estarei ocupado me dedicando à faculdade e ao meu serviço.
+<br>
+<br>
+### O que é Cache Mock?
+Cache Mock (Simulação de Cache) é uma técnica que desenvolvi para conseguir burlar de forma legal alguns sites que utilizam hard paywall. Essa técnica se define em utilizar o cache da própria página gerado pelo Google e, partir dela, pegar todo o conteúdo e renderizá-lo para o usuário. Como o cache é uma "cópia" do conteúdo estático de uma página, geralmente estas não possuem nenhum tipo de bloqueio de conteúdo, possibilitando o acesso a eles.
+<br>
+<br>
+### Observações sobre o Cache Mock
+Alguns sites utilizam proteção de hard paywall em seus conteúdos. Geralmente, conteúdos com esse nível de proteção ficam armazenados no servidor e só são renderizados na tela do usuário (cliente) quando o sistema tem a certeza de que o mesmo se encontra logado em sua conta de assinante. A solução encontrada para contornar este caso, foi utilizar o cache da página gerado pelo Google, como foi explicado no tópico acima. Contudo, caso a notícia seja muito recente, é capaz do cache da página em questão não ter sido gerado ainda, e caso esse seja o ocorrido, ao tentar desbloquear a notícia, a extensão informará a você por um pop-up que não foi possível desbloquear o conteúdo no momento e que você poderá tentar mais tarde. Ou seja, nem sempre será possível desbloquear todos os conteúdos. Pode ocorrer também da API que faz a conexão entre a extensão e o cache ficar indisponível devido ao excesso de requisições feitas a partir de um mesmo endereço de IP (Isso é uma medida de segurança a fim de evitar ataques DDoS). Caso isso ocorra, um pop-up aparecerá em sua tela informando que o serviço está temporariamente indisponível. Nesse caso, não há muito o que fazer além de esperar seu endereço de IP ser liberado novamente para fazer requisições para a API.
+<br>
+<br>
+**Ponto de atenção:** Por se tratar de dados obtidos à partir do cache, o conteúdo apresentado pode estar desatualizado em relação a página original caso a mesma tenha tido alguma alteração após a última geração de cache feita pelo Google.
 <br>
 <br>
 <br>
