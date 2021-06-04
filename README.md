@@ -25,7 +25,7 @@
 * [New York Times](https://www.nytimes.com/)
 * [El País](http://elpais.com/)
 * [Jornal VS](https://www.jornalvs.com.br/)
-* [Valor Econômico](https://valor.globo.com/)
+* [Valor Econômico](https://valor.globo.com/) - Ler sobre **Cache Mock** na seção de <i>Perguntas Frequentes</i>
 
 ## Perguntas Frequentes
 
