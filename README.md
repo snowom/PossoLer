@@ -20,6 +20,12 @@
 * [Revista Marie Claire](https://revistamarieclaire.globo.com/)
 * [Revista Globo Rural](https://revistagloborural.globo.com/)
 * [Pequenas Empresas Grandes Negócios](https://revistapegn.globo.com/)
+* [JOTA](https://www.jota.info/)
+* [NSC Total](https://www.nsctotal.com.br/home)
+* [New York Times](https://www.nytimes.com/)
+* [El País](http://elpais.com/)
+* [Jornal VS](https://www.jornalvs.com.br/)
+* [Valor Econômico](https://valor.globo.com/)
 
 ## Perguntas Frequentes
 
