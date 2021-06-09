@@ -45,7 +45,7 @@ Caso tenha encontrado um bug ou queira dar uma sugestão/feedback, escreva um em
 <br>
 <br>
 ### O que é Cache Mock?
-Cache Mock (Simulação de Cache) é uma técnica que desenvolvi para conseguir burlar de forma legal alguns sites que utilizam hard paywall. Essa técnica se define em utilizar o cache da própria página gerado pelo Google e, partir dela, pegar todo o conteúdo e renderizá-lo para o usuário. Como o cache é uma "cópia" do conteúdo estático de uma página, geralmente estas não possuem nenhum tipo de bloqueio de conteúdo, possibilitando o acesso a eles.
+Cache Mock (Simulação por Cache) é uma técnica que desenvolvi para conseguir burlar de forma legal alguns sites que utilizam hard paywall. Essa técnica se define em utilizar o cache da própria página gerado pelo Google e, partir dela, pegar todo o conteúdo e renderizá-lo para o usuário. Como o cache é uma "cópia" do conteúdo estático de uma página, geralmente estas não possuem nenhum tipo de bloqueio de conteúdo, possibilitando o acesso a eles.
 <br>
 <br>
 ### Observações sobre o Cache Mock
