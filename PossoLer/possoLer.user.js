@@ -108,6 +108,7 @@ else if(currentURL.includes("valor.globo.com")){
     modifyVLRECON();
 }
 else if(currentURL.includes("gauchazh.clicrbs.com.br")){
+    setBlockedScript('#special-paywall-js', 10);
     modifyGZH();
 }
 
@@ -128,6 +129,7 @@ function modifyGZH()
 
 function applyModifyGZH()
 {
+    setBlockedScript('#special-paywall-js', 10);
     let c = setInterval(()=>{
         if(verificaElemento('.m-signwall')){
             console.log('ACHEI BLOCK');
@@ -263,6 +265,26 @@ function getFriendlyTitle()
 }
 
 
+function setBlockedScript(element, timeout)
+{
+
+    let seconds = 0;
+		
+    let t = setInterval(()=>{
+        seconds++;
+        console.log('REQUEST');
+        if(verificaElemento(element)){
+            clearInterval(t);
+            document.querySelector(element).type = "javascript/blocked";
+            console.log('BLOQUEEI SCRIPT!');
+            return;
+        }
+        if(seconds>timeout*2){
+            clearInterval(t);
+            console.log('TIMEOUT');
+        }
+    },500);
+}
 
 /* ====================== VALOR ECONOMICO ===================== */
 
