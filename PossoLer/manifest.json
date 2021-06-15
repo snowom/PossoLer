@@ -1,6 +1,6 @@
 {
     "manifest_version": 2,
-    "version": "1.0.8",
+    "version": "1.0.9",
     "name": "Posso Ler?",
     "description": "Tenha acesso a notícias ilimitadas e conteúdos exclusivos de forma gratuita e segura",
     "author": "Thomaz Ferreira",
@@ -17,9 +17,18 @@
         "default_title": "Posso Ler?"
     },
 
+    "permissions": [
+        "webNavigation","<all_urls>","tabs","webRequest","webRequestBlocking","storage"
+      ],
+
+    "background": {
+        "scripts": ["js/background/denyRequests.js"],
+        "persistent": true
+    },
+
     "content_scripts": [{
         "js":["js/axios.js", "js/snackbar.js", "js/sweetAlert.js", "js/script.js"],
         "css":["css/snackbar.css", "css/styleSnackBar.css"],
-    "matches":["*://*.folha.uol.com.br/*", "*://*.estadao.com.br/*", "*://*.oglobo.globo.com/*", "*://*.gazetadopovo.com.br/*", "*://*.super.abril.com.br/*", "*://*.quatrorodas.abril.com.br/*", "*://*.veja.abril.com.br/*", "*://*.vejasp.abril.com.br/*", "*://*.respondeai.com.br/*", "*://*.exame.com/*", "*://*.guiadoestudante.abril.com.br/*", "*://*.epoca.globo.com/*", "*://*.revistagalileu.globo.com/*", "*://*.epocanegocios.globo.com/*", "*://*.revistamarieclaire.globo.com/*", "*://*.revistagloborural.globo.com/*", "*://*.autoesporte.globo.com/*", "*://*.revistapegn.globo.com/*", "*://possoler.tech/*", "*://*.jota.info/*", "*://*.nsctotal.com.br/*", "*://*.nytimes.com/*", "*://*.elpais.com/*", "*://*.jornalvs.com.br/*", "*://*.valor.globo.com/*"]
+    "matches":["*://*.folha.uol.com.br/*", "*://*.estadao.com.br/*", "*://*.oglobo.globo.com/*", "*://*.gazetadopovo.com.br/*", "*://*.super.abril.com.br/*", "*://*.quatrorodas.abril.com.br/*", "*://*.veja.abril.com.br/*", "*://*.vejasp.abril.com.br/*", "*://*.respondeai.com.br/*", "*://*.exame.com/*", "*://*.guiadoestudante.abril.com.br/*", "*://*.epoca.globo.com/*", "*://*.revistagalileu.globo.com/*", "*://*.epocanegocios.globo.com/*", "*://*.revistamarieclaire.globo.com/*", "*://*.revistagloborural.globo.com/*", "*://*.autoesporte.globo.com/*", "*://*.revistapegn.globo.com/*", "*://possoler.tech/*", "*://*.jota.info/*", "*://*.nsctotal.com.br/*", "*://*.nytimes.com/*", "*://*.elpais.com/*", "*://*.jornalvs.com.br/*", "*://*.valor.globo.com/*", "*://gauchazh.clicrbs.com.br/*"]
     }]
 }

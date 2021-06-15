@@ -97,3 +97,14 @@
 # Refatoração código Valor Econômico;
 # Melhoria de performance Valor Econômico;
 # CRX atualizado;
+
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-= v1.0.9 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+[11/06/2021]
+# Adicionado GauchaZH;
+# Correção de Bug Multiplos Request GauchaZH;
+
+[13/06/201]
+# FIXED BUG Multiplos requests GauchZH - Mobile;
+# GauchaZH Full Unlocked;

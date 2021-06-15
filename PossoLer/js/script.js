@@ -61,6 +61,142 @@ else if(currentURL.includes("jornalvs.com.br")){
 else if(currentURL.includes("valor.globo.com")){
     modifyVLRECON();
 }
+else if(currentURL.includes("gauchazh.clicrbs.com.br")){
+    modifyGZH();
+}
+
+
+
+/* ====================== GAUCHA ZH =========================== */
+
+function modifyGZH()
+{
+    let urlBase = document.location.href;
+    applyModifyGZH();
+
+    setInterval(()=>{
+        let tmpUrl = document.location.href;
+        if(urlBase != tmpUrl){
+            urlBase = tmpUrl;
+            console.log('MUDEI URL');
+            location.reload();
+        }
+    },800);
+}
+
+
+function applyModifyGZH()
+{
+    let c = setInterval(()=>{
+        if(verificaElemento('.m-signwall')){
+            console.log('ACHEI BLOCK');
+            clearInterval(c);
+
+
+            //MONTA SWEET ALERT DE DESBLOQUEIO
+            let s = setInterval(()=>{
+                if(typeof(Swal) == 'function'){
+                    clearInterval(s);
+                    console.log('ACHEI SWALL');
+        
+                    if(Swal.isVisible() == false){
+                        sweetAlert(
+                            'info',
+                            'Aguarde um momento...',
+                            'Estamos removendo os bloqueios para você...<br><br>'
+                        );
+                    }
+                }
+            },800);
+
+            const URL_REQUEST = 'https://gauchazh.clicrbs.com.br/graphql';
+            const TIMEOUT_REQUEST = 30000;
+            const METHOD_REQUEST = 'POST';
+            let friendlyTitle = getFriendlyTitle();
+            let payload_request;
+
+            let u = setInterval(()=>{
+                if(friendlyTitle != null && friendlyTitle != undefined){
+                    clearInterval(u);
+
+                    payload_request = {
+                        operationName: "content",
+                        query: "query content($friendlyTitle: String!, $classifications: [String]!, $preview: Boolean, $template: String, $product: String!, $site: String!) {\n  article(friendlyTitle: $friendlyTitle, preview: $preview, template: $template) {\n    published_first\n    published\n    canonical\n    exposed_id\n    friendly_title\n    featured_image_id\n    authors_complement\n    allow_comments\n    type\n    authors {\n      id\n      name\n      photo\n      email\n      facebook\n      twitter\n      __typename\n    }\n    headline {\n      text\n      __typename\n    }\n    deck {\n      text\n      __typename\n    }\n    support_line {\n      text\n      __typename\n    }\n    article_body_components {\n      html\n      type\n      data {\n        embed\n        embed_type\n        provider_name\n        scribbleId\n        images {\n          id\n          author\n          agency\n          label\n          src\n          __typename\n        }\n        type\n        __typename\n      }\n      __typename\n    }\n    components {\n      html\n      text\n      type\n      src\n      __typename\n    }\n    tags {\n      name\n      slug\n      __typename\n    }\n    seo {\n      title\n      description\n      __typename\n    }\n    __typename\n  }\n  classifications(slugs: $classifications) {\n    id\n    name\n    slug\n    exhibition_name\n    type\n    path\n    images {\n      cover {\n        src\n        __typename\n      }\n      logo {\n        src\n        __typename\n      }\n      site_logo {\n        svg\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n  product(slug: $product) {\n    ... on Product {\n      id\n      breaking_news {\n        id\n        deck {\n          text\n          __typename\n        }\n        headline {\n          html\n          text\n          type\n          src\n          __typename\n        }\n        links {\n          canonical\n          mobile\n          rest\n          amp\n          path\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n  settings(site: $site) {\n    seo\n    ads {\n      disabled\n      prebid\n      smart\n      shopping\n      outbrain\n      __typename\n    }\n    metrics {\n      disabled\n      __typename\n    }\n    auth {\n      method\n      __typename\n    }\n    __typename\n  }\n}\n",
+                        variables: {
+                            classifications: [""],
+                            friendlyTitle: friendlyTitle,
+                            preview: false,
+                            product: "",
+                            site: "",
+                            slug: "",
+                            template: "gauchazh"
+                        }
+                    };
+                }
+            },800);
+
+            let r = setInterval(()=>{
+                if(payload_request != null && payload_request != undefined){
+                    clearInterval(r);
+
+                    setTimeout(()=>{
+                        axios({
+                            method: METHOD_REQUEST,
+                            timeout: TIMEOUT_REQUEST,
+                            url: URL_REQUEST,
+                            data: payload_request
+                        }).then((resp)=>{
+                            console.log('SUCESSO REQUEST');
+            
+                            let responseCode = '';
+                            for(let i in resp.data.data.article.article_body_components){
+                                if(resp.data.data.article.article_body_components[i].html == null) continue;
+                                responseCode += resp.data.data.article.article_body_components[i].html;
+                            }
+            
+                            let domResponseCode = new DOMParser().parseFromString(responseCode, 'text/html');
+            
+                            let v = setInterval(()=>{
+                                if(verificaElemento('.article-content')){
+                                    clearInterval(v);
+                                    document.querySelector('.article-content').innerHTML = domResponseCode.body.outerHTML;
+
+                                    sweetAlert(
+                                        'success',
+                                        'Sucesso',
+                                        'Ótimo! Conteúdo desbloqueado!'
+                                    );
+                                    incrementaConteudoAPI();
+                                    verificaAtualizacaoVersao();
+                                }
+                            },800);
+
+                        }).catch((erro)=>{
+                            console.log('ERRO AXIOS REQUEST');
+                            console.log(erro);
+
+                            sweetAlert(
+                                'error',
+                                'Erro',
+                                `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`
+                            );
+                        });
+                    },2000);
+                }
+            },800);
+        }
+    },800);
+}
+
+
+function getFriendlyTitle()
+{
+    let fullURL = document.location.href;
+    let urlParts = fullURL.split("/");
+
+    return urlParts[urlParts.length-1];
+}
+
 
 
 /* ====================== VALOR ECONOMICO ===================== */
@@ -648,7 +784,7 @@ function modifyPossoLer()
     const codigo = 
     `if(typeof(VERSAO_ATUAL) == 'undefined')
     {
-       var VERSAO_ATUAL = '108';
+       var VERSAO_ATUAL = '109';
     }`;
 
     let script = document.createElement("script");
@@ -1343,7 +1479,7 @@ function configSnackBar(msg, tituloBtn, tempo)
 
 function verificaAtualizacaoVersao()
 {
-    const CURRENT_VERSION = '108';
+    const CURRENT_VERSION = '109';
     const URL_API_UPDATE = 'https://possoler.tech/API/searchUpdates.php';
     let tempoAwait = 5;
 
