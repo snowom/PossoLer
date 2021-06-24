@@ -33,14 +33,16 @@
 // @match        *://*.jornalvs.com.br/*
 // @match        *://*.valor.globo.com/*
 // @match        *://gauchazh.clicrbs.com.br/*
+// @match        *://especiais.zh.clicrbs.com.br/*
+// @match        *://*.jornaldocomercio.com/*
+// @match        *://*.economist.com/*
 // @grant        GM_webRequest
-// @webRequest   [{"selector":"https://www.rbsonline.com.br/cdn/scripts/*","action":"cancel"}]
+// @webRequest   [{"selector":"https://www.rbsonline.com.br/cdn/scripts/paywall.min.js*","action":"cancel"}, {"selector":"https://www.rbsonline.com.br/cdn/scripts/special-paywall.min.js*","action":"cancel"}, {"selector":"https://api.clicrbs.com.br/paywall-api/*","action":"cancel"}, {"selector": "*://*.jornaldocomercio.com/src/inove/paywall.php", "action": "cancel"}, {"selector": "*://cdn.tinypass.com/api/tinypass.min.js*", "action": "cancel"}]
 // @run-at       document-start
 // @noframes
 // ==/UserScript==
 
 
-// run_at: document_start
 importCDNSnackBar();
 
 
@@ -107,11 +109,84 @@ else if(currentURL.includes("jornalvs.com.br")){
 else if(currentURL.includes("valor.globo.com")){
     modifyVLRECON();
 }
-else if(currentURL.includes("gauchazh.clicrbs.com.br")){
-    setBlockedScript('#special-paywall-js', 10);
+else if(currentURL.includes("gauchazh.clicrbs.com.br") || currentURL.includes("especiais.zh.clicrbs")){
     modifyGZH();
 }
+else if(currentURL.includes('jornaldocomercio.com')){
+    modifyJCMR();
+}
+else if(currentURL.includes('economist.com')){
+    modifyECONOMIST();
+}
 
+
+
+/* ======================= THE ECONOMIST ============================== */
+
+function modifyECONOMIST()
+{
+    const BLOCKED_URL_REQUEST = "*://cdn.tinypass.com/api/tinypass.min.js*";
+
+    GM_webRequest([
+        {"selector": BLOCKED_URL_REQUEST, "action": "cancel"},
+    ], function(info, message, details) {
+        console.log('PAYWALL BLOQUEADO');
+        
+        if((typeof(axios) == 'function') && !verificaElemento('#tp-regwall')){
+            incrementaConteudoAPI();
+        }else if((self.fetch)  && !verificaElemento('#tp-regwall')){
+            FETCH_incrementaConteudoAPI();
+        }
+    });
+
+    if(typeof(axios) == 'function'){
+        axios({
+            method: 'GET',
+            url: BLOCKED_URL_REQUEST,
+            timeout: 10000
+        }).then((resp)=>{
+            console.log('SUCESSO REQUEST AXIOS');
+        }).catch((erro)=>{
+            console.log('FALHA REQUEST AXIOS');
+        });
+    } else if(self.fetch){
+        fetch(BLOCKED_URL_REQUEST)
+            .then(response => response.text())
+            .then(pageSource => {
+                console.log('SUCESSO REQUEST FETCH');
+            }).catch((erro)=>{
+                console.log('FALHA REQUEST FETCH');
+            });
+    }
+
+    let r = setInterval(()=>{
+        if(typeof(axios) == 'function'){
+            clearInterval(r);
+            verificaAtualizacaoVersao();
+        }
+    },800);
+}
+
+
+
+/* ======================== JORNAL DO COMERCIO ======================== */
+
+function modifyJCMR()
+{
+    GM_webRequest([
+        {"selector": "*://*.jornaldocomercio.com/src/inove/paywall.php", "action": "cancel"},
+    ], function(info, message, details) {
+        console.log('PAYWALL BLOQUEADO');
+
+        let r = setInterval(()=>{
+            if(typeof(axios) == 'function'){
+                clearInterval(r);
+                incrementaConteudoAPI();
+                verificaAtualizacaoVersao();
+            }
+        },800);
+    });
+}
 
 
 /* ====================== GAUCHA ZH =========================== */
@@ -119,116 +194,20 @@ else if(currentURL.includes("gauchazh.clicrbs.com.br")){
 function modifyGZH()
 {
     enableUrlChangeDetect();
-    applyModifyGZH();
+
+    GM_webRequest([
+        {"selector":"https://www.rbsonline.com.br/cdn/scripts/paywall.min.js*","action":"cancel"},
+        {"selector":"https://www.rbsonline.com.br/cdn/scripts/special-paywall.min.js*","action":"cancel"},
+        {"selector":"https://api.clicrbs.com.br/paywall-api/*","action":"cancel"}
+    ], function(info, message, details) {
+        console.log('PAYWALL BLOQUEADO');
+        FETCH_incrementaConteudoAPI();
+    });
 
     window.addEventListener('locationchange', ()=>{
-        location.reload();
+        console.log('MUDEI URL');
+        verificaAtualizacaoVersao();
     });
-}
-
-
-function applyModifyGZH()
-{
-    setBlockedScript('#special-paywall-js', 10);
-    let c = setInterval(()=>{
-        if(verificaElemento('.m-signwall')){
-            console.log('ACHEI BLOCK');
-            clearInterval(c);
-
-
-            //MONTA SWEET ALERT DE DESBLOQUEIO
-            let s = setInterval(()=>{
-                if(verificaElemento('#sweetAlert') && typeof(Swal) == 'function'){
-                    clearInterval(s);
-                    console.log('ACHEI SWALL');
-
-                    if(Swal.isVisible() == false && verificaElemento('#styleSnack')){
-                        sweetAlert(
-                            'info',
-                            'Aguarde um momento...',
-                            'Estamos removendo os bloqueios para você...<br><br>'
-                        );
-                    }
-                }
-            },800);
-
-            const URL_REQUEST = 'https://gauchazh.clicrbs.com.br/graphql';
-            const TIMEOUT_REQUEST = 30000;
-            const METHOD_REQUEST = 'POST';
-            let friendlyTitle = getFriendlyTitle();
-            let payload_request;
-
-            let u = setInterval(()=>{
-                if(friendlyTitle != null && friendlyTitle != undefined){
-                    clearInterval(u);
-
-                    payload_request = {
-                        operationName: "content",
-                        query: "query content($friendlyTitle: String!, $classifications: [String]!, $preview: Boolean, $template: String, $product: String!, $site: String!) {\n  article(friendlyTitle: $friendlyTitle, preview: $preview, template: $template) {\n    published_first\n    published\n    canonical\n    exposed_id\n    friendly_title\n    featured_image_id\n    authors_complement\n    allow_comments\n    type\n    authors {\n      id\n      name\n      photo\n      email\n      facebook\n      twitter\n      __typename\n    }\n    headline {\n      text\n      __typename\n    }\n    deck {\n      text\n      __typename\n    }\n    support_line {\n      text\n      __typename\n    }\n    article_body_components {\n      html\n      type\n      data {\n        embed\n        embed_type\n        provider_name\n        scribbleId\n        images {\n          id\n          author\n          agency\n          label\n          src\n          __typename\n        }\n        type\n        __typename\n      }\n      __typename\n    }\n    components {\n      html\n      text\n      type\n      src\n      __typename\n    }\n    tags {\n      name\n      slug\n      __typename\n    }\n    seo {\n      title\n      description\n      __typename\n    }\n    __typename\n  }\n  classifications(slugs: $classifications) {\n    id\n    name\n    slug\n    exhibition_name\n    type\n    path\n    images {\n      cover {\n        src\n        __typename\n      }\n      logo {\n        src\n        __typename\n      }\n      site_logo {\n        svg\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n  product(slug: $product) {\n    ... on Product {\n      id\n      breaking_news {\n        id\n        deck {\n          text\n          __typename\n        }\n        headline {\n          html\n          text\n          type\n          src\n          __typename\n        }\n        links {\n          canonical\n          mobile\n          rest\n          amp\n          path\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n  settings(site: $site) {\n    seo\n    ads {\n      disabled\n      prebid\n      smart\n      shopping\n      outbrain\n      __typename\n    }\n    metrics {\n      disabled\n      __typename\n    }\n    auth {\n      method\n      __typename\n    }\n    __typename\n  }\n}\n",
-                        variables: {
-                            classifications: [""],
-                            friendlyTitle: friendlyTitle,
-                            preview: false,
-                            product: "",
-                            site: "",
-                            slug: "",
-                            template: "gauchazh"
-                        }
-                    };
-                }
-            },800);
-
-            let r = setInterval(()=>{
-                if(verificaElemento('#axiosJS') && (payload_request != null && payload_request != undefined)){
-                    clearInterval(r);
-
-                    setTimeout(()=>{
-                        axios({
-                            method: METHOD_REQUEST,
-                            timeout: TIMEOUT_REQUEST,
-                            url: URL_REQUEST,
-                            data: payload_request
-                        }).then((resp)=>{
-                            console.log('SUCESSO REQUEST');
-
-                            let responseCode = '';
-                            for(let i in resp.data.data.article.article_body_components){
-                                if(resp.data.data.article.article_body_components[i].html == null) continue;
-                                responseCode += resp.data.data.article.article_body_components[i].html;
-                            }
-
-                            let domResponseCode = new DOMParser().parseFromString(responseCode, 'text/html');
-
-                            let v = setInterval(()=>{
-                                if(verificaElemento('.article-content')){
-                                    clearInterval(v);
-                                    document.querySelector('.article-content').innerHTML = domResponseCode.body.outerHTML;
-
-                                    sweetAlert(
-                                        'success',
-                                        'Sucesso',
-                                        'Ótimo! Conteúdo desbloqueado!'
-                                    );
-                                    incrementaConteudoAPI();
-                                    verificaAtualizacaoVersao();
-                                }
-                            },800);
-
-                        }).catch((erro)=>{
-                            console.log('ERRO AXIOS REQUEST');
-                            console.log(erro);
-
-                            sweetAlert(
-                                'error',
-                                'Erro',
-                                `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`
-                            );
-                        });
-                    },2000);
-                }
-            },800);
-        }
-    },800);
 }
 
 
@@ -256,35 +235,6 @@ function enableUrlChangeDetect()
 }
 
 
-function getFriendlyTitle()
-{
-    let fullURL = document.location.href;
-    let urlParts = fullURL.split("/");
-
-    return urlParts[urlParts.length-1];
-}
-
-
-function setBlockedScript(element, timeout)
-{
-
-    let seconds = 0;
-		
-    let t = setInterval(()=>{
-        seconds++;
-        console.log('REQUEST');
-        if(verificaElemento(element)){
-            clearInterval(t);
-            document.querySelector(element).type = "javascript/blocked";
-            console.log('BLOQUEEI SCRIPT!');
-            return;
-        }
-        if(seconds>timeout*2){
-            clearInterval(t);
-            console.log('TIMEOUT');
-        }
-    },500);
-}
 
 /* ====================== VALOR ECONOMICO ===================== */
 
@@ -1732,6 +1682,21 @@ function incrementaConteudoAPI()
             });
         }
     }, 800);
+}
+
+
+function FETCH_incrementaConteudoAPI()
+{
+    if(self.fetch){
+        fetch('https://possoler.tech/API/incrementViewsConteudos.php')
+        .then(response => response.text())
+        .then(pageSource => {
+            console.log('Contabilizar noticia API = SUCESSO');
+        }).catch((erro)=>{
+            console.log('ERRO Contabilizar noticia API');
+            console.log(erro);
+        });
+    }
 }
 
 /* ========================== METODOS E VARIAVEIS GLOBAIS ===================================== */

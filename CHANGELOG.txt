@@ -108,3 +108,10 @@
 [13/06/201]
 # FIXED BUG Multiplos requests GauchZH - Mobile;
 # GauchaZH Full Unlocked;
+
+[21/06/2021]
+# Adicionado Jornal do Comercio;
+# Refatoração e otimização código GauchaZH;
+# FIXED BUG no refresh page GauchaZH;
+# FIXED ALL BUGS GauchaZH;
+# Adicionado The Economist;
