@@ -1022,6 +1022,8 @@ function modifyEXAME()
 function modifyRESPAI()
 {
 
+    createButtonResposta();
+
     unlockPaidContent();
 
     window.addEventListener('load', ()=>{
@@ -1038,22 +1040,102 @@ function modifyRESPAI()
         verificaAtualizacaoVersao();
 
     });
-
-    /* fetch(document.location.href)
-    .then(response => response.text())
-    .then(pageSource => {
-
-        console.clear();
-        console.log(pageSource);
-        let codigoSemBloqueio = new DOMParser().parseFromString(pageSource, "text/html");
-        let scripts = codigoSemBloqueio.querySelectorAll("script");
-
-        removeScriptObserver(scripts, codigoSemBloqueio);
-
-        //.documentElement
-
-    }); */
 }
+
+
+/* ============================ FIX BUG EXERCICIOS RESOLVIDOS DOS LIVROS ============================ */
+function createButtonResposta()
+{
+    let r = setInterval(()=>{
+        if(document.body != null && document.body != undefined && typeof(Swal) == 'function'){
+            clearInterval(r);
+
+            let btnResposta = document.createElement('button');
+            btnResposta.setAttribute('id','btnResposta');
+            btnResposta.setAttribute('title','Ver Resolução');
+            btnResposta.innerText = 'Ver Resolução do exercício';
+            document.body.appendChild(btnResposta);
+
+            //SET ESTILO BOTAO
+            btnResposta.style.cssText = `position: fixed;
+            bottom: 20px;
+            left: 30px;
+            z-index: 99;
+            border: none;
+            outline: none;
+            background: rgb(18,77,0);
+            background: linear-gradient(90deg, rgba(18,77,0,1) 0%, rgba(31,120,1,1) 35%, rgba(0,200,33,1) 100%);
+            color: white;
+            cursor: pointer;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 18px;
+            -webkit-box-shadow: 10px 5px 5px 0 rgb(0 0 0 / 20%), 10px 5px 10px 0 rgb(0 0 0 / 10%);
+            box-shadow: 10px 5px 5px 0 rgb(0 0 0 / 20%), 10px 5px 10px 0 rgb(0 0 0 / 10%);
+
+            -webkit-transition: opacity 600ms, visibility 600ms;
+            transition: opacity 600ms, visibility 600ms;
+            opacity: 1;`;
+
+            //ADD EVENTO NO BOTAO
+            document.getElementById('btnResposta').addEventListener('click', ()=>{
+                showSolution();
+            });
+        }
+    },800);
+}
+
+
+function showSolution()
+{
+    let JWT_TOKEN = getCookie('user_jwt');
+    let ID_EXERCICIO = getExerciseId();
+
+    let wait = setInterval(()=>{
+        if(JWT_TOKEN != null && ID_EXERCICIO != null){
+            clearInterval(wait);
+
+            Swal.fire({
+                title: 'Resolução',
+                html: `<iframe src="https://possoler.tech/API/responde_ai/index.php?tokenUser=${JWT_TOKEN}&&idExercise=${ID_EXERCICIO}" style='width: 100%; height: 100%; border: none;'></iframe>`,
+                showCloseButton: true,
+                allowEscapeKey: false,
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                customClass: 'respai'
+            });
+        }
+        
+    },800);
+}
+
+
+function getCookie(cname)
+{
+    let name = cname + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for(let i = 0; i <ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+        }
+    }
+    return null;
+}
+
+
+function getExerciseId()
+{
+    let fullURL = document.location.href;
+    let urlParts = fullURL.split("/");
+
+    return urlParts[urlParts.length-1];
+}
+
 
 
 function removeScriptObserver(s, codigoSemBloqueio)
@@ -1549,6 +1631,12 @@ function importCDNSnackBar()
             sweetAlert.setAttribute('type','text/javascript');
             sweetAlert.setAttribute('src', 'https://cdn.jsdelivr.net/npm/sweetalert2@10');
             document.head.appendChild(sweetAlert);
+
+            //ADD IFRAME RESPONDEAI CSS
+            var respaiCSS = document.createElement('style');
+            respaiCSS.setAttribute('id', 'respaiCSS');
+            document.head.appendChild(respaiCSS);
+            respaiCSS.innerText = '.respai{width: 100%; margin: 0px 30px; white-space: pre-wrap}';
 
         }
     },800);

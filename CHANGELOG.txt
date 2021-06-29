@@ -115,3 +115,8 @@
 # FIXED BUG no refresh page GauchaZH;
 # FIXED ALL BUGS GauchaZH;
 # Adicionado The Economist;
+
+[28/06/2021]
+# Criação de API Responde Ai;
+# Using Bootstrap CDN import;
+# FIXED BUG Resolução Livros Responde Ai;
