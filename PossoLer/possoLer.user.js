@@ -1021,29 +1021,75 @@ function modifyEXAME()
 
 function modifyRESPAI()
 {
+    enableUrlChangeDetect();
+    checkButtonCreation();
 
-    createButtonResposta();
+    window.addEventListener('locationchange',()=>{
+        checkButtonCreation();
+    });
 
     unlockPaidContent();
-
     window.addEventListener('load', ()=>{
-
         const TIMEOUT = 3000;
-
         setTimeout(()=>{
             let codigoSemBloqueio = document.querySelector("html");
             let scripts = codigoSemBloqueio.querySelectorAll("script");
-
             removeScriptObserver(scripts, codigoSemBloqueio);
         },TIMEOUT);
-
         verificaAtualizacaoVersao();
-
     });
 }
 
 
 /* ============================ FIX BUG EXERCICIOS RESOLVIDOS DOS LIVROS ============================ */
+function checkButtonCreation()
+{
+    if(document.getElementById('btnResposta') == null || document.getElementById('btnResposta') == undefined){
+        let fullURL = window.location.href;
+        if(fullURL.includes('materias/solucionario/livro') && fullURL.includes('/edicao/') && fullURL.includes('/exercicio/')){
+            createButtonResposta();
+
+            let r = setInterval(()=>{
+                if(typeof(Swal) == 'function'){
+                    clearInterval(r);
+
+                    if(localStorage.getItem('agreeMessageBugFix') != 'true') { /* CRIA CHAVE PARA ARMAZENAR CONSENTIMENTO MSG */
+                        localStorage.setItem('agreeMessageBugFix', "false");
+                        swallBugFix(
+                            '[Posso Ler?]<br> Correção de bug Responde Aí',
+                            '<br>Na última versão da extensão <strong>Posso Ler?</strong> havia um pequeno bug que mostrava a solução dos exercícios de forma repetida em todos os passos.<br><br> Nessa versão, esse bug já foi corrigido. Para ver a resolução do exercício em questão, é só clicar no botão <strong>Ver resolução do exercício</strong>, localizado no canto inferior esquerdo da tela.<br><br><br>Obrigado pela paciência e por apoiar o projeto!<br><br>',
+                            'Não quero ver essa mensagem de novo'
+                        );
+                    }
+                }
+            },800);
+        }
+    }
+}
+
+
+function swallBugFix(title, msg, placeHolderText)
+{
+    Swal.fire({
+        title: title,
+        html: msg,
+        allowEscapeKey: false,
+        allowOutsideClick: false,
+        showConfirmButton: true,
+        input: 'checkbox',
+        inputValue: 0,
+        inputPlaceholder: placeHolderText,
+        inputValidator: (result) => {
+            let response = (result) ? "true" : "false";
+            localStorage.setItem('agreeMessageBugFix', response);
+        },
+        customClass: {
+            content: 'text-left'
+        }
+    });
+}
+
+
 function createButtonResposta()
 {
     let r = setInterval(()=>{
@@ -1053,7 +1099,7 @@ function createButtonResposta()
             let btnResposta = document.createElement('button');
             btnResposta.setAttribute('id','btnResposta');
             btnResposta.setAttribute('title','Ver Resolução');
-            btnResposta.innerText = 'Ver Resolução do exercício';
+            btnResposta.innerText = 'Ver resolução do exercício';
             document.body.appendChild(btnResposta);
 
             //SET ESTILO BOTAO
@@ -1063,8 +1109,7 @@ function createButtonResposta()
             z-index: 99;
             border: none;
             outline: none;
-            background: rgb(18,77,0);
-            background: linear-gradient(90deg, rgba(18,77,0,1) 0%, rgba(31,120,1,1) 35%, rgba(0,200,33,1) 100%);
+            background-color: #28a745;
             color: white;
             cursor: pointer;
             padding: 15px;
@@ -1096,16 +1141,20 @@ function showSolution()
             clearInterval(wait);
 
             Swal.fire({
-                title: 'Resolução',
-                html: `<iframe src="https://possoler.tech/API/responde_ai/index.php?tokenUser=${JWT_TOKEN}&&idExercise=${ID_EXERCICIO}" style='width: 100%; height: 100%; border: none;'></iframe>`,
+                title: 'Resolução Completa',
+                html: `<iframe src="https://possoler.tech/API/responde_ai/index.php?userToken=${JWT_TOKEN}&exerciseId=${ID_EXERCICIO}" style='width: 100%; height: 100% !important; border: none;'></iframe>`,
                 showCloseButton: true,
                 allowEscapeKey: false,
                 allowOutsideClick: false,
                 showConfirmButton: false,
-                customClass: 'respai'
+                customClass: {
+                    popup: 'respai',
+                    content: 'contentSolution',
+                    htmlContainer: 'contentSolution',
+                    header: 'headerPopup'
+                }
             });
         }
-        
     },800);
 }
 
@@ -1135,7 +1184,6 @@ function getExerciseId()
 
     return urlParts[urlParts.length-1];
 }
-
 
 
 function removeScriptObserver(s, codigoSemBloqueio)
@@ -1636,8 +1684,7 @@ function importCDNSnackBar()
             var respaiCSS = document.createElement('style');
             respaiCSS.setAttribute('id', 'respaiCSS');
             document.head.appendChild(respaiCSS);
-            respaiCSS.innerText = '.respai{width: 100%; margin: 0px 30px; white-space: pre-wrap}';
-
+            respaiCSS.innerText = '.respai{width: 100% !important; height: 100% !important; margin: 0px 0px !important; white-space: pre-wrap} .contentSolution{height: 100% !important; padding: 0px !important;} .headerPopup{background-color: #f9f7f7 !important; margin-right: 1.2em !important;} .text-left{text-align: left !important;}';
         }
     },800);
 }

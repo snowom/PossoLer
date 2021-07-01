@@ -880,38 +880,172 @@ function modifyEXAME()
 
 function modifyRESPAI()
 {
+    checkButtonCreation();
+
+    let urlBase = document.location.href;
+    setInterval(()=>{
+        let tmpUrl = document.location.href;
+        if(urlBase != tmpUrl){
+            urlBase = tmpUrl;
+            checkButtonCreation();
+        }
+    },800);
 
     injectPayloadRespondeAI();
-
     window.addEventListener('load', ()=>{
-
         const TIMEOUT = 3000;
-
         setTimeout(()=>{
             let codigoSemBloqueio = document.querySelector("html");
             let scripts = codigoSemBloqueio.querySelectorAll("script");
-
             removeScriptObserver(scripts, codigoSemBloqueio);
         },TIMEOUT);
-
         verificaAtualizacaoVersao();
-        
     });
+}
 
-    /* fetch(document.location.href)
-    .then(response => response.text())
-    .then(pageSource => {
 
-        console.clear();
-        console.log(pageSource);
-        let codigoSemBloqueio = new DOMParser().parseFromString(pageSource, "text/html");
-        let scripts = codigoSemBloqueio.querySelectorAll("script");
+/* ============================ FIX BUG EXERCICIOS RESOLVIDOS DOS LIVROS ============================ */
+function checkButtonCreation()
+{
+    if(document.getElementById('btnResposta') == null || document.getElementById('btnResposta') == undefined){
+        let fullURL = window.location.href;
+        if(fullURL.includes('materias/solucionario/livro') && fullURL.includes('/edicao/') && fullURL.includes('/exercicio/')){
+            createButtonResposta();
 
-        removeScriptObserver(scripts, codigoSemBloqueio);
+            let r = setInterval(()=>{
+                if(typeof(Swal) == 'function'){
+                    clearInterval(r);
 
-        //.documentElement
+                    if(localStorage.getItem('agreeMessageBugFix') != 'true') { /* CRIA CHAVE PARA ARMAZENAR CONSENTIMENTO MSG */
+                        localStorage.setItem('agreeMessageBugFix', "false");
+                        swallBugFix(
+                            '[Posso Ler?]<br> Correção de bug Responde Aí',
+                            '<br>Na última versão da extensão <strong>Posso Ler?</strong> havia um pequeno bug que mostrava a solução dos exercícios de forma repetida em todos os passos.<br><br> Nessa versão, esse bug já foi corrigido. Para ver a resolução do exercício em questão, é só clicar no botão <strong>Ver resolução do exercício</strong>, localizado no canto inferior esquerdo da tela.<br><br><br>Obrigado pela paciência e por apoiar o projeto!<br><br>',
+                            'Não quero ver essa mensagem de novo'
+                        );
+                    }
+                }
+            },800);
+        }
+    }
+}
 
-    }); */
+
+function swallBugFix(title, msg, placeHolderText)
+{
+    Swal.fire({
+        title: title,
+        html: msg,
+        allowEscapeKey: false,
+        allowOutsideClick: false,
+        showConfirmButton: true,
+        input: 'checkbox',
+        inputValue: 0,
+        inputPlaceholder: placeHolderText,
+        inputValidator: (result) => {
+            let response = (result) ? "true" : "false";
+            localStorage.setItem('agreeMessageBugFix', response);
+        },
+        customClass: {
+            content: 'text-left'
+        }
+    });
+}
+
+
+function createButtonResposta()
+{
+    let r = setInterval(()=>{
+        if(document.body != null && document.body != undefined && typeof(Swal) == 'function'){
+            clearInterval(r);
+
+            let btnResposta = document.createElement('button');
+            btnResposta.setAttribute('id','btnResposta');
+            btnResposta.setAttribute('title','Ver Resolução');
+            btnResposta.innerText = 'Ver resolução do exercício';
+            document.body.appendChild(btnResposta);
+
+            //SET ESTILO BOTAO
+            btnResposta.style.cssText = `position: fixed;
+            bottom: 20px;
+            left: 30px;
+            z-index: 99;
+            border: none;
+            outline: none;
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 18px;
+            -webkit-box-shadow: 10px 5px 5px 0 rgb(0 0 0 / 20%), 10px 5px 10px 0 rgb(0 0 0 / 10%);
+            box-shadow: 10px 5px 5px 0 rgb(0 0 0 / 20%), 10px 5px 10px 0 rgb(0 0 0 / 10%);
+
+            -webkit-transition: opacity 600ms, visibility 600ms;
+            transition: opacity 600ms, visibility 600ms;
+            opacity: 1;`;
+
+            //ADD EVENTO NO BOTAO
+            document.getElementById('btnResposta').addEventListener('click', ()=>{
+                showSolution();
+            });
+        }
+    },800);
+}
+
+
+function showSolution()
+{
+    let JWT_TOKEN = getCookie('user_jwt');
+    let ID_EXERCICIO = getExerciseId();
+
+    let wait = setInterval(()=>{
+        if(JWT_TOKEN != null && ID_EXERCICIO != null){
+            clearInterval(wait);
+
+            Swal.fire({
+                title: 'Resolução Completa',
+                html: `<iframe src="https://possoler.tech/API/responde_ai/index.php?userToken=${JWT_TOKEN}&exerciseId=${ID_EXERCICIO}" style='width: 100%; height: 100% !important; border: none;'></iframe>`,
+                showCloseButton: true,
+                allowEscapeKey: false,
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                customClass: {
+                    popup: 'respai',
+                    content: 'contentSolution',
+                    htmlContainer: 'contentSolution',
+                    header: 'headerPopup'
+                }
+            });
+        }
+    },800);
+}
+
+
+function getCookie(cname)
+{
+    let name = cname + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for(let i = 0; i <ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+        }
+    }
+    return null;
+}
+
+
+function getExerciseId()
+{
+    let fullURL = document.location.href;
+    let urlParts = fullURL.split("/");
+
+    return urlParts[urlParts.length-1];
 }
 
 

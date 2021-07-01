@@ -28,7 +28,7 @@
 
     "content_scripts": [{
         "js":["js/axios.js", "js/snackbar.js", "js/sweetAlert.js", "js/script.js"],
-        "css":["css/snackbar.css", "css/styleSnackBar.css"],
+        "css":["css/snackbar.css", "css/styleSnackBar.css", "css/responde_ai.css"],
     "matches":["*://*.folha.uol.com.br/*", "*://*.estadao.com.br/*", "*://*.oglobo.globo.com/*", "*://*.gazetadopovo.com.br/*", "*://*.super.abril.com.br/*", "*://*.quatrorodas.abril.com.br/*", "*://*.veja.abril.com.br/*", "*://*.vejasp.abril.com.br/*", "*://*.respondeai.com.br/*", "*://*.exame.com/*", "*://*.guiadoestudante.abril.com.br/*", "*://*.epoca.globo.com/*", "*://*.revistagalileu.globo.com/*", "*://*.epocanegocios.globo.com/*", "*://*.revistamarieclaire.globo.com/*", "*://*.revistagloborural.globo.com/*", "*://*.autoesporte.globo.com/*", "*://*.revistapegn.globo.com/*", "*://possoler.tech/*", "*://*.jota.info/*", "*://*.nsctotal.com.br/*", "*://*.nytimes.com/*", "*://*.elpais.com/*", "*://*.jornalvs.com.br/*", "*://*.valor.globo.com/*", "*://gauchazh.clicrbs.com.br/*", "*://especiais.zh.clicrbs.com.br/*", "*://*.jornaldocomercio.com/*", "*://*.economist.com/*"]
     }]
 }
