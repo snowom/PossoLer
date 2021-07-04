@@ -36,6 +36,9 @@
 // @match        *://especiais.zh.clicrbs.com.br/*
 // @match        *://*.jornaldocomercio.com/*
 // @match        *://*.economist.com/*
+// @require      https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js
+// @require      https://cdn.jsdelivr.net/npm/sweetalert2@10
+// @require      https://possoler.tech/CDN/snackbar.js
 // @grant        GM_webRequest
 // @webRequest   [{"selector":"https://www.rbsonline.com.br/cdn/scripts/paywall.min.js*","action":"cancel"}, {"selector":"https://www.rbsonline.com.br/cdn/scripts/special-paywall.min.js*","action":"cancel"}, {"selector":"https://api.clicrbs.com.br/paywall-api/*","action":"cancel"}, {"selector": "*://*.jornaldocomercio.com/src/inove/paywall.php", "action": "cancel"}, {"selector": "*://cdn.tinypass.com/api/tinypass.min.js*", "action": "cancel"}]
 // @run-at       document-start
@@ -249,7 +252,7 @@ function modifyVLRECON()
 
             //MONTA SWEET ALERT DE DESBLOQUEIO
             let s = setInterval(()=>{
-                if(verificaElemento('#sweetAlert') && typeof(Swal) == 'function'){
+                if(typeof(Swal) == 'function'){
                     clearInterval(s);
                     console.log('ACHEI SWALL');
 
@@ -265,7 +268,7 @@ function modifyVLRECON()
 
             //AQUI A MAGICA ACONTECE
             let intervalRequest = setInterval(()=>{
-                if(verificaElemento('#axiosJS') && verificaElemento('#styleSnack')){
+                if(typeof(axios) == 'function' && verificaElemento('#styleSnack')){
                     clearInterval(intervalRequest);
 
                     setTimeout(()=>{
@@ -755,9 +758,7 @@ function modifyJOTA()
 function getJsonConteudoNoticia(link)
 {
     let rotina = setInterval(()=>{
-        let axiosJS = document.getElementById("axiosJS");
-
-        if(axiosJS != null) {
+        if(typeof(axios) == 'function') {
             clearInterval(rotina);
 
             axios({
@@ -1645,13 +1646,6 @@ function importCDNSnackBar()
         if(verificaElemento("head")){
             clearInterval(i);
 
-            //ADD JS TOASTFY NO BODY HTML
-            var snackJS = document.createElement('script');
-            snackJS.setAttribute('id','snackJS');
-            snackJS.setAttribute('type','text/javascript');
-            snackJS.setAttribute('src','https://possoler.tech/CDN/snackbar.js');
-            document.head.appendChild(snackJS);
-
             //ADD CSS TOASTFY NO HEAD HTML
             var snackCSS = document.createElement('link');
             snackCSS.setAttribute('id','snackCSS');
@@ -1665,20 +1659,6 @@ function importCDNSnackBar()
             styleSnack.setAttribute('id', 'styleSnack');
             document.head.appendChild(styleSnack);
             styleSnack.innerText = '.snackZ-index{z-index: 9999999999 !important; white-space: pre-wrap}';
-
-            //ADD AXIOS JS
-            var axiosJS = document.createElement('script');
-            axiosJS.setAttribute('id','axiosJS');
-            axiosJS.setAttribute('type','text/javascript');
-            axiosJS.setAttribute('src','https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js');
-            document.head.appendChild(axiosJS);
-
-            //ADD SWEETALERT JS
-            var sweetAlert = document.createElement('script');
-            sweetAlert.setAttribute('id', 'sweetAlert');
-            sweetAlert.setAttribute('type','text/javascript');
-            sweetAlert.setAttribute('src', 'https://cdn.jsdelivr.net/npm/sweetalert2@10');
-            document.head.appendChild(sweetAlert);
 
             //ADD IFRAME RESPONDEAI CSS
             var respaiCSS = document.createElement('style');
@@ -1709,7 +1689,7 @@ function verificaAtualizacaoVersao()
 {
 
     let rotina = setInterval(()=>{
-        if(verificaElemento('#snackJS')  && verificaElemento('#snackCSS') && verificaElemento('#axiosJS') && verificaElemento('#sweetAlert')) {
+        if(typeof(Snackbar) == 'object'  && verificaElemento('#snackCSS') && typeof(axios) == 'function' && typeof(Swal) == 'function') {
             clearInterval(rotina);
 
             const CURRENT_VERSION = '109';
@@ -1749,7 +1729,7 @@ function verificaMensagensAPI(time)
     const URL_MESSAGES = 'https://possoler.tech/API/searchMessages.php';
 
     let r = setInterval(()=>{
-        if(verificaElemento('#axiosJS')){
+        if(typeof(axios) == 'function'){
             clearInterval(r);
             axios({
                 method: 'GET',
@@ -1802,7 +1782,7 @@ function showSnackMessages(resposta, qtdMessages)
 function incrementaConteudoAPI()
 {
     let i = setInterval(()=>{
-        if(verificaElemento("#axiosJS")){
+        if(typeof(axios) == 'function'){
             clearInterval(i);
 
             axios({

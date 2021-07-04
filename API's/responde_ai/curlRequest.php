@@ -10,6 +10,7 @@ class curlRequest
     private $header;
     private $token;
     private $exerciseId;
+    private $curl;
 
 
     public function __construct()
@@ -42,12 +43,11 @@ class curlRequest
     {
         $this->fullAttributesValues($this->exerciseId);
         
-        $curl = curl_init();
-        $this->configCurl($curl);
+        $this->curl = curl_init();
+        $this->configCurl($this->curl);
 
-        $response = curl_exec($curl);
-        $status = curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
-        curl_close($curl);
+        $response = curl_exec($this->curl);
+        $status = curl_getinfo($this->curl, CURLINFO_RESPONSE_CODE);
 
         if($status == 200){
             $jsonResponse = json_decode($response);
@@ -61,10 +61,10 @@ class curlRequest
         }
 
         if($status == 401){
-            return ['response' => false, 'msg' => 'Não Autorizado - Token inválido ou expirado!'];
+            return ['response' => false, 'msg' => 'Não Autorizado'];
         }
 
-        return ['response' => false, 'msg' => 'Erro ao realizar Request! --> ' . $response];
+        return ['response' => false, 'msg' => 'Erro ao realizar request (' . curl_error($this->curl) .')'];
     }
 
 
@@ -104,6 +104,16 @@ class curlRequest
         $this->payload['variables'] = [
             'id' => $exerciseId
         ];
+    }
+
+
+    public function closeCurl()
+    {
+        try{
+            curl_close($this->curl);
+        }catch(\Exception $e){
+
+        }
     }
 }
 

@@ -121,3 +121,12 @@
 # Using Bootstrap CDN import;
 # FIXED BUG Resolução Livros Responde Ai;
 # Ajustes variáveis API Responde Aí;
+# Remove Bootstrap CDN import;
+
+[04/07/2021]
+# Remove All JS CDN import;
+# Use @require tag for CDN JS Imports;
+# Tratativas de Erro 401 API Responde Ai;
+# Tratativas de Erro genéricos API Responde Aí;
+# Refatoração código API Responde Aí;
+

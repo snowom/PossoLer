@@ -33,7 +33,55 @@ class Utils
         $block .= '</div>';
         $block .= '</div></div>';
 
-        return $block;
+        return html_entity_decode($block);
+    }
+
+
+    public function mountTokenErrorBlock()
+    {
+        $block = '<div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <lottie-player src="https://assets9.lottiefiles.com/packages/lf20_csi2q9oq.json"  background="transparent"  speed="1"  style="height: 300px;"  loop  autoplay></lottie-player>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 text-center">
+                    <p class="lead">Token inválido ou expirado!<br>Por favor, recarregue a página do <strong>Responde Aí</strong> e tente novamente.</p>
+                </div>
+            </div>
+        </div>';
+
+        return html_entity_decode($block);
+    }
+
+    public function mountGeneralErrorBlock($erro)
+    {
+        $block = '<div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <lottie-player src="https://assets8.lottiefiles.com/packages/lf20_rjqeokgr.json"  background="transparent"  speed="1"  style="height: 300px;"  loop  autoplay></lottie-player>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 text-center">
+                    <p class="lead">Desculpe, mas ocorreu um erro inesperado. Por favor, tente novamente mais tarde.
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 text-center">
+                <p class="lead"><strong>Código do erro: </strong>'. $erro .'</p>
+                </div>
+            </div>
+        </div>';
+
+        return html_entity_decode($block);
+    }
+
+
+    public function injectBackgroundColorJS()
+    {
+        return html_entity_decode('<script>document.body.style.backgroundColor = "#f7f7f7";</script>');
     }
 }
 
