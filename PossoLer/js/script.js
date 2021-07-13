@@ -70,7 +70,237 @@ else if(currentURL.includes("jornaldocomercio.com")){
 else if(currentURL.includes('economist.com')){
     modifyECONOMIST();
 }
+else if(currentURL.includes("brainly.com.br")){
+    modifyBRAINLY();
+}
 
+
+
+/* =============================== BRAINLY =============================== */
+
+function modifyBRAINLY()
+{
+    let r = setInterval(()=>{
+        if(verificaElemento('.brn-qpage-next-answer-box-content') && verificaElemento('.js-react-bottom-banner') && typeof(axios) == 'function'){
+            clearInterval(r);
+
+            if(Swal.isVisible() == false){
+                sweetAlert(
+                    'info',
+                    'Aguarde um momento...',
+                    'Estamos removendo os bloqueios para você...<br><br>'
+                );
+            }
+
+            const URL_REQUEST = 'https://possoler.tech/API/brainly/index.php?urlTarefa=';
+            const METHOD_REQUEST = 'GET';
+
+            axios({
+                method: METHOD_REQUEST,
+                url: `${URL_REQUEST}${window.location.href}`,
+                timeout: 30000
+            }).then((resp)=>{
+
+                let r = setInterval(()=>{
+                    if(typeof(Swal) == 'function'){
+                        clearInterval(r);
+                        
+                        removeBrainlyBlocks();
+                        expandAnswerDiv();
+    
+                        let answersBlocks_1 = document.querySelectorAll('.brn-qpage-next-answer-box-content');
+                        let answersBlocks_2 = document.querySelectorAll('.brn-qpage-next-dummy-unlock-section');
+                        let allAnswersBlocks = [...answersBlocks_1, ...answersBlocks_2];
+    
+                        for(let i=0; i<resp.data.answers.length; i++){
+                            allAnswersBlocks[i].innerHTML = resp.data.answers[i];
+                            if(i == (resp.data.answers.length)-1){
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Sucesso',
+                                    html:  'Ótimo! Conteúdo desbloqueado!',
+                                    allowEscapeKey: false,
+                                    allowOutsideClick: false,
+                                    showConfirmButton: true,
+                                    timer: 7000,
+                                    timerProgressBar: true,
+                                    customClass: {
+                                        popup: 'snackZ-index',
+                                        container: 'snackZ-index'
+                                    }
+                                });
+                                observerResposta(resp.data.answers);
+                                incrementaConteudoAPI();
+                                verificaAtualizacaoVersao();
+                                //setActionBtnVerRespostaBrainly();
+                            }
+                        }
+                    }
+                },800);
+            }).catch((erro)=>{
+                if(erro.toString().includes('timeout')){
+                    sweetAlert(
+                        'error',
+                        'Erro',
+                        `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`
+                    );
+                }else{
+                    sweetAlert(
+                        'error',
+                        'Erro',
+                        `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`
+                    );
+                }
+            });
+        }
+    },800);
+}
+
+
+function observerResposta(answers)
+{
+    setInterval(()=>{
+        let btns = document.querySelectorAll("button");
+        for(let i=0; i<btns.length; i++){
+            let childNodesBtn = btns[i].childNodes;
+            for(let j=0; j<childNodesBtn.length; j++){
+                if(childNodesBtn[j].textContent == 'Desbloquear'){
+                    let answersBlocks_1 = document.querySelectorAll('.brn-qpage-next-answer-box-content');
+                    let answersBlocks_2 = document.querySelectorAll('.brn-qpage-next-dummy-unlock-section');
+                    let allAnswersBlocks = [...answersBlocks_1, ...answersBlocks_2];
+
+                    for(let i=0; i<answers.length; i++){
+                        allAnswersBlocks[i].innerHTML = answers[i];
+                    }
+                    //setActionBtnVerRespostaBrainly();
+                    break;
+                }
+            }
+        }
+    },800);
+}
+
+function expandAnswerDiv()
+{
+    //TIRA MAX-HEIGHT DAS DIVS DE RESPOSTA
+    let r = setInterval(()=>{
+        if(verificaElemento('.brn-qpage-next-answer-box__content--blocked')){
+            clearInterval(r);
+            let answersBlocks = document.querySelectorAll('.brn-qpage-next-answer-box__content--blocked');
+            for(let i=0; i<answersBlocks.length; i++){
+                answersBlocks[i].style.maxHeight = 'unset';
+                answersBlocks[i].style.position = 'unset';
+            }
+        }
+    },800);
+}
+
+
+function setActionBtnVerRespostaBrainly()
+{
+    let f1 = findBtnVerResposta();
+    let f2 = findFlag();
+
+    let r = setInterval(()=>{
+        if(f1 != false && f2 != false){
+            clearInterval(r);
+            try{
+                document.getElementById('btnResposta').addEventListener('click', (event)=>{
+                    event.preventDefault();
+                    window.location.href = '#FLAG_AQUI';
+                });
+            }catch(e){
+                console.log('Erro ao setar action no botão');
+            }
+        }
+    },800);
+}
+
+
+function findFlag()
+{
+    let flag = document.querySelector('.js-react-question-box-comments');
+    flag.setAttribute('id', 'FLAG_AQUI');
+    document.querySelector('html').style.cssText += 'scroll-behavior: smooth;';
+    return flag;
+}
+
+
+function findBtnVerResposta()
+{
+    let btns = document.querySelectorAll('button');
+
+    for(let i=0; i<btns.length; i++){
+        if(btns[i].className == 'sg-button sg-button--m sg-button--solid-blue sg-button--full-width'){
+            let childrenNodes = btns[i].childNodes;
+            for(let j=0; j<childrenNodes.length; j++){
+                if(childrenNodes[j].className.includes('sg-button__text') && childrenNodes[j].textContent == 'Ver respostas'){
+                    btns[i].setAttribute('id', 'btnResposta');
+                    try{
+                        document.querySelector('.js-react-authentication-in-modal').remove();
+                    }catch(e){
+                        console.log('nada para remover');
+                    }
+                    return true;
+                }
+            }
+        }
+    }
+
+    return false;
+}
+
+
+function removeBrainlyBlocks()
+{
+    //REMOVE BLOQUEIO DE CIMA DAS DIVS
+    let r = setInterval(()=>{
+        let bannerBlock = document.querySelectorAll('div');
+        for(let i=0; i<bannerBlock.length; i++){
+            if(bannerBlock[i].hasAttribute('data-testid')){
+                if(bannerBlock[i].getAttribute('data-testid') == 'unlock_section_wrapper'){
+                    clearInterval(r);
+                    bannerBlock[i].remove();
+                }
+            }
+        }
+    },800);
+
+    //REMOVE FOOTER DE QUANTIDADE DE RESPOSTAS RESTANTES
+    let bannerFooter = document.querySelectorAll('.js-react-bottom-banner');
+    for(let i=0; i<bannerFooter.length; i++){
+        try{
+            bannerFooter[i].remove();
+        }catch(erro){
+            console.log('nada para excluir');
+        }
+    }
+
+    //REMOVE FALSE FLAG BLUR RESPOSTA
+    let u = setInterval(()=>{
+        if(verificaElemento('.brn-qpage-next-answer-box__below-blockade')){
+            clearInterval(u);
+            if(!document.querySelector('.brn-qpage-next-answer-box__below-blockade').hasChildNodes()){
+                document.querySelector('.brn-qpage-next-answer-box__below-blockade').style.display = 'none';
+            }
+        }
+    },800);
+
+    //REMOVE CAMADA QUE IMPEDE INTERAÇÃO DO USUARIO
+    let y = setInterval(()=>{
+        if(document.head != null){
+            clearInterval(y);
+            document.head.innerHTML += `<style>*::before{content:none !important;} *::after{content:none !important;}</style>`;
+        }
+    },800);
+
+    let z = setInterval(()=>{
+        if(verificaElemento('.js-register-toplayer')){
+            clearInterval(z);
+            document.querySelector('.js-register-toplayer').remove();
+        }
+    },800);
+}
 
 
 

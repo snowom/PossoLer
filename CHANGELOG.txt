@@ -130,3 +130,12 @@
 # Tratativas de Erro genéricos API Responde Aí;
 # Refatoração código API Responde Aí;
 
+[09/07/2021]
+# Criação API Brainly;
+# Finalização API Brainly;
+# Brainly versão inicial;
+
+[13/07/2021]
+# Brainly versão Final v1
+# CRX Atualizado;
+

@@ -55,6 +55,7 @@ class Utils
         return html_entity_decode($block);
     }
 
+
     public function mountGeneralErrorBlock($erro)
     {
         $block = '<div class="container-fluid">
@@ -65,7 +66,7 @@ class Utils
             </div>
             <div class="row">
                 <div class="col-12 text-center">
-                    <p class="lead">Desculpe, mas ocorreu um erro inesperado. Por favor, tente novamente mais tarde.
+                    <p class="lead">Desculpe, mas ocorreu um erro inesperado. Por favor, tente novamente mais tarde.</p>
                 </div>
             </div>
             <div class="row">
@@ -79,9 +80,41 @@ class Utils
     }
 
 
-    public function injectBackgroundColorJS()
+    public function setBackgroundColorJS($hexColor)
     {
-        return html_entity_decode('<script>document.body.style.backgroundColor = "#f7f7f7";</script>');
+        return html_entity_decode('<script>document.body.style.backgroundColor = "'. $hexColor .'";</script>');
+    }
+
+
+    public function setLoadingAnimation()
+    {
+        $linksAnimations = array(
+            'https://assets1.lottiefiles.com/packages/lf20_aBZEgS.json',
+            'https://assets2.lottiefiles.com/packages/lf20_x9pEKm.json',
+            'https://assets4.lottiefiles.com/packages/lf20_YrS71w.json',
+            'https://assets9.lottiefiles.com/packages/lf20_zwNx9A.json'
+        );
+
+        $block = '<div class="container-fluid" id="loadingBlock">
+            <div class="row">
+                <div class="col-12">
+                    <lottie-player src="'. $linksAnimations[mt_rand(0, (count($linksAnimations)-1))] .'"  background="transparent"  speed="1"  style="height: 300px;"  loop  autoplay></lottie-player>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 text-center">
+                    <p class="lead">Carregando conteúdo...</p>
+                </div>
+            </div>
+        </div>';
+
+        return html_entity_decode($block);
+    }
+
+
+    public function deleteLoadingAnimation()
+    {
+        return html_entity_decode('<script>try{document.getElementById("loadingBlock").remove();}catch(e){console.log("Nada para excluir!");}</script>');
     }
 }
 

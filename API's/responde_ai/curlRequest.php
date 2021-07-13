@@ -2,7 +2,7 @@
 
 namespace RespondeAi;
 
-class curlRequest
+class CurlRequest
 {
     private $link;
     private $query;
@@ -84,8 +84,9 @@ class curlRequest
     private function configCurl($curl)
     {
         curl_setopt_array($curl, [
-            CURLOPT_CONNECTTIMEOUT => 10000,
-            CURLOPT_TIMEOUT => 15000,
+            CURLOPT_CONNECTTIMEOUT => 10,
+            CURLOPT_TIMEOUT => 15,
+            CURLOPT_FRESH_CONNECT => 1,
             CURLOPT_RETURNTRANSFER => 1,
             CURLOPT_HTTPHEADER => $this->header,
             CURLOPT_POSTFIELDS => json_encode($this->payload),

@@ -2,16 +2,13 @@
 
 <?php
 
-//Corrige problema de CORS da API
-header('Access-Control-Allow-Origin: *');
+//require_once './Composer/vendor/autoload.php';
+require_once __DIR__ . '/autoload.php';
 
-use RespondeAi\curlRequest;
+use RespondeAi\CurlRequest;
 use RespondeAi\Utils;
 
-require_once('./curlRequest.php');
-require_once('./utils.php');
-
-$request = new curlRequest;
+$request = new CurlRequest;
 $utils = new Utils;
 
 ?>
@@ -37,24 +34,30 @@ $utils = new Utils;
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
     </head>
     <body>
-        <?php 
+        <?php
             if(isset($_GET['userToken']) && isset($_GET['exerciseId'])){
                 $responseRequest = $request->getSolution($_GET['userToken'], $_GET['exerciseId']);
 
                 if($responseRequest['response']){
                     $request->closeCurl();
+                    echo $utils->setBackgroundColorJS("#fff");
+                    echo $utils->deleteLoadingAnimation();
                     echo $utils->mountHTMLBlock($responseRequest);
                 }else{
                     $request->closeCurl();
                     if($responseRequest['msg'] == 'Não Autorizado'){
+                        echo $utils->setBackgroundColorJS("#fff");
+                        echo $utils->deleteLoadingAnimation();
                         echo $utils->mountTokenErrorBlock();
                     } else{
+                        echo $utils->deleteLoadingAnimation();
                         echo $utils->mountGeneralErrorBlock($responseRequest['msg']);
-                        echo $utils->injectBackgroundColorJS();
+                        echo $utils->setBackgroundColorJS("#f7f7f7");
                     }
                 }
             }else{
-                echo 'Falha ao obter userToken ou exerciseId';
+                echo $utils->deleteLoadingAnimation();
+                echo $utils->mountGeneralErrorBlock('Falha ao obter userToken ou exerciseId');
             }
         ?>
     </body>
