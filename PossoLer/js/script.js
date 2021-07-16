@@ -2,75 +2,110 @@ let currentURL = window.location.hostname;
 
 
 if(currentURL.includes("folha.uol.com.br")){
+    saveDataForDashboard(1);
     modifyFLSP();
 
 }else if(currentURL.includes("estadao.com.br")){
+    saveDataForDashboard(2);
     modifyESTADAO();
 
-}else if(currentURL.includes("oglobo.globo.com")){
+}else if(currentURL.includes("oglobo.globo.com") && !(window.location.href.includes("/epoca"))){
+    saveDataForDashboard(3);
     modifyGLOBO();
 }
 else if(currentURL.includes("gazetadopovo.com.br")){
+    saveDataForDashboard(4);
     modifyGAZETA();
 }
 else if(currentURL.includes("super.abril.com.br")){
+    saveDataForDashboard(5);
     modifySUPINTERESSANTE();
 }
 else if(currentURL.includes("quatrorodas.abril.com.br")){
+    saveDataForDashboard(6);
     modifySUPINTERESSANTE();
 }
 else if(currentURL.includes("veja.abril.com.br") || (currentURL.includes("vejasp.abril"))){
+    saveDataForDashboard(7);
     modifySUPINTERESSANTE();
 }
 else if(currentURL.includes("guiadoestudante.abril.com.br")){
+    saveDataForDashboard(10);
     modifySUPINTERESSANTE();
 }
 else if(currentURL.includes("respondeai.com.br")){
+    saveDataForDashboard(8);
     modifyRESPAI();
 }
 else if(currentURL.includes("exame.com")){
+    saveDataForDashboard(9);
     modifyEXAME();
 }
-else if(currentURL.includes("epoca.globo.com")){
+else if(currentURL.includes("oglobo.globo.com") && window.location.href.includes("/epoca")){
+    //MIGROU PARA O DOMINIO OGLOBO.COM
+    saveDataForDashboard(11);
     modifyEPOCA();
 }
-else if(currentURL.includes("revistagalileu.globo.com") ||
- currentURL.includes("epocanegocios.globo.com") || currentURL.includes("revistamarieclaire.globo.com") ||
- currentURL.includes("revistagloborural.globo.com") || currentURL.includes("autoesporte.globo.com") || 
- currentURL.includes("revistapegn.globo.com")){
+else if(currentURL.includes("revistagalileu.globo.com")){
+    saveDataForDashboard(13);
+    modifyGALILEU();
+}
+else if(currentURL.includes("epocanegocios.globo.com")){
+    saveDataForDashboard(12);
+    modifyGALILEU();
+}
+else if(currentURL.includes("revistamarieclaire.globo.com")){
+    saveDataForDashboard(14);
+    modifyGALILEU();
+}
+else if(currentURL.includes("revistagloborural.globo.com")){
+    saveDataForDashboard(15);
+    modifyGALILEU();
+}
+else if(currentURL.includes("revistapegn.globo.com")){
+    saveDataForDashboard(26);
     modifyGALILEU();
 }
 else if(currentURL.includes("possoler.tech")){
     modifyPossoLer();
 }
 else if(currentURL.includes("jota.info")){
+    saveDataForDashboard(16);
     modifyJOTA();
 }
 else if(currentURL.includes("nsctotal.com.br")){
+    saveDataForDashboard(17);
     modifyNSC();
 }
 else if(currentURL.includes("nytimes.com")){
+    saveDataForDashboard(18);
     modifyNYTIMES();
 }
 else if(currentURL.includes("elpais.com")){
+    saveDataForDashboard(19);
     modifyELPAIS();
 }
 else if(currentURL.includes("jornalvs.com.br")){
+    saveDataForDashboard(20);
     modifyJVS();
 }
 else if(currentURL.includes("valor.globo.com")){
+    saveDataForDashboard(21);
     modifyVLRECON();
 }
 else if(currentURL.includes("gauchazh.clicrbs.com.br") || currentURL.includes("especiais.zh.clicrbs")){
     modifyGZH();
 }
-else if(currentURL.includes("jornaldocomercio.com")){
+else if(currentURL.includes('jornaldocomercio.com')){
+    saveDataForDashboard(23);
     modifyJCMR();
 }
 else if(currentURL.includes('economist.com')){
+    saveDataForDashboard(24);
     modifyECONOMIST();
 }
 else if(currentURL.includes("brainly.com.br")){
+    saveDataForDashboard(25);
     modifyBRAINLY();
 }
 
@@ -341,6 +376,7 @@ function modifyGZH()
             urlBase = tmpUrl;
             console.log('MUDEI URL');
             verificaAtualizacaoVersao();
+            saveDataForDashboard(22);
         }
     },800);
 }
@@ -780,11 +816,14 @@ function modifyNYTIMES()
         if(verificaElemento("#gateway-content")){
             clearInterval(r);
             document.querySelector("#gateway-content").remove();
-            document.querySelector(".css-1bd8bfl").remove();
-            
+
             let article = document.querySelector(".css-mcm29f");
-            article.style.position = "unset";
-            article.style.overflow = "auto";
+            if(article != null) {
+                article.style.cssText += "position: unset !important; overflow: auto !important;";
+            }
+
+            let blackDiv = document.querySelector('.css-gx5sib');
+            if(blackDiv != null) blackDiv.remove();
 
             incrementaConteudoAPI();
             verificaAtualizacaoVersao();
@@ -1141,6 +1180,7 @@ function checkButtonCreation()
         let fullURL = window.location.href;
         if(fullURL.includes('materias/solucionario/livro') && fullURL.includes('/edicao/') && fullURL.includes('/exercicio/')){
             createButtonResposta();
+            saveDataForDashboard(8);
 
             let r = setInterval(()=>{
                 if(typeof(Swal) == 'function'){
@@ -1694,8 +1734,11 @@ function verificaComponentsEST()
 
 function removeBloqueioEST()
 {
-
-    document.getElementById('paywall-wrapper-iframe-estadao').remove();
+    if(verificaElemento('.paywall-wrapper-iframe-estadao'));
+        document.getElementById('paywall-wrapper-iframe-estadao').remove();
+    
+    if(verificaElemento('.assine-bottom-banner-component'))
+        document.querySelector('.assine-bottom-banner-component').remove();
 
     let y = setInterval(()=>{
         if(document.querySelector('html').style.overflow != 'auto'){
@@ -1839,21 +1882,120 @@ function showSnackMessages(resposta, qtdMessages)
 }
 
 
+
 /* ========================== API INCREMENTO DE NOTICIAS E CONTEUDOS LIBERADOS ====================== */
 
 function incrementaConteudoAPI()
 {
-    axios({
-        method: 'post',
-        url: 'https://possoler.tech/API/incrementViewsConteudos.php',
-        timeout: 60000
-    }).then((resposta)=>{
-        console.log('Contabilizar noticia API = ' + resposta.data.status);
-    }).catch((erro)=>{
-        console.log('ERRO Contabilizar noticia API');
-        console.log(erro);
-    });
+    const ENDPOINT_INCREMENTVIEWS = 'https://possoler.tech/API/incrementViewsConteudos.php';
+
+    if(typeof(axios) == 'function'){
+        axios({
+            method: 'post',
+            url: ENDPOINT_INCREMENTVIEWS,
+            timeout: 60000
+        }).then((resposta)=>{
+            console.log('Contabilizar noticia API = ' + resposta.data.status);
+        }).catch((erro)=>{
+            console.log('ERRO Contabilizar noticia API');
+            console.log(erro);
+        });
+    }else if(self.fetch){
+        fetch(ENDPOINT_INCREMENTVIEWS)
+        .then(response => response.text())
+        .then(pageSource => {
+            console.log('Contabilizar noticia API = SUCESSO');
+        }).catch((erro)=>{
+            console.log('ERRO Contabilizar noticia API');
+            console.log(erro);
+        });
+    }else{
+        console.log('[INCREMENT API FAIL]');
+    }
 }
+
+
+
+/* ========================== API INCREMENTO DE INFOS DASHBOARD SITE ====================== */
+
+function getCurrentDate()
+{
+    let today = new Date();
+    let dd = String(today.getDate()).padStart(2, '0');
+    let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    let yyyy = today.getFullYear();
+    today = `${yyyy}-${mm}-${dd}`;
+
+    return today;
+}
+
+
+function getCurrentTime()
+{
+    let today = new Date();
+    let hh = String(today.getHours()).padStart(2, '0');
+    let mm = String(today.getMinutes()).padStart(2, '0');
+    let ss = String(today.getSeconds()).padStart(2, '0');
+    today = `${hh}:${mm}:${ss}`;
+
+    return today;
+}
+
+
+function saveDataForDashboard(codigoSite)
+{
+    let currentData = getCurrentDate();
+    let currentTime = getCurrentTime();
+    const ENDPOINT_DASHBOARD = 'https://possoler.tech/API/acessos/insertDadosAcesso.php';
+
+    let r = setInterval(()=>{
+        if(currentData != null && currentTime != null){
+            clearInterval(r);
+            if(typeof(axios) == 'function'){
+                axios({
+                    method: 'POST',
+                    url: ENDPOINT_DASHBOARD,
+                    timeout: 30000,
+                    data: JSON.stringify({
+                        codigo_site: codigoSite,
+                        data: currentData,
+                        horario: currentTime
+                    })
+                }).then((resp)=>{
+                    if(resp.data.STATUS == 'Sucesso ao executar query!'){
+                        console.log('[AXIOS] DASHBOARD DATA OK!');
+                    }else{
+                        console.log('[AXIOS] DASHBOARD DATA ERROR!');
+                    }
+                }).catch((erro)=>{
+                    console.log('[AXIOS] FALHA DASHBOARD!', erro.toString());
+                });
+            }else if(self.fetch){
+                fetch(ENDPOINT_DASHBOARD,
+                {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        codigo_site: codigoSite,
+                        data: currentData,
+                        horario: currentTime
+                    })
+                }).then(function(res){ return res.json(); })
+                .then(function(resp){
+                    if(resp.STATUS == 'Sucesso ao executar query!'){
+                        console.log('[FETCH] DASHBOARD DATA OK!');
+                    }else{
+                        console.log('[FETCH] DASHBOARD DATA ERROR!');
+                    }
+                }).catch((erro)=>{
+                    console.log('[FETCH] FALHA DASHBOARD!', erro.toString());
+                });
+            }else{
+                console.log('SEM AXIOS E FETCH DASHBOARD');
+            }
+        }
+    },800);
+}
+
 
 
 /* ========================== METODOS GLOBAIS ===================================== */

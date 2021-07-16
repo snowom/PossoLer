@@ -1,0 +1,26 @@
+1 - Folha de São Paulo
+2 - Estadão
+3 - O Globo
+4 - Gazeta do Povo
+5 - Super Interessante
+6 - Quatro Rodas
+7 - Veja
+8 - Responde Aí
+9 - Exame
+10 - Guia do Estudante
+11 - Revista Época
+12 - Época Negócios
+13 - Revista Galileu
+14 - Revista Marie Claire
+15 - Revista Globo Rural
+16 - JOTA
+17 - NSC Total
+18 - New York Times
+19 - El País
+20 - Jornal VS
+21 - Valor Econômico
+22 - Gaucha ZH
+23 - Jornal do Comércio
+24 - The Economist
+25 - Brainly
+26 - P Empresas G Negocios

@@ -136,6 +136,11 @@
 # Brainly versão inicial;
 
 [13/07/2021]
-# Brainly versão Final v1
+# Brainly versão Final v1;
 # CRX Atualizado;
+# Criação API Dashboard;
+# Implementação saveDataForDashboard();
+# Refatoração e add suporte fetch request em incrementaConteudoAPI();
+# FIX NY Times Block BUG;
+# CRX Atualizado
 

@@ -41,7 +41,7 @@
 // @require      https://cdn.jsdelivr.net/npm/sweetalert2@10
 // @require      https://possoler.tech/CDN/snackbar.js
 // @grant        GM_webRequest
-// @webRequest   [{"selector":"https://www.rbsonline.com.br/cdn/scripts/paywall.min.js*","action":"cancel"}, {"selector":"https://www.rbsonline.com.br/cdn/scripts/special-paywall.min.js*","action":"cancel"}, {"selector":"https://api.clicrbs.com.br/paywall-api/*","action":"cancel"}, {"selector": "*://*.jornaldocomercio.com/src/inove/paywall.php", "action": "cancel"}, {"selector": "*://cdn.tinypass.com/api/tinypass.min.js*", "action": "cancel"}]
+// @webRequest   [{"selector":"https://www.rbsonline.com.br/cdn/scripts/paywall.min.js*","action":"cancel"}, {"selector":"https://www.rbsonline.com.br/cdn/scripts/special-paywall.min.js*","action":"cancel"}, {"selector":"https://api.clicrbs.com.br/paywall-api/*","action":"cancel"}, {"selector": "*://*.jornaldocomercio.com/src/inove/paywall.php", "action": "cancel"}, {"selector": "*://cdn.tinypass.com/api/tinypass.min.js*", "action": "cancel"}, {"selector": "*://super.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://quatrorodas.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://veja.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://guiadoestudante.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector":"*://blockv4.fivewall.com.br/paywall.js*","action":"cancel"}]
 // @run-at       document-start
 // @noframes
 // ==/UserScript==
@@ -54,75 +54,123 @@ let currentURL = window.location.hostname;
 
 
 if(currentURL.includes("folha.uol.com.br")){
+    saveDataForDashboard(1);
     modifyFLSP();
 
 }else if(currentURL.includes("estadao.com.br")){
+    saveDataForDashboard(2);
     modifyESTADAO();
 
-}else if(currentURL.includes("oglobo.globo.com")){
+}else if(currentURL.includes("oglobo.globo.com") && !(window.location.href.includes("/epoca"))){
+    saveDataForDashboard(3);
+    blockPaywallRequest("*://cdn.tinypass.com/api/tinypass.min.js*");
     modifyGLOBO();
 }
 else if(currentURL.includes("gazetadopovo.com.br")){
+    saveDataForDashboard(4);
+    blockPaywallRequest("*://cdn.tinypass.com/api/tinypass.min.js*");
     modifyGAZETA();
 }
 else if(currentURL.includes("super.abril.com.br")){
+    saveDataForDashboard(5);
+    blockPaywallRequest("*://super.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*");
     modifySUPINTERESSANTE();
 }
 else if(currentURL.includes("quatrorodas.abril.com.br")){
+    saveDataForDashboard(6);
+    blockPaywallRequest("*://quatrorodas.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*")
     modifySUPINTERESSANTE();
 }
 else if(currentURL.includes("veja.abril.com.br") || (currentURL.includes("vejasp.abril"))){
+    saveDataForDashboard(7);
+    blockPaywallRequest("*://veja.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*")
     modifySUPINTERESSANTE();
 }
 else if(currentURL.includes("guiadoestudante.abril.com.br")){
+    saveDataForDashboard(10);
+    blockPaywallRequest("*://guiadoestudante.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*");
     modifySUPINTERESSANTE();
 }
 else if(currentURL.includes("respondeai.com.br")){
+    saveDataForDashboard(8);
     modifyRESPAI();
 }
 else if(currentURL.includes("exame.com")){
+    saveDataForDashboard(9);
     modifyEXAME();
 }
-else if(currentURL.includes("epoca.globo.com")){
+else if(currentURL.includes("oglobo.globo.com") && window.location.href.includes("/epoca")){
+    //MIGROU PARA O DOMINIO OGLOBO.COM
+    saveDataForDashboard(11);
     modifyEPOCA();
 }
-else if(currentURL.includes("revistagalileu.globo.com") ||
- currentURL.includes("epocanegocios.globo.com") || currentURL.includes("revistamarieclaire.globo.com") ||
- currentURL.includes("revistagloborural.globo.com") || currentURL.includes("autoesporte.globo.com") ||
- currentURL.includes("revistapegn.globo.com")){
+else if(currentURL.includes("revistagalileu.globo.com")){
+    saveDataForDashboard(13);
+    blockPaywallRequest("*://cdn.tinypass.com/api/tinypass.min.js*");
+    modifyGALILEU();
+}
+else if(currentURL.includes("epocanegocios.globo.com")){
+    saveDataForDashboard(12);
+    blockPaywallRequest("*://cdn.tinypass.com/api/tinypass.min.js*");
+    modifyGALILEU();
+}
+else if(currentURL.includes("revistamarieclaire.globo.com")){
+    saveDataForDashboard(14);
+    blockPaywallRequest("*://cdn.tinypass.com/api/tinypass.min.js*");
+    modifyGALILEU();
+}
+else if(currentURL.includes("revistagloborural.globo.com")){
+    saveDataForDashboard(15);
+    blockPaywallRequest("*://cdn.tinypass.com/api/tinypass.min.js*");
+    modifyGALILEU();
+}
+else if(currentURL.includes("revistapegn.globo.com")){
+    saveDataForDashboard(26);
+    blockPaywallRequest("*://cdn.tinypass.com/api/tinypass.min.js*");
     modifyGALILEU();
 }
 else if(currentURL.includes("possoler.tech")){
     modifyPossoLer();
 }
 else if(currentURL.includes("jota.info")){
+    saveDataForDashboard(16);
     modifyJOTA();
 }
 else if(currentURL.includes("nsctotal.com.br")){
+    saveDataForDashboard(17);
+    blockPaywallRequest("*://cdn.tinypass.com/api/tinypass.min.js*");
     modifyNSC();
 }
 else if(currentURL.includes("nytimes.com")){
+    saveDataForDashboard(18);
     modifyNYTIMES();
 }
 else if(currentURL.includes("elpais.com")){
+    saveDataForDashboard(19);
     modifyELPAIS();
 }
 else if(currentURL.includes("jornalvs.com.br")){
+    saveDataForDashboard(20);
+    blockPaywallRequest("*://blockv4.fivewall.com.br/paywall.js*");
     modifyJVS();
 }
 else if(currentURL.includes("valor.globo.com")){
+    saveDataForDashboard(21);
     modifyVLRECON();
 }
 else if(currentURL.includes("gauchazh.clicrbs.com.br") || currentURL.includes("especiais.zh.clicrbs")){
     modifyGZH();
 }
 else if(currentURL.includes('jornaldocomercio.com')){
-    modifyJCMR();
+    saveDataForDashboard(23);
+    blockPaywallRequest("*://*.jornaldocomercio.com/src/inove/paywall.php");
 }
 else if(currentURL.includes('economist.com')){
-    modifyECONOMIST();
+    saveDataForDashboard(24);
+    blockPaywallRequest("*://cdn.tinypass.com/api/tinypass.min.js*");
 }
 else if(currentURL.includes("brainly.com.br")){
+    saveDataForDashboard(25);
     modifyBRAINLY();
 }
 
@@ -405,74 +453,6 @@ function removeBrainlyBlocks()
 
 
 
-/* ======================= THE ECONOMIST ============================== */
-
-function modifyECONOMIST()
-{
-    const BLOCKED_URL_REQUEST = "*://cdn.tinypass.com/api/tinypass.min.js*";
-
-    GM_webRequest([
-        {"selector": BLOCKED_URL_REQUEST, "action": "cancel"},
-    ], function(info, message, details) {
-        console.log('PAYWALL BLOQUEADO');
-
-        if((typeof(axios) == 'function') && !verificaElemento('#tp-regwall')){
-            incrementaConteudoAPI();
-        }else if((self.fetch)  && !verificaElemento('#tp-regwall')){
-            FETCH_incrementaConteudoAPI();
-        }
-    });
-
-    if(typeof(axios) == 'function'){
-        axios({
-            method: 'GET',
-            url: BLOCKED_URL_REQUEST,
-            timeout: 10000
-        }).then((resp)=>{
-            console.log('SUCESSO REQUEST AXIOS');
-        }).catch((erro)=>{
-            console.log('FALHA REQUEST AXIOS');
-        });
-    } else if(self.fetch){
-        fetch(BLOCKED_URL_REQUEST)
-            .then(response => response.text())
-            .then(pageSource => {
-                console.log('SUCESSO REQUEST FETCH');
-            }).catch((erro)=>{
-                console.log('FALHA REQUEST FETCH');
-            });
-    }
-
-    let r = setInterval(()=>{
-        if(typeof(axios) == 'function'){
-            clearInterval(r);
-            verificaAtualizacaoVersao();
-        }
-    },800);
-}
-
-
-
-/* ======================== JORNAL DO COMERCIO ======================== */
-
-function modifyJCMR()
-{
-    GM_webRequest([
-        {"selector": "*://*.jornaldocomercio.com/src/inove/paywall.php", "action": "cancel"},
-    ], function(info, message, details) {
-        console.log('PAYWALL BLOQUEADO');
-
-        let r = setInterval(()=>{
-            if(typeof(axios) == 'function'){
-                clearInterval(r);
-                incrementaConteudoAPI();
-                verificaAtualizacaoVersao();
-            }
-        },800);
-    });
-}
-
-
 /* ====================== GAUCHA ZH =========================== */
 
 function modifyGZH()
@@ -485,7 +465,8 @@ function modifyGZH()
         {"selector":"https://api.clicrbs.com.br/paywall-api/*","action":"cancel"}
     ], function(info, message, details) {
         console.log('PAYWALL BLOQUEADO');
-        FETCH_incrementaConteudoAPI();
+        incrementaConteudoAPI();
+        saveDataForDashboard(22);
     });
 
     window.addEventListener('locationchange', ()=>{
@@ -962,11 +943,14 @@ function modifyNYTIMES()
         if(verificaElemento("#gateway-content")){
             clearInterval(r);
             document.querySelector("#gateway-content").remove();
-            document.querySelector(".css-1bd8bfl").remove();
 
             let article = document.querySelector(".css-mcm29f");
-            article.style.position = "unset";
-            article.style.overflow = "auto";
+            if(article != null) {
+                article.style.cssText += "position: unset !important; overflow: auto !important;";
+            }
+
+            let blackDiv = document.querySelector('.css-gx5sib');
+            if(blackDiv != null) blackDiv.remove();
 
             incrementaConteudoAPI();
             verificaAtualizacaoVersao();
@@ -1330,6 +1314,7 @@ function checkButtonCreation()
         let fullURL = window.location.href;
         if(fullURL.includes('materias/solucionario/livro') && fullURL.includes('/edicao/') && fullURL.includes('/exercicio/')){
             createButtonResposta();
+            saveDataForDashboard(8);
 
             let r = setInterval(()=>{
                 if(typeof(Swal) == 'function'){
@@ -1809,9 +1794,8 @@ function modifyGLOBO()
                     removeBlockCelular();
                 }
              }, 800);
-
          }
-     }, 800)
+     }, 800);
 }
 
 
@@ -1870,8 +1854,11 @@ function verificaComponentsEST()
 
 function removeBloqueioEST()
 {
-
-    document.getElementById('paywall-wrapper-iframe-estadao').remove();
+    if(verificaElemento('.paywall-wrapper-iframe-estadao'));
+        document.getElementById('paywall-wrapper-iframe-estadao').remove();
+    
+    if(verificaElemento('.assine-bottom-banner-component'))
+        document.querySelector('.assine-bottom-banner-component').remove();
 
     let y = setInterval(()=>{
         if(document.querySelector('html').style.overflow != 'auto'){
@@ -1968,7 +1955,6 @@ function configSnackBar(msg, tituloBtn, tempo)
 
 function verificaAtualizacaoVersao()
 {
-
     let rotina = setInterval(()=>{
         if(typeof(Snackbar) == 'object'  && verificaElemento('#snackCSS') && typeof(axios) == 'function' && typeof(Swal) == 'function') {
             clearInterval(rotina);
@@ -2058,33 +2044,26 @@ function showSnackMessages(resposta, qtdMessages)
 }
 
 
+
 /* ========================== API INCREMENTO DE NOTICIAS E CONTEUDOS LIBERADOS ====================== */
 
 function incrementaConteudoAPI()
 {
-    let i = setInterval(()=>{
-        if(typeof(axios) == 'function'){
-            clearInterval(i);
+    const ENDPOINT_INCREMENTVIEWS = 'https://possoler.tech/API/incrementViewsConteudos.php';
 
-            axios({
-                method: 'post',
-                url: 'https://possoler.tech/API/incrementViewsConteudos.php',
-                timeout: 60000
-            }).then((resposta)=>{
-                console.log('Contabilizar noticia API = ' + resposta.data.status);
-            }).catch((erro)=>{
-                console.log('ERRO Contabilizar noticia API');
-                console.log(erro);
-            });
-        }
-    }, 800);
-}
-
-
-function FETCH_incrementaConteudoAPI()
-{
-    if(self.fetch){
-        fetch('https://possoler.tech/API/incrementViewsConteudos.php')
+    if(typeof(axios) == 'function'){
+        axios({
+            method: 'post',
+            url: ENDPOINT_INCREMENTVIEWS,
+            timeout: 60000
+        }).then((resposta)=>{
+            console.log('Contabilizar noticia API = ' + resposta.data.status);
+        }).catch((erro)=>{
+            console.log('ERRO Contabilizar noticia API');
+            console.log(erro);
+        });
+    }else if(self.fetch){
+        fetch(ENDPOINT_INCREMENTVIEWS)
         .then(response => response.text())
         .then(pageSource => {
             console.log('Contabilizar noticia API = SUCESSO');
@@ -2092,8 +2071,93 @@ function FETCH_incrementaConteudoAPI()
             console.log('ERRO Contabilizar noticia API');
             console.log(erro);
         });
+    }else{
+        console.log('[INCREMENT API FAIL]');
     }
 }
+
+
+
+/* ========================== API INCREMENTO DE INFOS DASHBOARD SITE ====================== */
+
+function getCurrentDate()
+{
+    let today = new Date();
+    let dd = String(today.getDate()).padStart(2, '0');
+    let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    let yyyy = today.getFullYear();
+    today = `${yyyy}-${mm}-${dd}`;
+
+    return today;
+}
+
+
+function getCurrentTime()
+{
+    let today = new Date();
+    let hh = String(today.getHours()).padStart(2, '0');
+    let mm = String(today.getMinutes()).padStart(2, '0');
+    let ss = String(today.getSeconds()).padStart(2, '0');
+    today = `${hh}:${mm}:${ss}`;
+
+    return today;
+}
+
+
+function saveDataForDashboard(codigoSite)
+{
+    let currentData = getCurrentDate();
+    let currentTime = getCurrentTime();
+    const ENDPOINT_DASHBOARD = 'https://possoler.tech/API/acessos/insertDadosAcesso.php';
+
+    let r = setInterval(()=>{
+        if(currentData != null && currentTime != null){
+            clearInterval(r);
+            if(typeof(axios) == 'function'){
+                axios({
+                    method: 'POST',
+                    url: ENDPOINT_DASHBOARD,
+                    timeout: 30000,
+                    data: JSON.stringify({
+                        codigo_site: codigoSite,
+                        data: currentData,
+                        horario: currentTime
+                    })
+                }).then((resp)=>{
+                    if(resp.data.STATUS == 'Sucesso ao executar query!'){
+                        console.log('[AXIOS] DASHBOARD DATA OK!');
+                    }else{
+                        console.log('[AXIOS] DASHBOARD DATA ERROR!');
+                    }
+                }).catch((erro)=>{
+                    console.log('[AXIOS] FALHA DASHBOARD!', erro.toString());
+                });
+            }else if(self.fetch){
+                fetch(ENDPOINT_DASHBOARD,
+                {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        codigo_site: codigoSite,
+                        data: currentData,
+                        horario: currentTime
+                    })
+                }).then(function(res){ return res.json(); })
+                .then(function(resp){
+                    if(resp.STATUS == 'Sucesso ao executar query!'){
+                        console.log('[FETCH] DASHBOARD DATA OK!');
+                    }else{
+                        console.log('[FETCH] DASHBOARD DATA ERROR!');
+                    }
+                }).catch((erro)=>{
+                    console.log('[FETCH] FALHA DASHBOARD!', erro.toString());
+                });
+            }else{
+                console.log('SEM AXIOS E FETCH DASHBOARD');
+            }
+        }
+    },800);
+}
+
 
 /* ========================== METODOS E VARIAVEIS GLOBAIS ===================================== */
 
@@ -2102,4 +2166,45 @@ var contMessageIndex=0;
 function verificaElemento(elemento)
 {
     return (document.querySelector(elemento)!=null) ? true : false;
+}
+
+
+function blockPaywallRequest(urlBlock)
+{
+    const BLOCKED_URL_REQUEST = urlBlock;
+
+    GM_webRequest([
+        {"selector": BLOCKED_URL_REQUEST, "action": "cancel"},
+    ], function(info, message, details) {
+        console.log('PAYWALL BLOQUEADO');
+    });
+
+    if(typeof(axios) == 'function'){
+        axios({
+            method: 'GET',
+            url: BLOCKED_URL_REQUEST,
+            timeout: 10000
+        }).then((resp)=>{
+            console.log('SUCESSO REQUEST AXIOS');
+        }).catch((erro)=>{
+            console.log('FALHA REQUEST AXIOS');
+            incrementaConteudoAPI();
+        });
+    } else if(self.fetch){
+        fetch(BLOCKED_URL_REQUEST)
+            .then(response => response.text())
+            .then(pageSource => {
+                console.log('SUCESSO REQUEST FETCH');
+            }).catch((erro)=>{
+                console.log('FALHA REQUEST FETCH');
+                incrementaConteudoAPI();
+            });
+    }
+
+    let r = setInterval(()=>{
+        if(typeof(axios) == 'function'){
+            clearInterval(r);
+            verificaAtualizacaoVersao();
+        }
+    },800);
 }

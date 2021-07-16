@@ -1,7 +1,9 @@
 <?php
 
 //Corrige problema de CORS da API
-header('Access-Control-Allow-Origin: *');
+header("Access-Control-Allow-Headers: Authorization, Content-Type");
+header("Access-Control-Allow-Origin: *");
+header('content-type: application/json; charset=utf-8');
 
 require_once('./RequestURL.php');
 require_once('./GetPageCode.php');
