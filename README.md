@@ -26,6 +26,10 @@
 * [El País](http://elpais.com/)
 * [Jornal VS](https://www.jornalvs.com.br/)
 * [Valor Econômico](https://valor.globo.com/) - Ler sobre <i>**Cache Mock**</i> na seção de <i>Perguntas Frequentes</i>
+* [GaúchaZH](https://gauchazh.clicrbs.com.br/)
+* [Jornal do Comércio](https://www.jornaldocomercio.com/)
+* [The Economist](https://www.economist.com/)
+* [Brainly](https://brainly.com.br/)
 
 ## Perguntas Frequentes
 
