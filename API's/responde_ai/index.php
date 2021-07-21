@@ -58,6 +58,7 @@ $utils = new Utils;
             }else{
                 echo $utils->deleteLoadingAnimation();
                 echo $utils->mountGeneralErrorBlock('Falha ao obter userToken ou exerciseId');
+                echo $utils->setBackgroundColorJS("#f7f7f7");
             }
         ?>
     </body>
