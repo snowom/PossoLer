@@ -2,6 +2,10 @@
 É um projeto open source criado com o intuito de democratizar o acesso à informação, pois nesse momento, em meio a tantas _fake news_, é mais que fundamental ter acesso a notícias e conteúdos de fontes confiáveis. Com a extensão __Posso Ler?__ você é capaz de visualizar notícias e conteúdos exclusivos de alguns jornais e sites. [Ir para site](https://possoler.tech)
 <br>
 <br>
+<img src="https://img.shields.io/badge/Versão atual-1.0.9-green.svg"/>
+<img src="https://img.shields.io/badge/Data publicação-16/07/2021-blue.svg"/>
+<br>
+<br>
 ## Sites Suportados
 
 * [Folha de São Paulo](https://www.folha.uol.com.br/)
