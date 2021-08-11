@@ -505,7 +505,7 @@ function enableUrlChangeDetect()
 
 function modifyVLRECON()
 {
-    const LINK = `http://webcache.googleusercontent.com/search?q=cache:${document.location.href}`;
+    const LINK = `https://webcache.googleusercontent.com/search?q=cache:${document.location.href}`;
     const URL_REQUEST = `https://possoler.tech/API/cache_api/index.php?link=${LINK}`;
 
     let rotina = setInterval(()=>{

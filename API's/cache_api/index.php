@@ -29,7 +29,7 @@ use ValorEconomico\GetPageCode;
                 die();
             }
             
-            echo json_encode(['status' => 'error_off', 'resposta' => 'Serviço temporariamente indisponível']);
+            echo json_encode(['status_code' => $resposta['status'], 'status' => 'error_off', 'resposta' => 'Serviço temporariamente indisponível']);
         }
 
     }else{
