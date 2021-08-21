@@ -144,3 +144,12 @@
 # FIX NY Times Block BUG;
 # CRX Atualizado
 
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-= v1.2.0 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+[11/08/2021]
+# FIX Request Cache Mock - Erro https 429 - Many Requests;
+# Adicionado Jornal O Popular - versão Inicial;
+# Adicionado Jornal Diário de Santa Maria - versão Inicial;
+# Add jQuery min;
+# CRX Atualizado;

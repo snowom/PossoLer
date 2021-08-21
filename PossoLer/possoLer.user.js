@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Posso Ler?
 // @namespace    URL
-// @version      1.0.9
+// @version      1.2.0
 // @description  Tenha acesso a notícias ilimitadas e conteúdos exclusivos de forma gratuita e segura
 // @author       Thomaz Ferreira
 // @supportURL   *://possoler.tech/
@@ -37,6 +37,9 @@
 // @match        *://*.jornaldocomercio.com/*
 // @match        *://*.economist.com/*
 // @match        *://*brainly.com.br/*
+// @match        *://*.opopular.com.br/*
+// @match        *://diariosm.com.br/*
+// @require      https://code.jquery.com/jquery-3.6.0.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js
 // @require      https://cdn.jsdelivr.net/npm/sweetalert2@10
 // @require      https://possoler.tech/CDN/snackbar.js
@@ -173,7 +176,317 @@ else if(currentURL.includes("brainly.com.br")){
     saveDataForDashboard(25);
     modifyBRAINLY();
 }
+else if(currentURL.includes('opopular.com.br')){
+    //saveDataForDashboard(26)
+    modifyOPOPULAR();
+}
+else if(currentURL.includes('diariosm.com.br')){
+    //saveDataForDashboard(27)
+    modifyDIARIOSM();
+}
 
+
+
+
+/* ============================== DIARIO SANTA MARIA ============================== */
+
+function modifyDIARIOSM()
+{
+    let r = setInterval(()=>{
+        if(verificaElemento('.row-bloqueio') && typeof($) == 'function' && findPaywallText()){
+            clearInterval(r);
+
+            try{
+                let base64ParsedBody = CryptoJS.enc.Base64.parse(parsedBody);
+                let cryptoKey = CryptoJS.enc.Base64.parse('u/Gu5posvwDsXUnV5Zaq4g==');
+                let cryptoIv = CryptoJS.enc.Base64.parse('5D9r9ZVzEYYgha93/aUK2w==');
+
+                $(".suita-artigo .row-conteudo .post-content").html(CryptoJS.enc.Utf8.stringify(CryptoJS.AES.decrypt({
+                    ciphertext: base64ParsedBody
+                }, cryptoKey, {
+                    mode: CryptoJS.mode.CBC,
+                    padding: CryptoJS.pad.Pkcs7,
+                    iv: cryptoIv,
+                })));
+
+                $(".suita-artigo .row-conteudo").show();
+                $(".suita-artigo .videos").show();
+                $(".suita-artigo .imagens").show();
+                $(".suita-artigo .elementos").show();
+                $(".suita-artigo .row-loading").hide();
+
+                let u = setInterval(()=>{
+                    if(typeof(twttr) == 'object'){
+                        clearInterval(u);
+                        twttr.widgets.load();
+                    }
+                },800);
+
+                document.querySelector('.row-bloqueio').remove();
+                incrementaConteudoAPI();
+                verificaAtualizacaoVersao();
+
+            }catch(erro){
+                if(typeof(Swal) == 'function'){
+                    sweetAlert(
+                        'error',
+                        'Erro',
+                        `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}`
+                    )
+                }else{
+                    alert(erro.toString);
+                }
+            }
+        }
+    },800);
+}
+
+
+function findPaywallText()
+{
+    let h1 = document.querySelectorAll('h1');
+    for(let i=0; i<h1.length; i++){
+        if(h1[i].textContent.includes("Conteúdo exclusivo!")){
+            return true;
+        }
+    }
+    return false;
+}
+
+
+/* ============================== O POPULAR ============================== */
+
+function modifyOPOPULAR()
+{
+    const LINK = `https://webcache.googleusercontent.com/search?q=cache:${document.location.href}`;
+    const URL_REQUEST = `https://possoler.tech/API/cache_api/index.php?link=${LINK}`;
+
+    let rotina = setInterval(()=>{
+        if(verificaElemento('.locked-news')){
+            clearInterval(rotina);
+            
+            let articlesIsRemoved = removeArticles();
+            hideKeepReadingChildren();
+            removeAdBetweenArticles();
+            removeCommentDiv();
+
+            let y = setInterval(()=>{
+                if(verificaElemento('.locked-news') && articlesIsRemoved){
+                    clearInterval(y);
+
+                    //MONTA SWEET ALERT DE DESBLOQUEIO
+                    let s = setInterval(()=>{
+                        if(typeof(Swal) == 'function'){
+                            clearInterval(s);
+                            console.log('ACHEI SWALL');
+
+                            if(Swal.isVisible() == false && verificaElemento('#styleSnack')){
+                                sweetAlert(
+                                    'info',
+                                    'Aguarde um momento...',
+                                    'Estamos removendo os bloqueios para você...<br><br>'
+                                );
+                            }
+                        }
+                    },800);
+
+                    //AQUI A MAGICA ACONTECE
+                    let intervalRequest = setInterval(()=>{
+                        if(typeof(axios) == 'function' && verificaElemento('#styleSnack')){
+                            clearInterval(intervalRequest);
+
+                            setTimeout(()=>{
+                                axios({
+                                    method: 'GET',
+                                    url: URL_REQUEST,
+                                    timeout: 30000
+                                }).then((resp)=>{
+                                    if(typeof(resp.data.status) == 'undefined' && (resp.data != '\r\n') && (resp.data != '\n') && (resp.data.status != 'erro')){
+                                        console.clear();
+                                        console.log('SUCESSO GET PAGE CODE');
+                                        console.log(resp);
+
+                                        let cacheSourceCode = new DOMParser().parseFromString(resp.data, "text/html");
+                                        let blocoNoticia = getArticleBodyPOPULAR(cacheSourceCode);
+                                        let blocoOriginal = getArticleBodyPOPULAR(document);
+
+                                        let u = setInterval(()=>{
+                                            if(blocoNoticia != null && blocoOriginal != null){
+                                                clearInterval(u);
+
+                                                if(blocoNoticia != false && blocoOriginal != false){
+
+                                                    blocoOriginal.innerHTML = blocoNoticia.outerHTML;
+                                                    sweetAlert(
+                                                        'success',
+                                                        'Sucesso',
+                                                        'Ótimo! Conteúdo desbloqueado!'
+                                                    );
+
+                                                    incrementaConteudoAPI();
+                                                    verificaAtualizacaoVersao();
+
+                                                    //VERIFICA E OCULTA KEEP READING CHILDREN
+                                                    fixVideoRender();
+                                                    hideKeepReadingChildren();
+                                                    removeLockedNewsContainers();
+                                                    removeArticles();
+                                                    removeAdBetweenArticles();
+                                                    removeCommentDiv();
+
+                                                }else{
+                                                    sweetAlert(
+                                                        'warning',
+                                                        'Atenção',
+                                                        'Ops, infelizmente não é possível desbloquear essa página. <br>Que tal tentar outra notícia nesse site? <br><br>'
+                                                    );
+                                                    return;
+                                                }
+                                            }
+                                        },800);
+
+                                    }else{
+                                        console.clear();
+                                        console.log(`ERRO!\n\n Status = ${resp.data.status}\nMensagem = ${resp.data.resposta}`);
+
+                                        if(resp.data == '\r\n' || resp.data == '\n' || resp.data.status == 'error_off'){
+                                            sweetAlert(
+                                                'error',
+                                                'Erro',
+                                                `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${resp.data.resposta}`
+                                            );
+                                            return;
+                                        }else{
+                                            if(resp.data.resposta.includes('cache')){
+                                                sweetAlert(
+                                                    'warning',
+                                                    'Atenção',
+                                                    'Ops, infelizmente não foi possível desbloquear essa página. <br>Que tal tentar um pouco mais tarde ou tentar outra notícia? <br><br>'
+                                                );
+                                                return;
+                                            } else{
+
+                                                sweetAlert(
+                                                    'error',
+                                                    'Erro',
+                                                    `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${resp.data.resposta}`
+                                                );
+                                                return;
+                                            }
+                                        }
+                                    }
+
+                                }).catch((erro)=>{
+                                    console.log(erro);
+
+                                    if(erro.toString().includes('timeout')){
+                                        sweetAlert(
+                                            'error',
+                                            'Erro',
+                                            `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`
+                                        );
+                                    }else{
+                                        sweetAlert(
+                                            'error',
+                                            'Erro',
+                                            `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`
+                                        );
+                                    }
+                                });
+                            }, 2000);
+                        }
+                    }, 800);
+                }
+            },800); 
+        }
+    },800);
+}
+
+
+function getArticleBodyPOPULAR(scope)
+{
+    let articles = scope.querySelectorAll('section');
+
+    for(let i=0; i<articles.length; i++){
+        if(articles[i].hasAttribute("itemprop")){
+            if(articles[i].getAttribute("itemprop").includes("articleBody")){
+                return articles[i];
+            }
+        }
+    }
+
+    return false;
+}
+
+
+function hideKeepReadingChildren()
+{
+    let keepReadingChildren;
+    if(verificaElemento("#keep-reading")){
+        keepReadingChildren = document.getElementById("keep-reading").children;
+        for(let i=0; i<keepReadingChildren.length; i++){
+            if(i==0) continue;
+            keepReadingChildren[i].style.display = 'none';
+        }
+
+        if(verificaElemento('.for-top-news')){
+            document.querySelector('.for-top-news').remove();
+        }
+    }
+    return false;
+}
+
+
+function removeLockedNewsContainers()
+{
+    let lockedNews = document.querySelectorAll('.locked-news');
+    for(let i=0; i<lockedNews.length; i++){
+        lockedNews[i].remove();
+    }
+}
+
+
+function removeArticles()
+{
+    let allArticles = document.querySelectorAll('article');
+    for(let i=0; i<allArticles.length; i++){
+        if(i==0) continue;
+        allArticles[i].remove();
+    }
+    return true;
+}
+
+
+function removeAdBetweenArticles()
+{
+    let allAdBetweenArticles = document.querySelectorAll('.ad-between-articles');
+    for(let i=0; i<allAdBetweenArticles.length; i++){
+        allAdBetweenArticles[i].remove();
+    }
+}
+
+
+function fixVideoRender()
+{
+    if(window.location.href.includes('/videos')){
+        let iframes = document.querySelectorAll('iframe');
+        for(let i=0; i<iframes.length; i++){
+            if(iframes[i].hasAttribute('src')){
+                let currentSrc = iframes[i].getAttribute('src');
+                iframes[i].removeAttribute('src');
+                iframes[i].setAttribute('src', currentSrc);
+            }
+        }
+    }
+}
+
+
+function removeCommentDiv()
+{
+    if(verificaElemento('.comment')){
+        document.querySelector('.comment').remove();
+    }
+}
 
 
 /* =============================== BRAINLY =============================== */
