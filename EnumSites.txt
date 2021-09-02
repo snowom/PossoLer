@@ -24,3 +24,6 @@
 24 - The Economist
 25 - Brainly
 26 - P Empresas G Negocios
+30 - O Popular
+31 - Diário de Santa Maria
+32 - O Tempo - MG

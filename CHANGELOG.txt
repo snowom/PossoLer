@@ -149,7 +149,23 @@
 
 [11/08/2021]
 # FIX Request Cache Mock - Erro https 429 - Many Requests;
-# Adicionado Jornal O Popular - versão Inicial;
+# Adicionado Jornal O Popular [CACHE MOCK] - versão Inicial;
 # Adicionado Jornal Diário de Santa Maria - versão Inicial;
 # Add jQuery min;
 # CRX Atualizado;
+
+[29/08/2021]
+# Ajuste API Cache Mock;
+# FIX BUG API Cache Mock Requests HTTP e HTTPS;
+# FIX BUG Estadão New Paywall;
+# Brainly Removido;
+
+[31/08/2021]
+# Criação API Jornal O Tempo Minas Gerais;
+# Adicionado Jornal O Tempo Minas Gerais;
+# Adc SweetAlert em modifyDIARIOSM() CRX;
+# CRX Atualizado;
+
+[02/09/2021]
+# FIX BUG El País New Paywall;
+# Add bloqueio paywall por negação de requisição - Folha de SP;

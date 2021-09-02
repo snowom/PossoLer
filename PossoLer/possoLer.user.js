@@ -36,15 +36,15 @@
 // @match        *://especiais.zh.clicrbs.com.br/*
 // @match        *://*.jornaldocomercio.com/*
 // @match        *://*.economist.com/*
-// @match        *://*brainly.com.br/*
 // @match        *://*.opopular.com.br/*
 // @match        *://diariosm.com.br/*
+// @match        *://*.otempo.com.br/*
 // @require      https://code.jquery.com/jquery-3.6.0.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js
 // @require      https://cdn.jsdelivr.net/npm/sweetalert2@10
 // @require      https://possoler.tech/CDN/snackbar.js
 // @grant        GM_webRequest
-// @webRequest   [{"selector":"https://www.rbsonline.com.br/cdn/scripts/paywall.min.js*","action":"cancel"}, {"selector":"https://www.rbsonline.com.br/cdn/scripts/special-paywall.min.js*","action":"cancel"}, {"selector":"https://api.clicrbs.com.br/paywall-api/*","action":"cancel"}, {"selector": "*://*.jornaldocomercio.com/src/inove/paywall.php", "action": "cancel"}, {"selector": "*://cdn.tinypass.com/api/tinypass.min.js*", "action": "cancel"}, {"selector": "*://super.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://quatrorodas.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://veja.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://guiadoestudante.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector":"*://blockv4.fivewall.com.br/paywall.js*","action":"cancel"}]
+// @webRequest   [{"selector":"https://www.rbsonline.com.br/cdn/scripts/paywall.min.js*","action":"cancel"}, {"selector":"https://www.rbsonline.com.br/cdn/scripts/special-paywall.min.js*","action":"cancel"}, {"selector":"https://api.clicrbs.com.br/paywall-api/*","action":"cancel"}, {"selector": "*://*.jornaldocomercio.com/src/inove/paywall.php", "action": "cancel"}, {"selector": "*://cdn.tinypass.com/api/tinypass.min.js*", "action": "cancel"}, {"selector": "*://super.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://quatrorodas.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://veja.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://guiadoestudante.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector":"*://blockv4.fivewall.com.br/paywall.js*","action":"cancel"}, {"selector":"*://acesso.estadao.com.br/paywall*","action":"cancel"}, {"selector":"*://paywall.folha.uol.com.br/*","action":"cancel"}, {"selector":"*://prisa-el-pais-brasil-prod.cdn.arcpublishing.com/arc/subs/p.js","action":"cancel"}]
 // @run-at       document-start
 // @noframes
 // ==/UserScript==
@@ -58,11 +58,12 @@ let currentURL = window.location.hostname;
 
 if(currentURL.includes("folha.uol.com.br")){
     saveDataForDashboard(1);
+    blockPaywallRequest("*://paywall.folha.uol.com.br/*");
     modifyFLSP();
 
 }else if(currentURL.includes("estadao.com.br")){
     saveDataForDashboard(2);
-    modifyESTADAO();
+    blockPaywallRequest("*://acesso.estadao.com.br/paywall*");
 
 }else if(currentURL.includes("oglobo.globo.com") && !(window.location.href.includes("/epoca"))){
     saveDataForDashboard(3);
@@ -150,6 +151,7 @@ else if(currentURL.includes("nytimes.com")){
 }
 else if(currentURL.includes("elpais.com")){
     saveDataForDashboard(19);
+    blockPaywallRequest("*://prisa-el-pais-brasil-prod.cdn.arcpublishing.com/arc/subs/p.js");
     modifyELPAIS();
 }
 else if(currentURL.includes("jornalvs.com.br")){
@@ -172,19 +174,178 @@ else if(currentURL.includes('economist.com')){
     saveDataForDashboard(24);
     blockPaywallRequest("*://cdn.tinypass.com/api/tinypass.min.js*");
 }
-else if(currentURL.includes("brainly.com.br")){
+/* else if(currentURL.includes("brainly.com.br")){
     saveDataForDashboard(25);
-    modifyBRAINLY();
-}
+} */
 else if(currentURL.includes('opopular.com.br')){
-    //saveDataForDashboard(26)
+    saveDataForDashboard(30);
     modifyOPOPULAR();
 }
 else if(currentURL.includes('diariosm.com.br')){
-    //saveDataForDashboard(27)
+    saveDataForDashboard(31);
     modifyDIARIOSM();
 }
+else if(currentURL.includes('otempo.com.br')){
+    saveDataForDashboard(32);
+    modifyOTEMPO();
+}
 
+
+
+
+/* ============================== O TEMPO MINAS GERAIS ============================== */
+
+function modifyOTEMPO()
+{
+    let r = setInterval(()=>{
+        if(verificaElemento('#div-paywall-element')){
+            clearInterval(r);
+
+            //MONTA SWEET ALERT DE DESBLOQUEIO
+            let s = setInterval(()=>{
+                if(typeof(Swal) == 'function'){
+                    clearInterval(s);
+                    console.log('ACHEI SWALL');
+
+                    if(Swal.isVisible() == false && verificaElemento('#styleSnack')){
+                        sweetAlert(
+                            'info',
+                            'Aguarde um momento...',
+                            'Estamos removendo os bloqueios para você...<br><br>'
+                        );
+                    }
+                }
+            },800);
+
+            //TENTA REQUEST COM AXIOS PARA PEGAR TOKEN
+            let waitAxios = setInterval(()=>{
+                if(typeof(axios) == 'function'){
+                    clearInterval(waitAxios);
+                    axios({
+                        method: 'GET',
+                        url: 'https://possoler.tech/API/jornal_otempo/getRestServiceTokenEncoded.php',
+                        timeout: 30000
+                    }).then((resp)=>{
+                        const TOKEN_ENCODED = resp.data.OTEMPO_REST_SERVICE_TOKEN_ENCODED;
+
+                        let waitPolopoly = setInterval(()=>{
+                            if(typeof(polopoly) == 'object'){
+                                clearInterval(waitPolopoly);
+
+                                const TOKEN_DECODED = polopoly.base64.decode(TOKEN_ENCODED);
+                                const GUID = getArticleGuid();
+
+                                //REQUEST PARA PEGAR CONTEUDO DA MATÉRIA
+                                let t = setInterval(()=>{
+                                    if(TOKEN_DECODED != null && GUID != null){
+                                        clearInterval(t);
+                                        let conteudoMateria = "";
+
+                                        axios({
+                                            method: 'GET',
+                                            url: `${window.location.origin}/rest-services/emotion-service/noticia?guid=${GUID}&token=${TOKEN_DECODED}`,
+                                            timeout: 30000,
+                                            headers: {'accept': 'application/json'}
+                                        }).then((resp)=>{
+
+                                            for(let i=0; i<resp.data.length; i++){    
+                                                //GET CONTENT
+                                                if(resp.data[i].hasOwnProperty('content')){
+                                                    if(resp.data[i].content != "" && resp.data[i].content != undefined){
+                                                        conteudoMateria += resp.data[i].content;
+                                                    }
+                                                }
+
+                                                //GET NOTAS
+                                                if(resp.data[i].hasOwnProperty('notas')){
+                                                    for(let n=0; n<resp.data[i].notas.length; n++){
+
+                                                        //GET TITLE NOTA[n]
+                                                        if(resp.data[i].hasOwnProperty('title')){
+                                                            conteudoMateria += `<h4 style="font-size: 18px !important; font-weight: 700 !important;">${resp.data[i].notas[n].title}</h4>`;
+                                                        }
+
+                                                        //GET CONTENT NOTA[n]
+                                                        if(resp.data[i].notas[n].hasOwnProperty('content')){
+                                                            conteudoMateria += resp.data[i].notas[n].content;
+                                                        }
+                                                    }
+                                                }
+                                            }
+
+                                            let waitConteudoMateria = setInterval(()=>{
+                                                if(conteudoMateria != null){
+                                                    clearInterval(waitConteudoMateria);
+                                                    try{
+                                                        document.querySelector('.artigo-conteudo-article').innerHTML += conteudoMateria;
+                                                        sweetAlert(
+                                                            'success',
+                                                            'Sucesso',
+                                                            'Ótimo! Conteúdo desbloqueado!'
+                                                        );
+
+                                                        incrementaConteudoAPI();
+                                                        verificaAtualizacaoVersao();
+                                                        removePaywallBanner();
+                                                        restoreImgs();
+                                                    }catch(erro){
+                                                        sweetAlert(
+                                                            'error',
+                                                            'Erro',
+                                                            `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}`
+                                                        );
+                                                    }
+                                                }
+                                            },800);
+
+                                        }).catch((erro)=>{
+                                            sweetAlert(
+                                                'error',
+                                                'Erro',
+                                                `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>[O Tempo Request] ${erro.toString()}`
+                                            );
+                                        });
+                                    }
+                                },800);
+                            }
+                        },800);
+                    }).catch((erro)=>{
+                        sweetAlert(
+                            'error',
+                            'Erro',
+                            `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>[Internal API Request] ${erro.toString()}`
+                        );
+                    });
+                }
+            },800);
+        }
+    },800);
+}
+
+
+function getArticleGuid() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('aId');
+}
+
+
+function removePaywallBanner()
+{
+    if(verificaElemento('.reset-overlay')) document.querySelector('.reset-overlay').remove();
+}
+
+
+function restoreImgs()
+{
+    let imgs = document.querySelectorAll('img');
+
+    for(let i=0; i<imgs.length; i++){
+        if(imgs[i].hasAttribute('data-src')){
+            let currentAttributeValue = imgs[i].getAttribute("data-src");
+            imgs[i].setAttribute("src", currentAttributeValue);
+        }
+    }
+}
 
 
 
@@ -234,7 +395,7 @@ function modifyDIARIOSM()
                         `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}`
                     )
                 }else{
-                    alert(erro.toString);
+                    alert(erro.toString());
                 }
             }
         }
@@ -258,13 +419,13 @@ function findPaywallText()
 
 function modifyOPOPULAR()
 {
-    const LINK = `https://webcache.googleusercontent.com/search?q=cache:${document.location.href}`;
+    const LINK = `${document.location.href}`;
     const URL_REQUEST = `https://possoler.tech/API/cache_api/index.php?link=${LINK}`;
 
     let rotina = setInterval(()=>{
         if(verificaElemento('.locked-news')){
             clearInterval(rotina);
-            
+
             let articlesIsRemoved = removeArticles();
             hideKeepReadingChildren();
             removeAdBetweenArticles();
@@ -397,7 +558,7 @@ function modifyOPOPULAR()
                         }
                     }, 800);
                 }
-            },800); 
+            },800);
         }
     },800);
 }
@@ -487,6 +648,7 @@ function removeCommentDiv()
         document.querySelector('.comment').remove();
     }
 }
+
 
 
 /* =============================== BRAINLY =============================== */
@@ -818,7 +980,7 @@ function enableUrlChangeDetect()
 
 function modifyVLRECON()
 {
-    const LINK = `https://webcache.googleusercontent.com/search?q=cache:${document.location.href}`;
+    const LINK = `${document.location.href}`;
     const URL_REQUEST = `https://possoler.tech/API/cache_api/index.php?link=${LINK}`;
 
     let rotina = setInterval(()=>{
@@ -897,7 +1059,7 @@ function modifyVLRECON()
                                             sweetAlert(
                                                 'warning',
                                                 'Atenção',
-                                                'Ops, infelizmente não é possível desbloquear essa página. <br>Que tal tentar outra notícia nesse site? <br><br>'
+                                                'Ops, infelizmente não foi possível desbloquear essa página. <br>Que tal tentar um pouco mais tarde ou tentar outra notícia? <br><br>'
                                             );
                                             return;
                                         }
@@ -906,7 +1068,7 @@ function modifyVLRECON()
 
                             }else{
                                 console.clear();
-                                console.log(`ERRO!\n\n Status = ${resp.data.status}\nMensagem = ${resp.data.resposta}`);
+                                console.log(`ERRO!\n\n Status = ${resp.data.status}\nMensagem = ${resp.data.resposta}\nSTATUS HTTP = ${resp.data.status_code}`);
 
                                 if(resp.data == '\r\n' || resp.data == '\n' || resp.data.status == 'error_off'){
                                     sweetAlert(
@@ -1213,11 +1375,13 @@ function modifyELPAIS()
     });
 
     let r = setInterval(()=>{
-        if((verificaElemento("#ctn_closed_article") || verificaElemento(".paywallModal")) && sourceCode != null){
+        if((verificaElemento("#ctn_closed_article") || verificaElemento(".paywallModal") || verificaElemento("#capaPaywall")) && sourceCode != null){
             if(verificaElemento(".paywallModal")) document.querySelector(".paywallModal").remove();
+            if(verificaElemento("#capaPaywall")) document.querySelector("#capaPaywall").remove();
 
             let blocoNoticia = document.querySelector("article");
             blocoNoticia.innerHTML = (sourceCode.querySelector("article")).outerHTML;
+            document.body.style.overflow = "auto";
             removeSubscriptionBanners();
 
             if(passei==false){
@@ -1417,7 +1581,7 @@ function modifyPossoLer()
     const codigo =
     `if(typeof(VERSAO_ATUAL) == 'undefined')
     {
-       var VERSAO_ATUAL = '109';
+       var VERSAO_ATUAL = '120';
     }`;
 
     let script = document.createElement("script");
@@ -2144,53 +2308,7 @@ function getFatherElement(elementoFilho)
 }
 
 
-/* ====================== ESTADAO ================================ */
-var currentY;
-var msgUpdate = 0;
 
-function modifyESTADAO()
-{
-    let u = setInterval(()=>{
-        if(verificaComponentsEST()===true){
-            clearInterval(u);
-            removeBloqueioEST();
-        }
-    }, 800)
-}
-
-
-function verificaComponentsEST()
-{
-    return (document.getElementById('paywall-wrapper-iframe-estadao') != null) ? true : currentY = window.pageYOffset;
-}
-
-
-function removeBloqueioEST()
-{
-    if(verificaElemento('.paywall-wrapper-iframe-estadao'));
-        document.getElementById('paywall-wrapper-iframe-estadao').remove();
-    
-    if(verificaElemento('.assine-bottom-banner-component'))
-        document.querySelector('.assine-bottom-banner-component').remove();
-
-    let y = setInterval(()=>{
-        if(document.querySelector('html').style.overflow != 'auto'){
-            clearInterval(y);
-            document.querySelector('html').style.overflow = 'auto';
-            document.querySelector('html').style.width = 'auto';
-            document.querySelector('html').style.position = 'unset';
-            window.scrollTo(0,currentY);
-        }
-    },800);
-
-    if(msgUpdate<=0){
-        verificaAtualizacaoVersao();
-        msgUpdate++;
-        incrementaConteudoAPI();
-    }
-
-    modifyESTADAO();
-}
 
 /* ====================== FOLHA DE SP ============================ */
 
@@ -2199,21 +2317,17 @@ function modifyFLSP()
     let rotina = setInterval(() => {
         if(verificaElemento('#paywall-flutuante') && verificaElemento('#paywall-content') && verificaElemento('#paywall-fill')){
             clearInterval(rotina);
-            removeBloqueio();
+            try{
+                document.getElementById('paywall-flutuante').remove();
+                document.getElementById('paywall-fill').remove();
+                document.getElementById('paywall-content').style.overflow = 'auto';
+                verificaAtualizacaoVersao();
+                incrementaConteudoAPI();
+            }catch(erro){
+                console.error(`ERRO AO REMOVER PAYWALL FLSP --> ${erro.toString()}`);
+            }
         }
     }, 800);
-}
-
-
-function removeBloqueio()
-{
-    document.getElementById('paywall-flutuante').remove();
-    document.getElementById('paywall-fill').remove();
-
-    document.getElementById('paywall-content').style.overflow = 'auto';
-
-    verificaAtualizacaoVersao();
-    incrementaConteudoAPI();
 }
 
 
@@ -2272,7 +2386,7 @@ function verificaAtualizacaoVersao()
         if(typeof(Snackbar) == 'object'  && verificaElemento('#snackCSS') && typeof(axios) == 'function' && typeof(Swal) == 'function') {
             clearInterval(rotina);
 
-            const CURRENT_VERSION = '109';
+            const CURRENT_VERSION = '120';
             const URL_API_UPDATE = 'https://possoler.tech/API/searchUpdates.php';
             let tempoAwait = 5;
 

@@ -104,19 +104,235 @@ else if(currentURL.includes('economist.com')){
     saveDataForDashboard(24);
     modifyECONOMIST();
 }
-else if(currentURL.includes("brainly.com.br")){
+/* else if(currentURL.includes("brainly.com.br")){
     saveDataForDashboard(25);
     modifyBRAINLY();
-}
+} */
 else if(currentURL.includes('opopular.com.br')){
-    //saveDataForDashboard(26)
+    saveDataForDashboard(30)
     modifyOPOPULAR();
 }
 else if(currentURL.includes('diariosm.com.br')){
-    //saveDataForDashboard(27)
+    saveDataForDashboard(31)
     modifyDIARIOSM();
 }
+else if(currentURL.includes('otempo.com.br')){
+    saveDataForDashboard(32);
+    modifyOTEMPO();
+}
 
+
+
+
+/* ============================== O TEMPO MINAS GERAIS ============================== */
+
+function modifyOTEMPO()
+{
+    let payload = `let r = setInterval(()=>{
+        if(verificaElemento('#div-paywall-element')){
+            clearInterval(r);
+
+            //MONTA SWEET ALERT DE DESBLOQUEIO
+            let s = setInterval(()=>{
+                if(typeof(Swal) == 'function'){
+                    clearInterval(s);
+                    console.log('ACHEI SWALL');
+
+                    if(Swal.isVisible() == false){
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Aguarde um momento...',
+                            html: 'Estamos removendo os bloqueios para você...<br><br>',
+                            allowEscapeKey: false,
+                            allowOutsideClick: false,
+                            showConfirmButton: false,
+                            customClass: {
+                                popup: 'snackZ-index',
+                                container: 'snackZ-index'
+                            }
+                        });
+                    }
+                }
+            },800);
+
+            //TENTA REQUEST COM FETCH PARA PEGAR TOKEN
+			fetch('https://possoler.tech/API/jornal_otempo/getRestServiceTokenEncoded.php')
+			.then(response => response.json())
+			.then(resp => {
+				const TOKEN_ENCODED = resp.OTEMPO_REST_SERVICE_TOKEN_ENCODED;
+				
+				let waitPolopoly = setInterval(()=>{
+					if(typeof(polopoly) == 'object'){
+						clearInterval(waitPolopoly);
+
+						const TOKEN_DECODED = polopoly.base64.decode(TOKEN_ENCODED);
+						const GUID = getArticleGuid();
+						
+						//REQUEST PARA PEGAR CONTEUDO DA MATÉRIA
+						let t = setInterval(()=>{
+							if(TOKEN_DECODED != null && GUID != null){
+								clearInterval(t);			
+								let conteudoMateria = "";
+								
+								fetch(window.location.origin + '/rest-services/emotion-service/noticia?guid=' + GUID + '&token=' + TOKEN_DECODED, {
+									'headers': {
+										'accept': 'application/json'
+									}
+								}).then(response => response.json())
+									.then(resp => {
+										for(let i=0; i<resp.length; i++){    
+										//GET CONTENT
+										if(resp[i].hasOwnProperty('content')){
+											if(resp[i].content != "" && resp[i].content != undefined){
+												conteudoMateria += resp[i].content;
+											}
+										}
+
+										//GET NOTAS
+										if(resp[i].hasOwnProperty('notas')){
+											for(let n=0; n<resp[i].notas.length; n++){
+
+												//GET TITLE NOTA[n]
+												if(resp[i].hasOwnProperty('title')){
+													conteudoMateria += '<h4 style="font-size: 18px !important; font-weight: 700 !important;">' + resp[i].notas[n].title + '</h4>';
+												}
+
+												//GET CONTENT NOTA[n]
+												if(resp[i].notas[n].hasOwnProperty('content')){
+													conteudoMateria += resp[i].notas[n].content;
+												}
+											}
+										}
+									}
+									
+									let waitConteudoMateria = setInterval(()=>{
+										if(conteudoMateria != null){
+											clearInterval(waitConteudoMateria);
+											try{
+												document.querySelector('.artigo-conteudo-article').innerHTML += conteudoMateria;
+                                                Swal.fire({
+                                                    icon: 'success',
+                                                    title: 'Sucesso',
+                                                    html: 'Ótimo! Conteúdo desbloqueado!',
+                                                    allowEscapeKey: false,
+                                                    allowOutsideClick: false,
+                                                    showConfirmButton: true,
+                                                    timer: 7000,
+                                                    timerProgressBar: true,
+                                                    customClass: {
+                                                        popup: 'snackZ-index',
+                                                        container: 'snackZ-index'
+                                                    }
+                                                });
+                                                window.stop();
+
+												${incrementaConteudoAPI()};
+												${verificaAtualizacaoVersao()};
+												removePaywallBanner();
+												restoreImgs();
+											}catch(erro){
+                                                Swal.fire({
+                                                    icon: 'error',
+                                                    title: 'Erro',
+                                                    html: 'Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style="font-weight: bold !important;">Código do erro: </spam>' + erro.toString(),
+                                                    allowEscapeKey: false,
+                                                    allowOutsideClick: false,
+                                                    showConfirmButton: false,
+                                                    customClass: {
+                                                        popup: 'snackZ-index',
+                                                        container: 'snackZ-index'
+                                                    }
+                                                });
+											}
+										}
+									},800);
+								}).catch((erro)=>{
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Erro',
+                                        html: 'Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style="font-weight: bold !important;">Código do erro: </spam>[O Tempo Request] ' + erro.toString(),
+                                        allowEscapeKey: false,
+                                        allowOutsideClick: false,
+                                        showConfirmButton: false,
+                                        customClass: {
+                                            popup: 'snackZ-index',
+                                            container: 'snackZ-index'
+                                        }
+                                    });
+								});
+                            }
+						},800);
+					}
+				},800);
+			}).catch((erro)=>{
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro',
+                    html: 'Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style="font-weight: bold !important;">Código do erro: </spam>[Internal API Request] ' + erro.toString(),
+                    allowEscapeKey: false,
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    customClass: {
+                        popup: 'snackZ-index',
+                        container: 'snackZ-index'
+                    }
+                });
+			});
+        }
+    },800);
+    
+
+    function getArticleGuid() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('aId');
+    }
+    
+    
+    function removePaywallBanner()
+    {
+        if(verificaElemento('.reset-overlay')) document.querySelector('.reset-overlay').remove();
+    }
+    
+    
+    function restoreImgs()
+    {
+        let imgs = document.querySelectorAll('img');
+    
+        for(let i=0; i<imgs.length; i++){
+            if(imgs[i].hasAttribute('data-src')){
+                let currentAttributeValue = imgs[i].getAttribute("data-src");
+                imgs[i].setAttribute("src", currentAttributeValue);
+            }
+        }
+    }
+    
+    
+    function verificaElemento(elemento)
+    {
+        return (document.querySelector(elemento)!=null) ? true : false;
+    }`;
+
+
+    //IMPORT SWEET ALERT JS
+    let sweetAlert = document.createElement("script");
+    sweetAlert.type = "text/javascript";
+    sweetAlert.setAttribute('id', 'sweetAlertJS');
+    sweetAlert.setAttribute('src', 'https://cdn.jsdelivr.net/npm/sweetalert2@10');
+    document.head.appendChild(sweetAlert);
+
+    //INJEÇÃO PAYLOAD;
+    let script = document.createElement("script");
+    script.type = "text/javascript";
+    script.setAttribute('id', 'scriptJS');
+
+    try{
+        script.appendChild(document.createTextNode(payload));
+    }catch(e){
+        script.text = payload;
+    }finally{
+        document.head.appendChild(script);
+    }
+}
 
 
 
@@ -141,40 +357,67 @@ function modifyDIARIOSM()
         if(document.querySelector('.row-bloqueio') != null && typeof($) == 'function' && findPaywallText()){
             clearInterval(r);
 
-            let base64ParsedBody = CryptoJS.enc.Base64.parse(parsedBody);
-            let cryptoKey = CryptoJS.enc.Base64.parse('u/Gu5posvwDsXUnV5Zaq4g==');
-            let cryptoIv = CryptoJS.enc.Base64.parse('5D9r9ZVzEYYgha93/aUK2w==');
+            try{
+                let base64ParsedBody = CryptoJS.enc.Base64.parse(parsedBody);
+                let cryptoKey = CryptoJS.enc.Base64.parse('u/Gu5posvwDsXUnV5Zaq4g==');
+                let cryptoIv = CryptoJS.enc.Base64.parse('5D9r9ZVzEYYgha93/aUK2w==');
 
-            $(".suita-artigo .row-conteudo .post-content").html(CryptoJS.enc.Utf8.stringify(CryptoJS.AES.decrypt({
-                ciphertext: base64ParsedBody
-            }, cryptoKey, {
-                mode: CryptoJS.mode.CBC,
-                padding: CryptoJS.pad.Pkcs7,
-                iv: cryptoIv,
-            })));
+                $(".suita-artigo .row-conteudo .post-content").html(CryptoJS.enc.Utf8.stringify(CryptoJS.AES.decrypt({
+                    ciphertext: base64ParsedBody
+                }, cryptoKey, {
+                    mode: CryptoJS.mode.CBC,
+                    padding: CryptoJS.pad.Pkcs7,
+                    iv: cryptoIv,
+                })));
 
-            $(".suita-artigo .row-conteudo").show();
-            $(".suita-artigo .videos").show();
-            $(".suita-artigo .imagens").show();
-            $(".suita-artigo .elementos").show();
-            $(".suita-artigo .row-loading").hide();
+                $(".suita-artigo .row-conteudo").show();
+                $(".suita-artigo .videos").show();
+                $(".suita-artigo .imagens").show();
+                $(".suita-artigo .elementos").show();
+                $(".suita-artigo .row-loading").hide();
 
-            let u = setInterval(()=>{
-                if(typeof(twttr) == 'object'){
-                    clearInterval(u);
-                    twttr.widgets.load();
+                let u = setInterval(()=>{
+                    if(typeof(twttr) == 'object'){
+                        clearInterval(u);
+                        twttr.widgets.load();
+                    }
+                },800);
+
+                document.querySelector('.row-bloqueio').remove();
+                ${incrementaConteudoAPI()};
+                ${verificaAtualizacaoVersao()};
+            }catch(erro){
+                if(typeof(Swal) == 'function'){
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erro',
+                        html: 'Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style="font-weight: bold !important;">Código do erro: </spam>[Internal API Request] ' + erro.toString(),
+                        allowEscapeKey: false,
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        customClass: {
+                            popup: 'snackZ-index',
+                            container: 'snackZ-index'
+                        }
+                    });
+                }else{
+                    alert(erro.toString());
                 }
-            },800);
-
-            document.querySelector('.row-bloqueio').remove();
-            ${incrementaConteudoAPI()};
-            ${verificaAtualizacaoVersao()};
+            }
         }
     },800);`;
 
+    //IMPORT SWEET ALERT JS
+    let sweetAlert = document.createElement("script");
+    sweetAlert.type = "text/javascript";
+    sweetAlert.setAttribute('id', 'sweetAlertJS');
+    sweetAlert.setAttribute('src', 'https://cdn.jsdelivr.net/npm/sweetalert2@10');
+    document.head.appendChild(sweetAlert);
+
+    //INJEÇÃO PAYLOAD;
     let script = document.createElement("script");
     script.type = "text/javascript";
-    script.setAttribute('id', 'scriptJS')
+    script.setAttribute('id', 'scriptJS');
 
     try{
         script.appendChild(document.createTextNode(payload));
@@ -192,7 +435,7 @@ function modifyDIARIOSM()
 
 function modifyOPOPULAR()
 {
-    const LINK = `https://webcache.googleusercontent.com/search?q=cache:${document.location.href}`;
+    const LINK = `${document.location.href}`;
     const URL_REQUEST = `https://possoler.tech/API/cache_api/index.php?link=${LINK}`;
 
     let rotina = setInterval(()=>{
@@ -272,7 +515,7 @@ function modifyOPOPULAR()
                                                     sweetAlert(
                                                         'warning',
                                                         'Atenção',
-                                                        'Ops, infelizmente não é possível desbloquear essa página. <br>Que tal tentar outra notícia nesse site? <br><br>'
+                                                        'Ops, infelizmente não foi possível desbloquear essa página. <br>Que tal tentar um pouco mais tarde ou tentar outra notícia? <br><br>'
                                                     );
                                                     return;
                                                 }
@@ -701,7 +944,7 @@ function modifyGZH()
 
 function modifyVLRECON()
 {
-    const LINK = `https://webcache.googleusercontent.com/search?q=cache:${document.location.href}`;
+    const LINK = `${document.location.href}`;
     const URL_REQUEST = `https://possoler.tech/API/cache_api/index.php?link=${LINK}`;
 
     let rotina = setInterval(()=>{
@@ -773,7 +1016,7 @@ function modifyVLRECON()
                                     sweetAlert(
                                         'warning',
                                         'Atenção',
-                                        'Ops, infelizmente não é possível desbloquear essa página. <br>Que tal tentar outra notícia nesse site? <br><br>'
+                                        'Ops, infelizmente não foi possível desbloquear essa página. <br>Que tal tentar um pouco mais tarde ou tentar outra notícia? <br><br>'
                                     );
                                     return;
                                 }
@@ -782,7 +1025,7 @@ function modifyVLRECON()
     
                     }else{
                         console.clear();
-                        console.log(`ERRO!\n\n Status = ${resp.data.status}\nMensagem = ${resp.data.resposta}`);
+                        console.log(`ERRO!\n\n Status = ${resp.data.status}\nMensagem = ${resp.data.resposta}\nSTATUS HTTP = ${resp.data.status_code}`);
     
                         if(resp.data == '\r\n' || resp.data == '\n' || resp.data.status == 'error_off'){
                             sweetAlert(
@@ -1075,6 +1318,11 @@ function removeBlockPaywall()
 
 /* ====================== EL PAIS =========================== */
 
+//bloqueado por negação de requisição!
+//Olhar em js/background/denyRequests.js
+verificaAtualizacaoVersao();
+
+//ALTERA DOM CASO NECESSARIO
 function modifyELPAIS()
 {
     let passei = false;
@@ -1087,11 +1335,13 @@ function modifyELPAIS()
     });
 
     let r = setInterval(()=>{
-        if((verificaElemento("#ctn_closed_article") || verificaElemento(".paywallModal")) && sourceCode != null){
+        if((verificaElemento("#ctn_closed_article") || verificaElemento(".paywallModal") || verificaElemento("#capaPaywall")) && sourceCode != null){
             if(verificaElemento(".paywallModal")) document.querySelector(".paywallModal").remove();
+            if(verificaElemento("#capaPaywall")) document.querySelector("#capaPaywall").remove();
             
             let blocoNoticia = document.querySelector("article");
             blocoNoticia.innerHTML = (sourceCode.querySelector("article")).outerHTML;
+            document.body.style.overflow = "auto";
             removeSubscriptionBanners();
 
             if(passei==false){
@@ -1285,7 +1535,7 @@ function modifyPossoLer()
     const codigo = 
     `if(typeof(VERSAO_ATUAL) == 'undefined')
     {
-       var VERSAO_ATUAL = '109';
+       var VERSAO_ATUAL = '120';
     }`;
 
     let script = document.createElement("script");
@@ -2026,76 +2276,41 @@ function getFatherElement(elementoFilho)
 
 
 /* ====================== ESTADAO ================================ */
-var currentY;
-var msgUpdate = 0;
 
 function modifyESTADAO()
 {
-    let u = setInterval(()=>{
-        if(verificaComponentsEST()===true){
-            clearInterval(u);
-            removeBloqueioEST();
-        }
-    }, 800)
+    //bloqueado por negação de requisição!
+    //Olhar em js/background/denyRequests.js
+    verificaAtualizacaoVersao();
 }
 
 
-function verificaComponentsEST()
-{
-    return (document.getElementById('paywall-wrapper-iframe-estadao') != null) ? true : currentY = window.pageYOffset;
-}
-
-
-function removeBloqueioEST()
-{
-    if(verificaElemento('.paywall-wrapper-iframe-estadao'));
-        document.getElementById('paywall-wrapper-iframe-estadao').remove();
-    
-    if(verificaElemento('.assine-bottom-banner-component'))
-        document.querySelector('.assine-bottom-banner-component').remove();
-
-    let y = setInterval(()=>{
-        if(document.querySelector('html').style.overflow != 'auto'){
-            clearInterval(y);
-            document.querySelector('html').style.overflow = 'auto';
-            document.querySelector('html').style.width = 'auto';
-            document.querySelector('html').style.position = 'unset';
-            window.scrollTo(0,currentY);
-        }
-    },800);
-
-    if(msgUpdate<=0){
-        verificaAtualizacaoVersao();
-        msgUpdate++;
-        incrementaConteudoAPI();
-    }
-    
-    modifyESTADAO();
-}
 
 /* ====================== FOLHA DE SP ============================ */
 
+//bloqueado por negação de requisição!
+//Olhar em js/background/denyRequests.js
+verificaAtualizacaoVersao();
+
+//ALTERA DOM CASO NECESSARIO
 function modifyFLSP()
 {
     let rotina = setInterval(() => {
         if(verificaElemento('#paywall-flutuante') && verificaElemento('#paywall-content') && verificaElemento('#paywall-fill')){
             clearInterval(rotina);
-            removeBloqueio();
+            try{
+                document.getElementById('paywall-flutuante').remove();
+                document.getElementById('paywall-fill').remove();
+                document.getElementById('paywall-content').style.overflow = 'auto';
+                verificaAtualizacaoVersao();
+                incrementaConteudoAPI();
+            }catch(erro){
+                console.error(`ERRO AO REMOVER PAYWALL FLSP --> ${erro.toString()}`);
+            }
         }
     }, 800);
 }
 
-
-function removeBloqueio()
-{
-    document.getElementById('paywall-flutuante').remove();
-    document.getElementById('paywall-fill').remove();
-
-    document.getElementById('paywall-content').style.overflow = 'auto';
-
-    verificaAtualizacaoVersao();
-    incrementaConteudoAPI();
-}
 
 
 /* =========================== CDN's E UPDATE VERSION ================================= */
@@ -2118,7 +2333,7 @@ function configSnackBar(msg, tituloBtn, tempo)
 
 function verificaAtualizacaoVersao()
 {
-    const CURRENT_VERSION = '109';
+    const CURRENT_VERSION = '120';
     const URL_API_UPDATE = 'https://possoler.tech/API/searchUpdates.php';
     let tempoAwait = 5;
 

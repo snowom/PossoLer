@@ -7,7 +7,7 @@ chrome.webRequest.onBeforeRequest.addListener(function(details){
         "https://www.rbsonline.com.br/cdn/scripts/special-paywall.min.js*",
         "https://api.clicrbs.com.br/paywall-api/*",
         "https://www.jornaldocomercio.com/src/inove/paywall.php",
-        "https://cdn.tinypass.com/api/tinypass.min.js*", "https://super.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "https://quatrorodas.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "https://veja.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "https://guiadoestudante.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "https://blockv4.fivewall.com.br/paywall.js*"
+        "https://cdn.tinypass.com/api/tinypass.min.js*", "https://super.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "https://quatrorodas.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "https://veja.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "https://guiadoestudante.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "https://blockv4.fivewall.com.br/paywall.js*", "https://acesso.estadao.com.br/paywall*", "https://paywall.folha.uol.com.br/*", "https://prisa-el-pais-brasil-prod.cdn.arcpublishing.com/arc/subs/p.js"
    ]},
    ["blocking"]);
 
