@@ -104,10 +104,10 @@ else if(currentURL.includes('economist.com')){
     saveDataForDashboard(24);
     modifyECONOMIST();
 }
-/* else if(currentURL.includes("brainly.com.br")){
+else if(currentURL.includes("brainly.com.br")){
     saveDataForDashboard(25);
     modifyBRAINLY();
-} */
+}
 else if(currentURL.includes('opopular.com.br')){
     saveDataForDashboard(30)
     modifyOPOPULAR();
@@ -692,6 +692,15 @@ function modifyBRAINLY()
                 url: `${URL_REQUEST}${window.location.href}`,
                 timeout: 30000
             }).then((resp)=>{
+
+                if(resp.data.hasOwnProperty('erro')){
+                    sweetAlert(
+                        'error',
+                        'Erro',
+                        `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: </spam>${resp.data.erro}`
+                    );
+                    return;
+                }
 
                 let r = setInterval(()=>{
                     if(typeof(Swal) == 'function'){
@@ -1535,7 +1544,7 @@ function modifyPossoLer()
     const codigo = 
     `if(typeof(VERSAO_ATUAL) == 'undefined')
     {
-       var VERSAO_ATUAL = '120';
+       var VERSAO_ATUAL = '121';
     }`;
 
     let script = document.createElement("script");
@@ -2333,7 +2342,7 @@ function configSnackBar(msg, tituloBtn, tempo)
 
 function verificaAtualizacaoVersao()
 {
-    const CURRENT_VERSION = '120';
+    const CURRENT_VERSION = '121';
     const URL_API_UPDATE = 'https://possoler.tech/API/searchUpdates.php';
     let tempoAwait = 5;
 

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Posso Ler?
 // @namespace    URL
-// @version      1.2.0
+// @version      1.2.1
 // @description  Tenha acesso a notícias ilimitadas e conteúdos exclusivos de forma gratuita e segura
 // @author       Thomaz Ferreira
 // @supportURL   *://possoler.tech/
@@ -39,6 +39,7 @@
 // @match        *://*.opopular.com.br/*
 // @match        *://diariosm.com.br/*
 // @match        *://*.otempo.com.br/*
+// @match        *://*brainly.com.br/*
 // @require      https://code.jquery.com/jquery-3.6.0.min.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js
 // @require      https://cdn.jsdelivr.net/npm/sweetalert2@10
@@ -174,9 +175,10 @@ else if(currentURL.includes('economist.com')){
     saveDataForDashboard(24);
     blockPaywallRequest("*://cdn.tinypass.com/api/tinypass.min.js*");
 }
-/* else if(currentURL.includes("brainly.com.br")){
+else if(currentURL.includes("brainly.com.br")){
     saveDataForDashboard(25);
-} */
+    modifyBRAINLY();
+}
 else if(currentURL.includes('opopular.com.br')){
     saveDataForDashboard(30);
     modifyOPOPULAR();
@@ -676,6 +678,16 @@ function modifyBRAINLY()
                     url: `${URL_REQUEST}${window.location.href}`,
                     timeout: 30000
                 }).then((resp)=>{
+
+                    if(resp.data.hasOwnProperty('erro')){
+                        sweetAlert(
+                            'error',
+                            'Erro',
+                            `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: </spam>${resp.data.erro}`
+                        );
+                        return;
+                    }
+
                     removeBrainlyBlocks();
                     expandAnswerDiv();
 
@@ -732,6 +744,16 @@ function modifyBRAINLY()
                     method: METHOD_REQUEST
                 }).then(function(res){ return res.json(); })
                 .then(function(resp){
+
+                    if(resp.hasOwnProperty('erro')){
+                        sweetAlert(
+                            'error',
+                            'Erro',
+                            `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: </spam>${resp.erro}`
+                        );
+                        return;
+                    }
+
                     removeBrainlyBlocks();
                     expandAnswerDiv();
 
@@ -1581,7 +1603,7 @@ function modifyPossoLer()
     const codigo =
     `if(typeof(VERSAO_ATUAL) == 'undefined')
     {
-       var VERSAO_ATUAL = '120';
+       var VERSAO_ATUAL = '121';
     }`;
 
     let script = document.createElement("script");
@@ -2386,7 +2408,7 @@ function verificaAtualizacaoVersao()
         if(typeof(Snackbar) == 'object'  && verificaElemento('#snackCSS') && typeof(axios) == 'function' && typeof(Swal) == 'function') {
             clearInterval(rotina);
 
-            const CURRENT_VERSION = '120';
+            const CURRENT_VERSION = '121';
             const URL_API_UPDATE = 'https://possoler.tech/API/searchUpdates.php';
             let tempoAwait = 5;
 

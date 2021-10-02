@@ -177,3 +177,7 @@
 [25/09/2021]
 # Refatoração API Cache Mock usando Guzzle
 # Add suporte Log de Erro API Cache Mock;
+
+[02/10/2021]
+# Refatoração API Brainly;
+# Adicionado Brainly;
