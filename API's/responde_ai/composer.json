@@ -1,0 +1,14 @@
+{
+    "name": "thomaz/responde_ai",
+    "description": "API Livros Resolvidos Responde A",
+    "type": "project",
+    "require": {
+        "guzzlehttp/guzzle": "^7.3"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "RespondeAi\\": "src/"
+        }
+    }
+}

@@ -9,7 +9,7 @@ use Monolog\Handler\StreamHandler;
 
 final class Log
 {
-    private const LOG_PATH = __DIR__ . '/../logs/log';
+    private const LOG_PATH = __DIR__ . '/../../../LOGS/logCacheMock';
     public $logger;
     
     public function __construct()

@@ -2,13 +2,12 @@
 
 <?php
 
-//require_once './Composer/vendor/autoload.php';
-require_once __DIR__ . '/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
-use RespondeAi\CurlRequest;
+use RespondeAi\Request;
 use RespondeAi\Utils;
 
-$request = new CurlRequest;
+$request = new Request;
 $utils = new Utils;
 
 ?>
@@ -35,16 +34,22 @@ $utils = new Utils;
     </head>
     <body>
         <?php
-            if(isset($_GET['userToken']) && isset($_GET['exerciseId'])){
-                $responseRequest = $request->getSolution($_GET['userToken'], $_GET['exerciseId']);
+            try{
+                $userToken = (isset($_GET['userToken']) && !empty($_GET['userToken'])) 
+                    ? $_GET['userToken']
+                    : throw new Exception('Falha ao obter userToken');
+
+                $exerciseId = (isset($_GET['exerciseId']) && !empty($_GET['exerciseId']))
+                    ? $_GET['exerciseId']
+                    : throw new Exception('Falha ao obter exerciseId');
+
+                $responseRequest = $request->getSolution($userToken, $exerciseId);
 
                 if($responseRequest['response']){
-                    $request->closeCurl();
                     echo $utils->setBackgroundColorJS("#fff");
                     echo $utils->deleteLoadingAnimation();
                     echo $utils->mountHTMLBlock($responseRequest);
                 }else{
-                    $request->closeCurl();
                     if($responseRequest['msg'] == 'Não Autorizado'){
                         echo $utils->setBackgroundColorJS("#fff");
                         echo $utils->deleteLoadingAnimation();
@@ -55,9 +60,9 @@ $utils = new Utils;
                         echo $utils->setBackgroundColorJS("#f7f7f7");
                     }
                 }
-            }else{
+            }catch(\Exception $e){
                 echo $utils->deleteLoadingAnimation();
-                echo $utils->mountGeneralErrorBlock('Falha ao obter userToken ou exerciseId');
+                echo $utils->mountGeneralErrorBlock($e->getMessage());
                 echo $utils->setBackgroundColorJS("#f7f7f7");
             }
         ?>

@@ -175,9 +175,20 @@
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-= v1.2.1 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 [25/09/2021]
-# Refatoração API Cache Mock usando Guzzle
+# Refatoração API Cache Mock usando Guzzle;
 # Add suporte Log de Erro API Cache Mock;
 
 [02/10/2021]
-# Refatoração API Brainly;
+# Refatoração API Brainly usando Guzzle;
 # Adicionado Brainly;
+
+[10/10/2021]
+# Atualização Bypass Responde Aí;
+# Add suporte Log Report API;
+
+[14/10/2021]
+# FIX BUG botão duplicado Resolução Livro Responde Aí;
+# Atualização Bypass Revista Exame;
+# Raftoração API Responde Aí usando Guzzle;
+# Adicionado Exame Invest;
+# Adicionado Revista Glamour;
