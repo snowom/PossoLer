@@ -28,3 +28,4 @@
 31 - Diário de Santa Maria
 32 - O Tempo - MG
 33 - Revista Glamour
+34 - Jornal do Commercio

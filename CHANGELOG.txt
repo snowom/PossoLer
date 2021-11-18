@@ -192,3 +192,32 @@
 # Raftoração API Responde Aí usando Guzzle;
 # Adicionado Exame Invest;
 # Adicionado Revista Glamour;
+
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-= v1.2.2 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+[25/10/2021]
+# Adicionado De Grão em Grão [FOLHA SP];
+# Removido swalLog feature;
+
+[30/10/2021]
+# Otimização API Cache Mock;
+# Valor Economico Removido;
+# O Popular Removido;
+
+[04/11/2021]
+# Brainly Removido;
+
+[11/11/2021]
+# Ajuste layout snackBar Mensagens;
+# Adicionado Jornal do Comercio - PE;
+
+[13/11/2021]
+# Manutenção API Cache Mock;
+# FIXED Valor Economico;
+# FIXED O Popular;
+
+[17/11/2021]
+# Ajustes finais na nova API de CacheMock;
+# Ajuste de performance em O Popular e Valor Econômico;
+# FIX BUG Notificação Atualização em https://possoler.tech;

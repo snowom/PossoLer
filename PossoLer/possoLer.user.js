@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         Posso Ler?
 // @namespace    URL
-// @version      1.2.1
+// @version      1.2.2
 // @description  Tenha acesso a notícias ilimitadas e conteúdos exclusivos de forma gratuita e segura
 // @author       Thomaz Ferreira
-// @supportURL   *://possoler.tech/
+// @supportURL   https://possoler.tech/
 // @icon         https://possoler.tech/img/128.png
 // Atenção:      Caso algum site não funcione logo após a instalação, limpe o cache do navegador.
 // @match        *://*.possoler.tech/*
@@ -31,22 +31,24 @@
 // @match        *://*.nytimes.com/*
 // @match        *://*.elpais.com/*
 // @match        *://*.jornalvs.com.br/*
-// @match        *://*.valor.globo.com/*
 // @match        *://gauchazh.clicrbs.com.br/*
 // @match        *://especiais.zh.clicrbs.com.br/*
 // @match        *://*.jornaldocomercio.com/*
 // @match        *://*.economist.com/*
-// @match        *://*.opopular.com.br/*
 // @match        *://diariosm.com.br/*
 // @match        *://*.otempo.com.br/*
-// @match        *://*brainly.com.br/*
 // @match        *://revistaglamour.globo.com/*
-// @require      https://code.jquery.com/jquery-3.6.0.min.js
+// @match        *://degraoemgrao.blogfolha.uol.com.br/*
+// @match        *://jc.ne10.uol.com.br/*
+// @match        *://impresso.jc.ne10.uol.com.br/*
+// @match        *://valor.globo.com/*
+// @match        *://webcache.googleusercontent.com/search?q=cache:https://valor.globo.com/*
+// @match        *://opopular.com.br/*
+// @match        *://webcache.googleusercontent.com/search?q=cache:https://opopular.com.br/*
 // @require      https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js
-// @require      https://cdn.jsdelivr.net/npm/sweetalert2@10
 // @require      https://possoler.tech/CDN/snackbar.js
 // @grant        GM_webRequest
-// @webRequest   [{"selector":"https://www.rbsonline.com.br/cdn/scripts/paywall.min.js*","action":"cancel"}, {"selector":"https://www.rbsonline.com.br/cdn/scripts/special-paywall.min.js*","action":"cancel"}, {"selector":"https://api.clicrbs.com.br/paywall-api/*","action":"cancel"}, {"selector": "*://*.jornaldocomercio.com/src/inove/paywall.php", "action": "cancel"}, {"selector": "*://cdn.tinypass.com/api/tinypass.min.js*", "action": "cancel"}, {"selector": "*://super.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://quatrorodas.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://veja.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://guiadoestudante.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector":"*://blockv4.fivewall.com.br/paywall.js*","action":"cancel"}, {"selector":"*://acesso.estadao.com.br/paywall*","action":"cancel"}, {"selector":"*://paywall.folha.uol.com.br/*","action":"cancel"}, {"selector":"*://prisa-el-pais-brasil-prod.cdn.arcpublishing.com/arc/subs/p.js","action":"cancel"}, {"selector":"*://exame.com/wp-content/themes/exame-new/js/extd-acc.js*","action":"cancel"}]
+// @webRequest   [{"selector":"https://www.rbsonline.com.br/cdn/scripts/paywall.min.js*","action":"cancel"}, {"selector":"https://www.rbsonline.com.br/cdn/scripts/special-paywall.min.js*","action":"cancel"}, {"selector":"https://api.clicrbs.com.br/paywall-api/*","action":"cancel"}, {"selector": "*://*.jornaldocomercio.com/src/inove/paywall.php", "action": "cancel"}, {"selector": "*://cdn.tinypass.com/api/tinypass.min.js*", "action": "cancel"}, {"selector": "*://super.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://quatrorodas.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://veja.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://guiadoestudante.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector":"*://blockv4.fivewall.com.br/paywall.js*","action":"cancel"}, {"selector":"*://acesso.estadao.com.br/paywall*","action":"cancel"}, {"selector":"*://paywall.folha.uol.com.br/*","action":"cancel"}, {"selector":"*://prisa-el-pais-brasil-prod.cdn.arcpublishing.com/arc/subs/p.js","action":"cancel"}, {"selector":"*://exame.com/wp-content/themes/exame-new/js/extd-acc.js*","action":"cancel"}, {"selector":"*://folhadelondrina.com.br/themes/default/js/paywall/fivewall1.26.js*","action":"cancel"}, {"selector":"*://s3.amazonaws.com/sdk-signin-wall-production/bundle.js*","action":"cancel"}, {"selector":"*://me.jsuol.com.br/*","action":"cancel"}]
 // @run-at       document-start
 // @noframes
 // ==/UserScript==
@@ -162,7 +164,10 @@ else if(currentURL.includes("jornalvs.com.br")){
     blockPaywallRequest("*://blockv4.fivewall.com.br/paywall.js*");
     modifyJVS();
 }
-else if(currentURL.includes("valor.globo.com")){
+else if(
+    currentURL.includes("valor.globo.com") ||
+    window.location.href.includes("webcache.googleusercontent.com/search?q=cache:https://valor.globo.com/")
+){
     saveDataForDashboard(21);
     modifyVLRECON();
 }
@@ -177,11 +182,14 @@ else if(currentURL.includes('economist.com')){
     saveDataForDashboard(24);
     blockPaywallRequest("*://cdn.tinypass.com/api/tinypass.min.js*");
 }
-else if(currentURL.includes("brainly.com.br")){
+/* else if(currentURL.includes("brainly.com.br")){
     saveDataForDashboard(25);
     modifyBRAINLY();
-}
-else if(currentURL.includes('opopular.com.br')){
+} */
+else if(
+    currentURL.includes('opopular.com.br') ||
+    window.location.href.includes("webcache.googleusercontent.com/search?q=cache:https://opopular.com.br/")
+){
     saveDataForDashboard(30);
     modifyOPOPULAR();
 }
@@ -197,8 +205,472 @@ else if(currentURL.includes("revistaglamour.globo.com")){
     saveDataForDashboard(33);
     blockPaywallRequest("*://cdn.tinypass.com/api/tinypass.min.js*");
 }
+else if(currentURL.includes("degraoemgrao.blogfolha.uol.com.br")){
+    saveDataForDashboard(1);
+    blockPaywallRequest("*://paywall.folha.uol.com.br/*");
+}
+else if(currentURL.includes("jc.ne10.uol.com.br")){
+    saveDataForDashboard(34);
+    modyfyJORNALCOMERCIO();
+}
 
 
+
+/* ============================== VALOR ECONOMICO V2 ============================== */
+
+function modifyVLRECON()
+{
+    if(window.location.hostname == "valor.globo.com"){
+        let rotina = setInterval(()=>{
+            if(verificaElemento('.paywall-cpt') || verificaElemento(".barber-barrier-cpnt") || verificaElemento(".paywall")){
+                clearInterval(rotina);
+
+                let intervalRequest = setInterval(()=>{
+                    if(typeof(axios) == 'function' && verificaElemento('#styleSnack')){
+                        clearInterval(intervalRequest);
+
+                        mountSweetAlert(
+                            'info',
+                            'Aguarde um momento...',
+                            'Estamos removendo os bloqueios para você...<br><br>'
+                        );
+
+                        //RECUPERA ARQUIVO COM CONTEUDO DESBLOQUEADO
+                        axios({
+                            method: 'POST',
+                            url: 'https://possoler.tech/API/cachemock/?options=get',
+                            timeout: 30000,
+                            data: JSON.stringify({
+                                key: btoa(window.location.pathname)
+                            })
+                        }).then((resp)=>{
+                            console.clear();
+                            console.log('SUCESSO GET PAGE CODE');
+                            console.log(resp);
+
+                            if(resp.data.hasOwnProperty("content")){
+                                let cacheSourceCode = new DOMParser().parseFromString(resp.data.content, "text/html");
+                                let blocoNoticia = getArticle(cacheSourceCode);
+                                let blocoOriginal = getArticle(document);
+
+                                let u = setInterval(()=>{
+                                    if(blocoNoticia != null && blocoOriginal != null){
+                                        clearInterval(u);
+
+                                        console.log(`CODE CACHE = ${blocoNoticia.outerHTML}`);
+                                        console.log(`CODE ORIGINAL = ${blocoOriginal.outerHTML}`);
+
+                                        if(blocoNoticia != false && blocoOriginal != false){
+
+                                            blocoOriginal.innerHTML = blocoNoticia.outerHTML;
+                                            sweetAlert(
+                                                'success',
+                                                'Sucesso',
+                                                'Ótimo! Conteúdo desbloqueado!'
+                                            );
+
+                                            setTimeout(()=>{
+                                                removeAds();
+                                                corrigeImgsCache();
+                                            },3000);
+
+                                            //VERIFICA E REMOVE SOFT PAYWALLS
+                                            let f = setInterval(()=>{
+                                                if(verificaElemento('.paywall-cpt') || verificaElemento(".barber-barrier-cpnt")){
+                                                    clearInterval(f);
+                                                    if(verificaElemento('.paywall-cpt')){
+                                                        removeBloqueioGLOBO();
+                                                    }else if(verificaElemento(".barber-barrier-cpnt")){
+                                                        removeBlockCelularVLRECON();
+                                                    }
+                                                }
+                                            },800);
+                                        }else{
+                                            sweetAlert(
+                                                'warning',
+                                                'Atenção',
+                                                'Ops, infelizmente não foi possível desbloquear essa página. <br>Por favor, tente acessar a noticia mais tarde.<br><br>'
+                                            );
+                                            return;
+                                        }
+                                    }
+                                },800);
+                            }else{
+                                setTimeout(()=>{
+                                    window.location.assign(`https://webcache.googleusercontent.com/search?q=cache:${window.location.href}`);
+                                },1500);
+                            }
+                        }).catch((erro)=>{
+                            if(erro.toString().includes('timeout')){
+                                SwalTimeout(
+                                    'error',
+                                    'Erro',
+                                    `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`,
+                                    'https://valor.globo.com'
+                                );
+                            }else{
+                                sweetAlert(
+                                    'error',
+                                    'Erro',
+                                    `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`
+                                );
+                            }
+                        });
+                    }
+                },800);
+            }
+        },800);
+    }else{
+        //TRECHO DO CÓDIGO RESPONSÁVEL POR PEGAR CACHE DA PÁGINA
+
+        //SET NO SCROLL PAGE
+        let u = setInterval(()=>{
+            if(verificaElemento('body')){
+                clearInterval(u);
+                document.body.style.cssText += 'overflow: hidden !important; position: fixed !important;';
+            }
+        },800);
+        
+        mountSweetAlert(
+            'info',
+            'Aguarde mais um momento...',
+            'Estamos removendo os bloqueios para você...<br><br>'
+        );
+
+        let waitAxios = setInterval(()=>{
+            if(typeof(axios) == 'function' && verificaElemento('#styleSnack')){
+                clearInterval(waitAxios);
+
+                let key = genHashKey();
+
+                //FAZ GET PARA PRÓPRIA PAGINA PARA PEGAR CÓDIGO FONTE DELA
+                fetch(document.location.href)
+                .then((response) => {
+                    if(response.status == 200){
+                        response.text().then(pageSource => {
+
+                            pageSource = new DOMParser().parseFromString(pageSource, 'text/html');
+                            let article = getArticle(pageSource);
+                            let blocoNoticia = (article != false) ? article.outerHTML : pageSource.outerHTML;
+
+                            let l = setInterval(()=>{
+                                if((key != null || key != undefined) && (pageSource != null || pageSource != undefined) && (blocoNoticia != null || blocoNoticia != undefined)){
+                                    clearInterval(l);
+        
+                                    //FAZ POST PARA CRIAR ARQUIVO JSON COM CONTEUDO DA PÁGINA DE CACHE
+                                    axios({
+                                        method: 'POST',
+                                        url: 'https://possoler.tech/API/cachemock/?options=post',
+                                        timeout: 30000,
+                                        data: JSON.stringify({
+                                            key: btoa(key.hash),
+                                            pageSource: blocoNoticia
+                                        })
+                                    }).then((resp)=>{
+                                        if(resp.data == "success"){
+                                            window.location.replace(key.url);
+                                        }else{
+                                            SwalGotoHome(
+                                                'error',
+                                                'Erro',
+                                                `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: [API FAILED TO CREATE FILE] - </spam>${resp.data}`,
+                                                "https://valor.globo.com"
+                                            );
+                                        }
+                                    }).catch((erro)=>{
+                                        if(erro.toString().includes('timeout')){
+                                            SwalTimeout(
+                                                'error',
+                                                'Erro',
+                                                `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`,
+                                                "https://valor.globo.com"
+                                            );
+                                        }else{
+                                            SwalGotoHome(
+                                                'error',
+                                                'Erro',
+                                                `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`,
+                                                "https://valor.globo.com"
+                                            );
+                                        }
+                                    });
+                                }
+                            },800);
+                        }).catch((erro) => {
+                            if(erro.toString().includes('timeout')){
+                                SwalTimeout(
+                                    'error',
+                                    'Erro',
+                                    `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`,
+                                    "https://valor.globo.com"
+                                );
+                            }else{
+                                if(erro.toString().includes('timeout')){
+                                    SwalTimeout(
+                                        'error',
+                                        'Erro',
+                                        `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`,
+                                        "https://valor.globo.com"
+                                    );
+                                }else{
+                                    SwalGotoHome(
+                                        'error',
+                                        'Erro',
+                                        `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`,
+                                        "https://valor.globo.com"
+                                    );
+                                }
+                            }
+                        });
+                    }else if(response.status == 404){
+                        SwalGotoHome(
+                            'warning',
+                            'Atenção',
+                            'Ops, infelizmente não foi possível desbloquear essa página. <br>Por favor, tente acessar a noticia mais tarde.<br><br>',
+                            "https://valor.globo.com"
+                        );
+                    }else{
+                        throw `Wrong HTTPS Status on get cache content - HTTPS STATUS ${response.status}`;
+                    }
+                }).catch((erro)=>{
+                    if(erro.toString().includes('timeout')){
+                        SwalTimeout(
+                            'error',
+                            'Erro',
+                            `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`,
+                            "https://valor.globo.com"
+                        );
+                    }else{
+                        SwalGotoHome(
+                            'error',
+                            'Erro',
+                            `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`,
+                            "https://valor.globo.com"
+                        );
+                    }
+                });
+            }    
+        },800);
+    }
+}
+
+
+function SwalTimeout(icon, title, msg, homeLink)
+{
+    let r = setInterval(()=>{
+        if(typeof(Swal) == 'function'){
+            clearInterval(r);
+
+            Swal.fire({
+                icon: icon,
+                title: title,
+                html: msg,
+                allowEscapeKey: false,
+                allowOutsideClick: false,
+                showConfirmButton: true,
+                confirmButtonText: `Tentar novamente`,
+                showCancelButton: true,
+                cancelButtonText: `Voltar para ${homeLink}`,
+                backdrop: 'rgba(8, 8, 8, 0.92)',
+                customClass: {
+                    popup: 'snackZ-index',
+                    container: 'snackZ-index'
+                }
+            }).then((result) => {
+                if(result.isConfirmed) window.location.reload();
+                else window.location.replace(homeLink);
+            });
+        }
+    },800);
+}
+
+
+function SwalGotoHome(icon, title, msg, homeLink)
+{
+    let r = setInterval(()=>{
+        if(typeof(Swal) == 'function'){
+            clearInterval(r);
+
+            Swal.fire({
+                icon: icon,
+                title: title,
+                html: msg,
+                allowEscapeKey: false,
+                allowOutsideClick: false,
+                showConfirmButton: true,
+                confirmButtonText: `Voltar para ${homeLink}`,
+                //showDenyButton: true,
+                //denyButtonText: `Fechar guia`,
+                backdrop: 'rgba(8, 8, 8, 0.92)',
+                customClass: {
+                    popup: 'snackZ-index',
+                    container: 'snackZ-index'
+                }
+            }).then((result) => {
+                if(result.isConfirmed) window.location.replace(homeLink);
+                /* else if(result.isDenied) window.close(); */
+            });
+        }
+    },800);
+}
+
+
+function genHashKey()
+{
+    let url = window.location.href;
+    let part2 = url.split("cache:");
+    let uri = part2[part2.length-1];
+    return (uri.includes('valor.globo.com'))
+        ? {hash: `/${uri.split('valor.globo.com/')[1]}`, url: uri}
+        : {hash: `/${uri.split('opopular.com.br/')[1]}`, url: uri};
+}
+
+
+function mountSweetAlert(icon, title, msg)
+{
+    //MONTA SWEET ALERT DE DESBLOQUEIO
+    let s = setInterval(()=>{
+        if(typeof(Swal) == 'function'){
+            clearInterval(s);
+            console.log('ACHEI SWALL');
+            if(Swal.isVisible() == false && verificaElemento('#styleSnack')){
+                sweetAlert(icon, title, msg);
+            }
+        }
+    },800);
+}
+
+
+function corrigeImgsCache()
+{
+    let divs = document.querySelectorAll('div');
+
+    for(let i=0; i<divs.length; i++){
+        if(divs[i].classList.contains("glb-skeleton-box")){
+            divs[i].classList.remove("glb-skeleton-box");
+            divs[i].style.cssText += 'padding-top: 0 !important;';
+        }
+    }
+}
+
+
+function removeBlockCelularVLRECON()
+{
+    try{
+        let block = document.querySelector(".barber-barrier-cpnt");
+
+        if(block != null || block != undefined)
+        {
+            block.remove();
+            document.body.style.overflow = "auto";
+            verificaAtualizacaoVersao();
+            incrementaConteudoAPI();
+        }
+    }catch(erro){
+        console.error('ERRO')
+    }
+}
+
+
+function sweetAlert(icon, title, msg)
+{
+    let opt = (icon == 'info') ? false : true;
+    let backdropColor;
+    Swal.close();
+
+    backdropColor = (
+        window.location.href.includes("webcache.googleusercontent.com/search?q=cache:https://opopular.com.br") || 
+        window.location.href.includes("webcache.googleusercontent.com/search?q=cache:https://valor.globo.com")
+    )
+        ? 'rgba(8, 8, 8, 0.92)' : '';
+
+
+    if(icon == 'success'){
+        Swal.fire({
+            icon: icon,
+            title: title,
+            html: msg,
+            allowEscapeKey: false,
+            allowOutsideClick: false,
+            showConfirmButton: opt,
+            timer: 7000,
+            timerProgressBar: true,
+            customClass: {
+                popup: 'snackZ-index',
+                container: 'snackZ-index'
+            }
+        });
+        window.stop();
+        return;
+    }
+
+    Swal.fire({
+        icon: icon,
+        title: title,
+        html: msg,
+        allowEscapeKey: false,
+        allowOutsideClick: false,
+        showConfirmButton: opt,
+        backdrop: backdropColor,
+        customClass: {
+            popup: 'snackZ-index',
+            container: 'snackZ-index'
+        }
+    });
+}
+
+
+function getArticle(scope)
+{
+    let articles = scope.querySelectorAll('article');
+
+    for(let i=0; i<articles.length; i++){
+        if(articles[i].hasAttribute("itemprop")){
+            if(articles[i].getAttribute("itemprop").includes("articleBody")){
+                return articles[i];
+            }
+        }
+    }
+
+    return false;
+}
+
+
+function removeAds()
+{
+    let divs = document.querySelectorAll('div');
+
+    for(let i=0; i<divs.length; i++){
+        if(divs[i].hasAttribute("data-block-type")){
+            if(divs[i].getAttribute("data-block-type").includes("ads")){
+                divs[i].remove();
+            }
+        }
+    }
+}
+
+
+/* ============================== JORNAL DO COMERCIO - PE ============================== */
+
+function modyfyJORNALCOMERCIO()
+{
+    if((window.location.href).includes("https://impresso.jc.ne10.uol.com.br/")){
+
+        if(window.location.href == "https://impresso.jc.ne10.uol.com.br/"){
+            window.location.replace("https://impresso.jc.ne10.uol.com.br/index.php?id=/txt.php");
+        }
+        let r = setInterval(()=>{
+            if(verificaElemento('#preloader-jconline')){
+                clearInterval(r);
+                document.getElementById("preloader-jconline").remove();
+                blockPaywallRequest("*://me.jsuol.com.br/*");
+            }
+        },800);
+    }
+    else{
+        blockPaywallRequest("*://s3.amazonaws.com/sdk-signin-wall-production/bundle.js*");
+    }
+}
 
 
 /* ============================== O TEMPO MINAS GERAIS ============================== */
@@ -302,7 +774,6 @@ function modifyOTEMPO()
                                                             'Erro',
                                                             `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}`
                                                         );
-                                                        swalLog(erro.toString(), window.location.hostname);
                                                     }
                                                 }
                                             },800);
@@ -313,7 +784,6 @@ function modifyOTEMPO()
                                                 'Erro',
                                                 `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>[O Tempo Request] ${erro.toString()}`
                                             );
-                                            swalLog(erro.toString(), window.location.hostname);
                                         });
                                     }
                                 },800);
@@ -325,7 +795,6 @@ function modifyOTEMPO()
                             'Erro',
                             `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>[Internal API Request] ${erro.toString()}`
                         );
-                        swalLog(erro.toString(), window.location.hostname);
                     });
                 }
             },800);
@@ -405,10 +874,8 @@ function modifyDIARIOSM()
                         'Erro',
                         `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}`
                     );
-                    swalLog(erro.toString(), window.location.hostname);
                 }else{
                     alert(erro.toString());
-                    swalLog(erro.toString(), window.location.hostname);
                 }
             }
         }
@@ -432,151 +899,242 @@ function findPaywallText()
 
 function modifyOPOPULAR()
 {
-    const LINK = `${document.location.href}`;
-    const URL_REQUEST = `https://possoler.tech/API/cache_api/index.php?link=${LINK}`;
+    if(window.location.hostname == "opopular.com.br"){
 
-    let rotina = setInterval(()=>{
-        if(verificaElemento('.locked-news')){
-            clearInterval(rotina);
+        let rotina = setInterval(()=>{
+            if(verificaElemento('.locked-news')){
+                clearInterval(rotina);
+    
+                let articlesIsRemoved = removeArticles();
+                hideKeepReadingChildren();
+                removeAdBetweenArticles();
+                removeCommentDiv();
+    
+                let y = setInterval(()=>{
+                    if(verificaElemento('.locked-news') && articlesIsRemoved && typeof(axios) == 'function' && verificaElemento('#styleSnack')){
+                        clearInterval(y);
+        
+                        mountSweetAlert(
+                            'info',
+                            'Aguarde um momento...',
+                            'Estamos removendo os bloqueios para você...<br><br>'
+                        );
 
-            let articlesIsRemoved = removeArticles();
-            hideKeepReadingChildren();
-            removeAdBetweenArticles();
-            removeCommentDiv();
+                        //RECUPERA ARQUIVO COM CONTEUDO DESBLOQUEADO
+                        axios({
+                            method: 'POST',
+                            url: 'https://possoler.tech/API/cachemock/?options=get',
+                            timeout: 30000,
+                            data: JSON.stringify({
+                                key: btoa(window.location.pathname)
+                            })
+                        }).then((resp)=>{
+                            console.clear();
+                            console.log('SUCESSO GET PAGE CODE');
+                            console.log(resp.data);
 
-            let y = setInterval(()=>{
-                if(verificaElemento('.locked-news') && articlesIsRemoved){
-                    clearInterval(y);
+                            if(resp.data.hasOwnProperty("content")){
+                                let cacheSourceCode = new DOMParser().parseFromString(resp.data.content, "text/html");
+                                let blocoNoticia = getArticleBodyPOPULAR(cacheSourceCode);
+                                let blocoOriginal = getArticleBodyPOPULAR(document);
 
-                    //MONTA SWEET ALERT DE DESBLOQUEIO
-                    let s = setInterval(()=>{
-                        if(typeof(Swal) == 'function'){
-                            clearInterval(s);
-                            console.log('ACHEI SWALL');
+                                let u = setInterval(()=>{
+                                    if(blocoNoticia != null && blocoOriginal != null){
+                                        clearInterval(u);
 
-                            if(Swal.isVisible() == false && verificaElemento('#styleSnack')){
-                                sweetAlert(
-                                    'info',
-                                    'Aguarde um momento...',
-                                    'Estamos removendo os bloqueios para você...<br><br>'
-                                );
-                            }
-                        }
-                    },800);
+                                        console.log(`CODE CACHE = ${blocoNoticia.outerHTML}`);
+                                        console.log(`CODE ORIGINAL = ${blocoOriginal.outerHTML}`);
 
-                    //AQUI A MAGICA ACONTECE
-                    let intervalRequest = setInterval(()=>{
-                        if(typeof(axios) == 'function' && verificaElemento('#styleSnack')){
-                            clearInterval(intervalRequest);
+                                        if(blocoNoticia != false && blocoOriginal != false){
 
-                            setTimeout(()=>{
-                                axios({
-                                    method: 'GET',
-                                    url: URL_REQUEST,
-                                    timeout: 30000
-                                }).then((resp)=>{
-                                    if(typeof(resp.data.status) == 'undefined' && (resp.data != '\r\n') && (resp.data != '\n') && (resp.data.status != 'erro')){
-                                        console.clear();
-                                        console.log('SUCESSO GET PAGE CODE');
-                                        console.log(resp);
-
-                                        let cacheSourceCode = new DOMParser().parseFromString(resp.data, "text/html");
-                                        let blocoNoticia = getArticleBodyPOPULAR(cacheSourceCode);
-                                        let blocoOriginal = getArticleBodyPOPULAR(document);
-
-                                        let u = setInterval(()=>{
-                                            if(blocoNoticia != null && blocoOriginal != null){
-                                                clearInterval(u);
-
-                                                if(blocoNoticia != false && blocoOriginal != false){
-
-                                                    blocoOriginal.innerHTML = blocoNoticia.outerHTML;
-                                                    sweetAlert(
-                                                        'success',
-                                                        'Sucesso',
-                                                        'Ótimo! Conteúdo desbloqueado!'
-                                                    );
-
-                                                    incrementaConteudoAPI();
-                                                    verificaAtualizacaoVersao();
-
-                                                    //VERIFICA E OCULTA KEEP READING CHILDREN
-                                                    fixVideoRender();
-                                                    hideKeepReadingChildren();
-                                                    removeLockedNewsContainers();
-                                                    removeArticles();
-                                                    removeAdBetweenArticles();
-                                                    removeCommentDiv();
-
-                                                }else{
-                                                    sweetAlert(
-                                                        'warning',
-                                                        'Atenção',
-                                                        'Ops, infelizmente não é possível desbloquear essa página. <br>Que tal tentar outra notícia nesse site? <br><br>'
-                                                    );
-                                                    return;
-                                                }
-                                            }
-                                        },800);
-
-                                    }else{
-                                        console.clear();
-                                        console.log(`ERRO!\n\n Status = ${resp.data.status}\nMensagem = ${resp.data.resposta}`);
-
-                                        if(resp.data == '\r\n' || resp.data == '\n' || resp.data.status == 'error_off'){
+                                            blocoOriginal.innerHTML = blocoNoticia.outerHTML;
                                             sweetAlert(
-                                                'error',
-                                                'Erro',
-                                                `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${resp.data.resposta}`
+                                                'success',
+                                                'Sucesso',
+                                                'Ótimo! Conteúdo desbloqueado!'
+                                            );
+
+                                            incrementaConteudoAPI();
+                                            verificaAtualizacaoVersao();
+
+                                            //VERIFICA E OCULTA KEEP READING CHILDREN
+                                            fixVideoRender();
+                                            hideKeepReadingChildren();
+                                            removeLockedNewsContainers();
+                                            removeArticles();
+                                            removeAdBetweenArticles();
+                                            removeCommentDiv();
+
+                                        }else{
+                                            sweetAlert(
+                                                'warning',
+                                                'Atenção',
+                                                'Ops, infelizmente não foi possível desbloquear essa página. <br>Por favor, tente acessar a noticia mais tarde.<br><br>'
                                             );
                                             return;
-                                        }else{
-                                            if(resp.data.resposta.includes('cache')){
-                                                sweetAlert(
-                                                    'warning',
-                                                    'Atenção',
-                                                    'Ops, infelizmente não foi possível desbloquear essa página. <br>Que tal tentar um pouco mais tarde ou tentar outra notícia? <br><br>'
-                                                );
-                                                return;
-                                            } else{
-
-                                                sweetAlert(
-                                                    'error',
-                                                    'Erro',
-                                                    `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${resp.data.resposta}`
-                                                );
-                                                swalLog(resp.data.resposta, window.location.hostname);
-                                                return;
-                                            }
                                         }
                                     }
+                                },800);
+                            }else{
+                                setTimeout(()=>{
+                                    window.location.assign(`https://webcache.googleusercontent.com/search?q=cache:${window.location.href}`);
+                                },1500);
+                            }
+                        }).catch((erro)=>{
+                            if(erro.toString().includes('timeout')){
+                                SwalTimeout(
+                                    'error',
+                                    'Erro',
+                                    `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`,
+                                    'https://opopular.com.br'
+                                );
+                            }else{
+                                sweetAlert(
+                                    'warning',
+                                    'Atenção',
+                                    `Ops, tivemos um pequeno problema!<br> Por favor, recarregue a página para tentar novamente.<spam style='font-weight: bold !important;'>Código do erro: [API FAILED REQUEST TO RESPONSE FILE] - </spam>`
+                                );
+                            }
+                        });
+                    }
+                },800);
+            }
+        },800);
+    }else{
+        //TRECHO DO CÓDIGO RESPONSÁVEL POR PEGAR CACHE DA PÁGINA
 
-                                }).catch((erro)=>{
-                                    console.log(erro);
+        //SET NO SCROLL PAGE
+        let u = setInterval(()=>{
+            if(verificaElemento('body')){
+                clearInterval(u);
+                document.body.style.cssText += 'overflow: hidden !important; position: fixed !important;';
+            }
+        },800);
 
-                                    if(erro.toString().includes('timeout')){
-                                        sweetAlert(
-                                            'error',
-                                            'Erro',
-                                            `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`
-                                        );
-                                    }else{
-                                        sweetAlert(
-                                            'error',
-                                            'Erro',
-                                            `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`
-                                        );
-                                        swalLog(erro.toString(), window.location.hostname);
-                                    }
-                                });
-                            }, 2000);
-                        }
-                    }, 800);
-                }
-            },800);
-        }
-    },800);
+        mountSweetAlert(
+            'info',
+            'Aguarde mais um momento...',
+            'Estamos removendo os bloqueios para você...<br><br>'
+        );
+
+        let waitAxios = setInterval(()=>{
+            if(typeof(axios) == 'function' && verificaElemento('#styleSnack')){
+                clearInterval(waitAxios);
+
+                let key = genHashKey();
+
+                //FAZ GET PARA PRÓPRIA PAGINA PARA PEGAR CÓDIGO FONTE DELA
+                fetch(document.location.href)
+                .then((response) => {
+                    if(response.status == 200){
+                        response.text().then(pageSource => {
+
+                            pageSource = new DOMParser().parseFromString(pageSource, 'text/html');
+                            let article = getArticleBodyPOPULAR(pageSource);
+                            let blocoNoticia = (article != false) ? article.outerHTML : pageSource.outerHTML;
+
+                            console.clear();
+
+                            let l = setInterval(()=>{
+
+                                try{
+                                    console.log(`KEY = ${key}`);
+                                    console.log(`PAGE SOURCE = ${pageSource != null}`);
+                                    console.log(`BLOCO NOTICIA = ${blocoNoticia.outerHTML}`);
+                                }catch(erro){
+
+                                }
+                                if((key != null || key != undefined) && (pageSource != null || pageSource != undefined) && (blocoNoticia != null || blocoNoticia != undefined)){
+                                    clearInterval(l);
+        
+                                    //FAZ POST PARA CRIAR ARQUIVO JSON COM CONTEUDO DA PÁGINA DE CACHE
+                                    axios({
+                                        method: 'POST',
+                                        url: 'https://possoler.tech/API/cachemock/?options=post',
+                                        timeout: 30000,
+                                        data: JSON.stringify({
+                                            key: btoa(key.hash),
+                                            pageSource: blocoNoticia
+                                        })
+                                    }).then((resp)=>{
+                                        if(resp.data == "success"){
+                                            window.location.replace(key.url);
+                                        }else{
+                                            SwalGotoHome(
+                                                'error',
+                                                'Erro',
+                                                `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: [API FAILED TO CREATE FILE] - </spam>${resp.data}`,
+                                                "https://opopular.com.br"
+                                            );
+                                        }
+                                    }).catch((erro)=>{
+                                        if(erro.toString().includes('timeout')){
+                                            SwalTimeout(
+                                                'error',
+                                                'Erro',
+                                                `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`,
+                                                "https://opopular.com.br"
+                                            );
+                                        }else{
+                                            SwalGotoHome(
+                                                'error',
+                                                'Erro',
+                                                `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`,
+                                                "https://opopular.com.br"
+                                            );
+                                        }
+                                    });
+                                }
+                            },800);
+                        }).catch((erro) => {
+                            if(erro.toString().includes('timeout')){
+                                SwalTimeout(
+                                    'error',
+                                    'Erro',
+                                    `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`,
+                                    "https://opopular.com.br"
+                                );
+                            }else{
+                                SwalGotoHome(
+                                    'error',
+                                    'Erro',
+                                    `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`,
+                                    "https://opopular.com.br"
+                                );
+                            }
+                        });
+                    }else if(response.status == 404){
+                        SwalGotoHome(
+                            'warning',
+                            'Atenção',
+                            'Ops, infelizmente não foi possível desbloquear essa página. <br>Por favor, tente acessar a noticia mais tarde.<br><br>',
+                            "https://opopular.com.br"
+                        );
+                    }else{
+                        throw `Wrong HTTPS Status on get cache content - HTTPS STATUS ${response.status}`;
+                    }
+                }).catch((erro)=>{
+                    if(erro.toString().includes('timeout')){
+                        SwalTimeout(
+                            'error',
+                            'Erro',
+                            `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`,
+                            "https://opopular.com.br"
+                        );
+                    }else{
+                        SwalGotoHome(
+                            'error',
+                            'Erro',
+                            `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`,
+                            "https://opopular.com.br"
+                        );
+                    }
+                });
+            }    
+        },800);
+    }
 }
+        
 
 
 function getArticleBodyPOPULAR(scope)
@@ -698,7 +1256,6 @@ function modifyBRAINLY()
                             'Erro',
                             `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: </spam>${resp.data.erro}`
                         );
-                        swalLog(resp.data.erro, window.location.hostname);
                         return;
                     }
 
@@ -750,7 +1307,6 @@ function modifyBRAINLY()
                             'Erro',
                             `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`
                         );
-                        swalLog(erro.toString(), window.location.hostname);
                     }
                 });
             }else{
@@ -766,7 +1322,6 @@ function modifyBRAINLY()
                             'Erro',
                             `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: </spam>${resp.erro}`
                         );
-                        swalLog(resp.erro, window.location.hostname);
                         return;
                     }
 
@@ -811,7 +1366,6 @@ function modifyBRAINLY()
                         'Erro',
                         `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`
                     );
-                    swalLog(erro.toString(), window.location.hostname);
                 });
             }
         }
@@ -1013,255 +1567,6 @@ function enableUrlChangeDetect()
     });
 }
 
-
-
-/* ====================== VALOR ECONOMICO ===================== */
-
-function modifyVLRECON()
-{
-    const LINK = `${document.location.href}`;
-    const URL_REQUEST = `https://possoler.tech/API/cache_api/index.php?link=${LINK}`;
-
-    let rotina = setInterval(()=>{
-        if(verificaElemento('.paywall-cpt') || verificaElemento(".barber-barrier-cpnt") || verificaElemento(".paywall")){
-            clearInterval(rotina);
-
-            //MONTA SWEET ALERT DE DESBLOQUEIO
-            let s = setInterval(()=>{
-                if(typeof(Swal) == 'function'){
-                    clearInterval(s);
-                    console.log('ACHEI SWALL');
-
-                    if(Swal.isVisible() == false && verificaElemento('#styleSnack')){
-                        sweetAlert(
-                            'info',
-                            'Aguarde um momento...',
-                            'Estamos removendo os bloqueios para você...<br><br>'
-                        );
-                    }
-                }
-            },800);
-
-            //AQUI A MAGICA ACONTECE
-            let intervalRequest = setInterval(()=>{
-                if(typeof(axios) == 'function' && verificaElemento('#styleSnack')){
-                    clearInterval(intervalRequest);
-
-                    setTimeout(()=>{
-                        axios({
-                            method: 'GET',
-                            url: URL_REQUEST,
-                            timeout: 30000
-                        }).then((resp)=>{
-                            if(typeof(resp.data.status) == 'undefined' && (resp.data != '\r\n') && (resp.data != '\n') && (resp.data.status != 'erro')){
-                                console.clear();
-                                console.log('SUCESSO GET PAGE CODE');
-                                console.log(resp);
-
-                                let cacheSourceCode = new DOMParser().parseFromString(resp.data, "text/html");
-                                let blocoNoticia = getArticle(cacheSourceCode);
-                                let blocoOriginal = getArticle(document);
-
-                                let u = setInterval(()=>{
-                                    if(blocoNoticia != null && blocoOriginal != null){
-                                        clearInterval(u);
-
-                                        console.log(`CODE CACHE = ${blocoNoticia.outerHTML}`);
-                                        console.log(`CODE ORIGINAL = ${blocoOriginal.outerHTML}`);
-
-                                        if(blocoNoticia != false && blocoOriginal != false){
-
-                                            blocoOriginal.innerHTML = blocoNoticia.outerHTML;
-                                            sweetAlert(
-                                                'success',
-                                                'Sucesso',
-                                                'Ótimo! Conteúdo desbloqueado!'
-                                            );
-
-                                            setTimeout(()=>{
-                                                removeAds();
-                                                corrigeImgsCache();
-                                            },3000);
-
-                                            //VERIFICA E REMOVE SOFT PAYWALLS
-                                            let f = setInterval(()=>{
-                                                if(verificaElemento('.paywall-cpt') || verificaElemento(".barber-barrier-cpnt")){
-                                                    clearInterval(f);
-                                                    if(verificaElemento('.paywall-cpt')){
-                                                        removeBloqueioGLOBO();
-                                                    }else if(verificaElemento(".barber-barrier-cpnt")){
-                                                        removeBlockCelularVLRECON();
-                                                    }
-                                                }
-                                            },800);
-                                        }else{
-                                            sweetAlert(
-                                                'warning',
-                                                'Atenção',
-                                                'Ops, infelizmente não foi possível desbloquear essa página. <br>Que tal tentar um pouco mais tarde ou tentar outra notícia? <br><br>'
-                                            );
-                                            return;
-                                        }
-                                    }
-                                },800);
-
-                            }else{
-                                console.clear();
-                                console.log(`ERRO!\n\n Status = ${resp.data.status}\nMensagem = ${resp.data.resposta}\nSTATUS HTTP = ${resp.data.status_code}`);
-
-                                if(resp.data == '\r\n' || resp.data == '\n' || resp.data.status == 'error_off'){
-                                    sweetAlert(
-                                        'error',
-                                        'Erro',
-                                        `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${resp.data.resposta}`
-                                    );
-                                    swalLog(resp.data.resposta, window.location.hostname);
-                                    return;
-                                }else{
-                                    if(resp.data.resposta.includes('cache')){
-                                        sweetAlert(
-                                            'warning',
-                                            'Atenção',
-                                            'Ops, infelizmente não foi possível desbloquear essa página. <br>Que tal tentar um pouco mais tarde ou tentar outra notícia? <br><br>'
-                                        );
-                                        return;
-                                    } else{
-                                        sweetAlert(
-                                            'error',
-                                            'Erro',
-                                            `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${resp.data.resposta}`
-                                        );
-                                        swalLog(resp.data.resposta, window.location.hostname);
-                                        return;
-                                    }
-                                }
-                            }
-
-                        }).catch((erro)=>{
-                            console.log(erro);
-
-                            if(erro.toString().includes('timeout')){
-                                sweetAlert(
-                                    'error',
-                                    'Erro',
-                                    `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`
-                                );
-                            }else{
-                                sweetAlert(
-                                    'error',
-                                    'Erro',
-                                    `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`
-                                );
-                                swalLog(erro.toString(), window.location.hostname);
-                            }
-                        });
-                    }, 2000);
-                }
-            }, 800);
-        }
-    }, 800);
-}
-
-
-function corrigeImgsCache()
-{
-    let divs = document.querySelectorAll('div');
-
-    for(let i=0; i<divs.length; i++){
-        if(divs[i].classList.contains("glb-skeleton-box")){
-            divs[i].classList.remove("glb-skeleton-box");
-            divs[i].style.cssText += 'padding-top: 0 !important;';
-        }
-    }
-}
-
-
-function removeBlockCelularVLRECON()
-{
-    try{
-        let block = document.querySelector(".barber-barrier-cpnt");
-
-        if(block != null || block != undefined)
-        {
-            block.remove();
-            document.body.style.overflow = "auto";
-            verificaAtualizacaoVersao();
-            incrementaConteudoAPI();
-        }
-    }catch(erro){
-        console.error('ERRO')
-    }
-}
-
-
-function sweetAlert(icon, title, msg)
-{
-    let opt = (icon == 'info') ? false : true;
-
-    Swal.close();
-
-    if(icon == 'success'){
-        Swal.fire({
-            icon: icon,
-            title: title,
-            html: msg,
-            allowEscapeKey: false,
-            allowOutsideClick: false,
-            showConfirmButton: opt,
-            timer: 7000,
-            timerProgressBar: true,
-            customClass: {
-                popup: 'snackZ-index',
-                container: 'snackZ-index'
-            }
-        });
-        window.stop();
-        return;
-    }
-
-    Swal.fire({
-        icon: icon,
-        title: title,
-        html: msg,
-        allowEscapeKey: false,
-        allowOutsideClick: false,
-        showConfirmButton: opt,
-        customClass: {
-            popup: 'snackZ-index',
-            container: 'snackZ-index'
-        }
-    });
-}
-
-
-function getArticle(scope)
-{
-    let articles = scope.querySelectorAll('article');
-
-    for(let i=0; i<articles.length; i++){
-        if(articles[i].hasAttribute("itemprop")){
-            if(articles[i].getAttribute("itemprop").includes("articleBody")){
-                return articles[i];
-            }
-        }
-    }
-
-    return false;
-}
-
-
-function removeAds()
-{
-    let divs = document.querySelectorAll('div');
-
-    for(let i=0; i<divs.length; i++){
-        if(divs[i].hasAttribute("data-block-type")){
-            if(divs[i].getAttribute("data-block-type").includes("ads")){
-                divs[i].remove();
-            }
-        }
-    }
-}
 
 
 /* ====================== JORNAL VS =========================== */
@@ -1510,7 +1815,6 @@ function modifyNSC()
                                 'Erro',
                                 `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`
                             );
-                            swalLog(erro.toString(), window.location.hostname);
                         }
                     }
                 },800);
@@ -1570,7 +1874,6 @@ function getJsonConteudoNoticia(link)
 
             }).catch((erro)=>{
                 console.error(erro);
-                swalLog(erro.toString(), window.location.hostname);
             });
         }
     },800)
@@ -1632,7 +1935,7 @@ function modifyPossoLer()
     const codigo =
     `if(typeof(VERSAO_ATUAL) == 'undefined')
     {
-       var VERSAO_ATUAL = '121';
+       var VERSAO_ATUAL = '122';
     }`;
 
     let script = document.createElement("script");
@@ -1828,7 +2131,6 @@ function modifyEXAME()
                                     'Erro',
                                     `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>Erro ao montar newsBlock `
                                 );
-                                swalLog(erro, window.location.hostname);
                             }
                         }
                     },800);
@@ -1838,7 +2140,6 @@ function modifyEXAME()
                         'Erro',
                         `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}`
                     );
-                    swalLog(erro, window.location.hostname);
                 });
             }
         },800);
@@ -2570,7 +2871,6 @@ function modifyFLSP()
                 incrementaConteudoAPI();
             }catch(erro){
                 console.error(`ERRO AO REMOVER PAYWALL FLSP --> ${erro.toString()}`);
-                swalLog(erro.toString(), window.location.hostname);
             }
         }
     }, 800);
@@ -2599,7 +2899,7 @@ function importCDNSnackBar()
             var styleSnack = document.createElement('style');
             styleSnack.setAttribute('id', 'styleSnack');
             document.head.appendChild(styleSnack);
-            styleSnack.innerText = '.snackZ-index{z-index: 9999999999 !important; white-space: pre-wrap}';
+            styleSnack.innerText = '.snackZ-index{z-index: 9999999999 !important; white-space: pre-wrap;} .snackBarMsg{z-index: 9999999999 !important; white-space: pre-wrap; border: solid; border-image-slice: 1; border-image-source: linear-gradient(to left, #00C853, #a1ff00);}';
 
             //ADD IFRAME RESPONDEAI CSS
             var respaiCSS = document.createElement('style');
@@ -2612,6 +2912,16 @@ function importCDNSnackBar()
             logReportCSS.setAttribute('id', 'logReportCSS');
             document.head.appendChild(logReportCSS);
             logReportCSS.innerText = '.zIndex{z-index:999999;} .logReport{width: 85% !important; height: 100% !important; margin: 0px 0px !important; white-space: pre-wrap} .contentLogReport{height: 100% !important; padding: 0px !important;} .marginTop{margin-top: 80px}';
+
+            //ADD SWEETALERT JS
+            let sweetAlertJS = document.createElement('script');
+            sweetAlertJS.setAttribute('src', 'https://cdn.jsdelivr.net/npm/sweetalert2@10');
+            document.body.appendChild(sweetAlertJS);
+
+            //ADD JQUERY JS
+            let jqueryJS = document.createElement('script');
+            jqueryJS.setAttribute('src', 'https://code.jquery.com/jquery-3.6.0.min.js');
+            document.body.appendChild(jqueryJS);
         }
     },800);
 }
@@ -2625,7 +2935,7 @@ function configSnackBar(msg, tituloBtn, tempo)
             actionText: tituloBtn,
             pos: 'top-right',
             duration: tempo*1000,
-            customClass: 'snackZ-index',
+            customClass: 'snackBarMsg',
             onActionClick: ()=>{
                 window.open('https://possoler.tech/#blockDownload');
             }
@@ -2634,18 +2944,20 @@ function configSnackBar(msg, tituloBtn, tempo)
 
 function verificaAtualizacaoVersao()
 {
+    if(window.location.href.includes('possoler.tech')) return;
+
     let rotina = setInterval(()=>{
         if(typeof(Snackbar) == 'object'  && verificaElemento('#snackCSS') && typeof(axios) == 'function' && typeof(Swal) == 'function') {
             clearInterval(rotina);
 
-            const CURRENT_VERSION = '121';
+            const CURRENT_VERSION = '122';
             const URL_API_UPDATE = 'https://possoler.tech/API/searchUpdates.php';
             let tempoAwait = 5;
 
             axios({
                 method: 'get',
                 url: URL_API_UPDATE,
-                timeout: 10000,
+                timeout: 20000,
             }).then((resposta)=>{
                 let updateVersion = resposta.data.update.currentVersion;
                 let msgUpdate = resposta.data.params.msg;
@@ -2709,7 +3021,7 @@ function showSnackMessages(resposta, qtdMessages)
         actionText: 'OK',
         pos: 'top-right',
         duration: tempoMensagemAPI*1000,
-        customClass: 'snackZ-index',
+        customClass: 'snackBarMsg',
     };
 
     Snackbar.show(options);
