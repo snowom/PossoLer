@@ -7,8 +7,8 @@
 É um projeto open source criado com o intuito de democratizar o acesso à informação, pois nesse momento, em meio a tantas _fake news_, é mais que fundamental ter acesso a notícias e conteúdos de fontes confiáveis. Com a extensão __Posso Ler?__ você é capaz de burlar o paywall e visualizar conteúdos exclusivos de alguns jornais e sites. [Ir para site](https://possoler.tech)
 <br>
 <br>
-<img src="https://img.shields.io/badge/Versão atual-1.2.1-green.svg"/>
-<img src="https://img.shields.io/badge/Data atualização-17/10/2021-blue.svg"/>
+<img src="https://img.shields.io/badge/Versão atual-1.2.2-green.svg"/>
+<img src="https://img.shields.io/badge/Data atualização-18/11/2021-blue.svg"/>
 <br>
 <br>
 ## Sites Suportados
@@ -41,9 +41,10 @@
 * [O Popular](https://www.opopular.com.br/) - Ler sobre <i>**Cache Mock**</i> na seção de <i>Perguntas Frequentes</i>
 * [Diário de Santa Maria](https://diariosm.com.br/)
 * [O Tempo - Minas Gerais](https://www.otempo.com.br/)
-* [Brainly](https://brainly.com.br/)
 * [Revista Glamour](https://revistaglamour.globo.com/)
 * [Exame Invest](https://invest.exame.com/)
+* [De Grão em Grão](https://degraoemgrao.blogfolha.uol.com.br/)
+* [Jornal do Commercio](https://jc.ne10.uol.com.br/)
 
 ## Perguntas Frequentes
 
@@ -67,7 +68,7 @@ Cache Mock (Simulação por Cache) é uma técnica que desenvolvi para conseguir
 <br>
 <br>
 ### Observações sobre o Cache Mock
-Alguns sites utilizam proteção de hard paywall em seus conteúdos. Geralmente, conteúdos com esse nível de proteção ficam armazenados no servidor e só são renderizados na tela do usuário (cliente) quando o sistema tem a certeza de que o mesmo se encontra logado em sua conta de assinante. A solução encontrada para contornar este caso, foi utilizar o cache da página gerado pelo Google, como foi explicado no tópico acima. Contudo, caso a notícia seja muito recente, é capaz do cache da página em questão não ter sido gerado ainda, e caso esse seja o ocorrido, ao tentar desbloquear a notícia, a extensão informará a você por um pop-up que não foi possível desbloquear o conteúdo no momento e que você poderá tentar mais tarde. Ou seja, nem sempre será possível desbloquear todos os conteúdos. Pode ocorrer também da API que faz a conexão entre a extensão e o cache ficar indisponível devido ao excesso de requisições feitas a partir de um mesmo endereço de IP (Isso é uma medida de segurança a fim de evitar ataques DDoS). Caso isso ocorra, um pop-up aparecerá em sua tela informando que o serviço está temporariamente indisponível. Nesse caso, não há muito o que fazer além de esperar seu endereço de IP ser liberado novamente para fazer requisições para a API.
+Alguns sites utilizam proteção de hard paywall em seus conteúdos. Geralmente, conteúdos com esse nível de proteção ficam armazenados no servidor e só são renderizados na tela do usuário (cliente) quando o sistema tem a certeza de que o mesmo se encontra logado em sua conta de assinante. A solução encontrada para contornar este caso, foi utilizar o cache da página gerado pelo Google, como foi explicado no tópico acima. Contudo, caso a notícia seja muito recente, é capaz do cache da página em questão não ter sido gerado ainda, e caso esse seja o ocorrido, ao tentar desbloquear a notícia, a extensão informará a você por um pop-up que não foi possível desbloquear o conteúdo no momento e que você poderá tentar mais tarde. Ou seja, nem sempre será possível desbloquear todos os conteúdos. Pode ocorrer também da <strong><em><a target="_blank" href="https://vertigo.com.br/entenda-o-que-e-uma-api/">API</a></em></strong> que faz a conexão entre a extensão e o cache <strong>ficar indisponível</strong> devido ao excesso de requisições feitas a partir de um mesmo <strong><em><a target="_blank" href="https://www.kaspersky.com.br/resource-center/definitions/what-is-an-ip-address">endereço de IP</a></em></strong> (Isso é uma medida de segurança por parte da Google a fim de evitar <strong><em><a target="_blank" href="https://www.kaspersky.com.br/resource-center/threats/ddos-attacks">ataques DDoS</a></em></strong>). Caso isso ocorra ao tentar desbloquear uma notícia, em uma das etapas do desbloqueio, aparecerá um  <strong><em><a target="_blank" href="https://canaltech.com.br/internet/o-que-e-captcha-recaptcha/">reCAPTCHA</a></em></strong> e o processo será interrompido. Para retomá-lo, basta resolver o <em>reCAPTCHA</em>.
 <br>
 <br>
 **Ponto de atenção:** Por se tratar de dados obtidos à partir do cache, o conteúdo apresentado pode estar desatualizado em relação a página original caso a mesma tenha sofrido alguma alteração após a última geração de cache feita pelo Google.
