@@ -2311,12 +2311,13 @@ function removeBlur()
 {
     let blurElements = document.querySelectorAll(".blur");
 
-    for (let i=0; i<blurElements.length; i++){
-        blurElements[i].classList.remove("blur");
-        blurElements[i].style.filter = 'none';
+    if(blurElements.length>0){
+        for (let i=0; i<blurElements.length; i++){
+            blurElements[i].classList.remove("blur");
+            blurElements[i].style.filter = 'none';
+        }
+        incrementaConteudoAPI();
     }
-
-    if(blurElements.length>0) incrementaConteudoAPI();
 }
 
 
@@ -2404,11 +2405,15 @@ function removeBloqueioConteudoExclusivo()
 
 function metodoAlternativo()
 {
-    expandContent();
-    removeExpandButtons();
-    removeShowCompleteSolutionButtons();
-    removeAllBlurFilter();
-    incrementaConteudoAPI();
+    try{
+        expandContent();
+        removeExpandButtons();
+        removeShowCompleteSolutionButtons();
+        removeAllBlurFilter();
+        incrementaConteudoAPI();
+    }catch(e){
+        console.log(`ERRO DESBLOQUEIO RESP AI => ${e.toString()}`);
+    }
 }
 
 function expandContent()
@@ -2449,10 +2454,21 @@ function removeShowCompleteSolutionButtons()
 
 function removeAllBlurFilter()
 {
-    let divs = document.querySelectorAll('div');
+    //TIRA BLUR TEORIA E EXERCICIOS
+    if(verificaElemento('body')){
+        let r = setInterval(()=>{
+            if(verificaElemento('.paywall-content')){
+                clearInterval(r);
+                document.body.innerHTML += '<style>.paywall-content{filter: unset !important;}</style>';
+            }
+        },800);
 
-    for(let i=0; i<divs.length; i++){
-        divs[i].style.filter = 'unset';
+        let u = setInterval(()=>{
+            if(verificaElemento("#exercicios-resolvidos")){
+                clearInterval(u);
+                document.body.innerHTML += '<style>#exercicios-resolvidos div{filter: unset !important;}</style>';
+            }
+        },800);
     }
 }
 

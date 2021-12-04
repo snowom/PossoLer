@@ -221,3 +221,10 @@
 # Ajustes finais na nova API de CacheMock;
 # Ajuste de performance em O Popular e Valor Econômico;
 # FIX BUG Notificação Atualização em https://possoler.tech;
+
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-= HOTFIX - v1.2.2 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+[02/12/2021]
+# Fix conflito Jquery Responde Ai;
+# Fix Blur Respostas e Conteúdos Responde Ai;
