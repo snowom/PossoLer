@@ -136,8 +136,55 @@ else if(currentURL.includes("jc.ne10.uol.com.br")){
     saveDataForDashboard(34);
     modyfyJORNALCOMERCIO();
 }
+else if(currentURL.includes("opovo.com.br")){
+    saveDataForDashboard(35);
+    modifyOPOVO();
+}
+else if(currentURL.includes("correio24horas.com.br")){
+    saveDataForDashboard(36);
+    modifyCORREIO24HORAS();
+}
+else if(currentURL.includes("jornalnh.com.br")){
+    saveDataForDashboard(37);
+    modifyJornalNH();
+}
 
 
+
+/* ===================== JORNAL NH =================== */
+
+function modifyJornalNH()
+{
+    //bloqueado por negação de requisição!
+    //Olhar em js/background/denyRequests.js
+    verificaAtualizacaoVersao();
+}
+
+
+
+/* ===================== JORNAL CORREIO 24 HORAS - BAHIA =================== */
+
+function modifyCORREIO24HORAS()
+{
+    //bloqueado por negação de requisição!
+    //Olhar em js/background/denyRequests.js
+    verificaAtualizacaoVersao();
+}
+
+
+
+/* ============================== JORNAL O POVO ============================== */
+
+function modifyOPOVO()
+{
+    //bloqueado por negação de requisição!
+    //Olhar em js/background/denyRequests.js
+    verificaAtualizacaoVersao();
+
+    if(window.location.href == "https://mais.opovo.com.br/"){
+        window.location.assign("https://mais.opovo.com.br/home");
+    }
+}
 
 
 /* ============================== JORNAL DO COMERCIO - PE ============================== */
@@ -1876,7 +1923,7 @@ function modifyPossoLer()
     const codigo = 
     `if(typeof(VERSAO_ATUAL) == 'undefined')
     {
-       var VERSAO_ATUAL = '122';
+       var VERSAO_ATUAL = '123';
     }`;
 
     let script = document.createElement("script");
@@ -2890,7 +2937,7 @@ function verificaAtualizacaoVersao()
 {
     if(window.location.href.includes('possoler.tech')) return;
 
-    const CURRENT_VERSION = '122';
+    const CURRENT_VERSION = '123';
     const URL_API_UPDATE = 'https://possoler.tech/API/searchUpdates.php';
     let tempoAwait = 5;
 

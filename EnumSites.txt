@@ -29,3 +29,6 @@
 32 - O Tempo - MG
 33 - Revista Glamour
 34 - Jornal do Commercio
+35 - Jornal O Povo
+36 - Jornal Correio 24hrs - Bahia
+37 - Jornal NH

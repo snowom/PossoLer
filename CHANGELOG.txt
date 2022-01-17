@@ -228,3 +228,18 @@
 [02/12/2021]
 # Fix conflito Jquery Responde Ai;
 # Fix Blur Respostas e Conteúdos Responde Ai;
+
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-= v1.2.3 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+[08/12/2021]
+# Adicionado Jornal O Povo;
+# CRX Atualizado;
+
+[09/01/2022]
+# Adicionado Jornal Correio 24 Horas - Bahia;
+# CRX Atualizado;
+
+[17/01/2022]
+# Adicionado Jornal NH;
+# CRX Atualizado;
