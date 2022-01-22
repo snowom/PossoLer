@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Posso Ler?
 // @namespace    URL
-// @version      1.2.3
+// @version      1.3.3
 // @description  Tenha acesso a notícias ilimitadas e conteúdos exclusivos de forma gratuita e segura
 // @author       Thomaz Ferreira
 // @supportURL   https://possoler.tech/
@@ -37,7 +37,7 @@
 // @match        *://*.economist.com/*
 // @match        *://diariosm.com.br/*
 // @match        *://*.otempo.com.br/*
-// @match        *://revistaglamour.globo.com/*
+// @match        *://glamour.globo.com/*
 // @match        *://degraoemgrao.blogfolha.uol.com.br/*
 // @match        *://jc.ne10.uol.com.br/*
 // @match        *://impresso.jc.ne10.uol.com.br/*
@@ -51,7 +51,7 @@
 // @require      https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js
 // @require      https://possoler.tech/CDN/snackbar.js
 // @grant        GM_webRequest
-// @webRequest   [{"selector":"https://www.rbsonline.com.br/cdn/scripts/paywall.min.js*","action":"cancel"}, {"selector":"https://www.rbsonline.com.br/cdn/scripts/special-paywall.min.js*","action":"cancel"}, {"selector":"https://api.clicrbs.com.br/paywall-api/*","action":"cancel"}, {"selector": "*://*.jornaldocomercio.com/src/inove/paywall.php", "action": "cancel"}, {"selector": "*://cdn.tinypass.com/api/tinypass.min.js*", "action": "cancel"}, {"selector": "*://super.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://quatrorodas.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://veja.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://guiadoestudante.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector":"*://blockv4.fivewall.com.br/paywall.js*","action":"cancel"}, {"selector":"*://acesso.estadao.com.br/paywall*","action":"cancel"}, {"selector":"*://paywall.folha.uol.com.br/*","action":"cancel"}, {"selector":"*://prisa-el-pais-brasil-prod.cdn.arcpublishing.com/arc/subs/p.js","action":"cancel"}, {"selector":"*://exame.com/wp-content/themes/exame-new/js/extd-acc.js*","action":"cancel"}, {"selector":"*://folhadelondrina.com.br/themes/default/js/paywall/fivewall1.26.js*","action":"cancel"}, {"selector":"*://s3.amazonaws.com/sdk-signin-wall-production/bundle.js*","action":"cancel"}, {"selector":"*://me.jsuol.com.br/*","action":"cancel"}, {"selector":"*://mais.opovo.com.br/auth*","action":"cancel"}, {"selector":"*://mais.opovo.com.br/includes/assets/opovomais/js/auth/auth_new_menu.min.js*","action":"cancel"}, {"selector":"*://mais.opovo.com.br/includes/assets/opovomais/js/paywall_config.min.js*","action":"cancel"}, {"selector":"*://correio-static.cworks.cloud/fileadmin/sites/correio24horas/js/all.js*","action":"cancel"}]
+// @webRequest   [{"selector":"https://www.rbsonline.com.br/cdn/scripts/paywall.min.js*","action":"cancel"}, {"selector":"https://www.rbsonline.com.br/cdn/scripts/special-paywall.min.js*","action":"cancel"}, {"selector":"https://api.clicrbs.com.br/paywall-api/*","action":"cancel"}, {"selector": "*://*.jornaldocomercio.com/src/inove/paywall.php", "action": "cancel"}, {"selector": "*://cdn.tinypass.com/api/tinypass.min.js*", "action": "cancel"}, {"selector": "*://super.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://quatrorodas.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://veja.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://guiadoestudante.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector":"*://blockv4.fivewall.com.br/paywall.js*","action":"cancel"}, {"selector":"*://acesso.estadao.com.br/paywall*","action":"cancel"}, {"selector":"*://paywall.folha.uol.com.br/*","action":"cancel"}, {"selector":"*://*/arc/subs/p.min.js","action":"cancel"}, {"selector":"*://exame.com/wp-content/themes/exame-new/js/extd-acc.js*","action":"cancel"}, {"selector":"*://folhadelondrina.com.br/themes/default/js/paywall/fivewall1.26.js*","action":"cancel"}, {"selector":"*://s3.amazonaws.com/sdk-signin-wall-production/bundle.js*","action":"cancel"}, {"selector":"*://me.jsuol.com.br/*","action":"cancel"}, {"selector":"*://mais.opovo.com.br/auth*","action":"cancel"}, {"selector":"*://mais.opovo.com.br/includes/assets/opovomais/js/auth/auth_new_menu.min.js*","action":"cancel"}, {"selector":"*://mais.opovo.com.br/includes/assets/opovomais/js/paywall_config.min.js*","action":"cancel"}, {"selector":"*://correio-static.cworks.cloud/fileadmin/sites/correio24horas/js/all.js*","action":"cancel"}]
 // @run-at       document-start
 // @noframes
 // ==/UserScript==
@@ -159,7 +159,7 @@ else if(currentURL.includes("nytimes.com")){
 }
 else if(currentURL.includes("elpais.com")){
     saveDataForDashboard(19);
-    blockPaywallRequest("*://prisa-el-pais-brasil-prod.cdn.arcpublishing.com/arc/subs/p.js");
+    blockPaywallRequest("*://*/arc/subs/p.min.js");
     modifyELPAIS();
 }
 else if(currentURL.includes("jornalvs.com.br")){
@@ -204,7 +204,7 @@ else if(currentURL.includes('otempo.com.br')){
     saveDataForDashboard(32);
     modifyOTEMPO();
 }
-else if(currentURL.includes("revistaglamour.globo.com")){
+else if(currentURL.includes("glamour.globo.com")){
     saveDataForDashboard(33);
     blockPaywallRequest("*://cdn.tinypass.com/api/tinypass.min.js*");
 }
@@ -226,7 +226,7 @@ else if(currentURL.includes("correio24horas.com.br")){
     blockPaywallRequest("*://correio-static.cworks.cloud/fileadmin/sites/correio24horas/js/all.js*")
 }
 else if(currentURL.includes("jornalnh.com.br")){
-    //saveDataForDashboard();
+    saveDataForDashboard(37);
     blockPaywallRequest("*://blockv4.fivewall.com.br/paywall.js*");
 }
 
@@ -1968,7 +1968,7 @@ function modifyPossoLer()
     const codigo =
     `if(typeof(VERSAO_ATUAL) == 'undefined')
     {
-       var VERSAO_ATUAL = '123';
+       var VERSAO_ATUAL = '133';
     }`;
 
     let script = document.createElement("script");
@@ -2589,12 +2589,27 @@ function checkButtonCreation()
     if(document.getElementById('btnResposta') == null || document.getElementById('btnResposta') == undefined){
         let fullURL = window.location.href;
         if(
-            fullURL.includes('materias/solucionario/livro') && 
+            (fullURL.includes('materias/solucionario/livro') && 
             fullURL.includes('/edicao/') && 
-            new RegExp('\/exercicio\/[0-9]+').test(fullURL)
+            new RegExp('\/exercicio\/[0-9]+').test(fullURL))
+            || (fullURL.includes("/conteudo/") && fullURL.includes("/livro/"))
         ){
-            createButtonResposta();
-            saveDataForDashboard(8);
+            //RESPOSTA LIVRO - USUARIO DESLOGADO
+            if(fullURL.includes("/conteudo/") && fullURL.includes("/livro/")){
+                setInterval(()=>{
+                    removeShowCompleteSolutionButtons();
+                    let sections = document.querySelectorAll('section');
+                    for(let i = 0; i<sections.length; i++){
+                        sections[i].style.filter = 'unset'
+                    };
+                },800);
+                saveDataForDashboard(8);
+            }
+            //RESPOSTA LIVRO USUARIO LOGADO
+            else{
+                createButtonResposta();
+                saveDataForDashboard(8);
+            }
         }
     }
 }
@@ -2994,7 +3009,7 @@ function verificaAtualizacaoVersao()
         if(typeof(Snackbar) == 'object'  && verificaElemento('#snackCSS') && typeof(axios) == 'function' && typeof(Swal) == 'function') {
             clearInterval(rotina);
 
-            const CURRENT_VERSION = '123';
+            const CURRENT_VERSION = '133';
             const URL_API_UPDATE = 'https://possoler.tech/API/searchUpdates.php';
             let tempoAwait = 5;
 

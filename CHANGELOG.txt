@@ -230,7 +230,7 @@
 # Fix Blur Respostas e Conteúdos Responde Ai;
 
 
-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= v1.2.3 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-= v1.3.3 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 [08/12/2021]
 # Adicionado Jornal O Povo;
@@ -242,4 +242,11 @@
 
 [17/01/2022]
 # Adicionado Jornal NH;
+# CRX Atualizado;
+
+[20/01/2022]
+# Fix Blur Respostas Livros Responde Ai para usuários não logados;
+# Atualização Bypass El País;
+# Fix Match Url Revista Glamour;
+# Ajuste de tageamento de versão - https://semver.org
 # CRX Atualizado;

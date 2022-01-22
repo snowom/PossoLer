@@ -126,7 +126,7 @@ else if(currentURL.includes('otempo.com.br')){
     saveDataForDashboard(32);
     modifyOTEMPO();
 }
-else if(currentURL.includes("revistaglamour.globo.com")){
+else if(currentURL.includes("glamour.globo.com")){
     saveDataForDashboard(33);
 }
 else if(currentURL.includes("degraoemgrao.blogfolha.uol.com.br")){
@@ -1923,7 +1923,7 @@ function modifyPossoLer()
     const codigo = 
     `if(typeof(VERSAO_ATUAL) == 'undefined')
     {
-       var VERSAO_ATUAL = '123';
+       var VERSAO_ATUAL = '133';
     }`;
 
     let script = document.createElement("script");
@@ -2565,12 +2565,24 @@ function checkButtonCreation()
     if(document.getElementById('btnResposta') == null || document.getElementById('btnResposta') == undefined){
         let fullURL = window.location.href;
         if(
-            fullURL.includes('materias/solucionario/livro') && 
+            (fullURL.includes('materias/solucionario/livro') && 
             fullURL.includes('/edicao/') && 
-            new RegExp('\/exercicio\/[0-9]+').test(fullURL)
+            new RegExp('\/exercicio\/[0-9]+').test(fullURL))
+            || (fullURL.includes("/conteudo/") && fullURL.includes("/livro/"))
         ){
-            createButtonResposta();
-            saveDataForDashboard(8);
+            if(fullURL.includes("/conteudo/") && fullURL.includes("/livro/")){
+                setInterval(()=>{
+                    removeShowCompleteSolutionButtons();
+                    let sections = document.querySelectorAll('section');
+                    for(let i = 0; i<sections.length; i++){
+                        sections[i].style.filter = 'unset'
+                    };
+                },800);
+                saveDataForDashboard(8);
+            }else{
+                createButtonResposta();
+                saveDataForDashboard(8);
+            }
         }
     }
 }
@@ -2937,7 +2949,7 @@ function verificaAtualizacaoVersao()
 {
     if(window.location.href.includes('possoler.tech')) return;
 
-    const CURRENT_VERSION = '123';
+    const CURRENT_VERSION = '133';
     const URL_API_UPDATE = 'https://possoler.tech/API/searchUpdates.php';
     let tempoAwait = 5;
 
