@@ -7,8 +7,8 @@
 É um projeto open source criado com o intuito de democratizar o acesso à informação, pois nesse momento, em meio a tantas _fake news_, é mais que fundamental ter acesso a notícias e conteúdos de fontes confiáveis. Com a extensão __Posso Ler?__ você é capaz de burlar o paywall e visualizar conteúdos exclusivos de alguns jornais e sites. [Ir para site](https://possoler.tech)
 <br>
 <br>
-<img src="https://img.shields.io/badge/Versão atual-1.2.2-green.svg"/>
-<img src="https://img.shields.io/badge/Data atualização-18/11/2021-blue.svg"/>
+<img src="https://img.shields.io/badge/Versão atual-1.3.3-green.svg"/>
+<img src="https://img.shields.io/badge/Data atualização-22/01/2022-blue.svg"/>
 <br>
 <br>
 ## Sites Suportados
@@ -45,6 +45,9 @@
 * [Exame Invest](https://invest.exame.com/)
 * [De Grão em Grão](https://degraoemgrao.blogfolha.uol.com.br/)
 * [Jornal do Commercio](https://jc.ne10.uol.com.br/)
+* [Jornal O Povo](https://opovo.com.br/)
+* [Correio 24 Horas - Bahia](http://correio24horas.com.br/)
+* [Jornal NH](https://www.jornalnh.com.br/)
 
 ## Perguntas Frequentes
 
