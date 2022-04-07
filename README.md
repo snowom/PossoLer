@@ -8,8 +8,8 @@
 <br>
 <br>
 <img src="https://img.shields.io/badge/License-MIT-orange.svg"/>
-<img src="https://img.shields.io/badge/Versão atual-1.3.3-green.svg"/>
-<img src="https://img.shields.io/badge/Data atualização-22/01/2022-blue.svg"/>
+<img src="https://img.shields.io/badge/Versão atual-1.4.4-green.svg"/>
+<img src="https://img.shields.io/badge/Data atualização-07/04/2022-blue.svg"/>
 <br>
 <br>
 ## Sites Suportados
@@ -49,6 +49,7 @@
 * [Jornal O Povo](https://opovo.com.br/)
 * [Correio 24 Horas - Bahia](http://correio24horas.com.br/)
 * [Jornal NH](https://www.jornalnh.com.br/)
+* [Jornal A Tribuna - Santos](https://www.atribuna.com.br/)
 
 ## Perguntas Frequentes
 
@@ -78,9 +79,20 @@ Alguns sites utilizam proteção de hard paywall em seus conteúdos. Geralmente,
 **Ponto de atenção:** Por se tratar de dados obtidos à partir do cache, o conteúdo apresentado pode estar desatualizado em relação a página original caso a mesma tenha sofrido alguma alteração após a última geração de cache feita pelo Google.
 <br>
 <br>
+### O que é a Chave de Acesso e para que ela serve?
+A <strong>chave de acesso</strong> é um <em><strong><a target="_blank" href="https://academy.bit2me.com/pt/o-que-%C3%A9-hash/">hash</a></strong></em> que identifica de forma única a extensão baixada. Essa chave de acesso é utilizada para assegurar a autenticidade da extensão, ou seja, ela garante que a extensão foi baixada diretamente do site oficial. Ela também impede que um usuário baixe cópias da extensão e as distribuam. Após instalar extensão, a chave de acesso será solicitada na primeira execução da extensão para a ativação da mesma. Depois que a extensão for ativada, <strong>a chave de acesso se tornará inválida e poderá ser descartada.</strong><br><br><strong>Observação:</strong> Caso o Tampermonkey ou o userscript ou a extensão sejam <strong>desinstalados ou atualizados</strong>, será necessário fazer o download novamente do Posso Ler?, pois uma vez utilizada, a chave de acesso se torna inválida.
 <br>
 <br>
-
- >"O direito à informação é considerado um direito fundamental numa sociedade democrática"
+### Qual é o problema de usar uma cópia disponibilizada por terceiros?
+Ao usar uma cópia da extensão disponibilizada por terceiros, além de atrapalhar a divulgação do projeto original, você também corre o risco de estar instalando uma cópia modificada <strong>com um código malicioso injetado</strong>, podendo comprometer seus dados pessoais e informações sensíveis, como senhas e dados bancários.
+<br>
+<br>
+### E se eu usar uma cópia disponibilizada por terceiros?
+Caso você usar uma cópia disponibilizada por terceiros, ao tentar executar a extensão, será exibido um aviso informando que você está usando uma extensão com um hash já utilizado por outro usuário. Além disso, caso opte por usar uma cópia, ficarei bastante decepcionado com você. Anualmente, pago aproximadamente <strong>R$800,00</strong> (quase 2/3 de um salário mínimo no Brasil) para deixar online esse site e as APIs que a extensão consome. Faço esse projeto totalmente gratuito para ajudar as pessoas, dedicando um tempo que poderia estar estudando para a faculdade ou para o meu trabalho, ou até mesmo descansando depois de um dia cansativo. Então pense com bastante carinho antes de optar por usar uma versão não oficial, beleza?
+<br>
+<br>
+<br>
+<br>
+>"O direito à informação é considerado um direito fundamental numa sociedade democrática"
  
 Made with ❤️ by Thomaz Ferreira
