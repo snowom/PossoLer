@@ -1,12 +1,11 @@
 // ==UserScript==
 // @name         Posso Ler?
 // @namespace    URL
-// @version      1.3.3
-// @description  Tenha acesso a notícias ilimitadas e conteúdos exclusivos de forma gratuita e segura
+// @version      1.4.4
+// @description  Tenha acesso a noticias ilimitadas e conteudos exclusivos de forma gratuita e segura
 // @author       Thomaz Ferreira
 // @supportURL   https://possoler.tech/
 // @icon         https://possoler.tech/img/128.png
-// Atenção:      Caso algum site não funcione logo após a instalação, limpe o cache do navegador.
 // @match        *://*.possoler.tech/*
 // @match        *://*.folha.uol.com.br/*
 // @match        *://*.estadao.com.br/*
@@ -48,186 +47,182 @@
 // @match        *://*.opovo.com.br/*
 // @match        *://*.correio24horas.com.br/*
 // @match        *://*.jornalnh.com.br/*
+// @match        *://*.atribuna.com.br/*
 // @require      https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js
 // @require      https://possoler.tech/CDN/snackbar.js
+// @require      https://possoler.tech/CDN/[FF]blockCorePaywall.js
 // @grant        GM_webRequest
-// @webRequest   [{"selector":"https://www.rbsonline.com.br/cdn/scripts/paywall.min.js*","action":"cancel"}, {"selector":"https://www.rbsonline.com.br/cdn/scripts/special-paywall.min.js*","action":"cancel"}, {"selector":"https://api.clicrbs.com.br/paywall-api/*","action":"cancel"}, {"selector": "*://*.jornaldocomercio.com/src/inove/paywall.php", "action": "cancel"}, {"selector": "*://cdn.tinypass.com/api/tinypass.min.js*", "action": "cancel"}, {"selector": "*://super.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://quatrorodas.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://veja.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://guiadoestudante.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector":"*://blockv4.fivewall.com.br/paywall.js*","action":"cancel"}, {"selector":"*://acesso.estadao.com.br/paywall*","action":"cancel"}, {"selector":"*://paywall.folha.uol.com.br/*","action":"cancel"}, {"selector":"*://*/arc/subs/p.min.js","action":"cancel"}, {"selector":"*://exame.com/wp-content/themes/exame-new/js/extd-acc.js*","action":"cancel"}, {"selector":"*://folhadelondrina.com.br/themes/default/js/paywall/fivewall1.26.js*","action":"cancel"}, {"selector":"*://s3.amazonaws.com/sdk-signin-wall-production/bundle.js*","action":"cancel"}, {"selector":"*://me.jsuol.com.br/*","action":"cancel"}, {"selector":"*://mais.opovo.com.br/auth*","action":"cancel"}, {"selector":"*://mais.opovo.com.br/includes/assets/opovomais/js/auth/auth_new_menu.min.js*","action":"cancel"}, {"selector":"*://mais.opovo.com.br/includes/assets/opovomais/js/paywall_config.min.js*","action":"cancel"}, {"selector":"*://correio-static.cworks.cloud/fileadmin/sites/correio24horas/js/all.js*","action":"cancel"}]
+// @grant        GM_setValue
+// @grant        GM_getValue
+// @grant        GM_deleteValue
+// @webRequest   [{"selector":"https://www.rbsonline.com.br/cdn/scripts/paywall.min.js*","action":"cancel"}, {"selector":"https://www.rbsonline.com.br/cdn/scripts/special-paywall.min.js*","action":"cancel"}, {"selector":"https://api.clicrbs.com.br/paywall-api/*","action":"cancel"}, {"selector": "*://*.jornaldocomercio.com/src/inove/paywall.php", "action": "cancel"}, {"selector": "*://cdn.tinypass.com/api/tinypass.min.js*", "action": "cancel"}, {"selector": "*://super.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://quatrorodas.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://veja.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://guiadoestudante.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector":"*://blockv4.fivewall.com.br/paywall.js*","action":"cancel"}, {"selector":"*://acesso.estadao.com.br/paywall*","action":"cancel"}, {"selector":"*://paywall.folha.uol.com.br/*","action":"cancel"}, {"selector":"*://*/arc/subs/p.min.js","action":"cancel"}, {"selector":"*://exame.com/wp-content/themes/exame-new/js/extd-acc.js*","action":"cancel"}, {"selector":"*://folhadelondrina.com.br/themes/default/js/paywall/fivewall1.26.js*","action":"cancel"}, {"selector":"*://s3.amazonaws.com/sdk-signin-wall-production/bundle.js*","action":"cancel"}, {"selector":"*://me.jsuol.com.br/*","action":"cancel"}, {"selector":"*://mais.opovo.com.br/auth*","action":"cancel"}, {"selector":"*://mais.opovo.com.br/includes/assets/opovomais/js/auth/auth_new_menu.min.js*","action":"cancel"}, {"selector":"*://mais.opovo.com.br/includes/assets/opovomais/js/paywall_config.min.js*","action":"cancel"}, {"selector":"*://correio-static.cworks.cloud/fileadmin/sites/correio24horas/js/all.js*","action":"cancel"}, {"selector":"*://static.infoglobo.com.br/paywall/js/tiny.js*","action":"cancel"}, {"selector":"*://assine.correio24horas.com.br/v2/amp/subscriber/auth*","action":"cancel"}, {"selector":"*://*.atribuna.com.br/assets/js*/materia.js","action":"cancel"}]
 // @run-at       document-start
 // @noframes
 // ==/UserScript==
 
-
 importCDNSnackBar();
-
-
 let currentURL = window.location.hostname;
+const CURRENT_VERSION = '144';
 
 
-if(currentURL.includes("folha.uol.com.br")){
-    saveDataForDashboard(1);
-    blockPaywallRequest("*://paywall.folha.uol.com.br/*");
-    modifyFLSP();
-
-}else if(currentURL.includes("estadao.com.br")){
-    saveDataForDashboard(2);
-    blockPaywallRequest("*://acesso.estadao.com.br/paywall*");
-
-}else if(currentURL.includes("oglobo.globo.com") && !(window.location.href.includes("/epoca"))){
-    saveDataForDashboard(3);
-    blockPaywallRequest("*://cdn.tinypass.com/api/tinypass.min.js*");
-    modifyGLOBO();
-}
-else if(currentURL.includes("gazetadopovo.com.br")){
-    saveDataForDashboard(4);
-    blockPaywallRequest("*://cdn.tinypass.com/api/tinypass.min.js*");
-    modifyGAZETA();
-}
-else if(currentURL.includes("super.abril.com.br")){
-    saveDataForDashboard(5);
-    blockPaywallRequest("*://super.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*");
-    modifySUPINTERESSANTE();
-}
-else if(currentURL.includes("quatrorodas.abril.com.br")){
-    saveDataForDashboard(6);
-    blockPaywallRequest("*://quatrorodas.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*")
-    modifySUPINTERESSANTE();
-}
-else if(currentURL.includes("veja.abril.com.br") || (currentURL.includes("vejasp.abril"))){
-    saveDataForDashboard(7);
-    blockPaywallRequest("*://veja.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*")
-    modifySUPINTERESSANTE();
-}
-else if(currentURL.includes("guiadoestudante.abril.com.br")){
-    saveDataForDashboard(10);
-    blockPaywallRequest("*://guiadoestudante.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*");
-    modifySUPINTERESSANTE();
-}
-else if(currentURL.includes("respondeai.com.br")){
-    saveDataForDashboard(8);
-    modifyRESPAI();
-}
-else if(currentURL.includes("exame.com")){
-    saveDataForDashboard(9);
-    blockPaywallRequest("*://exame.com/wp-content/themes/exame-new/js/extd-acc.js*");
-    modifyEXAME();
-}
-else if(currentURL.includes("oglobo.globo.com") && window.location.href.includes("/epoca")){
-    //MIGROU PARA O DOMINIO OGLOBO.COM
-    saveDataForDashboard(11);
-    modifyEPOCA();
-}
-else if(currentURL.includes("revistagalileu.globo.com")){
-    saveDataForDashboard(13);
-    blockPaywallRequest("*://cdn.tinypass.com/api/tinypass.min.js*");
-    modifyGALILEU();
-}
-else if(currentURL.includes("epocanegocios.globo.com")){
-    saveDataForDashboard(12);
-    blockPaywallRequest("*://cdn.tinypass.com/api/tinypass.min.js*");
-    modifyGALILEU();
-}
-else if(currentURL.includes("revistamarieclaire.globo.com")){
-    saveDataForDashboard(14);
-    blockPaywallRequest("*://cdn.tinypass.com/api/tinypass.min.js*");
-    modifyGALILEU();
-}
-else if(currentURL.includes("revistagloborural.globo.com")){
-    saveDataForDashboard(15);
-    blockPaywallRequest("*://cdn.tinypass.com/api/tinypass.min.js*");
-    modifyGALILEU();
-}
-else if(currentURL.includes("revistapegn.globo.com")){
-    saveDataForDashboard(26);
-    blockPaywallRequest("*://cdn.tinypass.com/api/tinypass.min.js*");
-    modifyGALILEU();
-}
-else if(currentURL.includes("possoler.tech")){
-    modifyPossoLer();
-}
-else if(currentURL.includes("jota.info")){
-    saveDataForDashboard(16);
-    modifyJOTA();
-}
-else if(currentURL.includes("nsctotal.com.br")){
-    saveDataForDashboard(17);
-    blockPaywallRequest("*://cdn.tinypass.com/api/tinypass.min.js*");
-    modifyNSC();
-}
-else if(currentURL.includes("nytimes.com")){
-    saveDataForDashboard(18);
-    modifyNYTIMES();
-}
-else if(currentURL.includes("elpais.com")){
-    saveDataForDashboard(19);
-    blockPaywallRequest("*://*/arc/subs/p.min.js");
-    modifyELPAIS();
-}
-else if(currentURL.includes("jornalvs.com.br")){
-    saveDataForDashboard(20);
-    blockPaywallRequest("*://blockv4.fivewall.com.br/paywall.js*");
-    modifyJVS();
-}
-else if(
-    currentURL.includes("valor.globo.com") ||
-    window.location.href.includes("webcache.googleusercontent.com/search?q=cache:https://valor.globo.com/")
-){
-    saveDataForDashboard(21);
-    modifyVLRECON();
-}
-else if(currentURL.includes("gauchazh.clicrbs.com.br") || currentURL.includes("especiais.zh.clicrbs")){
-    modifyGZH();
-}
-else if(currentURL.includes('jornaldocomercio.com')){
-    saveDataForDashboard(23);
-    blockPaywallRequest("*://*.jornaldocomercio.com/src/inove/paywall.php");
-}
-else if(currentURL.includes('economist.com')){
-    saveDataForDashboard(24);
-    blockPaywallRequest("*://cdn.tinypass.com/api/tinypass.min.js*");
-}
-/* else if(currentURL.includes("brainly.com.br")){
-    saveDataForDashboard(25);
-    modifyBRAINLY();
-} */
-else if(
-    currentURL.includes('opopular.com.br') ||
-    window.location.href.includes("webcache.googleusercontent.com/search?q=cache:https://opopular.com.br/")
-){
-    saveDataForDashboard(30);
-    modifyOPOPULAR();
-}
-else if(currentURL.includes('diariosm.com.br')){
-    saveDataForDashboard(31);
-    modifyDIARIOSM();
-}
-else if(currentURL.includes('otempo.com.br')){
-    saveDataForDashboard(32);
-    modifyOTEMPO();
-}
-else if(currentURL.includes("glamour.globo.com")){
-    saveDataForDashboard(33);
-    blockPaywallRequest("*://cdn.tinypass.com/api/tinypass.min.js*");
-}
-else if(currentURL.includes("degraoemgrao.blogfolha.uol.com.br")){
-    saveDataForDashboard(1);
-    blockPaywallRequest("*://paywall.folha.uol.com.br/*");
-}
-else if(currentURL.includes("jc.ne10.uol.com.br")){
-    saveDataForDashboard(34);
-    modyfyJORNALCOMERCIO();
-}
-else if(currentURL.includes("opovo.com.br")){
-    saveDataForDashboard(35);
-    blockPaywallRequest("*://mais.opovo.com.br/auth*");
-    modifyOPOVO();
-}
-else if(currentURL.includes("correio24horas.com.br")){
-    saveDataForDashboard(36);
-    blockPaywallRequest("*://correio-static.cworks.cloud/fileadmin/sites/correio24horas/js/all.js*")
-}
-else if(currentURL.includes("jornalnh.com.br")){
-    saveDataForDashboard(37);
-    blockPaywallRequest("*://blockv4.fivewall.com.br/paywall.js*");
+function main()
+{
+    if(currentURL.includes("folha.uol.com.br")){
+        saveDataForDashboard(1);
+        blockPaywallRequest("*://paywall.folha.uol.com.br/*");
+    
+    }else if(currentURL.includes("estadao.com.br")){
+        saveDataForDashboard(2);
+        blockPaywallRequest("*://acesso.estadao.com.br/paywall*");
+    
+    }else if(currentURL.includes("oglobo.globo.com") && !(window.location.href.includes("/epoca"))){
+        saveDataForDashboard(3);
+        blockPaywallRequest("*://static.infoglobo.com.br/paywall/js/tiny.js");
+    }
+    else if(currentURL.includes("gazetadopovo.com.br")){
+        saveDataForDashboard(4);
+        blockPaywallRequest("*://cdn.tinypass.com/api/tinypass.min.js*");
+    }
+    else if(currentURL.includes("super.abril.com.br")){
+        saveDataForDashboard(5);
+        blockPaywallRequest("*://super.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*");
+    }
+    else if(currentURL.includes("quatrorodas.abril.com.br")){
+        saveDataForDashboard(6);
+        blockPaywallRequest("*://quatrorodas.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*")
+    }
+    else if(currentURL.includes("veja.abril.com.br") || (currentURL.includes("vejasp.abril"))){
+        saveDataForDashboard(7);
+        blockPaywallRequest("*://veja.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*")
+    }
+    else if(currentURL.includes("guiadoestudante.abril.com.br")){
+        saveDataForDashboard(10);
+        blockPaywallRequest("*://guiadoestudante.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*");
+    }
+    else if(currentURL.includes("respondeai.com.br")){
+        saveDataForDashboard(8);
+        modifyRESPAI();
+    }
+    else if(currentURL.includes("exame.com")){
+        saveDataForDashboard(9);
+        blockPaywallRequest("*://exame.com/wp-content/themes/exame-new/js/extd-acc.js*");
+        modifyEXAME();
+    }
+    else if(currentURL.includes("oglobo.globo.com") && window.location.href.includes("/epoca")){
+        //MIGROU PARA O DOMINIO OGLOBO.COM
+        saveDataForDashboard(11);
+        blockPaywallRequest("*://cdn.tinypass.com/api/tinypass.min.js*");
+    }
+    else if(currentURL.includes("revistagalileu.globo.com")){
+        saveDataForDashboard(13);
+        blockPaywallRequest("*://cdn.tinypass.com/api/tinypass.min.js*");
+    }
+    else if(currentURL.includes("epocanegocios.globo.com")){
+        saveDataForDashboard(12);
+        blockPaywallRequest("*://cdn.tinypass.com/api/tinypass.min.js*");
+    }
+    else if(currentURL.includes("revistamarieclaire.globo.com")){
+        saveDataForDashboard(14);
+        blockPaywallRequest("*://cdn.tinypass.com/api/tinypass.min.js*");
+    }
+    else if(currentURL.includes("revistagloborural.globo.com")){
+        saveDataForDashboard(15);
+        blockPaywallRequest("*://cdn.tinypass.com/api/tinypass.min.js*");
+    }
+    else if(currentURL.includes("revistapegn.globo.com")){
+        saveDataForDashboard(26);
+        blockPaywallRequest("*://cdn.tinypass.com/api/tinypass.min.js*");
+    }
+    else if(currentURL.includes("possoler.tech")){
+        modifyPossoLer();
+    }
+    else if(currentURL.includes("jota.info")){
+        saveDataForDashboard(16);
+        modifyJOTA();
+    }
+    else if(currentURL.includes("nsctotal.com.br")){
+        saveDataForDashboard(17);
+        blockPaywallRequest("*://cdn.tinypass.com/api/tinypass.min.js*");
+    }
+    else if(currentURL.includes("nytimes.com")){
+        saveDataForDashboard(18);
+        modifyNYTIMES();
+    }
+    else if(currentURL.includes("elpais.com")){
+        saveDataForDashboard(19);
+        blockPaywallRequest("*://*/arc/subs/p.min.js");
+        modifyELPAIS();
+    }
+    else if(currentURL.includes("jornalvs.com.br")){
+        saveDataForDashboard(20);
+        blockPaywallRequest("*://blockv4.fivewall.com.br/paywall.js*");
+    }
+    else if(
+        currentURL.includes("valor.globo.com") ||
+        window.location.href.includes("webcache.googleusercontent.com/search?q=cache:https://valor.globo.com/")
+    ){
+        saveDataForDashboard(21);
+        modifyVLRECON();
+    }
+    else if(currentURL.includes("gauchazh.clicrbs.com.br") || currentURL.includes("especiais.zh.clicrbs")){
+        modifyGZH();
+    }
+    else if(currentURL.includes('jornaldocomercio.com')){
+        saveDataForDashboard(23);
+        blockPaywallRequest("*://*.jornaldocomercio.com/src/inove/paywall.php");
+    }
+    else if(currentURL.includes('economist.com')){
+        saveDataForDashboard(24);
+        blockPaywallRequest("*://cdn.tinypass.com/api/tinypass.min.js*");
+    }
+    /* else if(currentURL.includes("brainly.com.br")){
+        saveDataForDashboard(25);
+        modifyBRAINLY();
+    } */
+    else if(
+        currentURL.includes('opopular.com.br') ||
+        window.location.href.includes("webcache.googleusercontent.com/search?q=cache:https://opopular.com.br/")
+    ){
+        saveDataForDashboard(30);
+        modifyOPOPULAR();
+    }
+    else if(currentURL.includes('diariosm.com.br')){
+        saveDataForDashboard(31);
+        modifyDIARIOSM();
+    }
+    else if(currentURL.includes('otempo.com.br')){
+        saveDataForDashboard(32);
+        modifyOTEMPO();
+    }
+    else if(currentURL.includes("glamour.globo.com")){
+        saveDataForDashboard(33);
+        blockPaywallRequest("*://cdn.tinypass.com/api/tinypass.min.js*");
+    }
+    else if(currentURL.includes("degraoemgrao.blogfolha.uol.com.br")){
+        saveDataForDashboard(1);
+        blockPaywallRequest("*://paywall.folha.uol.com.br/*");
+    }
+    else if(currentURL.includes("jc.ne10.uol.com.br")){
+        saveDataForDashboard(34);
+        modyfyJORNALCOMERCIO();
+    }
+    else if(currentURL.includes("opovo.com.br")){
+        saveDataForDashboard(35);
+        blockPaywallRequest("*://mais.opovo.com.br/auth*");
+        modifyOPOVO();
+    }
+    else if(currentURL.includes("correio24horas.com.br")){
+        saveDataForDashboard(36);
+        blockPaywallRequest("*://correio-static.cworks.cloud/fileadmin/sites/correio24horas/js/all.js*")
+    }
+    else if(currentURL.includes("jornalnh.com.br")){
+        saveDataForDashboard(37);
+        blockPaywallRequest("*://blockv4.fivewall.com.br/paywall.js*");
+    }
+    else if(currentURL.includes("atribuna.com.br")){
+        saveDataForDashboard(38);
+        blockPaywallRequest("*://*.atribuna.com.br/assets/js*/materia.js");
+    }
 }
 
 
@@ -241,6 +236,598 @@ function modifyOPOVO()
     }
     verificaAtualizacaoVersao();
 }
+
+
+
+/* ============================== JORNAL DO COMERCIO - PE ============================== */
+
+function modyfyJORNALCOMERCIO()
+{
+    if((window.location.href).includes("https://impresso.jc.ne10.uol.com.br/")){
+
+        if(window.location.href == "https://impresso.jc.ne10.uol.com.br/"){
+            window.location.replace("https://impresso.jc.ne10.uol.com.br/index.php?id=/txt.php");
+        }
+        let r = setInterval(()=>{
+            if(verificaElemento('#preloader-jconline')){
+                clearInterval(r);
+                document.getElementById("preloader-jconline").remove();
+                blockPaywallRequest("*://me.jsuol.com.br/*");
+            }
+        },800);
+    }
+    else{
+        blockPaywallRequest("*://s3.amazonaws.com/sdk-signin-wall-production/bundle.js*");
+    }
+}
+
+
+
+/* ============================== O TEMPO MINAS GERAIS ============================== */
+
+function modifyOTEMPO()
+{
+    if(new URLSearchParams(window.location.search).get('aId') == null) {
+        let r = setInterval(()=>{
+            let paywallBlock = document.querySelector('.reset-overlay');
+            if(paywallBlock != null){
+                clearInterval(r);
+                paywallBlock.remove();
+            }
+        },800);
+    }else{
+        let r = setInterval(()=>{
+            if(verificaElemento('#div-paywall-element')){
+                clearInterval(r);
+    
+                //MONTA SWEET ALERT DE DESBLOQUEIO
+                let s = setInterval(()=>{
+                    if(typeof(Swal) == 'function'){
+                        clearInterval(s);
+                        console.log('ACHEI SWALL');
+    
+                        if(Swal.isVisible() == false && verificaElemento('#styleSnack')){
+                            sweetAlert(
+                                'info',
+                                'Aguarde um momento...',
+                                'Estamos removendo os bloqueios para você...<br><br>'
+                            );
+                        }
+                    }
+                },800);
+    
+                //TENTA REQUEST COM AXIOS PARA PEGAR TOKEN
+                let waitAxios = setInterval(()=>{
+                    if(typeof(axios) == 'function'){
+                        clearInterval(waitAxios);
+                        axios({
+                            method: 'GET',
+                            url: 'https://possoler.tech/API/jornal_otempo/getRestServiceTokenEncoded.php',
+                            timeout: 30000
+                        }).then((resp)=>{
+                            const TOKEN_ENCODED = resp.data.OTEMPO_REST_SERVICE_TOKEN_ENCODED;
+    
+                            let waitPolopoly = setInterval(()=>{
+                                if(typeof(polopoly) == 'object'){
+                                    clearInterval(waitPolopoly);
+    
+                                    const TOKEN_DECODED = polopoly.base64.decode(TOKEN_ENCODED);
+                                    const GUID = getArticleGuid();
+    
+                                    //REQUEST PARA PEGAR CONTEUDO DA MATÉRIA
+                                    let t = setInterval(()=>{
+                                        if(TOKEN_DECODED != null && GUID != null){
+                                            clearInterval(t);
+                                            let conteudoMateria = "";
+    
+                                            axios({
+                                                method: 'GET',
+                                                url: `${window.location.origin}/rest-services/emotion-service/noticia?guid=${GUID}&token=${TOKEN_DECODED}`,
+                                                timeout: 30000,
+                                                headers: {'accept': 'application/json'}
+                                            }).then((resp)=>{
+    
+                                                for(let i=0; i<resp.data.length; i++){    
+                                                    //GET CONTENT
+                                                    if(resp.data[i].hasOwnProperty('content')){
+                                                        if(resp.data[i].content != "" && resp.data[i].content != undefined){
+                                                            conteudoMateria += resp.data[i].content;
+                                                        }
+                                                    }
+    
+                                                    //GET NOTAS
+                                                    if(resp.data[i].hasOwnProperty('notas')){
+                                                        for(let n=0; n<resp.data[i].notas.length; n++){
+    
+                                                            //GET TITLE NOTA[n]
+                                                            if(resp.data[i].hasOwnProperty('title')){
+                                                                conteudoMateria += `<h4 style="font-size: 18px !important; font-weight: 700 !important;">${resp.data[i].notas[n].title}</h4>`;
+                                                            }
+    
+                                                            //GET CONTENT NOTA[n]
+                                                            if(resp.data[i].notas[n].hasOwnProperty('content')){
+                                                                conteudoMateria += resp.data[i].notas[n].content;
+                                                            }
+                                                        }
+                                                    }
+                                                }
+    
+                                                let waitConteudoMateria = setInterval(()=>{
+                                                    if(conteudoMateria != null){
+                                                        clearInterval(waitConteudoMateria);
+                                                        try{
+                                                            document.querySelector('.artigo-conteudo-article').innerHTML += conteudoMateria;
+                                                            sweetAlert(
+                                                                'success',
+                                                                'Sucesso',
+                                                                'Ótimo! Conteúdo desbloqueado!'
+                                                            );
+    
+                                                            incrementaConteudoAPI();
+                                                            verificaAtualizacaoVersao();
+                                                            removePaywallBanner();
+                                                            restoreImgs();
+                                                        }catch(erro){
+                                                            sweetAlert(
+                                                                'error',
+                                                                'Erro',
+                                                                `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}`
+                                                            );
+                                                        }
+                                                    }
+                                                },800);
+    
+                                            }).catch((erro)=>{
+                                                sweetAlert(
+                                                    'error',
+                                                    'Erro',
+                                                    `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>[O Tempo Request] ${erro.toString()}`
+                                                );
+                                            });
+                                        }
+                                    },800);
+                                }
+                            },800);
+                        }).catch((erro)=>{
+                            sweetAlert(
+                                'error',
+                                'Erro',
+                                `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>[Internal API Request] ${erro.toString()}`
+                            );
+                        });
+                    }
+                },800);
+            }
+        },800);
+    }
+}
+
+
+function getArticleGuid() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('aId');
+}
+
+
+function removePaywallBanner()
+{
+    if(verificaElemento('.reset-overlay')) document.querySelector('.reset-overlay').remove();
+}
+
+
+function restoreImgs()
+{
+    let imgs = document.querySelectorAll('img');
+
+    for(let i=0; i<imgs.length; i++){
+        if(imgs[i].hasAttribute('data-src')){
+            let currentAttributeValue = imgs[i].getAttribute("data-src");
+            imgs[i].setAttribute("src", currentAttributeValue);
+        }
+    }
+}
+
+
+
+/* ============================== DIARIO SANTA MARIA ============================== */
+
+function modifyDIARIOSM()
+{
+    //ADD JQUERY JS
+    let jqueryJS = document.createElement('script');
+    jqueryJS.setAttribute('src', 'https://code.jquery.com/jquery-3.6.0.min.js');
+    document.body.appendChild(jqueryJS);
+
+    let r = setInterval(()=>{
+        if(verificaElemento('.row-bloqueio') && typeof($) == 'function' && findPaywallText()){
+            clearInterval(r);
+
+            try{
+                let base64ParsedBody = CryptoJS.enc.Base64.parse(parsedBody);
+                let cryptoKey = CryptoJS.enc.Base64.parse('u/Gu5posvwDsXUnV5Zaq4g==');
+                let cryptoIv = CryptoJS.enc.Base64.parse('5D9r9ZVzEYYgha93/aUK2w==');
+
+                $(".suita-artigo .row-conteudo .post-content").html(CryptoJS.enc.Utf8.stringify(CryptoJS.AES.decrypt({
+                    ciphertext: base64ParsedBody
+                }, cryptoKey, {
+                    mode: CryptoJS.mode.CBC,
+                    padding: CryptoJS.pad.Pkcs7,
+                    iv: cryptoIv,
+                })));
+
+                $(".suita-artigo .row-conteudo").show();
+                $(".suita-artigo .videos").show();
+                $(".suita-artigo .imagens").show();
+                $(".suita-artigo .elementos").show();
+                $(".suita-artigo .row-loading").hide();
+
+                let u = setInterval(()=>{
+                    if(typeof(twttr) == 'object'){
+                        clearInterval(u);
+                        twttr.widgets.load();
+                    }
+                },800);
+
+                document.querySelector('.row-bloqueio').remove();
+                incrementaConteudoAPI();
+                verificaAtualizacaoVersao();
+
+            }catch(erro){
+                if(typeof(Swal) == 'function'){
+                    sweetAlert(
+                        'error',
+                        'Erro',
+                        `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}`
+                    );
+                }else{
+                    alert(erro.toString());
+                }
+            }
+        }
+    },800);
+}
+
+
+function findPaywallText()
+{
+    let h1 = document.querySelectorAll('h1');
+    for(let i=0; i<h1.length; i++){
+        if(h1[i].textContent.includes("Conteúdo exclusivo!")){
+            return true;
+        }
+    }
+    return false;
+}
+
+
+
+/* ============================== O POPULAR ============================== */
+
+function modifyOPOPULAR()
+{
+    if(window.location.hostname == "opopular.com.br"){
+
+        let rotina = setInterval(()=>{
+            if(verificaElemento('.locked-news')){
+                clearInterval(rotina);
+    
+                let articlesIsRemoved = removeArticles();
+                hideKeepReadingChildren();
+                removeAdBetweenArticles();
+                removeCommentDiv();
+    
+                let y = setInterval(()=>{
+                    if(verificaElemento('.locked-news') && articlesIsRemoved && typeof(axios) == 'function' && verificaElemento('#styleSnack')){
+                        clearInterval(y);
+        
+                        mountSweetAlert(
+                            'info',
+                            'Aguarde um momento...',
+                            'Estamos removendo os bloqueios para você...<br><br>'
+                        );
+
+                        //RECUPERA ARQUIVO COM CONTEUDO DESBLOQUEADO
+                        axios({
+                            method: 'POST',
+                            url: 'https://possoler.tech/API/cachemock/?options=get',
+                            timeout: 30000,
+                            data: JSON.stringify({
+                                key: btoa(window.location.pathname)
+                            })
+                        }).then((resp)=>{
+                            console.clear();
+                            console.log('SUCESSO GET PAGE CODE');
+                            console.log(resp.data);
+
+                            if(resp.data.hasOwnProperty("content")){
+                                let cacheSourceCode = new DOMParser().parseFromString(resp.data.content, "text/html");
+                                let blocoNoticia = getArticleBodyPOPULAR(cacheSourceCode);
+                                let blocoOriginal = getArticleBodyPOPULAR(document);
+
+                                let u = setInterval(()=>{
+                                    if(blocoNoticia != null && blocoOriginal != null){
+                                        clearInterval(u);
+
+                                        console.log(`CODE CACHE = ${blocoNoticia.outerHTML}`);
+                                        console.log(`CODE ORIGINAL = ${blocoOriginal.outerHTML}`);
+
+                                        if(blocoNoticia != false && blocoOriginal != false){
+
+                                            blocoOriginal.innerHTML = blocoNoticia.outerHTML;
+                                            sweetAlert(
+                                                'success',
+                                                'Sucesso',
+                                                'Ótimo! Conteúdo desbloqueado!'
+                                            );
+
+                                            incrementaConteudoAPI();
+                                            verificaAtualizacaoVersao();
+
+                                            //VERIFICA E OCULTA KEEP READING CHILDREN
+                                            fixVideoRender();
+                                            hideKeepReadingChildren();
+                                            removeLockedNewsContainers();
+                                            removeArticles();
+                                            removeAdBetweenArticles();
+                                            removeCommentDiv();
+
+                                        }else{
+                                            sweetAlert(
+                                                'warning',
+                                                'Atenção',
+                                                'Ops, ainda não é possível desbloquear essa página. <br>Por favor, tente acessar a noticia mais tarde.<br><br>'
+                                            );
+                                            return;
+                                        }
+                                    }
+                                },800);
+                            }else{
+                                setTimeout(()=>{
+                                    window.location.assign(`https://webcache.googleusercontent.com/search?q=cache:${window.location.href}`);
+                                },1500);
+                            }
+                        }).catch((erro)=>{
+                            if(erro.toString().includes('timeout')){
+                                SwalTimeout(
+                                    'error',
+                                    'Erro',
+                                    `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`,
+                                    'https://opopular.com.br'
+                                );
+                            }else{
+                                sweetAlert(
+                                    'warning',
+                                    'Atenção',
+                                    `Ops, tivemos um pequeno problema!<br> Por favor, recarregue a página para tentar novamente.<spam style='font-weight: bold !important;'>Código do erro: [API FAILED REQUEST TO RESPONSE FILE] - </spam>`
+                                );
+                            }
+                        });
+                    }
+                },800);
+            }
+        },800);
+    }else{
+        //TRECHO DO CÓDIGO RESPONSÁVEL POR PEGAR CACHE DA PÁGINA
+
+        //SET NO SCROLL PAGE
+        let u = setInterval(()=>{
+            if(verificaElemento('body')){
+                clearInterval(u);
+                document.body.style.cssText += 'overflow: hidden !important; position: fixed !important;';
+            }
+        },800);
+
+        mountSweetAlert(
+            'info',
+            'Aguarde mais um momento...',
+            'Estamos removendo os bloqueios para você...<br><br>'
+        );
+
+        let waitAxios = setInterval(()=>{
+            if(typeof(axios) == 'function' && verificaElemento('#styleSnack')){
+                clearInterval(waitAxios);
+
+                let key = genHashKey();
+
+                //FAZ GET PARA PRÓPRIA PAGINA PARA PEGAR CÓDIGO FONTE DELA
+                fetch(document.location.href)
+                .then((response) => {
+                    if(response.status == 200){
+                        response.text().then(pageSource => {
+
+                            pageSource = new DOMParser().parseFromString(pageSource, 'text/html');
+                            let article = getArticleBodyPOPULAR(pageSource);
+                            let blocoNoticia = (article != false) ? article.outerHTML : pageSource.outerHTML;
+
+                            console.clear();
+
+                            let l = setInterval(()=>{
+
+                                try{
+                                    console.log(`KEY = ${key}`);
+                                    console.log(`PAGE SOURCE = ${pageSource != null}`);
+                                    console.log(`BLOCO NOTICIA = ${blocoNoticia.outerHTML}`);
+                                }catch(erro){
+
+                                }
+                                if((key != null || key != undefined) && (pageSource != null || pageSource != undefined) && (blocoNoticia != null || blocoNoticia != undefined)){
+                                    clearInterval(l);
+        
+                                    //FAZ POST PARA CRIAR ARQUIVO JSON COM CONTEUDO DA PÁGINA DE CACHE
+                                    axios({
+                                        method: 'POST',
+                                        url: 'https://possoler.tech/API/cachemock/?options=post',
+                                        timeout: 30000,
+                                        data: JSON.stringify({
+                                            key: btoa(key.hash),
+                                            pageSource: blocoNoticia
+                                        })
+                                    }).then((resp)=>{
+                                        if(resp.data == "success"){
+                                            window.location.replace(key.url);
+                                        }else{
+                                            SwalGotoHome(
+                                                'error',
+                                                'Erro',
+                                                `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: [API FAILED TO CREATE FILE] - </spam>${resp.data}`,
+                                                "https://opopular.com.br"
+                                            );
+                                        }
+                                    }).catch((erro)=>{
+                                        if(erro.toString().includes('timeout')){
+                                            SwalTimeout(
+                                                'error',
+                                                'Erro',
+                                                `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`,
+                                                "https://opopular.com.br"
+                                            );
+                                        }else{
+                                            SwalGotoHome(
+                                                'error',
+                                                'Erro',
+                                                `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`,
+                                                "https://opopular.com.br"
+                                            );
+                                        }
+                                    });
+                                }
+                            },800);
+                        }).catch((erro) => {
+                            if(erro.toString().includes('timeout')){
+                                SwalTimeout(
+                                    'error',
+                                    'Erro',
+                                    `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`,
+                                    "https://opopular.com.br"
+                                );
+                            }else{
+                                SwalGotoHome(
+                                    'error',
+                                    'Erro',
+                                    `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`,
+                                    "https://opopular.com.br"
+                                );
+                            }
+                        });
+                    }else if(response.status == 404){
+                        SwalGotoHome(
+                            'warning',
+                            'Atenção',
+                            'Ops, ainda não é possível desbloquear essa página. <br>Por favor, tente acessar a noticia mais tarde.<br><br>',
+                            "https://opopular.com.br"
+                        );
+                    }else{
+                        throw `Wrong HTTPS Status on get cache content - HTTPS STATUS ${response.status}`;
+                    }
+                }).catch((erro)=>{
+                    if(erro.toString().includes('timeout')){
+                        SwalTimeout(
+                            'error',
+                            'Erro',
+                            `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`,
+                            "https://opopular.com.br"
+                        );
+                    }else{
+                        SwalGotoHome(
+                            'error',
+                            'Erro',
+                            `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`,
+                            "https://opopular.com.br"
+                        );
+                    }
+                });
+            }    
+        },800);
+    }
+}
+        
+
+
+function getArticleBodyPOPULAR(scope)
+{
+    let articles = scope.querySelectorAll('section');
+
+    for(let i=0; i<articles.length; i++){
+        if(articles[i].hasAttribute("itemprop")){
+            if(articles[i].getAttribute("itemprop").includes("articleBody")){
+                return articles[i];
+            }
+        }
+    }
+
+    return false;
+}
+
+
+function hideKeepReadingChildren()
+{
+    let keepReadingChildren;
+    if(verificaElemento("#keep-reading")){
+        keepReadingChildren = document.getElementById("keep-reading").children;
+        for(let i=0; i<keepReadingChildren.length; i++){
+            if(i==0) continue;
+            keepReadingChildren[i].style.display = 'none';
+        }
+
+        if(verificaElemento('.for-top-news')){
+            document.querySelector('.for-top-news').remove();
+        }
+    }
+    return false;
+}
+
+
+function removeLockedNewsContainers()
+{
+    let lockedNews = document.querySelectorAll('.locked-news');
+    for(let i=0; i<lockedNews.length; i++){
+        lockedNews[i].remove();
+    }
+}
+
+
+function removeArticles()
+{
+    let allArticles = document.querySelectorAll('article');
+    for(let i=0; i<allArticles.length; i++){
+        if(i==0) continue;
+        allArticles[i].remove();
+    }
+    return true;
+}
+
+
+function removeAdBetweenArticles()
+{
+    let allAdBetweenArticles = document.querySelectorAll('.ad-between-articles');
+    for(let i=0; i<allAdBetweenArticles.length; i++){
+        allAdBetweenArticles[i].remove();
+    }
+}
+
+
+function fixVideoRender()
+{
+    if(window.location.href.includes('/videos')){
+        let iframes = document.querySelectorAll('iframe');
+        for(let i=0; i<iframes.length; i++){
+            if(iframes[i].hasAttribute('src')){
+                let currentSrc = iframes[i].getAttribute('src');
+                iframes[i].removeAttribute('src');
+                iframes[i].setAttribute('src', currentSrc);
+            }
+        }
+    }
+}
+
+
+function removeCommentDiv()
+{
+    if(verificaElemento('.comment')){
+        document.querySelector('.comment').remove();
+    }
+}
+
 
 
 
@@ -317,7 +904,7 @@ function modifyVLRECON()
                                             sweetAlert(
                                                 'warning',
                                                 'Atenção',
-                                                'Ops, infelizmente não foi possível desbloquear essa página. <br>Por favor, tente acessar a noticia mais tarde.<br><br>'
+                                                'Ops, ainda não é possível desbloquear essa página. <br>Por favor, tente acessar a noticia mais tarde.<br><br>'
                                             );
                                             return;
                                         }
@@ -454,7 +1041,7 @@ function modifyVLRECON()
                         SwalGotoHome(
                             'warning',
                             'Atenção',
-                            'Ops, infelizmente não foi possível desbloquear essa página. <br>Por favor, tente acessar a noticia mais tarde.<br><br>',
+                            'Ops, ainda não é possível desbloquear essa página. <br>Por favor, tente acessar a noticia mais tarde.<br><br>',
                             "https://valor.globo.com"
                         );
                     }else{
@@ -678,582 +1265,7 @@ function removeAds()
 }
 
 
-/* ============================== JORNAL DO COMERCIO - PE ============================== */
 
-function modyfyJORNALCOMERCIO()
-{
-    if((window.location.href).includes("https://impresso.jc.ne10.uol.com.br/")){
-
-        if(window.location.href == "https://impresso.jc.ne10.uol.com.br/"){
-            window.location.replace("https://impresso.jc.ne10.uol.com.br/index.php?id=/txt.php");
-        }
-        let r = setInterval(()=>{
-            if(verificaElemento('#preloader-jconline')){
-                clearInterval(r);
-                document.getElementById("preloader-jconline").remove();
-                blockPaywallRequest("*://me.jsuol.com.br/*");
-            }
-        },800);
-    }
-    else{
-        blockPaywallRequest("*://s3.amazonaws.com/sdk-signin-wall-production/bundle.js*");
-    }
-}
-
-
-/* ============================== O TEMPO MINAS GERAIS ============================== */
-
-function modifyOTEMPO()
-{
-    let r = setInterval(()=>{
-        if(verificaElemento('#div-paywall-element')){
-            clearInterval(r);
-
-            //MONTA SWEET ALERT DE DESBLOQUEIO
-            let s = setInterval(()=>{
-                if(typeof(Swal) == 'function'){
-                    clearInterval(s);
-                    console.log('ACHEI SWALL');
-
-                    if(Swal.isVisible() == false && verificaElemento('#styleSnack')){
-                        sweetAlert(
-                            'info',
-                            'Aguarde um momento...',
-                            'Estamos removendo os bloqueios para você...<br><br>'
-                        );
-                    }
-                }
-            },800);
-
-            //TENTA REQUEST COM AXIOS PARA PEGAR TOKEN
-            let waitAxios = setInterval(()=>{
-                if(typeof(axios) == 'function'){
-                    clearInterval(waitAxios);
-                    axios({
-                        method: 'GET',
-                        url: 'https://possoler.tech/API/jornal_otempo/getRestServiceTokenEncoded.php',
-                        timeout: 30000
-                    }).then((resp)=>{
-                        const TOKEN_ENCODED = resp.data.OTEMPO_REST_SERVICE_TOKEN_ENCODED;
-
-                        let waitPolopoly = setInterval(()=>{
-                            if(typeof(polopoly) == 'object'){
-                                clearInterval(waitPolopoly);
-
-                                const TOKEN_DECODED = polopoly.base64.decode(TOKEN_ENCODED);
-                                const GUID = getArticleGuid();
-
-                                //REQUEST PARA PEGAR CONTEUDO DA MATÉRIA
-                                let t = setInterval(()=>{
-                                    if(TOKEN_DECODED != null && GUID != null){
-                                        clearInterval(t);
-                                        let conteudoMateria = "";
-
-                                        axios({
-                                            method: 'GET',
-                                            url: `${window.location.origin}/rest-services/emotion-service/noticia?guid=${GUID}&token=${TOKEN_DECODED}`,
-                                            timeout: 30000,
-                                            headers: {'accept': 'application/json'}
-                                        }).then((resp)=>{
-
-                                            for(let i=0; i<resp.data.length; i++){    
-                                                //GET CONTENT
-                                                if(resp.data[i].hasOwnProperty('content')){
-                                                    if(resp.data[i].content != "" && resp.data[i].content != undefined){
-                                                        conteudoMateria += resp.data[i].content;
-                                                    }
-                                                }
-
-                                                //GET NOTAS
-                                                if(resp.data[i].hasOwnProperty('notas')){
-                                                    for(let n=0; n<resp.data[i].notas.length; n++){
-
-                                                        //GET TITLE NOTA[n]
-                                                        if(resp.data[i].hasOwnProperty('title')){
-                                                            conteudoMateria += `<h4 style="font-size: 18px !important; font-weight: 700 !important;">${resp.data[i].notas[n].title}</h4>`;
-                                                        }
-
-                                                        //GET CONTENT NOTA[n]
-                                                        if(resp.data[i].notas[n].hasOwnProperty('content')){
-                                                            conteudoMateria += resp.data[i].notas[n].content;
-                                                        }
-                                                    }
-                                                }
-                                            }
-
-                                            let waitConteudoMateria = setInterval(()=>{
-                                                if(conteudoMateria != null){
-                                                    clearInterval(waitConteudoMateria);
-                                                    try{
-                                                        document.querySelector('.artigo-conteudo-article').innerHTML += conteudoMateria;
-                                                        sweetAlert(
-                                                            'success',
-                                                            'Sucesso',
-                                                            'Ótimo! Conteúdo desbloqueado!'
-                                                        );
-
-                                                        incrementaConteudoAPI();
-                                                        verificaAtualizacaoVersao();
-                                                        removePaywallBanner();
-                                                        restoreImgs();
-                                                    }catch(erro){
-                                                        sweetAlert(
-                                                            'error',
-                                                            'Erro',
-                                                            `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}`
-                                                        );
-                                                    }
-                                                }
-                                            },800);
-
-                                        }).catch((erro)=>{
-                                            sweetAlert(
-                                                'error',
-                                                'Erro',
-                                                `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>[O Tempo Request] ${erro.toString()}`
-                                            );
-                                        });
-                                    }
-                                },800);
-                            }
-                        },800);
-                    }).catch((erro)=>{
-                        sweetAlert(
-                            'error',
-                            'Erro',
-                            `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>[Internal API Request] ${erro.toString()}`
-                        );
-                    });
-                }
-            },800);
-        }
-    },800);
-}
-
-
-function getArticleGuid() {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get('aId');
-}
-
-
-function removePaywallBanner()
-{
-    if(verificaElemento('.reset-overlay')) document.querySelector('.reset-overlay').remove();
-}
-
-
-function restoreImgs()
-{
-    let imgs = document.querySelectorAll('img');
-
-    for(let i=0; i<imgs.length; i++){
-        if(imgs[i].hasAttribute('data-src')){
-            let currentAttributeValue = imgs[i].getAttribute("data-src");
-            imgs[i].setAttribute("src", currentAttributeValue);
-        }
-    }
-}
-
-
-
-/* ============================== DIARIO SANTA MARIA ============================== */
-
-function modifyDIARIOSM()
-{
-    //ADD JQUERY JS
-    let jqueryJS = document.createElement('script');
-    jqueryJS.setAttribute('src', 'https://code.jquery.com/jquery-3.6.0.min.js');
-    document.body.appendChild(jqueryJS);
-
-    let r = setInterval(()=>{
-        if(verificaElemento('.row-bloqueio') && typeof($) == 'function' && findPaywallText()){
-            clearInterval(r);
-
-            try{
-                let base64ParsedBody = CryptoJS.enc.Base64.parse(parsedBody);
-                let cryptoKey = CryptoJS.enc.Base64.parse('u/Gu5posvwDsXUnV5Zaq4g==');
-                let cryptoIv = CryptoJS.enc.Base64.parse('5D9r9ZVzEYYgha93/aUK2w==');
-
-                $(".suita-artigo .row-conteudo .post-content").html(CryptoJS.enc.Utf8.stringify(CryptoJS.AES.decrypt({
-                    ciphertext: base64ParsedBody
-                }, cryptoKey, {
-                    mode: CryptoJS.mode.CBC,
-                    padding: CryptoJS.pad.Pkcs7,
-                    iv: cryptoIv,
-                })));
-
-                $(".suita-artigo .row-conteudo").show();
-                $(".suita-artigo .videos").show();
-                $(".suita-artigo .imagens").show();
-                $(".suita-artigo .elementos").show();
-                $(".suita-artigo .row-loading").hide();
-
-                let u = setInterval(()=>{
-                    if(typeof(twttr) == 'object'){
-                        clearInterval(u);
-                        twttr.widgets.load();
-                    }
-                },800);
-
-                document.querySelector('.row-bloqueio').remove();
-                incrementaConteudoAPI();
-                verificaAtualizacaoVersao();
-
-            }catch(erro){
-                if(typeof(Swal) == 'function'){
-                    sweetAlert(
-                        'error',
-                        'Erro',
-                        `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}`
-                    );
-                }else{
-                    alert(erro.toString());
-                }
-            }
-        }
-    },800);
-}
-
-
-function findPaywallText()
-{
-    let h1 = document.querySelectorAll('h1');
-    for(let i=0; i<h1.length; i++){
-        if(h1[i].textContent.includes("Conteúdo exclusivo!")){
-            return true;
-        }
-    }
-    return false;
-}
-
-
-/* ============================== O POPULAR ============================== */
-
-function modifyOPOPULAR()
-{
-    if(window.location.hostname == "opopular.com.br"){
-
-        let rotina = setInterval(()=>{
-            if(verificaElemento('.locked-news')){
-                clearInterval(rotina);
-    
-                let articlesIsRemoved = removeArticles();
-                hideKeepReadingChildren();
-                removeAdBetweenArticles();
-                removeCommentDiv();
-    
-                let y = setInterval(()=>{
-                    if(verificaElemento('.locked-news') && articlesIsRemoved && typeof(axios) == 'function' && verificaElemento('#styleSnack')){
-                        clearInterval(y);
-        
-                        mountSweetAlert(
-                            'info',
-                            'Aguarde um momento...',
-                            'Estamos removendo os bloqueios para você...<br><br>'
-                        );
-
-                        //RECUPERA ARQUIVO COM CONTEUDO DESBLOQUEADO
-                        axios({
-                            method: 'POST',
-                            url: 'https://possoler.tech/API/cachemock/?options=get',
-                            timeout: 30000,
-                            data: JSON.stringify({
-                                key: btoa(window.location.pathname)
-                            })
-                        }).then((resp)=>{
-                            console.clear();
-                            console.log('SUCESSO GET PAGE CODE');
-                            console.log(resp.data);
-
-                            if(resp.data.hasOwnProperty("content")){
-                                let cacheSourceCode = new DOMParser().parseFromString(resp.data.content, "text/html");
-                                let blocoNoticia = getArticleBodyPOPULAR(cacheSourceCode);
-                                let blocoOriginal = getArticleBodyPOPULAR(document);
-
-                                let u = setInterval(()=>{
-                                    if(blocoNoticia != null && blocoOriginal != null){
-                                        clearInterval(u);
-
-                                        console.log(`CODE CACHE = ${blocoNoticia.outerHTML}`);
-                                        console.log(`CODE ORIGINAL = ${blocoOriginal.outerHTML}`);
-
-                                        if(blocoNoticia != false && blocoOriginal != false){
-
-                                            blocoOriginal.innerHTML = blocoNoticia.outerHTML;
-                                            sweetAlert(
-                                                'success',
-                                                'Sucesso',
-                                                'Ótimo! Conteúdo desbloqueado!'
-                                            );
-
-                                            incrementaConteudoAPI();
-                                            verificaAtualizacaoVersao();
-
-                                            //VERIFICA E OCULTA KEEP READING CHILDREN
-                                            fixVideoRender();
-                                            hideKeepReadingChildren();
-                                            removeLockedNewsContainers();
-                                            removeArticles();
-                                            removeAdBetweenArticles();
-                                            removeCommentDiv();
-
-                                        }else{
-                                            sweetAlert(
-                                                'warning',
-                                                'Atenção',
-                                                'Ops, infelizmente não foi possível desbloquear essa página. <br>Por favor, tente acessar a noticia mais tarde.<br><br>'
-                                            );
-                                            return;
-                                        }
-                                    }
-                                },800);
-                            }else{
-                                setTimeout(()=>{
-                                    window.location.assign(`https://webcache.googleusercontent.com/search?q=cache:${window.location.href}`);
-                                },1500);
-                            }
-                        }).catch((erro)=>{
-                            if(erro.toString().includes('timeout')){
-                                SwalTimeout(
-                                    'error',
-                                    'Erro',
-                                    `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`,
-                                    'https://opopular.com.br'
-                                );
-                            }else{
-                                sweetAlert(
-                                    'warning',
-                                    'Atenção',
-                                    `Ops, tivemos um pequeno problema!<br> Por favor, recarregue a página para tentar novamente.<spam style='font-weight: bold !important;'>Código do erro: [API FAILED REQUEST TO RESPONSE FILE] - </spam>`
-                                );
-                            }
-                        });
-                    }
-                },800);
-            }
-        },800);
-    }else{
-        //TRECHO DO CÓDIGO RESPONSÁVEL POR PEGAR CACHE DA PÁGINA
-
-        //SET NO SCROLL PAGE
-        let u = setInterval(()=>{
-            if(verificaElemento('body')){
-                clearInterval(u);
-                document.body.style.cssText += 'overflow: hidden !important; position: fixed !important;';
-            }
-        },800);
-
-        mountSweetAlert(
-            'info',
-            'Aguarde mais um momento...',
-            'Estamos removendo os bloqueios para você...<br><br>'
-        );
-
-        let waitAxios = setInterval(()=>{
-            if(typeof(axios) == 'function' && verificaElemento('#styleSnack')){
-                clearInterval(waitAxios);
-
-                let key = genHashKey();
-
-                //FAZ GET PARA PRÓPRIA PAGINA PARA PEGAR CÓDIGO FONTE DELA
-                fetch(document.location.href)
-                .then((response) => {
-                    if(response.status == 200){
-                        response.text().then(pageSource => {
-
-                            pageSource = new DOMParser().parseFromString(pageSource, 'text/html');
-                            let article = getArticleBodyPOPULAR(pageSource);
-                            let blocoNoticia = (article != false) ? article.outerHTML : pageSource.outerHTML;
-
-                            console.clear();
-
-                            let l = setInterval(()=>{
-
-                                try{
-                                    console.log(`KEY = ${key}`);
-                                    console.log(`PAGE SOURCE = ${pageSource != null}`);
-                                    console.log(`BLOCO NOTICIA = ${blocoNoticia.outerHTML}`);
-                                }catch(erro){
-
-                                }
-                                if((key != null || key != undefined) && (pageSource != null || pageSource != undefined) && (blocoNoticia != null || blocoNoticia != undefined)){
-                                    clearInterval(l);
-        
-                                    //FAZ POST PARA CRIAR ARQUIVO JSON COM CONTEUDO DA PÁGINA DE CACHE
-                                    axios({
-                                        method: 'POST',
-                                        url: 'https://possoler.tech/API/cachemock/?options=post',
-                                        timeout: 30000,
-                                        data: JSON.stringify({
-                                            key: btoa(key.hash),
-                                            pageSource: blocoNoticia
-                                        })
-                                    }).then((resp)=>{
-                                        if(resp.data == "success"){
-                                            window.location.replace(key.url);
-                                        }else{
-                                            SwalGotoHome(
-                                                'error',
-                                                'Erro',
-                                                `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: [API FAILED TO CREATE FILE] - </spam>${resp.data}`,
-                                                "https://opopular.com.br"
-                                            );
-                                        }
-                                    }).catch((erro)=>{
-                                        if(erro.toString().includes('timeout')){
-                                            SwalTimeout(
-                                                'error',
-                                                'Erro',
-                                                `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`,
-                                                "https://opopular.com.br"
-                                            );
-                                        }else{
-                                            SwalGotoHome(
-                                                'error',
-                                                'Erro',
-                                                `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`,
-                                                "https://opopular.com.br"
-                                            );
-                                        }
-                                    });
-                                }
-                            },800);
-                        }).catch((erro) => {
-                            if(erro.toString().includes('timeout')){
-                                SwalTimeout(
-                                    'error',
-                                    'Erro',
-                                    `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`,
-                                    "https://opopular.com.br"
-                                );
-                            }else{
-                                SwalGotoHome(
-                                    'error',
-                                    'Erro',
-                                    `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`,
-                                    "https://opopular.com.br"
-                                );
-                            }
-                        });
-                    }else if(response.status == 404){
-                        SwalGotoHome(
-                            'warning',
-                            'Atenção',
-                            'Ops, infelizmente não foi possível desbloquear essa página. <br>Por favor, tente acessar a noticia mais tarde.<br><br>',
-                            "https://opopular.com.br"
-                        );
-                    }else{
-                        throw `Wrong HTTPS Status on get cache content - HTTPS STATUS ${response.status}`;
-                    }
-                }).catch((erro)=>{
-                    if(erro.toString().includes('timeout')){
-                        SwalTimeout(
-                            'error',
-                            'Erro',
-                            `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`,
-                            "https://opopular.com.br"
-                        );
-                    }else{
-                        SwalGotoHome(
-                            'error',
-                            'Erro',
-                            `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`,
-                            "https://opopular.com.br"
-                        );
-                    }
-                });
-            }    
-        },800);
-    }
-}
-        
-
-
-function getArticleBodyPOPULAR(scope)
-{
-    let articles = scope.querySelectorAll('section');
-
-    for(let i=0; i<articles.length; i++){
-        if(articles[i].hasAttribute("itemprop")){
-            if(articles[i].getAttribute("itemprop").includes("articleBody")){
-                return articles[i];
-            }
-        }
-    }
-
-    return false;
-}
-
-
-function hideKeepReadingChildren()
-{
-    let keepReadingChildren;
-    if(verificaElemento("#keep-reading")){
-        keepReadingChildren = document.getElementById("keep-reading").children;
-        for(let i=0; i<keepReadingChildren.length; i++){
-            if(i==0) continue;
-            keepReadingChildren[i].style.display = 'none';
-        }
-
-        if(verificaElemento('.for-top-news')){
-            document.querySelector('.for-top-news').remove();
-        }
-    }
-    return false;
-}
-
-
-function removeLockedNewsContainers()
-{
-    let lockedNews = document.querySelectorAll('.locked-news');
-    for(let i=0; i<lockedNews.length; i++){
-        lockedNews[i].remove();
-    }
-}
-
-
-function removeArticles()
-{
-    let allArticles = document.querySelectorAll('article');
-    for(let i=0; i<allArticles.length; i++){
-        if(i==0) continue;
-        allArticles[i].remove();
-    }
-    return true;
-}
-
-
-function removeAdBetweenArticles()
-{
-    let allAdBetweenArticles = document.querySelectorAll('.ad-between-articles');
-    for(let i=0; i<allAdBetweenArticles.length; i++){
-        allAdBetweenArticles[i].remove();
-    }
-}
-
-
-function fixVideoRender()
-{
-    if(window.location.href.includes('/videos')){
-        let iframes = document.querySelectorAll('iframe');
-        for(let i=0; i<iframes.length; i++){
-            if(iframes[i].hasAttribute('src')){
-                let currentSrc = iframes[i].getAttribute('src');
-                iframes[i].removeAttribute('src');
-                iframes[i].setAttribute('src', currentSrc);
-            }
-        }
-    }
-}
-
-
-function removeCommentDiv()
-{
-    if(verificaElemento('.comment')){
-        document.querySelector('.comment').remove();
-    }
-}
 
 
 
@@ -1602,192 +1614,17 @@ function enableUrlChangeDetect()
 
 
 
-/* ====================== JORNAL VS =========================== */
-
-function modifyJVS()
-{
-    let sourceCode;
-
-    if(window.location.href.includes("jornalvs.com.br/multimidia")){
-        removeBlockPaywall();
-    }else{
-        if(sourceCode == null){
-            fetch(document.location.href)
-            .then(response => response.text())
-            .then(pageSource => {
-                sourceCode = new DOMParser().parseFromString(pageSource, "text/html");
-                montaNoticiaJVS(sourceCode);
-            });
-        }
-    }
-}
-
-
-function montaNoticiaJVS(sourceCode)
-{
-    let passei = false;
-
-    let r = setInterval(()=>{
-        let iframes = document.querySelectorAll("iframe");
-
-        for(let i=0; i<iframes.length; i++){
-            if(iframes[i].hasAttribute("src")){
-                if(iframes[i].getAttribute("src").includes("jornalvs.com.br/tools/2019/paywall/")){
-
-                    let bodyMateria = document.querySelector("#materia");
-                    bodyMateria.innerHTML = sourceCode.querySelector("#materia").outerHTML;
-                    restauraImgs(bodyMateria);
-
-                    let r1 = setInterval(()=>{
-                        if(verificaElemento("html") && verificaElemento("body")){
-                            clearInterval(r1);
-
-                            document.querySelector("html").style.overflow = "auto";
-                            document.querySelector("body").style.overflow = "auto";
-
-                            //REMOVE PAYWALL FOOTER
-                            let iframes = document.querySelectorAll("iframe");
-                            for(let i=0; i<iframes.length; i++){
-                                if(iframes[i].hasAttribute("src")){
-                                    if(iframes[i].getAttribute("src").includes("jornalvs.com.br/tools/2019/paywall/")){
-                                        iframes[i].remove();
-                                        break;
-                                    }
-                                }
-                            }
-
-                            //REMOVE BACKGROUND PAYWALL FOOTER
-                            let divs = document.querySelectorAll("div");
-                            for(let i=0; i<divs.length; i++){
-                                if(divs[i].hasAttribute("style")){
-                                    if(divs[i].getAttribute("style").includes("z-index:9999997; opacity:0.6")){
-                                        divs[i].remove();
-                                        break;
-                                    }
-                                }
-                            }
-
-                            if(passei == false){
-                                incrementaConteudoAPI();
-                                verificaAtualizacaoVersao();
-                                passei = true;
-                            }
-                        }
-                    },800);
-                    break;
-                }
-            }
-        }
-    },800);
-
-    window.addEventListener("load", ()=>{
-        setTimeout(()=>{
-            clearInterval(r);
-            console.log("LIMPEI INTERVAL AFTER 5 SEG");
-        }, 5000);
-    });
-}
-
-
-function removeBlockPaywall()
-{
-    let keys = [false, false];
-
-    let r = setInterval(()=>{
-        if(verificaElemento("html") && verificaElemento("body")){
-
-            document.querySelector("html").style.overflow = "auto";
-            document.querySelector("body").style.overflow = "auto";
-
-            //REMOVE PAYWALL FOOTER
-            let iframes = document.querySelectorAll("iframe");
-            for(let i=0; i<iframes.length; i++){
-                if(iframes[i].hasAttribute("src")){
-                    if(iframes[i].getAttribute("src").includes("jornalvs.com.br/tools/2019/paywall/")){
-                        iframes[i].remove();
-                        keys[0] = true;
-                        break;
-                    }
-                }
-            }
-
-            //REMOVE BACKGROUND PAYWALL FOOTER
-            let divs = document.querySelectorAll("div");
-            for(let i=0; i<divs.length; i++){
-                if(divs[i].hasAttribute("style")){
-                    if(divs[i].getAttribute("style").includes("z-index:9999997; opacity:0.6")){
-                        divs[i].remove();
-                        keys[1] = true;
-                        break;
-                    }
-                }
-            }
-        }
-    },800);
-
-    window.addEventListener("load", ()=>{
-        setTimeout(()=>{
-            clearInterval(r);
-            console.log("LIMPEI INTERVAL AFTER 5 SEG");
-
-            if(keys[0] == true && keys[1] == true){
-                incrementaConteudoAPI();
-                verificaAtualizacaoVersao();
-            }
-        }, 5000);
-    });
-}
-
-
-
 /* ====================== EL PAIS =========================== */
 
 function modifyELPAIS()
 {
-    let passei = false;
-    let sourceCode;
-
-    fetch(document.location.href)
-    .then(response => response.text())
-    .then(pageSource => {
-        sourceCode = new DOMParser().parseFromString(pageSource, "text/html");
-    });
-
-    let r = setInterval(()=>{
-        if((verificaElemento("#ctn_closed_article") || verificaElemento(".paywallModal") || verificaElemento("#capaPaywall")) && sourceCode != null){
-            if(verificaElemento(".paywallModal")) document.querySelector(".paywallModal").remove();
-            if(verificaElemento("#capaPaywall")) document.querySelector("#capaPaywall").remove();
-
-            let blocoNoticia = document.querySelector("article");
-            blocoNoticia.innerHTML = (sourceCode.querySelector("article")).outerHTML;
-            document.body.style.overflow = "auto";
-            removeSubscriptionBanners();
-
-            if(passei==false){
-                incrementaConteudoAPI();
-                verificaAtualizacaoVersao();
-                passei = true;
-            }
+    verificaAtualizacaoVersao();
+    let r = setInterval(() => {
+        if(verificaElemento('#ctn_freemium_article')){
+            clearInterval(r);
+            document.querySelector('#ctn_freemium_article').remove();
         }
-    }, 800);
-
-    window.addEventListener("load", ()=>{
-        clearInterval(r);
-    })
-}
-
-
-function removeSubscriptionBanners()
-{
-    let subscriptionsDivs = document.querySelectorAll(".suscripcion");
-    for(let i=0; i<subscriptionsDivs.length; i++){
-        subscriptionsDivs[i].remove();
-    }
-
-    window.addEventListener("load", ()=>{
-        let bannerPaywallOfferBig = document.querySelector("#paywallOfferBig");
-        if(bannerPaywallOfferBig != null) bannerPaywallOfferBig.remove();
-    })
+    },800);
 }
 
 
@@ -1812,48 +1649,6 @@ function modifyNYTIMES()
             verificaAtualizacaoVersao();
         }
     }, 800);
-}
-
-/* ========================= NSC TOTAL =============================== */
-
-function modifyNSC()
-{
-    fetch(document.location.href)
-    .then(response => response.text())
-    .then(pageSource => {
-
-		let sourceCode = new DOMParser().parseFromString(pageSource, "text/html");
-
-        let r = setInterval(()=>{
-            if(sourceCode != null || sourceCode != undefined){
-                clearInterval(r);
-
-                let blocoNoticia = sourceCode.querySelector(".paywall-content");
-
-                let rotina = setInterval(()=>{
-                    if(verificaElemento("#signwall-template") && verificaElemento(".ContentFadeOut__Wrapper-sc-164tfq8-0") && (blocoNoticia != null || blocoNoticia != undefined)){
-                        clearInterval(rotina);
-
-                        try{
-                            let contentNoticia = document.querySelector(".ContentFadeOut__Wrapper-sc-164tfq8-0");
-                            contentNoticia.innerHTML = blocoNoticia.outerHTML;
-                            contentNoticia.style.maxHeight = "none";
-                            document.querySelector("#signwall-template").remove();
-
-                            incrementaConteudoAPI();
-                            verificaAtualizacaoVersao();
-                        }catch(erro){
-                            sweetAlert(
-                                'error',
-                                'Erro',
-                                `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`
-                            );
-                        }
-                    }
-                },800);
-            }
-        },800);
-	});
 }
 
 
@@ -1968,7 +1763,7 @@ function modifyPossoLer()
     const codigo =
     `if(typeof(VERSAO_ATUAL) == 'undefined')
     {
-       var VERSAO_ATUAL = '133';
+       var VERSAO_ATUAL = '${CURRENT_VERSION}';
     }`;
 
     let script = document.createElement("script");
@@ -1983,131 +1778,6 @@ function modifyPossoLer()
     }
 }
 
-
-/* ======================= REVISTA GALILEU ====================== */
-
-function modifyGALILEU()
-{
-    let codigoPage;
-
-    fetch(document.location.href)
-    .then(response => response.text())
-    .then(pageSource => {
-        codigoPage = new DOMParser().parseFromString(pageSource, "text/html");
-    });
-
-    let rotina = setInterval(()=>{
-        removeFooter();
-        if(verificaElemento(".paywall-cpt")){
-            clearInterval(rotina);
-
-            let divNoticia = codigoPage.querySelector('.protected-content');
-            let elementoPai = document.querySelector("article");
-
-            removeBloqueioGLOBO();
-            elementoPai.appendChild(divNoticia);
-            restauraImgs(elementoPai);
-            restauraPodcast(divNoticia);
-
-        }else if(verificaElemento(".barber-barrier-cpnt")){
-            clearInterval(rotina);
-            removeBlockCelular();
-        }
-    },800);
-
-    verificaAtualizacaoVersao();
-}
-
-
-function removeFooter()
-{
-    let footer = document.querySelectorAll(".banner-bottom-fixed-cpnt");
-
-    if(footer.length>0){
-        for(let i=0; i<footer.length; i++){
-            footer[i].remove();
-        }
-    }
-}
-
-
-function restauraPodcast(codeBody)
-{
-    let podcastElements = codeBody.querySelectorAll("iframe");
-
-    if(podcastElements.length>0){
-        for(let i=0; i<podcastElements.length; i++){
-            let linkPdct = podcastElements[i].getAttribute("data-src");
-
-            if(linkPdct != null){
-                podcastElements[i].removeAttribute("data-src");
-                podcastElements[i].setAttribute("src", linkPdct);
-            }
-        }
-    }
-}
-
-
-function removeBlockCelular()
-{
-    let block = document.querySelector(".barber-barrier-cpnt");
-
-    if(block != null)
-    {
-        block.remove();
-        document.body.style.overflow = "auto";
-        verificaAtualizacaoVersao();
-        incrementaConteudoAPI();
-    }
-}
-
-/* ======================= REVISTA EPOCA ======================== */
-
-function modifyEPOCA()
-{
-    let codigoPage;
-
-    fetch(document.location.href)
-    .then(response => response.text())
-    .then(pageSource => {
-        codigoPage = new DOMParser().parseFromString(pageSource, "text/html");
-    });
-
-    let rotina = setInterval(()=>{
-        removeFooter();
-        if(verificaElemento(".paywall-cpt")){
-            clearInterval(rotina);
-
-            let divNoticia = codigoPage.querySelector('.article__content-container');
-            let elementoPai = document.querySelector(".article");
-
-            removeBloqueioGLOBO();
-            elementoPai.appendChild(divNoticia);
-            restauraImgs(elementoPai);
-
-        }else if(verificaElemento(".barber-barrier-cpnt")){
-            clearInterval(rotina);
-            removeBlockCelular();
-        }
-    },800);
-
-    verificaAtualizacaoVersao();
-}
-
-
-function restauraImgs(bodyNoticia)
-{
-    let imgsNoticia = bodyNoticia.querySelectorAll("img");
-
-    for(let i=0; i<imgsNoticia.length; i++){
-        let linkImg = imgsNoticia[i].getAttribute("data-src");
-
-        if(linkImg!=null){
-            imgsNoticia[i].removeAttribute("data-src");
-            imgsNoticia[i].setAttribute("src",linkImg);
-        }
-    }
-}
 
 
 /* ======================= EXAME ================================ */
@@ -2173,32 +1843,6 @@ function modifyEXAME()
                         'Erro',
                         `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}`
                     );
-                });
-            }
-        },800);
-    }else{
-        let interval = setInterval(()=>{
-            if(verificaElemento('#adid') && verificaElemento('#paywallModal')){
-                clearInterval(interval);
-
-                fetch(document.location.href)
-                .then(response => response.text())
-                .then(pageSource => {
-
-                    let codigoFonte = new DOMParser().parseFromString(pageSource, 'text/html');
-                
-                    let articleNotice = codigoFonte.getElementById(`post-${codigoFonte.getElementById('adid').textContent}`);
-                    const NAME_DIV_ARTICLE = `post-${codigoFonte.getElementById('adid').textContent}`;
-    
-                    let rotina = setInterval(()=>{
-                        if(verificaElemento(`#${NAME_DIV_ARTICLE}`)){
-                            clearInterval(rotina);
-                            document.getElementById(`${NAME_DIV_ARTICLE}`).innerHTML = articleNotice.outerHTML;
-                            verificaAtualizacaoVersao();
-                            incrementaConteudoAPI();
-                        }
-                    },800);
-                    verificaAtualizacaoVersao();
                 });
             }
         },800);
@@ -2323,6 +1967,7 @@ function removeScriptObserver(s, codigoSemBloqueio)
     }
 
     //removeHeaderLogin();
+    setSelectableArea();
     removeBloqueioExercicioLivro()
     removeBlur();
     removeAllBtnShowSolucao();
@@ -2331,14 +1976,38 @@ function removeScriptObserver(s, codigoSemBloqueio)
 
     //LOOP Para remover bloqueios caso haja atualização dos iframes
     setInterval(()=>{
-        //removeHeaderLogin();
-        removeBloqueioExercicioLivro()
+        //removeVideoBlockingAulao();
+        removeBloqueioExercicioLivro();
         removeBlur();
         removeAllBtnShowSolucao();
         removeBloqueioTeoria();
         removeBloqueioConteudoExclusivo();
     },800);
 }
+
+
+function setSelectableArea()
+{
+    let divs = document.querySelectorAll('div');
+    for(let i=0; i<divs.length; i++){
+        let cssProperties = getComputedStyle(divs[i]);
+        if(cssProperties.inset == '0px' && cssProperties.cursor == 'pointer')
+            divs[i].style.cssText += 'inset: unset !important;';
+    }
+}
+
+
+/* function removeVideoBlockingAulao()
+{
+    if((window.location.href).includes('/aulao-')){
+        let blockVideo = document.querySelectorAll('.video-overlay');
+        for(let i=0; i<blockVideo.length; i++){
+            blockVideo[i].remove();
+        }
+        let chat = document.querySelector('.chat-container');
+        if(chat != null) chat.remove();
+    }
+} */
 
 
 function removeBloqueioExercicioLivro()
@@ -2416,11 +2085,16 @@ function removeAllBtnShowSolucao()
             btnSolucaoCompleta[i].remove();
         }
     }
-    else{
-        let btns = document.querySelectorAll(".exercise-theory-expand-button");
+    let btns = document.querySelectorAll(".exercise-theory-expand-button");
+    if(btns.length>0){
         for(let i=0; i<btns.length; i++){
             btns[i].remove();
         }
+    }
+    let buttons = document.querySelectorAll('button');
+    for(let i=0; i<buttons.length; i++){
+        if(buttons[i].textContent == 'Mostrar Solução Completa')
+            buttons[i].remove();
     }
 }
 
@@ -2615,28 +2289,6 @@ function checkButtonCreation()
 }
 
 
-function swallBugFix(title, msg, placeHolderText)
-{
-    Swal.fire({
-        title: title,
-        html: msg,
-        allowEscapeKey: false,
-        allowOutsideClick: false,
-        showConfirmButton: true,
-        input: 'checkbox',
-        inputValue: 0,
-        inputPlaceholder: placeHolderText,
-        inputValidator: (result) => {
-            let response = (result) ? "true" : "false";
-            localStorage.setItem('agreeMessageBugFix', response);
-        },
-        customClass: {
-            content: 'text-left'
-        }
-    });
-}
-
-
 function createButtonResposta()
 {
     let r = setInterval(()=>{
@@ -2736,212 +2388,6 @@ function getExerciseId()
 
 
 
-
-/* ====================== SUPER INTERESSANTE ===================== */
-
-function modifySUPINTERESSANTE()
-{
-    let rotina = setInterval(()=>{
-        if(verificaElemento(".piano-offer-overlay") && verificaElemento("#piano_offer")){
-            clearInterval(rotina);
-            removeBloqueioSPRINTERESSANTE();
-        }
-    },800);
-}
-
-
-function removeBloqueioSPRINTERESSANTE()
-{
-    document.getElementById("piano_offer").remove();
-    document.querySelector(".piano-offer-overlay").remove();
-    document.body.classList.remove("disabledByPaywall");
-
-    verificaAtualizacaoVersao();
-    incrementaConteudoAPI();
-}
-
-
-/* ====================== GAZETA ================================= */
-
-function modifyGAZETA()
-{
-
-    fetch(document.location.href)
-    .then(response => response.text())
-    .then(pageSource => {
-
-        let blocoNoticia = new DOMParser().parseFromString(pageSource,"text/html").getElementById("tp-post-content");
-
-        let rotina = setInterval(()=>{
-            if(verificaBloqueioGAZETA()){
-                clearInterval(rotina);
-
-                removeBlockGAZETA();
-
-                if(getFatherElementGAZETA()){
-                    remountDivNoticiaGAZETA(blocoNoticia);
-                    restauraImgsGAZETA(document.getElementById("tp-post-content"));
-                }
-
-                decrementZindexHeaderGAZETA()
-                removeFooterGAZETA();
-                verificaAtualizacaoVersao();
-                incrementaConteudoAPI();
-            }
-        },800);
-    });
-}
-
-
-function verificaBloqueioGAZETA()
-{
-    return document.querySelector(".tp-container-inner")!=null ? true : false;
-}
-
-
-function getFatherElementGAZETA()
-{
-    return document.querySelector(".tpl-post");
-}
-
-
-function removeBlockGAZETA()
-{
-    document.querySelector(".tp-container-inner").remove();
-}
-
-
-function remountDivNoticiaGAZETA(blocoNoticia)
-{
-    document.getElementById("tp-post-content").innerHTML = blocoNoticia.outerHTML;
-}
-
-
-function decrementZindexHeaderGAZETA()
-{
-    document.getElementById("gp-header").style.zIndex = '99999';
-}
-
-
-function removeFooterGAZETA()
-{
-    let rotina = setInterval(()=>{
-        if(document.getElementById("d-pos-footer")!=null){
-            clearInterval(rotina);
-            document.getElementById("d-pos-footer").remove();
-        }
-    }, 800);
-}
-
-
-function restauraImgsGAZETA(bodyNoticia)
-{
-    //REMOVE CLASSE QUE BLOQUEIA IMGs
-    let classBloqueioImg = bodyNoticia.querySelectorAll(".img-fallback");
-
-    for(let i=0; i<classBloqueioImg.length; i++){
-        classBloqueioImg[i].classList.remove("img-fallback")
-    }
-
-
-    //REMONTA AS IMAGENS
-    let sourceNoticia = bodyNoticia.querySelectorAll("source");
-
-    for(let i=0; i<sourceNoticia.length; i++){
-        let linkImg = sourceNoticia[i].getAttribute("data-srcset");
-
-        if(linkImg!=null){
-            sourceNoticia[i].removeAttribute("data-srcset");
-            sourceNoticia[i].setAttribute("srcset",linkImg);
-        }
-    }
-}
-
-
-/* ====================== O GLOBO ================================ */
-
-function modifyGLOBO()
-{
-     let rotina = setInterval(()=>{
-         if(verificaElemento(".article__content-container")){
-             clearInterval(rotina);
-
-             let divNoticia = getNoticeBlock('.article__content-container');
-             let elementoPai = getFatherElement('.article__content-container');
-
-             let rotinaVerificaBloqueio = setInterval(()=>{
-
-                if(verificaElemento('.paywall-cpt')){
-                    clearInterval(rotinaVerificaBloqueio);
-                    removeBloqueioGLOBO();
-                    elementoPai.appendChild(divNoticia);
-
-                }else if(verificaElemento(".barber-barrier-cpnt")){
-                    clearInterval(rotina);
-                    removeBlockCelular();
-                }
-             }, 800);
-         }
-     }, 800);
-}
-
-
-function getNoticeBlock(elemento)
-{
-    return document.querySelector(elemento);
-}
-
-
-
-function removeBloqueioGLOBO()
-{
-
-    document.querySelector('.paywall-cpt').remove();
-
-    document.body.style.overflow = 'auto';
-    document.body.style.position = 'unset';
-
-    try{
-        document.querySelector('.banner-bottom-fixed-cpnt').remove();
-    }catch(erro){
-        console.log('ERRO AO REMOVER FOOTER = ' + erro);
-    }
-
-    verificaAtualizacaoVersao();
-    incrementaConteudoAPI();
-}
-
-
-function getFatherElement(elementoFilho)
-{
-    return document.querySelector(elementoFilho).parentElement;
-}
-
-
-
-
-/* ====================== FOLHA DE SP ============================ */
-
-function modifyFLSP()
-{
-    let rotina = setInterval(() => {
-        if(verificaElemento('#paywall-flutuante') && verificaElemento('#paywall-content') && verificaElemento('#paywall-fill')){
-            clearInterval(rotina);
-            try{
-                document.getElementById('paywall-flutuante').remove();
-                document.getElementById('paywall-fill').remove();
-                document.getElementById('paywall-content').style.overflow = 'auto';
-                verificaAtualizacaoVersao();
-                incrementaConteudoAPI();
-            }catch(erro){
-                console.error(`ERRO AO REMOVER PAYWALL FLSP --> ${erro.toString()}`);
-            }
-        }
-    }, 800);
-}
-
-
-
 /* =========================== CDN's E UPDATE VERSION ================================= */
 
 
@@ -3009,7 +2455,6 @@ function verificaAtualizacaoVersao()
         if(typeof(Snackbar) == 'object'  && verificaElemento('#snackCSS') && typeof(axios) == 'function' && typeof(Swal) == 'function') {
             clearInterval(rotina);
 
-            const CURRENT_VERSION = '133';
             const URL_API_UPDATE = 'https://possoler.tech/API/searchUpdates.php';
             let tempoAwait = 5;
 

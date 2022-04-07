@@ -250,3 +250,32 @@
 # Fix Match Url Revista Glamour;
 # Ajuste de tageamento de versão - https://semver.org
 # CRX Atualizado;
+
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-= v1.4.4 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+[13/02/2022]
+# Atualização paywall Sites da Globo;
+
+[19/02/2022]
+# Adicionado Jornal A Tribuna;
+# Refatoração e otimização do código da extensão;
+# Ajuste Bypass El País;
+
+[15/03/2022]
+# Criação API de verificação de autenticidade da extensão;
+# Implementação API de verificação de autenticidade da extensão;
+# Diminuição de tamanho da extensão;
+# Criação de API para download da extensão;
+# Adicionado sistema de ativação extensão Mobile;
+
+[24/03/2022]
+# Remove botão "Mostrar Solução Completa" exercicios Responde Ai;
+# Remove bloqueio de vídeo em Aulão Responde Aí - BETA;
+
+[31/03/2022]
+# Fix Loop Infinito paywall em seção Especiais - Jornal O Tempo MG;
+
+[03/04/2022]
+# FIX blur Responde Ai para usuarios não logados em mobile;
+# Ajuste Bypass Jornal Correio 24 Horas;

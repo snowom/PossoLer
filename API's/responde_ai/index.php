@@ -66,5 +66,19 @@ $utils = new Utils;
                 echo $utils->setBackgroundColorJS("#f7f7f7");
             }
         ?>
+
+        <style>
+            /* Personalização Scroll Bar */
+            ::-webkit-scrollbar {
+                width: 8px;
+            }
+            ::-webkit-scrollbar-thumb {
+                background: rgb(153, 153, 153);
+                border-radius: 10px;
+            }
+            ::-webkit-scrollbar-track {
+                background: transparent;
+            }
+        </style>
     </body>
 </html>

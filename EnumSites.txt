@@ -32,3 +32,4 @@
 35 - Jornal O Povo
 36 - Jornal Correio 24hrs - Bahia
 37 - Jornal NH
+38 - Jornal A Tribuna - Santos
