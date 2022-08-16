@@ -10,6 +10,8 @@
 <img src="https://img.shields.io/badge/License-MIT-orange.svg"/>
 <img src="https://img.shields.io/badge/Versão atual-1.4.4-green.svg"/>
 <img src="https://img.shields.io/badge/Data atualização-07/04/2022-blue.svg"/>
+<img src="https://img.shields.io/badge/Tecnologia-PHP-red.svg"/>
+<img src="https://img.shields.io/badge/Tecnologia-Javascript-yellow.svg"/>
 <br>
 <br>
 ## Sites Suportados
