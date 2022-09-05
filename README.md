@@ -8,8 +8,8 @@
 <br>
 <br>
 <img src="https://img.shields.io/badge/License-MIT-orange.svg"/>
-<img src="https://img.shields.io/badge/Versão atual-1.4.4-green.svg"/>
-<img src="https://img.shields.io/badge/Data atualização-07/04/2022-blue.svg"/>
+<img src="https://img.shields.io/badge/Versão atual-1.5.5-green.svg"/>
+<img src="https://img.shields.io/badge/Data atualização-05/09/2022-blue.svg"/>
 <img src="https://img.shields.io/badge/Tecnologia-PHP-red.svg"/>
 <img src="https://img.shields.io/badge/Tecnologia-Javascript-yellow.svg"/>
 <br>
@@ -52,6 +52,8 @@
 * [Correio 24 Horas - Bahia](http://correio24horas.com.br/)
 * [Jornal NH](https://www.jornalnh.com.br/)
 * [Jornal A Tribuna - Santos](https://www.atribuna.com.br/)
+* [Um Dois Esportes](https://www.umdoisesportes.com.br/)
+* [Correio do Povo](https://www.correiodopovo.com.br/)
 
 ## Perguntas Frequentes
 
