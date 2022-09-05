@@ -279,3 +279,41 @@
 [03/04/2022]
 # FIX blur Responde Ai para usuarios não logados em mobile;
 # Ajuste Bypass Jornal Correio 24 Horas;
+
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-= v1.5.5 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+[26/04/2022]
+# Migração API Posso Ler para Java (Spring Framework);
+
+[28/04/2022]
+# [BETA] Criação API Responde Ai (PHP) - Logged Users
+# [BETA] FIX Teoria bloqueada Responde Ai - usuarios logados
+
+[18/05/2022]
+# FIXED Respostas Exercícios de Fixação;
+
+[22/06/2022]
+# Fixed show button Resolução Livros em app.respondeai
+
+[03/07/2022]
+# Adicionado Um dois esportes
+# CRX Atualizado
+# Add desbloqueio lista exercicio de faculdade Responde Ai - usuarios logados
+# Término full unlocked responde aí - logged users
+# Fixed refresh to show button Resolução Livros em app.respondeai
+
+[17/07/2022]
+# Adicionado Correio do Povo
+# CRX Atualizado
+
+[15/08/2022]
+# Migração novo site Responde Aí para Mobile
+# FIXED Exibição do botão mostrar resolução em páginas erradas
+
+[03/09/2022]
+# Ajuste Bypass A Tribuna - Santos;
+# Ajuste Bypass Exame
+# Ajuste Bypass El País;
+# Ajuste Bypass Jornal do Comercio;
+# Ajuste desbloqueio assincrono Responde Aí;

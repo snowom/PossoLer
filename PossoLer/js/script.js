@@ -1,4 +1,4 @@
-const CURRENT_VERSION = '144';
+const CURRENT_VERSION = '155';
 
 /**
  * Verifica qual URL de correspondencia o usuario está e aplica a 
@@ -40,9 +40,13 @@ function main()
         saveDataForDashboard(10);
         verificaAtualizacaoVersao();
     }
-    else if(currentURL.includes("respondeai.com.br")){
+    else if(currentURL == 'www.respondeai.com.br'){
         saveDataForDashboard(8);
         modifyRESPAI();
+    }
+    else if(currentURL == 'app.respondeai.com.br'){
+        saveDataForDashboard(8);
+        modifyAPPRESPAI();
     }
     else if(currentURL.includes("exame.com")){
         saveDataForDashboard(9);
@@ -160,8 +164,845 @@ function main()
         saveDataForDashboard(38);
         verificaAtualizacaoVersao();
     }
+    else if(currentURL.includes("umdoisesportes.com.br")){
+        saveDataForDashboard(39);
+        verificaAtualizacaoVersao();
+    }
+    else if(currentURL.includes("correiodopovo.com.br")){
+        saveDataForDashboard(40);
+        verificaAtualizacaoVersao();
+    }
 }
 
+
+/* ============================== APP RESPONDE AI ============================== */
+
+function modifyAPPRESPAI()
+{
+    let payload = `
+        mainUnlockFunction();
+        ${checkButtonCreation()};
+        changeLockedIcons();
+        enableBodyOverflow();
+        removeReactModalOverlay();
+
+        let urlBase = document.location.href;
+        setInterval(()=>{
+            let tmpUrl = document.location.href;
+            if(urlBase != tmpUrl){
+                urlBase = tmpUrl;
+                mainUnlockFunction();
+                checkButtonCreation();
+                enableBodyOverflow();
+                removeReactModalOverlay();
+            }
+        },800);
+
+        /**
+         * Nested function (funcao aninhada)
+         * Funcao principal de desbloqueio de conteudo
+         */
+        function mainUnlockFunction(){
+            if(window.location.href.includes('app.respondeai.com.br/aprender') && window.location.href.includes('/teoria/')){
+                importRequiredCDN();
+                setTheoryLinksAction();
+                enableBodyOverflow();
+                removeReactModalOverlay();
+                removeDexterBlock();
+                removeBlurPage();
+                unlockTeoria();
+                ${incrementaConteudoAPI()};
+                ${verificaAtualizacaoVersao()};
+            }
+            else if(window.location.href.includes('app.respondeai.com.br/aprender') && window.location.href.includes('/exercicio/')){
+                importRequiredCDN();
+                setTheoryLinksAction();
+                enableBodyOverflow();
+                removeReactModalOverlay();
+                removeDexterBlock();
+                removeBlurPage();
+                unlockFixationExercise();
+                ${incrementaConteudoAPI()};
+                ${verificaAtualizacaoVersao()};
+            }
+            else if((window.location.href.includes('app.respondeai.com.br/aprender') || window.location.href.includes('app.respondeai.com.br/praticar')) && window.location.href.includes('/exercicio-lista/')){
+                importRequiredCDN();
+                setTheoryLinksAction();
+                enableBodyOverflow();
+                removeReactModalOverlay();
+                removeDexterBlock();
+                removeBlurPage();
+                unlockListExercise();
+                ${incrementaConteudoAPI()};
+                ${verificaAtualizacaoVersao()};
+            }
+        }
+        
+        function changeLockedIcons()
+        {
+            setInterval(()=>{
+                let svgIcons = document.querySelectorAll(".MuiSvgIcon-root");
+                svgIcons.forEach(icon => {
+                    icon.innerHTML = '<svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="square" class="svg-inline--fa fa-square sc-lgsYow gFYkCv  logged" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zm-6 400H54c-3.3 0-6-2.7-6-6V86c0-3.3 2.7-6 6-6h340c3.3 0 6 2.7 6 6v340c0 3.3-2.7 6-6 6z"></path></svg>'
+                });
+            },800);
+        }
+        
+
+        function unlockListExercise()
+        {
+            //Remove format toogle
+            let k = setInterval(()=>{
+                let divs = document.querySelectorAll('div');
+                for(let i=0; i<divs.length; i++){
+                    if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == 'content-format-toggle'){
+                        clearInterval(k);
+                        divs[i].style.display = "none";
+                        break;
+                    }
+                }
+            },800);
+
+            let r = setInterval(()=>{
+                let divs = document.querySelectorAll('div');
+                for(let i=0; i<divs.length; i++){
+                    if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == 'exercise-show-answer-button'){
+                        clearInterval(r);
+
+                        let answerDiv = divs[i];
+                        let token = getCookie('user_jwt');
+                        let listExerciseId = getTopicId();
+
+                        answerDiv.innerHTML = setLoadingPageAnimation();
+
+                        let s = setInterval(()=>{
+                            if(typeof(axios) == 'function' && token != null && listExerciseId != null){
+                                clearInterval(s);
+                                axios({
+                                    method: "POST",
+                                    url: 'https://possoler.tech/API/responde_ai/signedUser/index.php?action=getListExercise',
+                                    timeout: 30000,
+                                    data: JSON.stringify({
+                                        token: token,
+                                        listExerciseId: listExerciseId
+                                    })
+                                }).then((resp)=>{
+                                    if(resp.data.status == 'failed') throw new Error(resp.data.message);
+
+                                    //Set div style
+                                    answerDiv.style.cssText = 'width: 100% !important; padding: 0px 30px !important; font-family: "Droid Serif", serif !important;font-size: 1.25em !important; line-height: 26px !important; color: rgb(68, 68, 68) !important; padding-bottom: 15px !important'
+                                    
+                                    //Renderiza solução na tela - Teoria
+                                    for(let i=0; i<resp.data.lightSolution.length; i++){
+                                        if(i==0){
+                                            answerDiv.innerHTML = '<h1 style="color: rgb(54, 170, 173); font-size: 1.7em; font-family:Droid Serif, serif; font-weight: inherit; margin: 50px 0px 30px 0px">Resposta</h1>';
+                                        }
+                                        answerDiv.innerHTML += resp.data.lightSolution[i];
+                                        MathJax.typeset();
+                                    }
+
+
+                                    //Renderiza solução na tela - Videos
+                                    if(resp.data.hasOwnProperty('videos')){
+                                        const SINGLE_VIDEO_SIZE = 450;
+                                        const SPACE_BETWEEN_VIDEOS = 50;
+                                        
+                                        for(let j=0; j<resp.data.videos.length; j++){
+
+                                            if(j==0){
+                                                answerDiv.innerHTML += '<h1 style="color: rgb(54, 170, 173); font-size: 1.7em; font-family:Droid Serif, serif; font-weight: inherit; margin: 50px 0px 30px 0px">Vídeo Tutorial</h1>';
+                                            }
+                                            answerDiv.innerHTML += '<div data-cy="video-iframe" allowfullscreen="" frameborder="0" style="width: 100%; height: ' + (SINGLE_VIDEO_SIZE+SPACE_BETWEEN_VIDEOS)*resp.data.videos.length + 'px;"><div style="width: 100%; height: ' + SINGLE_VIDEO_SIZE  + 'px;"><iframe frameborder="0" allowfullscreen="1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" title="YouTube video player" width="100%" height="100%" src="https://www.youtube.com/embed/' + resp.data.videos[j].providerId + '?autoplay=0&amp;mute=0&amp;controls=1&amp;origin=https%3A%2F%2Fapp.respondeai.com.br&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;iv_load_policy=3&amp;modestbranding=1&amp;enablejsapi=1&amp;widgetid=1"></iframe></div></div><div style="height: ' + SPACE_BETWEEN_VIDEOS + 'px !important"></div>'   
+                                        }
+                                    }
+                                }).catch((erro)=>{
+                                    sweetAlert(
+                                        'error',
+                                        'Erro',
+                                        'Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style="font-weight: bold !important;">Código do erro: </spam>' + erro.toString()
+                                    );
+                                });
+                            }
+                        },800);
+                        break;
+                    }
+                }
+            },800);
+        }
+
+        
+        function unlockFixationExercise()
+        {
+            //Remove format toogle
+            let k = setInterval(()=>{
+                let divs = document.querySelectorAll('div');
+                for(let i=0; i<divs.length; i++){
+                    if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == 'content-format-toggle'){
+                        clearInterval(k);
+                        divs[i].style.display = "none";
+                        break;
+                    }
+                }
+            },800);
+
+            let r = setInterval(()=>{
+                let divs = document.querySelectorAll('div');
+                for(let i=0; i<divs.length; i++){
+                    if(
+                        (divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == 'exercise-show-answer-button') || 
+                        (divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == 'exercise-statement')
+                    ){
+                        clearInterval(r);
+                        let answerDiv;
+
+                        if(divs[i].getAttribute('data-cy') == 'exercise-statement'){
+                            divs[i].innerHTML += '<div id="tmpAnswer"></div>';
+                            answerDiv = document.getElementById("tmpAnswer");
+
+                            // Remove botão responde ai
+                            for(let k=i; k<divs.length; k++){
+                                if(divs[k].hasAttribute('data-cy') && divs[k].getAttribute('data-cy') == 'exercise-show-answer-button'){
+                                    divs[k].remove(); 
+                                }
+                            }
+                        }else{
+                            answerDiv = divs[i];
+                        }
+
+                        let token = getCookie('user_jwt');
+                        let exerciseId = getTopicId();
+
+                        answerDiv.innerHTML = setLoadingPageAnimation();
+
+                        let s = setInterval(()=>{
+                            if(typeof(axios) == 'function' && token != null && exerciseId != null){
+                                clearInterval(s);
+                                axios({
+                                    method: "POST",
+                                    url: 'https://possoler.tech/API/responde_ai/signedUser/index.php?action=getFixationExercise',
+                                    timeout: 30000,
+                                    data: JSON.stringify({
+                                        token: token,
+                                        exerciseId: exerciseId
+                                    })
+                                }).then((resp)=>{
+                                    if(resp.data.status == 'failed') throw new Error(resp.data.message);
+
+                                    //Set div style
+                                    answerDiv.style.cssText = 'width: 100% !important; padding: 0px 30px !important; font-family: "Droid Serif", serif !important; font-size: 1.25em !important; line-height: 26px !important; color: rgb(68, 68, 68) !important; padding-bottom: 15px !important'
+
+                                        console.log(resp.data);
+                                        //Renderiza solução na tela - Teoria
+                                        for(let i=0; i<resp.data.lightSolution.length; i++){
+                                            if(i==0){
+                                                answerDiv.innerHTML = '<h1 style="color: rgb(247, 172, 60); font-size: 1.7em; font-family:Droid Serif, serif; font-weight: inherit; margin: 50px 0px 30px 0px">Resposta</h1>';
+                                            }
+                                            answerDiv.innerHTML += resp.data.lightSolution[i];
+                                            MathJax.typeset();
+                                        }
+
+
+                                        //Renderiza solução na tela - Videos
+                                        if(resp.data.hasOwnProperty('videos')){
+                                            const SINGLE_VIDEO_SIZE = 450;
+                                            const SPACE_BETWEEN_VIDEOS = 50;
+                                        
+                                        for(let j=0; j<resp.data.videos.length; j++){
+
+                                            if(j==0){
+                                                answerDiv.innerHTML += '<h1 style="color: rgb(247, 172, 60); font-size: 1.7em; font-family:Droid Serif, serif; font-weight: inherit; margin: 50px 0px 30px 0px">Vídeo Tutorial</h1>';
+                                            }
+                                            answerDiv.innerHTML += '<div data-cy="video-iframe" allowfullscreen="" frameborder="0" style="width: 100%; height: ' + (SINGLE_VIDEO_SIZE+SPACE_BETWEEN_VIDEOS)*resp.data.videos.length + 'px;"><div style="width: 100%; height: ' + SINGLE_VIDEO_SIZE + 'px;"><iframe frameborder="0" allowfullscreen="1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" title="YouTube video player" width="100%" height="100%" src="https://www.youtube.com/embed/' + resp.data.videos[j].providerId + '?autoplay=0&amp;mute=0&amp;controls=1&amp;origin=https%3A%2F%2Fapp.respondeai.com.br&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;iv_load_policy=3&amp;modestbranding=1&amp;enablejsapi=1&amp;widgetid=1"></iframe></div></div><div style="height: ' + SPACE_BETWEEN_VIDEOS + 'px !important"></div>';     
+                                        }
+                                    }
+                                }).catch((erro)=>{
+                                    sweetAlert(
+                                        'error',
+                                        'Erro',
+                                        'Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style="font-weight: bold !important;">Código do erro: </spam>' + erro.toString()
+                                    );
+                                });
+                            }
+                        },800);
+                        break;
+                    }
+                }
+            },800);
+        }
+
+
+        function unlockTeoria()
+        {
+            let r = setInterval(()=>{
+                let divs = document.querySelectorAll('div');
+                for(let i=0; i<divs.length; i++){
+                    if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == 'content-format-toggle'){
+                        clearInterval(r);
+
+                        //VERIFICA SE NA 1 EXEC O CONTEUDO ESTA BLOQUEADO - TEXTO
+                        //CASO POSITIVO, CHAMA API E MONTA TEXTO
+                        let s = setInterval(()=>{
+                            let divsSteps = document.querySelectorAll('div');
+                            for(let j=0; j<divsSteps.length; j++){
+                                if(divsSteps[j].hasAttribute('data-cy') && divsSteps[j].getAttribute('data-cy') == 'theory-text-content'){
+                                    clearInterval(s);
+                                    let divStepsContainer = divsSteps[j].children[0].children[0];
+                                    try{
+                                        if(
+                                            divStepsContainer.children[0].isEqualNode(divStepsContainer.children[1]) &&
+                                            divStepsContainer.children[1].isEqualNode(divStepsContainer.children[2]) && 
+                                            divStepsContainer.children[2].isEqualNode(divStepsContainer.children[3]) &&
+                                            divStepsContainer.children[3].isEqualNode(divStepsContainer.children[4]) &&
+                                            divStepsContainer.children[4].isEqualNode(divStepsContainer.children[5])
+                                        ){
+                                            //SETTA MSG DE LOADING
+                                            divsSteps[j].innerHTML = setLoadingPageAnimation();
+    
+                                            //CHAMA API PARA DESBLOQUEAR CONTEUDO
+                                            callAPITheoryUnlocked('texto');
+                                            container = divsSteps[j];
+                                            break;
+                                        }
+                                    }catch(exception){
+                                        
+                                    }
+                                }
+                            }
+                        },800);
+
+
+                        //VERIFICA SE NA 1 EXEC O CONTEUDO ESTA BLOQUEADO - VIDEO
+                        //CASO POSITIVO, CHAMA API E MONTA VIDEO
+                        let v = setInterval(()=>{
+                            let divsVideo = document.querySelectorAll('div');
+                            for(let j=0; j<divsVideo.length; j++){
+                                if(divsVideo[j].hasAttribute('data-cy') && divsVideo[j].getAttribute('data-cy') == 'theory-video-content'){
+                                    clearInterval(v);
+                                    if(divsVideo[j].children.length == 0)
+                                    {
+                                        //SETTA MSG DE LOADING
+                                        divsVideo[j].innerHTML = setLoadingPageAnimation();
+
+                                        //CHAMA API PARA DESBLOQUEAR CONTEUDO
+                                        callAPITheoryUnlocked('video');
+                                        break;
+                                    }
+                                }
+                            }
+                        },800);
+
+
+                        //DEFINE NOVA ACAO AO CLICAR NO BOTAO
+                        divs[i].addEventListener("click", ()=>{
+                            let nodes = divs[i].childNodes;
+                            for(let i=0; i<nodes.length; i++){
+                                if(nodes[i].nodeName == 'P' && nodes[i].textContent == 'Alternar para texto >>'){
+                                    
+                                    //PROCURA DIV PARA RECEBER CONTEUDO
+                                    let s = setInterval(()=>{
+                                        let divsSteps = document.querySelectorAll('div');
+                                        for(let j=0; j<divsSteps.length; j++){
+                                            if(divsSteps[j].hasAttribute('data-cy') && divsSteps[j].getAttribute('data-cy') == 'theory-text-content'){
+                                                clearInterval(s);
+
+                                                let divStepsContainer = divsSteps[j].children[0].children[0];
+                                                try{
+                                                    if(
+                                                        divStepsContainer.children[0].isEqualNode(divStepsContainer.children[1]) &&
+                                                        divStepsContainer.children[1].isEqualNode(divStepsContainer.children[2]) && 
+                                                        divStepsContainer.children[2].isEqualNode(divStepsContainer.children[3]) &&
+                                                        divStepsContainer.children[3].isEqualNode(divStepsContainer.children[4]) &&
+                                                        divStepsContainer.children[4].isEqualNode(divStepsContainer.children[5])
+                                                    ){
+                                                        divsSteps[j].innerHTML = setLoadingPageAnimation();
+                                                        callAPITheoryUnlocked("texto");
+                                                        break;
+                                                    }
+                                                }catch(exception){
+                                                    
+                                                }
+                                            }
+                                        }
+                                    },800);
+                                    break;
+                                }
+                                if(nodes[i].nodeName == 'P' && nodes[i].textContent == 'Alternar para video >>'){
+                                    callAPITheoryUnlocked("video");
+                                    if(verificaElemento("#msgLottieDesbloqueio")){
+                                        document.getElementById("msgLottieDesbloqueio").innerHTML = '<p class="lead">Aguarde um momento...<br>Estamos removendo os bloqueios para você...</p>'
+                                    }
+                                    break;
+                                }
+                            }
+                        });
+                        break;
+                    }else{
+                        //PROCURA DIV PARA RECEBER CONTEUDO
+                        let s = setInterval(()=>{
+                            let divsSteps = document.querySelectorAll('div');
+                            for(let j=0; j<divsSteps.length; j++){
+                                if(divsSteps[j].hasAttribute('data-cy') && divsSteps[j].getAttribute('data-cy') == 'theory-text-content'){
+                                    clearInterval(s);
+
+                                    let divStepsContainer = divsSteps[j].children[0].children[0];
+                                    try{
+                                        if(
+                                            divStepsContainer.children[0].isEqualNode(divStepsContainer.children[1]) &&
+                                            divStepsContainer.children[1].isEqualNode(divStepsContainer.children[2]) && 
+                                            divStepsContainer.children[2].isEqualNode(divStepsContainer.children[3]) &&
+                                            divStepsContainer.children[3].isEqualNode(divStepsContainer.children[4]) &&
+                                            divStepsContainer.children[4].isEqualNode(divStepsContainer.children[5])
+                                        ){
+                                            divsSteps[j].innerHTML = setLoadingPageAnimation();
+                                            callAPITheoryUnlocked("texto");
+                                            break;
+                                        }
+                                    }catch(exception){
+                                        
+                                    }
+                                }
+                            }
+                        },800);
+                    }
+                }
+            },800);
+        }
+
+
+        function setLoadingPageAnimation()
+        {
+            return '<div id="containerLootieLoading" class="container text-center"><lottie-player src="https://assets7.lottiefiles.com/packages/lf20_4bzh2jhs.json"  background="transparent"  speed="1"  style="height: 300px;"  loop  autoplay></lottie-player><center id="msgLottieDesbloqueio"><p class="lead">Aguarde um momento...<br>Estamos removendo os bloqueios para você...</p></center></div>'
+        }
+
+
+        function importRequiredCDN()
+        {
+            let r = setInterval(()=>{
+                if(document.querySelector('head') != null){
+                    clearInterval(r);
+                    let lottieJS = document.createElement('script');
+                    lottieJS.setAttribute('src','https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js');
+                    document.querySelector('head').appendChild(lottieJS);
+                }
+            },800);
+        }
+
+
+        /**
+         * Faz chamada para API e popula página de acordo com o parametro typeContent
+         * @param {*} typeContent
+         */
+        function callAPITheoryUnlocked(typeContent)
+        {
+            let token = getCookie('user_jwt');
+            let topicId = getTopicId();
+            let r = setInterval(()=>{
+                if(typeof(axios) == 'function' && token != null && topicId != null){
+                    clearInterval(r);
+                    axios({
+                        method: "POST",
+                        url: 'https://possoler.tech/API/responde_ai/signedUser/index.php?action=getTheory',
+                        timeout: 30000,
+                        data: JSON.stringify({
+                            token: token,
+                            topicId: topicId
+                        })
+                    }).then((resp)=>{
+
+                        if(resp.data.status == 'failed')
+                            throw new Error(resp.data.message);
+
+                        if(typeContent == 'texto'){
+                            let r = setInterval(()=>{
+                                let divs = document.querySelectorAll('div');
+                                for(let i=0; i<divs.length; i++){
+                                    if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == 'theory-text-content' && typeof(MathJax) == "object"){
+                                        clearInterval(r);
+                                        divs[i].innerHTML = '<div class="sc-jTzLTM fFEUnb rendered"><div>' + resp.data.lightBody + '</div></div>';
+                                        MathJax.typeset();
+                                        return;
+                                    }
+                                }
+                            },800);
+                        }
+                        else if(typeContent == 'video'){
+                            const SINGLE_VIDEO_SIZE = 450;
+                            const SPACE_BETWEEN_VIDEOS = 50;
+
+                            let r = setInterval(()=>{
+                                let divs = document.querySelectorAll('div');
+                                for(let i=0; i<divs.length; i++){
+                                    if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == 'theory-video-content'){
+                                        clearInterval(r);
+                                        if(divs[i].children[0].id == "containerLootieLoading")
+                                        {
+                                            if(resp.data.hasOwnProperty('videos'))
+                                            {
+                                                //REMOVE ANIMACAO DE CARREGAMENTO
+                                                document.getElementById("containerLootieLoading").remove();
+
+                                                //SETA TAMANHO DA PAGINA
+                                                divs[i].style.cssText += 'height: ' + ((SINGLE_VIDEO_SIZE*resp.data.videos.length) + (SPACE_BETWEEN_VIDEOS*resp.data.videos.length)) + 'px !important';
+
+                                                //ITERA SOBRE OBJETO DE RESPOSTA PARA MONTAR PAGINA
+                                                for(let j=0; j<resp.data.videos.length; j++){
+                                                    divs[i].innerHTML += '<div data-cy="video-iframe" allowfullscreen="" frameborder="0" style="width: 100%; height: ' + 100/resp.data.videos.length + '%;"><div style="width: 100%; height: 100%;"><iframe frameborder="0" allowfullscreen="1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" title="YouTube video player" width="100%" height="100%" src="https://www.youtube.com/embed/' + resp.data.videos[j] + '?autoplay=0&amp;mute=0&amp;controls=1&amp;origin=https%3A%2F%2Fapp.respondeai.com.br&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;iv_load_policy=3&amp;modestbranding=1&amp;enablejsapi=1&amp;widgetid=1"></iframe></div></div><div style="height: ' + SPACE_BETWEEN_VIDEOS + 'px !important"></div>'
+                                                }
+                                            }else{
+                                                throw new Error('Falha ao obter objeto "videos"');
+                                            }
+                                        }
+                                    }
+                                }
+                            },800);
+                        }
+                    }).catch((erro)=>{
+                        sweetAlert(
+                            'error',
+                            'Erro',
+                            'Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style="font-weight: bold !important;">Código do erro: </spam>' + erro.toString()
+                        );
+                        if(verificaElemento("#msgLottieDesbloqueio")){
+                            document.getElementById("msgLottieDesbloqueio").innerHTML = '<p>Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.</p><p><spam style="font-weight: bold !important;">Código do erro: </spam>' + erro.toString() + '</p>'
+                        }
+                    })
+                }
+            },800);
+        }
+
+
+        /**
+         * Pega e retorna topicId da URL
+         * @returns String
+         */
+        function getTopicId()
+        {
+            let url = window.location.href;
+            let params = url.split("/");
+            return params[params.length-1];
+        }
+
+
+        /**
+         * Sobrescreve acao padrao dos botoes
+         */
+        function setTheoryLinksAction()
+        {
+            let r = setInterval(()=>{
+                let divs = document.querySelectorAll('div');
+                for(let i=0; i<divs.length; i++){
+                    if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == 'side-menu'){
+                        clearInterval(r);
+                        setTimeout(()=>{
+                            let links = document.querySelectorAll("a");
+                            for(let i=0; i<links.length; i++){
+                                if(
+                                    links[i].getAttribute("href").includes("/aprender") && 
+                                    links[i].getAttribute("href").includes("/topico") &&
+                                    links[i].getAttribute("href").includes("/teoria") &&
+                                    links[i].getAttribute("href").includes("/exercicio/")
+                                ){
+                                    links[i].addEventListener("click", (event)=>{
+                                        event.preventDefault();
+                                        window.location.assign('https://'+ window.location.hostname + links[i].getAttribute("href"));
+                                    });
+                                }
+                            }
+                        },2000);
+                        break;
+                    }
+                }
+            },800);
+        }
+
+
+        /**
+         * Remove blur da pagina
+         */
+        function removeBlurPage()
+        {
+            let r = setInterval(()=>{
+                let blurElements = document.querySelectorAll(".blur");            
+                if(blurElements.length>0){
+                    clearInterval(r);
+                    for (let i=0; i<blurElements.length; i++){
+                        blurElements[i].classList.remove("blur");
+                        blurElements[i].style.filter = 'none';
+                    }
+                }
+            },800);
+        }
+
+
+        /**
+         * Habilita scroll da pagina
+         */
+        function enableBodyOverflow()
+        {
+            let r = setInterval(()=>{
+                if(document.querySelector(".ReactModal__Body--open") != null){
+                    clearInterval(r);
+                    document.body.style.overflow = "auto"
+                }
+            },800);
+        }
+
+
+        function removeReactModalOverlay()
+        {
+            let r = setInterval(()=>{
+                let reactModalOverlay = document.querySelectorAll(".ReactModal__Overlay");
+                if(reactModalOverlay.length > 0){
+                    clearInterval(r);
+                    for(let i=0; i<reactModalOverlay.length; i++){
+                        reactModalOverlay[i].remove();
+                    }
+                }
+            },800);
+        }
+
+
+        /**
+         * Remove bloqueio do dexter
+         */
+        function removeDexterBlock()
+        {
+            let r = setInterval(()=>{
+                let divs = document.querySelectorAll('div');
+                for(let i=0; i<divs.length; i++){
+                    if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == 'no-access-dexter-overlay'){
+                        clearInterval(r);
+                        divs[i].remove();
+                    }
+                }
+            },800);
+        }
+        
+        /**
+         * Obtem cookie jwt para fazer request para API de conteudos
+         */
+        function getCookie(cname)
+        {
+            let name = cname + "=";
+            let decodedCookie = decodeURIComponent(document.cookie);
+            let ca = decodedCookie.split(';');
+            for(let i = 0; i <ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+                }
+            }
+            return null;
+        }
+        
+
+        function sweetAlert(icon, title, msg)
+        {
+            let opt = (icon == 'info') ? false : true;
+            let backdropColor;
+            Swal.close();
+
+            backdropColor = (
+                window.location.href.includes("webcache.googleusercontent.com/search?q=cache:https://opopular.com.br") || 
+                window.location.href.includes("webcache.googleusercontent.com/search?q=cache:https://valor.globo.com")
+            )
+                ? 'rgba(8, 8, 8, 0.92)' : '';
+
+
+            if(icon == 'success'){
+                Swal.fire({
+                    icon: icon,
+                    title: title,
+                    html: msg,
+                    allowEscapeKey: false,
+                    allowOutsideClick: false,
+                    showConfirmButton: opt,
+                    timer: 7000,
+                    timerProgressBar: true,
+                    customClass: {
+                        popup: 'snackZ-index',
+                        container: 'snackZ-index'
+                    }
+                });
+                window.stop();
+                return;
+            }
+
+            Swal.fire({
+                icon: icon,
+                title: title,
+                html: msg,
+                allowEscapeKey: false,
+                allowOutsideClick: false,
+                showConfirmButton: opt,
+                backdrop: backdropColor,
+                customClass: {
+                    popup: 'snackZ-index',
+                    container: 'snackZ-index'
+                }
+            });
+        }
+        
+
+        function checkButtonCreation()
+        {
+            let fullURL = window.location.href;
+            if(document.getElementById('btnResposta') == null || document.getElementById('btnResposta') == undefined){
+                if(
+                    (fullURL.includes('materias/solucionario/livro') && 
+                    fullURL.includes('/edicao/') && 
+                    new RegExp('\/exercicio\/[0-9]+').test(fullURL))
+                    || (fullURL.includes("/conteudo/") && fullURL.includes("/livro/"))
+                ){
+                    if(fullURL.includes("/conteudo/") && fullURL.includes("/livro/")){
+                        setInterval(()=>{
+                            removeShowCompleteSolutionButtons();
+                            let sections = document.querySelectorAll('section');
+                            for(let i = 0; i<sections.length; i++){
+                                sections[i].style.filter = 'unset'
+                            };
+                        },800);
+                    }else{
+                        createButtonResposta();
+                    }
+                }
+            }else{
+                //REMOVE BOTÃO DE RESOLUÇÃO
+                if(
+                    (!fullURL.includes('materias/solucionario/livro') || 
+                    !fullURL.includes('/edicao/') || 
+                    !new RegExp('\/exercicio\/[0-9]+').test(fullURL))
+                    && !(fullURL.includes("/conteudo/") && fullURL.includes("/livro/"))  && document.querySelector("#btnResposta") != null
+                ){
+                    document.getElementById('btnResposta').remove();
+                }
+            }
+        }
+        
+        
+        function removeShowCompleteSolutionButtons()
+        {
+            let btn = document.querySelectorAll('button');
+
+            for(let i=0; i<btn.length; i++){
+                if((btn[i].textContent).includes('Mostrar Solução Completa')){
+                    btn[i].parentElement.remove();
+                }
+            }
+        }
+
+
+        function createButtonResposta()
+        {
+            let r = setInterval(()=>{
+                if(document.body != null && document.body != undefined && typeof(Swal) == 'function'){
+                    clearInterval(r);
+
+                    if(document.getElementById('btnResposta') == null || document.getElementById('btnResposta') == undefined){
+                        let btnResposta = document.createElement('button');
+                        btnResposta.setAttribute('id','btnResposta');
+                        btnResposta.setAttribute('title','Ver Resolução');
+                        btnResposta.innerText = 'Ver resolução do exercício';
+                        document.body.appendChild(btnResposta);
+
+                        //SET ESTILO BOTAO
+                        btnResposta.style.cssText = 'position: fixed; bottom: 20px; left: 30px; z-index: 99; border: none; outline: none; background-color: #28a745; color: white; cursor: pointer; padding: 15px; border-radius: 5px; font-size: 18px; -webkit-box-shadow: 10px 5px 5px 0 rgb(0 0 0 / 20%), 10px 5px 10px 0 rgb(0 0 0 / 10%); box-shadow: 10px 5px 5px 0 rgb(0 0 0 / 20%), 10px 5px 10px 0 rgb(0 0 0 / 10%); -webkit-transition: opacity 600ms, visibility 600ms; transition: opacity 600ms, visibility 600ms; opacity: 1;';
+
+                        //ADD EVENTO NO BOTAO
+                        document.getElementById('btnResposta').addEventListener('click', ()=>{
+                            showSolution();
+                        });
+                    }
+                }
+            },800);
+        }
+        
+        
+        function showSolution()
+        {
+            let JWT_TOKEN = getCookie('user_jwt');
+            let ID_EXERCICIO = getExerciseId();
+
+            let wait = setInterval(()=>{
+                if(JWT_TOKEN != null && ID_EXERCICIO != null){
+                    clearInterval(wait);
+
+                    Swal.fire({
+                        title: 'Resolução Completa',
+                        html: '<iframe src="https://possoler.tech/API/responde_ai/index.php?userToken=' + JWT_TOKEN + '&exerciseId=' + ID_EXERCICIO + '" style="width: 100%; height: 100% !important; border: none;"></iframe>',
+                        showCloseButton: true,
+                        allowEscapeKey: false,
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        customClass: {
+                            popup: 'respai',
+                            content: 'contentSolution',
+                            htmlContainer: 'contentSolution',
+                            header: 'headerPopup'
+                        }
+                    });
+                }
+            },800);
+        }
+
+
+        function getCookie(cname)
+        {
+            let name = cname + "=";
+            let decodedCookie = decodeURIComponent(document.cookie);
+            let ca = decodedCookie.split(';');
+            for(let i = 0; i <ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+                }
+            }
+            return null;
+        }
+
+
+        function getExerciseId()
+        {
+            let fullURL = document.location.href;
+            let urlParts = fullURL.split("/");
+
+            return urlParts[urlParts.length-1];
+        }`;
+
+
+    //IMPORT SWEET ALERT JS
+    let sweetAlert = document.createElement("script");
+    sweetAlert.type = "text/javascript";
+    sweetAlert.setAttribute('id', 'sweetAlertJS');
+    sweetAlert.setAttribute('src', 'https://cdn.jsdelivr.net/npm/sweetalert2@10');
+    document.head.appendChild(sweetAlert);
+
+    //IMPORT SWEET ALERT JS
+    let axiosJS = document.createElement("script");
+    axiosJS.type = "text/javascript";
+    axiosJS.setAttribute('id', 'axiosJS');
+    axiosJS.setAttribute('src', 'https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js');
+    document.head.appendChild(axiosJS);
+
+    //INJEÇÃO PAYLOAD;
+    let script = document.createElement("script");
+    script.type = "text/javascript";
+    script.setAttribute('id', 'scriptJS');
+
+    try{
+        script.appendChild(document.createTextNode(payload));
+    }catch(e){
+        script.text = payload;
+    }finally{
+        document.head.appendChild(script);
+    }
+}
 
 
 /* ============================== JORNAL O POVO ============================== */
@@ -607,14 +1448,14 @@ function modifyOPOPULAR()
                                 SwalTimeout(
                                     'error',
                                     'Erro',
-                                    `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`,
+                                    `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style="font-weight: bold !important;">Código do erro: </spam>${erro}`,
                                     'https://opopular.com.br'
                                 );
                             }else{
                                 sweetAlert(
                                     'warning',
                                     'Atenção',
-                                    `Ops, tivemos um pequeno problema!<br> Por favor, recarregue a página para tentar novamente.<spam style='font-weight: bold !important;'>Código do erro: [API FAILED REQUEST TO RESPONSE FILE] - </spam>`
+                                    `Ops, tivemos um pequeno problema!<br> Por favor, recarregue a página para tentar novamente.<spam style="font-weight: bold !important;">Código do erro: [API FAILED REQUEST TO RESPONSE FILE] - </spam>`
                                 );
                             }
                         });
@@ -1566,6 +2407,12 @@ function modifyELPAIS()
             document.querySelector('#ctn_freemium_article').remove();
         }
     },800);
+
+    setInterval(()=>{
+        if(document.getElementById("elpais_gpt-INTEXT") != null){
+            document.getElementById("elpais_gpt-INTEXT").style.height = "unset";
+        }
+    },800);
 }
 
 
@@ -1720,157 +2567,81 @@ function modifyEXAME()
 {
     verificaAtualizacaoVersao();
 
-    if(new RegExp('/invest\.exame\.com/').test(window.location.href)){
-        let r = setInterval(()=>{
-            let paywallBlock = getDivPaywall();
-            if(paywallBlock != undefined && paywallBlock != null && typeof(axios) == 'function'){
-                clearInterval(r);
+    if(document.querySelector(".xm-paywall") != null){
+        let s = setInterval(()=>{
+            if(typeof(Swal) == 'function'){
+                clearInterval(s);
+                console.log('ACHEI SWALL');
 
-                let s = setInterval(()=>{
-                    if(typeof(Swal) == 'function'){
-                        clearInterval(s);
-                        console.log('ACHEI SWALL');
-    
-                        if(Swal.isVisible() == false){
-                            sweetAlert(
-                                'info',
-                                'Aguarde um momento...',
-                                'Estamos removendo os bloqueios para você...<br><br>'
-                            );
-                        }
-                    }
-                },800);
-
-                axios({
-                    method: 'GET',
-                    url: document.location.href,
-                    timeout: 20000
-                }).then((resp)=>{
-                    let codigoFonte = new DOMParser().parseFromString(resp.data, 'text/html');
-                    let newsBlock = getNewsDiv(codigoFonte);
-
-                    let u = setInterval(()=>{
-                        if(newsBlock != null && newsBlock != undefined){
-                            clearInterval(u);
-                            if(newsBlock != ''){
-                                sweetAlert(
-                                    'success',
-                                    'Sucesso',
-                                    'Ótimo! Conteúdo desbloqueado!'
-                                );
-                                paywallBlock.innerHTML = newsBlock;
-                                removeInvisibleDiv();
-                                fixTextStyle(paywallBlock);
-                                incrementaConteudoAPI();
-                            }else{
-                                sweetAlert(
-                                    'error',
-                                    'Erro',
-                                    `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>Erro ao montar newsBlock `
-                                );
-                            }
-                        }
-                    },800);
-                }).catch((erro)=>{
+                if(Swal.isVisible() == false){
                     sweetAlert(
-                        'error',
-                        'Erro',
-                        `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}`
+                        'info',
+                        'Aguarde um momento...',
+                        'Estamos removendo os bloqueios para você...<br><br>'
                     );
-                });
-            }
-        },800);
-    }else{
-        let interval = setInterval(()=>{
-            if(verificaElemento('#adid') && verificaElemento('#paywallModal')){
-                clearInterval(interval);
-
-                fetch(document.location.href)
-                .then(response => response.text())
-                .then(pageSource => {
-
-                    let codigoFonte = new DOMParser().parseFromString(pageSource, 'text/html');
-                
-                    let articleNotice = codigoFonte.getElementById(`post-${codigoFonte.getElementById('adid').textContent}`);
-                    const NAME_DIV_ARTICLE = `post-${codigoFonte.getElementById('adid').textContent}`;
-    
-                    let rotina = setInterval(()=>{
-                        if(verificaElemento(`#${NAME_DIV_ARTICLE}`)){
-                            clearInterval(rotina);
-                            document.getElementById(`${NAME_DIV_ARTICLE}`).innerHTML = articleNotice.outerHTML;
-                            verificaAtualizacaoVersao();
-                            incrementaConteudoAPI();
-                        }
-                    },800);
-                    verificaAtualizacaoVersao();
-                });
-            }
-        },800);
-    }
-}
-
-
-/* =============================== FUNÇÕES EXAME INVEST ===============================*/
-
-function getDivPaywall()
-{
-    let h4 = document.querySelectorAll('h4');
-
-    for(let i=0; i<h4.length; i++){
-        if((h4[i].textContent).includes('Falta pouco para você liberar seu acesso')){
-            return (h4[i].parentElement.parentElement.parentElement);
-        }
-    }
-}
-
-
-function getNewsDiv(code)
-{
-    let divs = code.querySelectorAll('div');
-    let htmlCode = '';
-
-    for(let i=0; i<divs.length; i++){
-        let classes = divs[i].classList;
-        for(let j=0; j<classes.length; j++){
-            if(new RegExp('NewsBody\_\_NewsWrapper\-sc').test(classes[j])){
-                let childrenElements = divs[i].children;
-                for(let k=0; k<childrenElements.length; k++){
-                    htmlCode += childrenElements[k].outerHTML;
                 }
             }
+        },800);
+
+        try{
+            let unlockedContent = "";
+            (__NEXT_DATA__.props.pageProps.postData).forEach((data)=>{
+                unlockedContent += (data.hasOwnProperty("content")) ? data.content : "";
+            });
+            document.getElementById("news-body").innerHTML = unlockedContent;
+
+            sweetAlert(
+                'success',
+                'Sucesso',
+                'Ótimo! Conteúdo desbloqueado!'
+            );
+            incrementaConteudoAPI();
+            document.querySelector(".xm-paywall").remove();
+        }catch(erro){
+            let r = setInterval(()=>{
+                let paywallBlock = document.querySelector(".xm-paywall");
+                if(paywallBlock != undefined && paywallBlock != null && typeof(axios) == 'function'){
+                    clearInterval(r);
+                    axios({
+                        method: 'GET',
+                        url: document.location.href,
+                        timeout: 20000
+                    }).then((resp)=>{
+                        let codigoFonte = new DOMParser().parseFromString(resp.data, 'text/html');
+                        let newsBlock = codigoFonte.getElementById("news-body");
+
+                        let u = setInterval(()=>{
+                            if(newsBlock != null && newsBlock != undefined){
+                                clearInterval(u);
+                                if(newsBlock != ''){
+                                    sweetAlert(
+                                        'success',
+                                        'Sucesso',
+                                        'Ótimo! Conteúdo desbloqueado!'
+                                    );
+                                    document.getElementById("news-body").innerHTML = newsBlock.outerHTML;
+                                    paywallBlock.remove();
+                                    incrementaConteudoAPI();
+                                }else{
+                                    sweetAlert(
+                                        'error',
+                                        'Erro',
+                                        `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>Erro ao montar newsBlock `
+                                    );
+                                }
+                            }
+                        },800);
+                    }).catch((erro)=>{
+                        sweetAlert(
+                            'error',
+                            'Erro',
+                            `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}`
+                        );
+                    });
+                }
+            },800);
         }
     }
-    return htmlCode;
-}
-
-
-function removeInvisibleDiv()
-{
-    let divs = document.querySelectorAll('div');
-    for(let i=0; i<divs.length; i++){
-        let classes = divs[i].classList;
-        for(let j=0; j<classes.length; j++){
-            if(new RegExp('\_\_AbsoluteDivWrapper\-sc').test(classes[j])){
-                divs[i].remove();
-            }
-        }
-    }
-}
-
-
-function fixTextStyle(element)
-{
-    element.style.cssText = `
-        box-shadow: unset !important;
-        border-radius: unset; !important;
-        text-align: left;
-        margin: 0;
-        color: rgba(0,0,0, 0.87);
-        font-size: 16px;
-        font-family: Barlow;
-        font-weight: 400;
-        line-height: 24px;
-        letter-spacing: 0.5px;`;
 }
 
 
@@ -2100,15 +2871,23 @@ function removeBloqueioConteudoExclusivo()
 
 function metodoAlternativo()
 {
-    try{
-        expandContent();
-        removeExpandButtons();
-        removeShowCompleteSolutionButtons();
-        removeAllBlurFilter();
-        incrementaConteudoAPI();
-    }catch(e){
-        console.log(`ERRO DESBLOQUEIO RESP AI => ${e.toString()}`);
-    }
+    let r = setInterval(()=>{
+        try{
+            expandContent();
+            removeExpandButtons();
+            removeShowCompleteSolutionButtons();
+            removeAllBlurFilter();
+            incrementaConteudoAPI();
+        }catch(e){
+            clearInterval(r);
+            console.log(`ERRO DESBLOQUEIO RESP AI => ${e.toString()}`);
+            sweetAlert(
+                'error',
+                'Erro',
+                `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${e.toString()}`
+            );
+        }
+    },800);
 }
 
 function expandContent()
@@ -2210,8 +2989,8 @@ function injectPayloadRespondeAI()
 /* ============================ FIX BUG EXERCICIOS RESOLVIDOS DOS LIVROS ============================ */
 function checkButtonCreation()
 {
+    let fullURL = window.location.href;
     if(document.getElementById('btnResposta') == null || document.getElementById('btnResposta') == undefined){
-        let fullURL = window.location.href;
         if(
             (fullURL.includes('materias/solucionario/livro') && 
             fullURL.includes('/edicao/') && 
@@ -2231,6 +3010,16 @@ function checkButtonCreation()
                 createButtonResposta();
                 saveDataForDashboard(8);
             }
+        }
+    }else{
+        //REMOVE BOTÃO DE RESOLUÇÃO
+        if(
+            (!fullURL.includes('materias/solucionario/livro') || 
+            !fullURL.includes('/edicao/') || 
+            !new RegExp('\/exercicio\/[0-9]+').test(fullURL))
+            && !(fullURL.includes("/conteudo/") && fullURL.includes("/livro/"))  && verificaElemento("#btnResposta")
+        ){
+            document.getElementById('btnResposta').remove();
         }
     }
 }

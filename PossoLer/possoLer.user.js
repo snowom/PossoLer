@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         Posso Ler?
 // @namespace    URL
-// @version      1.4.4
+// @version      1.5.5
 // @description  Tenha acesso a noticias ilimitadas e conteudos exclusivos de forma gratuita e segura
-// @author       Thomaz Ferreira
+// @author       snowom
 // @supportURL   https://possoler.tech/
 // @icon         https://possoler.tech/img/128.png
 // @match        *://*.possoler.tech/*
@@ -48,6 +48,8 @@
 // @match        *://*.correio24horas.com.br/*
 // @match        *://*.jornalnh.com.br/*
 // @match        *://*.atribuna.com.br/*
+// @match        *://*.umdoisesportes.com.br/*
+// @match        *://*.correiodopovo.com.br/*
 // @require      https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js
 // @require      https://possoler.tech/CDN/snackbar.js
 // @require      https://possoler.tech/CDN/[FF]blockCorePaywall.js
@@ -55,14 +57,14 @@
 // @grant        GM_setValue
 // @grant        GM_getValue
 // @grant        GM_deleteValue
-// @webRequest   [{"selector":"https://www.rbsonline.com.br/cdn/scripts/paywall.min.js*","action":"cancel"}, {"selector":"https://www.rbsonline.com.br/cdn/scripts/special-paywall.min.js*","action":"cancel"}, {"selector":"https://api.clicrbs.com.br/paywall-api/*","action":"cancel"}, {"selector": "*://*.jornaldocomercio.com/src/inove/paywall.php", "action": "cancel"}, {"selector": "*://cdn.tinypass.com/api/tinypass.min.js*", "action": "cancel"}, {"selector": "*://super.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://quatrorodas.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://veja.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://guiadoestudante.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector":"*://blockv4.fivewall.com.br/paywall.js*","action":"cancel"}, {"selector":"*://acesso.estadao.com.br/paywall*","action":"cancel"}, {"selector":"*://paywall.folha.uol.com.br/*","action":"cancel"}, {"selector":"*://*/arc/subs/p.min.js","action":"cancel"}, {"selector":"*://exame.com/wp-content/themes/exame-new/js/extd-acc.js*","action":"cancel"}, {"selector":"*://folhadelondrina.com.br/themes/default/js/paywall/fivewall1.26.js*","action":"cancel"}, {"selector":"*://s3.amazonaws.com/sdk-signin-wall-production/bundle.js*","action":"cancel"}, {"selector":"*://me.jsuol.com.br/*","action":"cancel"}, {"selector":"*://mais.opovo.com.br/auth*","action":"cancel"}, {"selector":"*://mais.opovo.com.br/includes/assets/opovomais/js/auth/auth_new_menu.min.js*","action":"cancel"}, {"selector":"*://mais.opovo.com.br/includes/assets/opovomais/js/paywall_config.min.js*","action":"cancel"}, {"selector":"*://correio-static.cworks.cloud/fileadmin/sites/correio24horas/js/all.js*","action":"cancel"}, {"selector":"*://static.infoglobo.com.br/paywall/js/tiny.js*","action":"cancel"}, {"selector":"*://assine.correio24horas.com.br/v2/amp/subscriber/auth*","action":"cancel"}, {"selector":"*://*.atribuna.com.br/assets/js*/materia.js","action":"cancel"}]
+// @webRequest   [{"selector":"https://www.rbsonline.com.br/cdn/scripts/paywall.min.js*","action":"cancel"}, {"selector":"https://www.rbsonline.com.br/cdn/scripts/special-paywall.min.js*","action":"cancel"}, {"selector":"https://api.clicrbs.com.br/paywall-api/*","action":"cancel"}, {"selector": "*://cdn.tinypass.com/api/tinypass.min.js*", "action": "cancel"}, {"selector": "*://super.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://quatrorodas.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://veja.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://guiadoestudante.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector":"*://blockv4.fivewall.com.br/paywall.js*","action":"cancel"}, {"selector":"*://acesso.estadao.com.br/paywall*","action":"cancel"}, {"selector":"*://paywall.folha.uol.com.br/*","action":"cancel"}, {"selector":"*://*/arc/subs/p.min.js","action":"cancel"}, {"selector":"*://exame.com/wp-content/themes/exame-new/js/extd-acc.js*","action":"cancel"}, {"selector":"*://folhadelondrina.com.br/themes/default/js/paywall/fivewall1.26.js*","action":"cancel"}, {"selector":"*://s3.amazonaws.com/sdk-signin-wall-production/bundle.js*","action":"cancel"}, {"selector":"*://me.jsuol.com.br/*","action":"cancel"}, {"selector":"*://mais.opovo.com.br/auth*","action":"cancel"}, {"selector":"*://mais.opovo.com.br/includes/assets/opovomais/js/auth/auth_new_menu.min.js*","action":"cancel"}, {"selector":"*://mais.opovo.com.br/includes/assets/opovomais/js/paywall_config.min.js*","action":"cancel"}, {"selector":"*://correio-static.cworks.cloud/fileadmin/sites/correio24horas/js/all.js*","action":"cancel"}, {"selector":"*://static.infoglobo.com.br/paywall/js/tiny.js*","action":"cancel"}, {"selector":"*://assine.correio24horas.com.br/v2/amp/subscriber/auth*","action":"cancel"}, {"selector":"*://*.atribuna.com.br/assets/js*/materia.js","action":"cancel"}, {"selector":"*://*c2.piano.io/*","action":"cancel"}, {"selector":"*://paywall.correiodopovo.com.br/*","action":"cancel"}, {"selector":"*://*.atribuna.com.br/assets/js*/article.js","action":"cancel"}, {"selector":"*://static.elpais.com/dist/resources/js/*/ENP-closed-article-layer.js","action":"cancel"}, {"selector":"*://d.jornaldocomercio.com/_conteudo/_files/json/paywall.json","action":"cancel"}]
 // @run-at       document-start
 // @noframes
 // ==/UserScript==
 
 importCDNSnackBar();
 let currentURL = window.location.hostname;
-const CURRENT_VERSION = '144';
+const CURRENT_VERSION = '155';
 
 
 function main()
@@ -99,9 +101,13 @@ function main()
         saveDataForDashboard(10);
         blockPaywallRequest("*://guiadoestudante.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*");
     }
-    else if(currentURL.includes("respondeai.com.br")){
+    else if(currentURL == 'www.respondeai.com.br'){
         saveDataForDashboard(8);
         modifyRESPAI();
+    }
+    else if(currentURL == 'app.respondeai.com.br'){
+        saveDataForDashboard(8);
+        modifyAPPRESPAI();
     }
     else if(currentURL.includes("exame.com")){
         saveDataForDashboard(9);
@@ -223,8 +229,665 @@ function main()
         saveDataForDashboard(38);
         blockPaywallRequest("*://*.atribuna.com.br/assets/js*/materia.js");
     }
+    else if(currentURL.includes("umdoisesportes.com.br")){
+        saveDataForDashboard(39);
+        blockPaywallRequest("*://c2.piano.io/*");
+    }
+    else if(currentURL.includes("correiodopovo.com.br")){
+        saveDataForDashboard(40);
+        blockPaywallRequest("*://paywall.correiodopovo.com.br/*");
+    }
 }
 
+
+/* ============================== APP RESPONDE AI ============================== */
+
+function modifyAPPRESPAI()
+{
+    mainUnlockFunction();
+    enableUrlChangeDetect();
+    checkButtonCreation();
+    changeLockedIcons();
+    removeReactModalOverlay();
+    enableBodyOverflow();
+    
+    window.addEventListener('locationchange',()=>{
+        mainUnlockFunction();
+        checkButtonCreation();
+        removeReactModalOverlay();
+        enableBodyOverflow();
+    });
+
+    /**
+     * Nested function (funcao aninhada)
+     * Funcao principal de desbloqueio de conteudo
+     */
+    function mainUnlockFunction(){
+        if(window.location.href.includes('app.respondeai.com.br/aprender') && window.location.href.includes('/teoria/')){
+            importRequiredCDN();
+            setTheoryLinksAction();
+            enableBodyOverflow();
+            removeReactModalOverlay();
+            removeDexterBlock();
+            removeBlurPage();
+            unlockTeoria();
+            incrementaConteudoAPI();
+            verificaAtualizacaoVersao();
+        }
+        else if(window.location.href.includes('app.respondeai.com.br/aprender') && window.location.href.includes('/exercicio/')){
+            importRequiredCDN();
+            setTheoryLinksAction();
+            enableBodyOverflow();
+            removeReactModalOverlay();
+            removeDexterBlock();
+            removeBlurPage();
+            unlockFixationExercise();
+            incrementaConteudoAPI();
+            verificaAtualizacaoVersao();
+        }
+        else if((window.location.href.includes('app.respondeai.com.br/aprender') || window.location.href.includes('app.respondeai.com.br/praticar')) && window.location.href.includes('/exercicio-lista/')){
+            importRequiredCDN();
+            setTheoryLinksAction();
+            enableBodyOverflow();
+            removeReactModalOverlay();
+            removeDexterBlock();
+            removeBlurPage();
+            unlockListExercise();
+            incrementaConteudoAPI();
+            verificaAtualizacaoVersao();
+        }
+    }
+}
+
+
+function changeLockedIcons()
+{
+    setInterval(()=>{
+        let svgIcons = document.querySelectorAll(".MuiSvgIcon-root");
+        svgIcons.forEach(icon => {
+            icon.innerHTML = `<svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="square" class="svg-inline--fa fa-square sc-lgsYow gFYkCv  logged" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zm-6 400H54c-3.3 0-6-2.7-6-6V86c0-3.3 2.7-6 6-6h340c3.3 0 6 2.7 6 6v340c0 3.3-2.7 6-6 6z"></path></svg>`
+        });
+    },800);
+}
+
+
+function unlockListExercise()
+{
+
+    //Remove format toogle
+    let k = setInterval(()=>{
+        let divs = document.querySelectorAll('div');
+        for(let i=0; i<divs.length; i++){
+            if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == 'content-format-toggle'){
+                clearInterval(k);
+                divs[i].style.display = "none";
+                break;
+            }
+        }
+    },800);
+
+    let r = setInterval(()=>{
+        let divs = document.querySelectorAll('div');
+        for(let i=0; i<divs.length; i++){
+            if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == 'exercise-show-answer-button'){
+                clearInterval(r);
+
+                let answerDiv = divs[i];
+                let token = getCookie('user_jwt');
+                let listExerciseId = getTopicId();
+
+                answerDiv.innerHTML = setLoadingPageAnimation();
+
+                let s = setInterval(()=>{
+                    if(typeof(axios) == 'function' && token != null && listExerciseId != null){
+                        clearInterval(s);
+                        axios({
+                            method: "POST",
+                            url: `https://possoler.tech/API/responde_ai/signedUser/index.php?action=getListExercise`,
+                            timeout: 30000,
+                            data: JSON.stringify({
+                                token: token,
+                                listExerciseId: listExerciseId
+                            })
+                        }).then((resp)=>{
+                            if(resp.data.status == 'failed') throw new Error(resp.data.message);
+
+                            //Set div style
+                            answerDiv.style.cssText = `
+                                width: 100% !important; 
+                                padding: 0px 30px !important; 
+                                font-family: "Droid Serif", serif !important;
+                                font-size: 1.25em !important;
+                                line-height: 26px !important;
+                                color: rgb(68, 68, 68) !important;
+                                padding-bottom: 15px !important`
+
+                            
+                            //Renderiza solução na tela - Teoria
+                            for(let i=0; i<resp.data.lightSolution.length; i++){
+                                if(i==0){
+                                    answerDiv.innerHTML = `<h1 style="color: rgb(54, 170, 173); font-size: 1.7em; font-family:Droid Serif, serif; font-weight: inherit; margin: 50px 0px 30px 0px">Resposta</h1>`;
+                                }
+                                answerDiv.innerHTML += resp.data.lightSolution[i];
+                                MathJax.typeset();
+                            }
+
+
+                            //Renderiza solução na tela - Videos
+                            if(resp.data.hasOwnProperty('videos')){
+                                const SINGLE_VIDEO_SIZE = 450;
+                                const SPACE_BETWEEN_VIDEOS = 50;
+                                
+                                for(let j=0; j<resp.data.videos.length; j++){
+
+                                    if(j==0){
+                                        answerDiv.innerHTML += `<h1 style="color: rgb(54, 170, 173); font-size: 1.7em; font-family:Droid Serif, serif; font-weight: inherit; margin: 50px 0px 30px 0px">Vídeo Tutorial</h1>`;
+                                    }
+
+                                    answerDiv.innerHTML += `
+                                        <div data-cy="video-iframe" allowfullscreen="" frameborder="0" style="width: 100%; height: ${(SINGLE_VIDEO_SIZE+SPACE_BETWEEN_VIDEOS)*resp.data.videos.length}px;">
+                                            <div style="width: 100%; height: ${SINGLE_VIDEO_SIZE}px;">
+                                                <iframe frameborder="0" allowfullscreen="1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" title="YouTube video player" width="100%" height="100%" src="https://www.youtube.com/embed/${resp.data.videos[j].providerId}?autoplay=0&amp;mute=0&amp;controls=1&amp;origin=https%3A%2F%2Fapp.respondeai.com.br&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;iv_load_policy=3&amp;modestbranding=1&amp;enablejsapi=1&amp;widgetid=1"></iframe>
+                                            </div>
+                                        </div>
+                                        <div style="height: ${SPACE_BETWEEN_VIDEOS}px !important"></div>`
+                                }
+                            }
+                        }).catch((erro)=>{
+                            sweetAlert(
+                                'error',
+                                'Erro',
+                                `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}`
+                            );
+                        });
+                    }
+                },800);
+                break;
+            }
+        }
+    },800);
+}
+
+
+function unlockFixationExercise()
+{
+    //Remove format toogle
+    let k = setInterval(()=>{
+        let divs = document.querySelectorAll('div');
+        for(let i=0; i<divs.length; i++){
+            if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == 'content-format-toggle'){
+                clearInterval(k);
+                divs[i].style.display = "none";
+                break;
+            }
+        }
+    },800);
+
+    let r = setInterval(()=>{
+        let divs = document.querySelectorAll('div');
+        for(let i=0; i<divs.length; i++){
+            if(
+                (divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == 'exercise-show-answer-button') || 
+                (divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == 'exercise-statement')
+            ){
+                clearInterval(r);
+                let answerDiv;
+
+                if(divs[i].getAttribute('data-cy') == 'exercise-statement'){
+                    divs[i].innerHTML += `<div id="tmpAnswer"></div>`;
+                    answerDiv = document.getElementById("tmpAnswer");
+
+                    // Remove botão responde ai
+                    for(let k=i; k<divs.length; k++){
+                        if(divs[k].hasAttribute('data-cy') && divs[k].getAttribute('data-cy') == 'exercise-show-answer-button'){
+                            divs[k].remove(); 
+                        }
+                    }
+                }else{
+                    answerDiv = divs[i];
+                }
+
+                let token = getCookie('user_jwt');
+                let exerciseId = getTopicId();
+
+                answerDiv.innerHTML = setLoadingPageAnimation();
+
+                let s = setInterval(()=>{
+                    if(typeof(axios) == 'function' && token != null && exerciseId != null){
+                        clearInterval(s);
+                        axios({
+                            method: "POST",
+                            url: `https://possoler.tech/API/responde_ai/signedUser/index.php?action=getFixationExercise`,
+                            timeout: 30000,
+                            data: JSON.stringify({
+                                token: token,
+                                exerciseId: exerciseId
+                            })
+                        }).then((resp)=>{
+                            if(resp.data.status == 'failed') throw new Error(resp.data.message);
+
+                            //Set div style
+                            answerDiv.style.cssText = `
+                                width: 100% !important; 
+                                padding: 0px 30px !important; 
+                                font-family: "Droid Serif", serif !important;
+                                font-size: 1.25em !important;
+                                line-height: 26px !important;
+                                color: rgb(68, 68, 68) !important;
+                                padding-bottom: 15px !important`
+
+                            
+                                console.log(resp.data);
+                            //Renderiza solução na tela - Teoria
+                            for(let i=0; i<resp.data.lightSolution.length; i++){
+                                if(i==0){
+                                    answerDiv.innerHTML = `<h1 style="color: rgb(247, 172, 60); font-size: 1.7em; font-family:Droid Serif, serif; font-weight: inherit; margin: 50px 0px 30px 0px">Resposta</h1>`;
+                                }
+                                answerDiv.innerHTML += resp.data.lightSolution[i];
+                                MathJax.typeset();
+                            }
+
+
+                            //Renderiza solução na tela - Videos
+                            if(resp.data.hasOwnProperty('videos')){
+                                const SINGLE_VIDEO_SIZE = 450;
+                                const SPACE_BETWEEN_VIDEOS = 50;
+                                
+                                for(let j=0; j<resp.data.videos.length; j++){
+
+                                    if(j==0){
+                                        answerDiv.innerHTML += `<h1 style="color: rgb(247, 172, 60); font-size: 1.7em; font-family:Droid Serif, serif; font-weight: inherit; margin: 50px 0px 30px 0px">Vídeo Tutorial</h1>`;
+                                    }
+
+                                    answerDiv.innerHTML += `
+                                        <div data-cy="video-iframe" allowfullscreen="" frameborder="0" style="width: 100%; height: ${(SINGLE_VIDEO_SIZE+SPACE_BETWEEN_VIDEOS)*resp.data.videos.length}px;">
+                                            <div style="width: 100%; height: ${SINGLE_VIDEO_SIZE}px;">
+                                                <iframe frameborder="0" allowfullscreen="1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" title="YouTube video player" width="100%" height="100%" src="https://www.youtube.com/embed/${resp.data.videos[j].providerId}?autoplay=0&amp;mute=0&amp;controls=1&amp;origin=https%3A%2F%2Fapp.respondeai.com.br&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;iv_load_policy=3&amp;modestbranding=1&amp;enablejsapi=1&amp;widgetid=1"></iframe>
+                                            </div>
+                                        </div>
+                                        <div style="height: ${SPACE_BETWEEN_VIDEOS}px !important"></div>`
+                                }
+                            }
+                        }).catch((erro)=>{
+                            sweetAlert(
+                                'error',
+                                'Erro',
+                                `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}`
+                            );
+                        });
+                    }
+                },800);
+                break;
+            }
+        }
+    },800);
+}
+
+
+function unlockTeoria()
+{
+    let r = setInterval(()=>{
+        let divs = document.querySelectorAll('div');
+        for(let i=0; i<divs.length; i++){
+            if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == 'content-format-toggle'){
+                clearInterval(r);
+
+                //VERIFICA SE NA 1 EXEC O CONTEUDO ESTA BLOQUEADO - TEXTO
+                //CASO POSITIVO, CHAMA API E MONTA TEXTO
+                let s = setInterval(()=>{
+                    let divsSteps = document.querySelectorAll('div');
+                    for(let j=0; j<divsSteps.length; j++){
+                        if(divsSteps[j].hasAttribute('data-cy') && divsSteps[j].getAttribute('data-cy') == 'theory-text-content'){
+                            clearInterval(s);
+                            let divStepsContainer = divsSteps[j].children[0].children[0];
+                            try{
+                                if(
+                                    divStepsContainer.children[0].isEqualNode(divStepsContainer.children[1]) &&
+                                    divStepsContainer.children[1].isEqualNode(divStepsContainer.children[2]) && 
+                                    divStepsContainer.children[2].isEqualNode(divStepsContainer.children[3]) &&
+                                    divStepsContainer.children[3].isEqualNode(divStepsContainer.children[4]) &&
+                                    divStepsContainer.children[4].isEqualNode(divStepsContainer.children[5])
+                                ){
+                                    //SETTA MSG DE LOADING
+                                    divsSteps[j].innerHTML = setLoadingPageAnimation();
+    
+                                    //CHAMA API PARA DESBLOQUEAR CONTEUDO
+                                    callAPITheoryUnlocked('texto');
+                                    container = divsSteps[j];
+                                    break;
+                                }
+                            }catch(erro){
+
+                            }
+                            break;
+                        }
+                    }
+                },800);
+
+
+                //VERIFICA SE NA 1 EXEC O CONTEUDO ESTA BLOQUEADO - VIDEO
+                //CASO POSITIVO, CHAMA API E MONTA VIDEO
+                let v = setInterval(()=>{
+                    let divsVideo = document.querySelectorAll('div');
+                    for(let j=0; j<divsVideo.length; j++){
+                        if(divsVideo[j].hasAttribute('data-cy') && divsVideo[j].getAttribute('data-cy') == 'theory-video-content'){
+                            clearInterval(v);
+                            if(divsVideo[j].children.length == 0)
+                            {
+                                //SETTA MSG DE LOADING
+                                divsVideo[j].innerHTML = setLoadingPageAnimation();
+
+                                //CHAMA API PARA DESBLOQUEAR CONTEUDO
+                                callAPITheoryUnlocked('video');
+                                break;
+                            }
+                        }
+                    }
+                },800);
+
+
+                //DEFINE NOVA ACAO AO CLICAR NO BOTAO
+                divs[i].addEventListener("click", ()=>{
+                    let nodes = divs[i].childNodes;
+                    for(let i=0; i<nodes.length; i++){
+                        if(nodes[i].nodeName == 'P' && nodes[i].textContent == 'Alternar para texto >>'){
+                            
+                            //PROCURA DIV PARA RECEBER CONTEUDO
+                            let s = setInterval(()=>{
+                                let divsSteps = document.querySelectorAll('div');
+                                for(let j=0; j<divsSteps.length; j++){
+                                    if(divsSteps[j].hasAttribute('data-cy') && divsSteps[j].getAttribute('data-cy') == 'theory-text-content'){
+                                        clearInterval(s);
+
+                                        let divStepsContainer = divsSteps[j].children[0].children[0];
+                                        try{
+                                            if(
+                                                divStepsContainer.children[0].isEqualNode(divStepsContainer.children[1]) &&
+                                                divStepsContainer.children[1].isEqualNode(divStepsContainer.children[2]) && 
+                                                divStepsContainer.children[2].isEqualNode(divStepsContainer.children[3]) &&
+                                                divStepsContainer.children[3].isEqualNode(divStepsContainer.children[4]) &&
+                                                divStepsContainer.children[4].isEqualNode(divStepsContainer.children[5])
+                                            ){
+                                                divsSteps[j].innerHTML = setLoadingPageAnimation();
+                                                callAPITheoryUnlocked("texto");
+                                                break;
+                                            }
+                                        }catch(erro){
+
+                                        }
+                                    }
+                                }
+                            },800);
+                            break;
+                        }
+                        if(nodes[i].nodeName == 'P' && nodes[i].textContent == 'Alternar para video >>'){
+                            callAPITheoryUnlocked("video");
+                            if(verificaElemento("#msgLottieDesbloqueio")){
+                                document.getElementById("msgLottieDesbloqueio").innerHTML = `
+                                    <p class="lead">Aguarde um momento...<br>Estamos removendo os bloqueios para você...</p>`
+                            }
+                            break;
+                        }
+                    }
+                });
+                break;
+            }else{
+                //PROCURA DIV PARA RECEBER CONTEUDO
+                let s = setInterval(()=>{
+                    let divsSteps = document.querySelectorAll('div');
+                    for(let j=0; j<divsSteps.length; j++){
+                        if(divsSteps[j].hasAttribute('data-cy') && divsSteps[j].getAttribute('data-cy') == 'theory-text-content'){
+                            clearInterval(s);
+
+                            let divStepsContainer = divsSteps[j].children[0].children[0];
+                            try{
+                                if(
+                                    divStepsContainer.children[0].isEqualNode(divStepsContainer.children[1]) &&
+                                    divStepsContainer.children[1].isEqualNode(divStepsContainer.children[2]) && 
+                                    divStepsContainer.children[2].isEqualNode(divStepsContainer.children[3]) &&
+                                    divStepsContainer.children[3].isEqualNode(divStepsContainer.children[4]) &&
+                                    divStepsContainer.children[4].isEqualNode(divStepsContainer.children[5])
+                                ){
+                                    divsSteps[j].innerHTML = setLoadingPageAnimation();
+                                    callAPITheoryUnlocked("texto");
+                                    break;
+                                }
+                            }catch(erro){
+                                
+                            }
+                        }
+                    }
+                },800);
+            }
+        }
+    },800);
+}
+
+
+function setLoadingPageAnimation()
+{
+    return `
+        <div id="containerLootieLoading" class="container text-center">
+            <lottie-player src="https://assets7.lottiefiles.com/packages/lf20_4bzh2jhs.json"  background="transparent"  speed="1"  style="height: 300px;"  loop  autoplay></lottie-player>
+            <center id="msgLottieDesbloqueio">
+                <p class="lead">Aguarde um momento...<br>Estamos removendo os bloqueios para você...</p>
+            </center>
+        </div>`
+}
+
+
+function importRequiredCDN()
+{
+    let r = setInterval(()=>{
+        if(verificaElemento('head')){
+            clearInterval(r);
+            if(!customElements.get("lottie-player")){
+                let lottieJS = document.createElement('script');
+                lottieJS.setAttribute('src','https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js');
+                document.querySelector('head').appendChild(lottieJS);
+            }
+        }
+    },800);
+}
+
+
+/**
+ * Faz chamada para API e popula página de acordo com o parametro typeContent
+ * @param {*} typeContent
+ */
+function callAPITheoryUnlocked(typeContent)
+{
+    let token = getCookie('user_jwt');
+    let topicId = getTopicId();
+    let r = setInterval(()=>{
+        if(typeof(axios) == 'function' && token != null && topicId != null){
+            clearInterval(r);
+            axios({
+                method: "POST",
+                url: `https://possoler.tech/API/responde_ai/signedUser/index.php?action=getTheory`,
+                timeout: 30000,
+                data: JSON.stringify({
+                    token: token,
+                    topicId: topicId
+                })
+            }).then((resp)=>{
+
+                if(resp.data.status == 'failed')
+                    throw new Error(resp.data.message);
+
+                if(typeContent == 'texto'){
+                    let r = setInterval(()=>{
+                        let divs = document.querySelectorAll('div');
+                        for(let i=0; i<divs.length; i++){
+                            if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == 'theory-text-content' && typeof(MathJax) == "object"){
+                                clearInterval(r);
+                                divs[i].innerHTML = `
+                                    <div class="sc-jTzLTM fFEUnb rendered">
+                                        <div>${resp.data.lightBody}</div>
+                                    </div>`;
+                                MathJax.typeset();
+                                return;
+                            }
+                        }
+                    },800);
+                }
+                else if(typeContent == 'video'){
+                    const SINGLE_VIDEO_SIZE = 450;
+                    const SPACE_BETWEEN_VIDEOS = 50;
+
+                    let r = setInterval(()=>{
+                        let divs = document.querySelectorAll('div');
+                        for(let i=0; i<divs.length; i++){
+                            if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == 'theory-video-content'){
+                                clearInterval(r);
+                                if(divs[i].children[0].id == "containerLootieLoading")
+                                {
+                                    if(resp.data.hasOwnProperty('videos'))
+                                    {
+                                        //REMOVE ANIMACAO DE CARREGAMENTO
+                                        document.getElementById("containerLootieLoading").remove();
+
+                                        //SETA TAMANHO DA PAGINA
+                                        divs[i].style.cssText += `height: ${(SINGLE_VIDEO_SIZE*resp.data.videos.length) + (SPACE_BETWEEN_VIDEOS*resp.data.videos.length)}px !important`;
+
+                                        //ITERA SOBRE OBJETO DE RESPOSTA PARA MONTAR PAGINA
+                                        for(let j=0; j<resp.data.videos.length; j++){
+                                            divs[i].innerHTML += `
+                                                <div data-cy="video-iframe" allowfullscreen="" frameborder="0" style="width: 100%; height: ${100/resp.data.videos.length}%;">
+                                                    <div style="width: 100%; height: 100%;">
+                                                        <iframe frameborder="0" allowfullscreen="1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" title="YouTube video player" width="100%" height="100%" src="https://www.youtube.com/embed/${resp.data.videos[j]}?autoplay=0&amp;mute=0&amp;controls=1&amp;origin=https%3A%2F%2Fapp.respondeai.com.br&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;iv_load_policy=3&amp;modestbranding=1&amp;enablejsapi=1&amp;widgetid=1"></iframe>
+                                                    </div>
+                                                </div>
+                                                <div style="height: ${SPACE_BETWEEN_VIDEOS}px !important"></div>`
+                                        }
+                                    }else{
+                                        throw new Error("Falha ao obter objeto \"videos\"");
+                                    }
+                                }
+                            }
+                        }
+                    },800);
+                }
+            }).catch((erro)=>{
+                sweetAlert(
+                    'error',
+                    'Erro',
+                    `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}`
+                );
+                if(verificaElemento("#msgLottieDesbloqueio")){
+                    document.getElementById("msgLottieDesbloqueio").innerHTML = `
+                        <p>Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.</p>
+                        <p><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}</p>`
+                }
+            })
+        }
+    },800);
+}
+
+/**
+ * Pega e retorna topicId da URL
+ * @returns String
+ */
+function getTopicId()
+{
+    let url = window.location.href;
+    let params = url.split("/");
+    return params[params.length-1];
+}
+
+
+/**
+ * Sobrescreve acao padrao dos botoes
+ */
+function setTheoryLinksAction()
+{
+    let r = setInterval(()=>{
+        let divs = document.querySelectorAll('div');
+        for(let i=0; i<divs.length; i++){
+            if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == 'side-menu'){
+                clearInterval(r);
+                setTimeout(()=>{
+                    let links = document.querySelectorAll("a");
+                    for(let i=0; i<links.length; i++){
+                        if(
+                            links[i].getAttribute("href").includes("/aprender") && 
+                            links[i].getAttribute("href").includes("/topico") &&
+                            links[i].getAttribute("href").includes("/teoria") &&
+                            links[i].getAttribute("href").includes("/exercicio/")
+                        ){
+                            links[i].addEventListener("click", (event)=>{
+                                event.preventDefault();
+                                window.location.assign(`https://${window.location.hostname}${links[i].getAttribute("href")}`);
+                            });
+                        }
+                    }
+                },2000);
+                break;
+            }
+        }
+    },800);
+}
+
+/**
+ * Remove blur da pagina
+ */
+function removeBlurPage()
+{
+    let r = setInterval(()=>{
+        let blurElements = document.querySelectorAll(".blur");            
+        if(blurElements.length>0){
+            clearInterval(r);
+            for (let i=0; i<blurElements.length; i++){
+                blurElements[i].classList.remove("blur");
+                blurElements[i].style.filter = 'none';
+            }
+        }
+    },800);
+}
+
+
+/**
+ * Habilita scroll da pagina
+ */
+function enableBodyOverflow()
+{
+    let r = setInterval(()=>{
+        if(verificaElemento(".ReactModal__Body--open")){
+            clearInterval(r);
+            document.body.style.overflow = "auto"
+        }
+    },800);
+}
+
+
+function removeReactModalOverlay()
+{
+    let r = setInterval(()=>{
+        let reactModalOverlay = document.querySelectorAll(".ReactModal__Overlay");
+        if(reactModalOverlay.length > 0){
+            clearInterval(r);
+            for(let i=0; i<reactModalOverlay.length; i++){
+                reactModalOverlay[i].remove();
+            }
+        }
+    },800);
+}
+
+/**
+ * Remove bloqueio do dexter
+ */
+function removeDexterBlock()
+{
+    let r = setInterval(()=>{
+        let divs = document.querySelectorAll('div');
+        for(let i=0; i<divs.length; i++){
+            if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == 'no-access-dexter-overlay'){
+                clearInterval(r);
+                divs[i].remove();
+            }
+        }
+    },800);
+}
 
 
 /* ============================== JORNAL O POVO ============================== */
@@ -1625,6 +2288,12 @@ function modifyELPAIS()
             document.querySelector('#ctn_freemium_article').remove();
         }
     },800);
+
+    setInterval(()=>{
+        if(document.getElementById("elpais_gpt-INTEXT") != null){
+            document.getElementById("elpais_gpt-INTEXT").style.height = "unset";
+        }
+    },800);
 }
 
 
@@ -1786,131 +2455,76 @@ function modifyEXAME()
 {
     verificaAtualizacaoVersao();
 
-    if(new RegExp('/invest\.exame\.com/').test(window.location.href)){
-        let r = setInterval(()=>{
-            let paywallBlock = getDivPaywall();
-            if(paywallBlock != undefined && paywallBlock != null && typeof(axios) == 'function'){
-                clearInterval(r);
+    if(document.querySelector(".xm-paywall") != null){
+        try{
+            let unlockedContent = "";
+            (__NEXT_DATA__.props.pageProps.postData).forEach((data)=>{
+                unlockedContent += (data.hasOwnProperty("content")) ? data.content : "";
+            });
+            document.getElementById("news-body").innerHTML = unlockedContent;
+            incrementaConteudoAPI();
+            document.querySelector(".xm-paywall").remove();
+        }catch(erro){
 
-                let s = setInterval(()=>{
-                    if(typeof(Swal) == 'function'){
-                        clearInterval(s);
-                        console.log('ACHEI SWALL');
+            let s = setInterval(()=>{
+                if(typeof(Swal) == 'function'){
+                    clearInterval(s);
+                    console.log('ACHEI SWALL');
     
-                        if(Swal.isVisible() == false && verificaElemento('#styleSnack')){
-                            sweetAlert(
-                                'info',
-                                'Aguarde um momento...',
-                                'Estamos removendo os bloqueios para você...<br><br>'
-                            );
-                        }
+                    if(Swal.isVisible() == false){
+                        sweetAlert(
+                            'info',
+                            'Aguarde um momento...',
+                            'Estamos removendo os bloqueios para você...<br><br>'
+                        );
                     }
-                },800);
-
-                axios({
-                    method: 'GET',
-                    url: document.location.href,
-                    timeout: 20000
-                }).then((resp)=>{
-                    let codigoFonte = new DOMParser().parseFromString(resp.data, 'text/html');
-                    let newsBlock = getNewsDiv(codigoFonte);
-
-                    let u = setInterval(()=>{
-                        if(newsBlock != null && newsBlock != undefined){
-                            clearInterval(u);
-                            if(newsBlock != ''){
-                                sweetAlert(
-                                    'success',
-                                    'Sucesso',
-                                    'Ótimo! Conteúdo desbloqueado!'
-                                );
-                                paywallBlock.innerHTML = newsBlock;
-                                removeInvisibleDiv();
-                                fixTextStyle(paywallBlock);
-                                incrementaConteudoAPI();
-                            }else{
-                                sweetAlert(
-                                    'error',
-                                    'Erro',
-                                    `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>Erro ao montar newsBlock `
-                                );
-                            }
-                        }
-                    },800);
-                }).catch((erro)=>{
-                    sweetAlert(
-                        'error',
-                        'Erro',
-                        `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}`
-                    );
-                });
-            }
-        },800);
-    }
-}
-
-
-/* =============================== FUNÇÕES EXAME INVEST ===============================*/
-
-function getDivPaywall()
-{
-    let h4 = document.querySelectorAll('h4');
-
-    for(let i=0; i<h4.length; i++){
-        if((h4[i].textContent).includes('Falta pouco para você liberar seu acesso')){
-            return (h4[i].parentElement.parentElement.parentElement);
-        }
-    }
-}
-
-
-function getNewsDiv(code)
-{
-    let divs = code.querySelectorAll('div');
-    let htmlCode = '';
-
-    for(let i=0; i<divs.length; i++){
-        let classes = divs[i].classList;
-        for(let j=0; j<classes.length; j++){
-            if(new RegExp('NewsBody\_\_NewsWrapper\-sc').test(classes[j])){
-                let childrenElements = divs[i].children;
-                for(let k=0; k<childrenElements.length; k++){
-                    htmlCode += childrenElements[k].outerHTML;
                 }
-            }
+            },800);
+
+            let r = setInterval(()=>{
+                let paywallBlock = document.querySelector(".xm-paywall");
+                if(paywallBlock != undefined && paywallBlock != null && typeof(axios) == 'function'){
+                    clearInterval(r);
+                    axios({
+                        method: 'GET',
+                        url: document.location.href,
+                        timeout: 20000
+                    }).then((resp)=>{
+                        let codigoFonte = new DOMParser().parseFromString(resp.data, 'text/html');
+                        let newsBlock = codigoFonte.getElementById("news-body");
+
+                        let u = setInterval(()=>{
+                            if(newsBlock != null && newsBlock != undefined){
+                                clearInterval(u);
+                                if(newsBlock != ''){
+                                    sweetAlert(
+                                        'success',
+                                        'Sucesso',
+                                        'Ótimo! Conteúdo desbloqueado!'
+                                    );
+                                    document.getElementById("news-body").innerHTML = newsBlock.outerHTML;
+                                    paywallBlock.remove();
+                                    incrementaConteudoAPI();
+                                }else{
+                                    sweetAlert(
+                                        'error',
+                                        'Erro',
+                                        `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>Erro ao montar newsBlock `
+                                    );
+                                }
+                            }
+                        },800);
+                    }).catch((erro)=>{
+                        sweetAlert(
+                            'error',
+                            'Erro',
+                            `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}`
+                        );
+                    });
+                }
+            },800);
         }
     }
-    return htmlCode;
-}
-
-
-function removeInvisibleDiv()
-{
-    let divs = document.querySelectorAll('div');
-    for(let i=0; i<divs.length; i++){
-        let classes = divs[i].classList;
-        for(let j=0; j<classes.length; j++){
-            if(new RegExp('\_\_AbsoluteDivWrapper\-sc').test(classes[j])){
-                divs[i].remove();
-            }
-        }
-    }
-}
-
-
-function fixTextStyle(element)
-{
-    element.style.cssText = `
-        box-shadow: unset !important;
-        border-radius: unset; !important;
-        text-align: left;
-        margin: 0;
-        color: rgba(0,0,0, 0.87);
-        font-size: 16px;
-        font-family: Barlow;
-        font-weight: 400;
-        line-height: 24px;
-        letter-spacing: 0.5px;`;
 }
 
 
@@ -1966,17 +2580,10 @@ function removeScriptObserver(s, codigoSemBloqueio)
         }
     }
 
-    //removeHeaderLogin();
-    setSelectableArea();
-    removeBloqueioExercicioLivro()
-    removeBlur();
-    removeAllBtnShowSolucao();
-    removeBloqueioTeoria();
-    removeBloqueioConteudoExclusivo();
-
     //LOOP Para remover bloqueios caso haja atualização dos iframes
     setInterval(()=>{
         //removeVideoBlockingAulao();
+        setSelectableArea();
         removeBloqueioExercicioLivro();
         removeBlur();
         removeAllBtnShowSolucao();
@@ -1989,11 +2596,11 @@ function removeScriptObserver(s, codigoSemBloqueio)
 function setSelectableArea()
 {
     let divs = document.querySelectorAll('div');
-    for(let i=0; i<divs.length; i++){
-        let cssProperties = getComputedStyle(divs[i]);
+    divs.forEach((div)=>{
+        let cssProperties = getComputedStyle(div);
         if(cssProperties.inset == '0px' && cssProperties.cursor == 'pointer')
-            divs[i].style.cssText += 'inset: unset !important;';
-    }
+            div.style.cssText += 'inset: unset !important;';
+    });
 }
 
 
@@ -2013,34 +2620,25 @@ function setSelectableArea()
 function removeBloqueioExercicioLivro()
 {
     let keys = [false, false, false];
-
     let divBlock = document.querySelectorAll(".ReactModalPortal");
-    if(divBlock.length>0)
-    {
-        for(let i=0; i<divBlock.length; i++){
-            divBlock[i].remove();
-        }
-        keys[0] = true;
-    }
-
     let body = document.querySelectorAll(".ReactModal__Body--open");
-    if(body.length>0)
-    {
-        for(let i=0; i<body.length; i++){
-            body[i].classList.remove("ReactModal__Body--open");
-        }
-        keys[1] = true;
-    }
-
     let containerBlock = document.querySelectorAll(".NoAccessDisclaimer__Container-sc-6er3z1-0");
-    if(containerBlock.length>0)
-    {
-        for(let i=0; i<containerBlock.length; i++){
-            containerBlock[i].remove();
-        }
-        keys[2] = true;
-    }
 
+    body.forEach((b)=>{
+        b.classList.remove("ReactModal__Body--open");
+        keys[0] = true;
+    });
+
+    divBlock.forEach((div)=>{
+        div.remove();
+        keys[1] = true;
+    });
+
+    containerBlock.forEach((container)=>{
+        container.remove();
+        keys[2] = true;
+    });
+    
     if(keys[0] && keys[1] && keys[2]) incrementaConteudoAPI();
 }
 
@@ -2053,13 +2651,10 @@ function remountPage(elemento, codigoBase)
 
 function removeHeaderLogin()
 {
-    let header = document.querySelectorAll(".global_menu__fixed_header__login_container");
-    
-    if(header.length>0){
-        for(let i=0; i<header.length; i++){
-            header[i].remove();
-        }
-    }
+    let headers = document.querySelectorAll(".global_menu__fixed_header__login_container");
+    headers.forEach((header)=>{
+        header.remove();
+    });
 }
 
 
@@ -2068,10 +2663,10 @@ function removeBlur()
     let blurElements = document.querySelectorAll(".blur");
 
     if(blurElements.length>0){
-        for (let i=0; i<blurElements.length; i++){
-            blurElements[i].classList.remove("blur");
-            blurElements[i].style.filter = 'none';
-        }
+        blurElements.forEach((blurElement)=>{
+            blurElement.classList.remove("blur");
+            blurElement.style.filter = 'none';
+        });
         incrementaConteudoAPI();
     }
 }
@@ -2080,47 +2675,24 @@ function removeBlur()
 function removeAllBtnShowSolucao()
 {
     let btnSolucaoCompleta = document.querySelectorAll("#exercise-expand-button");
-    if(btnSolucaoCompleta.length>0){
-        for(let i=0; i<btnSolucaoCompleta.length; i++){
-            btnSolucaoCompleta[i].remove();
-        }
-    }
     let btns = document.querySelectorAll(".exercise-theory-expand-button");
-    if(btns.length>0){
-        for(let i=0; i<btns.length; i++){
-            btns[i].remove();
-        }
-    }
     let buttons = document.querySelectorAll('button');
-    for(let i=0; i<buttons.length; i++){
-        if(buttons[i].textContent == 'Mostrar Solução Completa')
-            buttons[i].remove();
-    }
+
+    btnSolucaoCompleta.forEach((btn)=>{btn.remove();});
+    btns.forEach((btn)=>{btn.remove()});
+    buttons.forEach((button)=>{button.remove();})
 }
 
 
 function removeBloqueioTeoria()
 {
     let elementosPaywall = document.querySelectorAll(".paywall");
-    if(elementosPaywall.length>0){
-        for(let i=0; i<elementosPaywall.length; i++){
-            elementosPaywall[i].classList.remove("paywall");
-        }
-    }
-
     let elementosTheory = document.querySelectorAll(".theory-container");
-    if(elementosTheory.length>0){
-        for(let i=0; i<elementosTheory.length; i++){
-            elementosTheory[i].classList.remove("theory-container");
-        }
-    }
-
     let btnExpandir = document.querySelectorAll(".expand-overlay");
-    if(btnExpandir.length>0){
-        for(let i=0; i<btnExpandir.length; i++){
-            btnExpandir[i].remove();
-        }
-    }
+
+    elementosPaywall.forEach((elem)=>{elem.classList.remove("paywall");});
+    elementosTheory.forEach((elem)=>{elem.classList.remove("theory-container");});
+    btnExpandir.forEach((elem)=>{elem.remove();});
 }
 
 
@@ -2187,50 +2759,55 @@ function unlockPaidContent()
 
 function metodoAlternativo()
 {
-    try{
-        expandContent();
-        removeExpandButtons();
-        removeShowCompleteSolutionButtons();
-        removeAllBlurFilter();
-        incrementaConteudoAPI();
-    }catch(e){
-        console.log(`ERRO DESBLOQUEIO RESP AI => ${e.toString()}`);
-    }
+    let r = setInterval(()=>{
+        try{
+            expandContent();
+            removeExpandButtons();
+            removeShowCompleteSolutionButtons();
+            removeAllBlurFilter();
+            incrementaConteudoAPI();
+        }catch(e){
+            clearInterval(r);
+            console.log(`ERRO DESBLOQUEIO RESP AI => ${e.toString()}`);
+            sweetAlert(
+                'error',
+                'Erro',
+                `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${e.toString()}`
+            );
+        }
+    },800);
 }
 
 function expandContent()
 {
     let sections = document.querySelectorAll('section');
-
-    for(let i=0; i<sections.length; i++){
-        if(sections[i].offsetHeight == 300){
-            sections[i].style.height = 'unset';
+    sections.forEach((section)=>{
+        if(section.offsetHeight == 300){
+            section.style.height = 'unset';
         }
-    }
+    });
 }
 
 
 function removeExpandButtons()
 {
     let btn = document.querySelectorAll('button');
-
-    for(let i=0; i<btn.length; i++){
-        if((btn[i].textContent).includes('Expandir')){
-            btn[i].parentElement.remove();
+    btn.forEach((button)=>{
+        if((button.textContent).includes('Expandir')){
+            button.parentElement.remove();
         }
-    }
+    });
 }
 
 
 function removeShowCompleteSolutionButtons()
 {
     let btn = document.querySelectorAll('button');
-
-    for(let i=0; i<btn.length; i++){
-        if((btn[i].textContent).includes('Mostrar Solução Completa')){
-            btn[i].parentElement.remove();
+    btn.forEach((button)=>{
+        if((button.textContent).includes('Mostrar Solução Completa')){
+            button.parentElement.remove();
         }
-    }
+    });
 }
 
 
@@ -2260,8 +2837,8 @@ function removeAllBlurFilter()
 /* =================================== FIX BUG EXERCICIOS RESOLVIDOS DOS LIVROS =================================== */
 function checkButtonCreation()
 {
+    let fullURL = window.location.href;
     if(document.getElementById('btnResposta') == null || document.getElementById('btnResposta') == undefined){
-        let fullURL = window.location.href;
         if(
             (fullURL.includes('materias/solucionario/livro') && 
             fullURL.includes('/edicao/') && 
@@ -2284,6 +2861,16 @@ function checkButtonCreation()
                 createButtonResposta();
                 saveDataForDashboard(8);
             }
+        }
+    }else{
+        //REMOVE BOTÃO DE RESOLUÇÃO
+        if(
+            (!fullURL.includes('materias/solucionario/livro') || 
+            !fullURL.includes('/edicao/') || 
+            !new RegExp('\/exercicio\/[0-9]+').test(fullURL))
+            && !(fullURL.includes("/conteudo/") && fullURL.includes("/livro/"))  && verificaElemento("#btnResposta")
+        ){
+            document.getElementById('btnResposta').remove();
         }
     }
 }
@@ -2382,7 +2969,6 @@ function getExerciseId()
 {
     let fullURL = document.location.href;
     let urlParts = fullURL.split("/");
-
     return urlParts[urlParts.length-1];
 }
 
@@ -2426,7 +3012,7 @@ function importCDNSnackBar()
             //ADD SWEETALERT JS
             let sweetAlertJS = document.createElement('script');
             sweetAlertJS.setAttribute('src', 'https://cdn.jsdelivr.net/npm/sweetalert2@10');
-            document.body.appendChild(sweetAlertJS);
+            document.head.appendChild(sweetAlertJS);
         }
     },800);
 }

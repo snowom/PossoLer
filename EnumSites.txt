@@ -33,3 +33,5 @@
 36 - Jornal Correio 24hrs - Bahia
 37 - Jornal NH
 38 - Jornal A Tribuna - Santos
+39 - Um Dois Esportes
+40 - Correio do Povo
