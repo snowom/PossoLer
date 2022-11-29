@@ -117,10 +117,6 @@ function main()
         saveDataForDashboard(24);
         verificaAtualizacaoVersao();
     }
-    /* else if(currentURL.includes("brainly.com.br")){
-        saveDataForDashboard(25);
-        modifyBRAINLY();
-    } */
     else if(
         currentURL.includes('opopular.com.br') ||
         window.location.href.includes("webcache.googleusercontent.com/search?q=cache:https://opopular.com.br/")
@@ -1685,245 +1681,6 @@ function removeCommentDiv()
 }
 
 
-
-
-/* =============================== BRAINLY =============================== */
-
-function modifyBRAINLY()
-{
-    let r = setInterval(()=>{
-        if(verificaElemento('.brn-qpage-next-answer-box-content') && verificaElemento('.js-react-bottom-banner') && typeof(axios) == 'function'){
-            clearInterval(r);
-
-            if(Swal.isVisible() == false){
-                sweetAlert(
-                    'info',
-                    'Aguarde um momento...',
-                    'Estamos removendo os bloqueios para você...<br><br>'
-                );
-            }
-
-            const URL_REQUEST = 'https://possoler.tech/API/brainly/index.php?urlTarefa=';
-            const METHOD_REQUEST = 'GET';
-
-            axios({
-                method: METHOD_REQUEST,
-                url: `${URL_REQUEST}${window.location.href}`,
-                timeout: 30000
-            }).then((resp)=>{
-
-                if(resp.data.hasOwnProperty('erro')){
-                    sweetAlert(
-                        'error',
-                        'Erro',
-                        `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: </spam>${resp.data.erro}`
-                    );
-                    return;
-                }
-
-                let r = setInterval(()=>{
-                    if(typeof(Swal) == 'function'){
-                        clearInterval(r);
-                        
-                        removeBrainlyBlocks();
-                        expandAnswerDiv();
-    
-                        let answersBlocks_1 = document.querySelectorAll('.brn-qpage-next-answer-box-content');
-                        let answersBlocks_2 = document.querySelectorAll('.brn-qpage-next-dummy-unlock-section');
-                        let allAnswersBlocks = [...answersBlocks_1, ...answersBlocks_2];
-    
-                        for(let i=0; i<resp.data.answers.length; i++){
-                            allAnswersBlocks[i].innerHTML = resp.data.answers[i];
-                            if(i == (resp.data.answers.length)-1){
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Sucesso',
-                                    html:  'Ótimo! Conteúdo desbloqueado!',
-                                    allowEscapeKey: false,
-                                    allowOutsideClick: false,
-                                    showConfirmButton: true,
-                                    timer: 7000,
-                                    timerProgressBar: true,
-                                    customClass: {
-                                        popup: 'snackZ-index',
-                                        container: 'snackZ-index'
-                                    }
-                                });
-                                observerResposta(resp.data.answers);
-                                incrementaConteudoAPI();
-                                verificaAtualizacaoVersao();
-                                //setActionBtnVerRespostaBrainly();
-                            }
-                        }
-                    }
-                },800);
-            }).catch((erro)=>{
-                if(erro.toString().includes('timeout')){
-                    sweetAlert(
-                        'error',
-                        'Erro',
-                        `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`
-                    );
-                }else{
-                    sweetAlert(
-                        'error',
-                        'Erro',
-                        `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`
-                    );
-                }
-            });
-        }
-    },800);
-}
-
-
-function observerResposta(answers)
-{
-    setInterval(()=>{
-        let btns = document.querySelectorAll("button");
-        for(let i=0; i<btns.length; i++){
-            let childNodesBtn = btns[i].childNodes;
-            for(let j=0; j<childNodesBtn.length; j++){
-                if(childNodesBtn[j].textContent == 'Desbloquear'){
-                    let answersBlocks_1 = document.querySelectorAll('.brn-qpage-next-answer-box-content');
-                    let answersBlocks_2 = document.querySelectorAll('.brn-qpage-next-dummy-unlock-section');
-                    let allAnswersBlocks = [...answersBlocks_1, ...answersBlocks_2];
-
-                    for(let i=0; i<answers.length; i++){
-                        allAnswersBlocks[i].innerHTML = answers[i];
-                    }
-                    //setActionBtnVerRespostaBrainly();
-                    break;
-                }
-            }
-        }
-    },800);
-}
-
-function expandAnswerDiv()
-{
-    //TIRA MAX-HEIGHT DAS DIVS DE RESPOSTA
-    let r = setInterval(()=>{
-        if(verificaElemento('.brn-qpage-next-answer-box__content--blocked')){
-            clearInterval(r);
-            let answersBlocks = document.querySelectorAll('.brn-qpage-next-answer-box__content--blocked');
-            for(let i=0; i<answersBlocks.length; i++){
-                answersBlocks[i].style.maxHeight = 'unset';
-                answersBlocks[i].style.position = 'unset';
-            }
-        }
-    },800);
-}
-
-
-function setActionBtnVerRespostaBrainly()
-{
-    let f1 = findBtnVerResposta();
-    let f2 = findFlag();
-
-    let r = setInterval(()=>{
-        if(f1 != false && f2 != false){
-            clearInterval(r);
-            try{
-                document.getElementById('btnResposta').addEventListener('click', (event)=>{
-                    event.preventDefault();
-                    window.location.href = '#FLAG_AQUI';
-                });
-            }catch(e){
-                console.log('Erro ao setar action no botão');
-            }
-        }
-    },800);
-}
-
-
-function findFlag()
-{
-    let flag = document.querySelector('.js-react-question-box-comments');
-    flag.setAttribute('id', 'FLAG_AQUI');
-    document.querySelector('html').style.cssText += 'scroll-behavior: smooth;';
-    return flag;
-}
-
-
-function findBtnVerResposta()
-{
-    let btns = document.querySelectorAll('button');
-
-    for(let i=0; i<btns.length; i++){
-        if(btns[i].className == 'sg-button sg-button--m sg-button--solid-blue sg-button--full-width'){
-            let childrenNodes = btns[i].childNodes;
-            for(let j=0; j<childrenNodes.length; j++){
-                if(childrenNodes[j].className.includes('sg-button__text') && childrenNodes[j].textContent == 'Ver respostas'){
-                    btns[i].setAttribute('id', 'btnResposta');
-                    try{
-                        document.querySelector('.js-react-authentication-in-modal').remove();
-                    }catch(e){
-                        console.log('nada para remover');
-                    }
-                    return true;
-                }
-            }
-        }
-    }
-
-    return false;
-}
-
-
-function removeBrainlyBlocks()
-{
-    //REMOVE BLOQUEIO DE CIMA DAS DIVS
-    let r = setInterval(()=>{
-        let bannerBlock = document.querySelectorAll('div');
-        for(let i=0; i<bannerBlock.length; i++){
-            if(bannerBlock[i].hasAttribute('data-testid')){
-                if(bannerBlock[i].getAttribute('data-testid') == 'unlock_section_wrapper'){
-                    clearInterval(r);
-                    bannerBlock[i].remove();
-                }
-            }
-        }
-    },800);
-
-    //REMOVE FOOTER DE QUANTIDADE DE RESPOSTAS RESTANTES
-    let bannerFooter = document.querySelectorAll('.js-react-bottom-banner');
-    for(let i=0; i<bannerFooter.length; i++){
-        try{
-            bannerFooter[i].remove();
-        }catch(erro){
-            console.log('nada para excluir');
-        }
-    }
-
-    //REMOVE FALSE FLAG BLUR RESPOSTA
-    let u = setInterval(()=>{
-        if(verificaElemento('.brn-qpage-next-answer-box__below-blockade')){
-            clearInterval(u);
-            if(!document.querySelector('.brn-qpage-next-answer-box__below-blockade').hasChildNodes()){
-                document.querySelector('.brn-qpage-next-answer-box__below-blockade').style.display = 'none';
-            }
-        }
-    },800);
-
-    //REMOVE CAMADA QUE IMPEDE INTERAÇÃO DO USUARIO
-    let y = setInterval(()=>{
-        if(document.head != null){
-            clearInterval(y);
-            document.head.innerHTML += `<style>*::before{content:none !important;} *::after{content:none !important;}</style>`;
-        }
-    },800);
-
-    let z = setInterval(()=>{
-        if(verificaElemento('.js-register-toplayer')){
-            clearInterval(z);
-            document.querySelector('.js-register-toplayer').remove();
-        }
-    },800);
-}
-
-
-
 /* ====================== GAUCHA ZH =========================== */
 
 function modifyGZH()
@@ -2663,9 +2420,7 @@ function modifyRESPAI()
     injectPayloadRespondeAI();
     try{
         verificaAtualizacaoVersao();
-        metodoOriginal();
-        metodoAlternativo();
-
+        mainUnlockRESPAI();
     }catch(erro){
         alert(erro.toString());
     }
@@ -2676,109 +2431,97 @@ function modifyRESPAI()
 
 /* ======================================== METODO ORIGINAL ======================================== */
 
-function metodoOriginal()
+function mainUnlockRESPAI()
 {
-    const TIMEOUT = 3000;
-    setTimeout(()=>{
-        let codigoSemBloqueio = document.querySelector("html");
-        let scripts = codigoSemBloqueio.querySelectorAll("script");
-        removeScriptObserver(scripts, codigoSemBloqueio);
-    },TIMEOUT);
-}
-
-function removeScriptObserver(s, codigoSemBloqueio)
-{
-    for(let i=0; i<s.length; i++){
-        if(s[i].textContent.includes(`new MutationObserver((changes)`)){
-            s[i].remove();
-            remountPage("html", codigoSemBloqueio);
-            break;
-        }
-    }
-
-    //removeHeaderLogin();
-    removeBloqueioExercicioLivro()
-    removeBlur();
-    removeAllBtnShowSolucao();
-    removeBloqueioTeoria();
-    removeBloqueioConteudoExclusivo();
-
-    //LOOP Para remover bloqueios caso haja atualização dos iframes
-    setInterval(()=>{
-        //removeHeaderLogin();
-        removeBloqueioExercicioLivro()
+   //LOOP Para remover bloqueios caso haja atualização dos iframes
+   setInterval(()=>{
+        removeBloqueioExercicioLivro();
         removeBlur();
         removeAllBtnShowSolucao();
         removeBloqueioTeoria();
         removeBloqueioConteudoExclusivo();
+        expandContent();
+        removeExpandButtons();
+        removeShowCompleteSolutionButtons();        
     },800);
+}
+
+
+function expandContent()
+{
+    let sections = document.querySelectorAll('section');
+
+    for(let i=0; i<sections.length; i++){
+        if(sections[i].offsetHeight == 300){
+            sections[i].style.height = 'unset';
+        }
+    }
+}
+
+
+function removeExpandButtons()
+{
+    let btn = document.querySelectorAll('button');
+
+    for(let i=0; i<btn.length; i++){
+        if((btn[i].textContent).includes('Expandir')){
+            btn[i].parentElement.remove();
+        }
+    }
+}
+
+
+function removeShowCompleteSolutionButtons()
+{
+    let btn = document.querySelectorAll('button');
+
+    for(let i=0; i<btn.length; i++){
+        if((btn[i].textContent).includes('Mostrar Solução Completa')){
+            btn[i].parentElement.remove();
+        }
+    }
 }
 
 
 function removeBloqueioExercicioLivro()
 {
     let keys = [false, false, false];
-
     let divBlock = document.querySelectorAll(".ReactModalPortal");
-    if(divBlock.length>0)
-    {
-        for(let i=0; i<divBlock.length; i++){
-            divBlock[i].remove();
-        }
-        keys[0] = true;
-    }
-
     let body = document.querySelectorAll(".ReactModal__Body--open");
-    if(body.length>0)
-    {
-        for(let i=0; i<body.length; i++){
-            body[i].classList.remove("ReactModal__Body--open");
-        }
-        keys[1] = true;
-    }
-
     let containerBlock = document.querySelectorAll(".NoAccessDisclaimer__Container-sc-6er3z1-0");
-    if(containerBlock.length>0)
-    {
-        for(let i=0; i<containerBlock.length; i++){
-            containerBlock[i].remove();
-        }
+
+    body.forEach((b)=>{
+        b.classList.remove("ReactModal__Body--open");
+        keys[0] = true;
+    });
+
+    divBlock.forEach((div)=>{
+        div.remove();
+        keys[1] = true;
+    });
+
+    containerBlock.forEach((container)=>{
+        container.remove();
         keys[2] = true;
-    }
+    });
 
     if(keys[0] && keys[1] && keys[2]) incrementaConteudoAPI();
 }
 
 
-function remountPage(elemento, codigoBase)
-{
-    document.querySelector(elemento).innerHTML = codigoBase.outerHTML;
-}
-
-
-function removeHeaderLogin()
-{
-    let header = document.querySelectorAll(".global_menu__fixed_header__login_container");
-    
-    if(header.length>0){
-        for(let i=0; i<header.length; i++){
-            header[i].remove();
-        }
-    }
-}
-
-
 function removeBlur()
 {
-    let blurElements = document.querySelectorAll(".blur");
-
-    if(blurElements.length>0){
-        for (let i=0; i<blurElements.length; i++){
-            blurElements[i].classList.remove("blur");
-            blurElements[i].style.filter = 'none';
+    let divs = document.querySelectorAll("div");
+    divs.forEach((div)=>{
+        if(div.classList.contains("htZGzZ")){
+            div.classList.remove("htZGzZ");
+            incrementaConteudoAPI();
         }
-        incrementaConteudoAPI();
-    }
+        if(div.classList.contains("blur")){
+            div.classList.remove("blur");
+            incrementaConteudoAPI();
+        }
+    });
 }
 
 
@@ -2807,25 +2550,12 @@ function removeAllBtnShowSolucao()
 function removeBloqueioTeoria()
 {
     let elementosPaywall = document.querySelectorAll(".paywall");
-    if(elementosPaywall.length>0){
-        for(let i=0; i<elementosPaywall.length; i++){
-            elementosPaywall[i].classList.remove("paywall");
-        }
-    }
-
     let elementosTheory = document.querySelectorAll(".theory-container");
-    if(elementosTheory.length>0){
-        for(let i=0; i<elementosTheory.length; i++){
-            elementosTheory[i].classList.remove("theory-container");
-        }
-    }
-
     let btnExpandir = document.querySelectorAll(".expand-overlay");
-    if(btnExpandir.length>0){
-        for(let i=0; i<btnExpandir.length; i++){
-            btnExpandir[i].remove();
-        }
-    }
+
+    elementosPaywall.forEach((elem)=>{elem.classList.remove("paywall");});
+    elementosTheory.forEach((elem)=>{elem.classList.remove("theory-container");});
+    btnExpandir.forEach((elem)=>{elem.remove();});
 }
 
 
@@ -2867,89 +2597,6 @@ function removeBloqueioConteudoExclusivo()
     if(bloqueioOverlay && bloqueioWrapper) incrementaConteudoAPI();
 }
 
-/* ======================================== METODO ALTERNATIVO ======================================== */
-
-function metodoAlternativo()
-{
-    let r = setInterval(()=>{
-        try{
-            expandContent();
-            removeExpandButtons();
-            removeShowCompleteSolutionButtons();
-            removeAllBlurFilter();
-            incrementaConteudoAPI();
-        }catch(e){
-            clearInterval(r);
-            console.log(`ERRO DESBLOQUEIO RESP AI => ${e.toString()}`);
-            sweetAlert(
-                'error',
-                'Erro',
-                `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${e.toString()}`
-            );
-        }
-    },800);
-}
-
-function expandContent()
-{
-    let sections = document.querySelectorAll('section');
-
-    for(let i=0; i<sections.length; i++){
-        if(sections[i].offsetHeight == 300){
-            sections[i].style.height = 'unset';
-        }
-    }
-}
-
-
-function removeExpandButtons()
-{
-    let btn = document.querySelectorAll('button');
-
-    for(let i=0; i<btn.length; i++){
-        if((btn[i].textContent).includes('Expandir')){
-            btn[i].parentElement.remove();
-        }
-    }
-}
-
-
-function removeShowCompleteSolutionButtons()
-{
-    let btn = document.querySelectorAll('button');
-
-    for(let i=0; i<btn.length; i++){
-        if((btn[i].textContent).includes('Mostrar Solução Completa')){
-            btn[i].parentElement.remove();
-        }
-    }
-}
-
-
-function removeAllBlurFilter()
-{
-    //TIRA BLUR TEORIA E EXERCICIOS
-    if(verificaElemento('body')){
-        let r = setInterval(()=>{
-            if(verificaElemento('.paywall-content')){
-                clearInterval(r);
-                document.body.innerHTML += '<style>.paywall-content{filter: unset !important;}</style>';
-            }
-        },800);
-
-        let u = setInterval(()=>{
-            if(verificaElemento("#exercicios-resolvidos")){
-                clearInterval(u);
-                document.body.innerHTML += '<style>#exercicios-resolvidos div{filter: unset !important;}</style>';
-            }
-        },800);
-    }
-}
-
-/* ====================================================================================================== */
-
-
-/* ======================================== PARA USUARIOS LOGADOS ========================================*/
 
 function injectPayloadRespondeAI()
 {

@@ -1,15 +1,12 @@
 <!DOCTYPE html>
 
 <?php
+    require_once __DIR__ . '/vendor/autoload.php';
 
-require_once __DIR__ . '/vendor/autoload.php';
+    use RespondeAi\Request;
+    use RespondeAi\Utils;
 
-use RespondeAi\Request;
-use RespondeAi\Utils;
-
-$request = new Request;
-$utils = new Utils;
-
+    $utils = new Utils();
 ?>
 
 <html lang="en">
@@ -43,7 +40,7 @@ $utils = new Utils;
                     ? $_GET['exerciseId']
                     : throw new Exception('Falha ao obter exerciseId');
 
-                $responseRequest = $request->getSolution($userToken, $exerciseId);
+                $responseRequest = (new Request($userToken, $exerciseId))->getSolution($userToken, $exerciseId);
 
                 if($responseRequest['response']){
                     echo $utils->setBackgroundColorJS("#fff");

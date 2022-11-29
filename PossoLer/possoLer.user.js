@@ -57,7 +57,7 @@
 // @grant        GM_setValue
 // @grant        GM_getValue
 // @grant        GM_deleteValue
-// @webRequest   [{"selector":"https://www.rbsonline.com.br/cdn/scripts/paywall.min.js*","action":"cancel"}, {"selector":"https://www.rbsonline.com.br/cdn/scripts/special-paywall.min.js*","action":"cancel"}, {"selector":"https://api.clicrbs.com.br/paywall-api/*","action":"cancel"}, {"selector": "*://cdn.tinypass.com/api/tinypass.min.js*", "action": "cancel"}, {"selector": "*://super.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://quatrorodas.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://veja.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://guiadoestudante.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector":"*://blockv4.fivewall.com.br/paywall.js*","action":"cancel"}, {"selector":"*://acesso.estadao.com.br/paywall*","action":"cancel"}, {"selector":"*://paywall.folha.uol.com.br/*","action":"cancel"}, {"selector":"*://*/arc/subs/p.min.js","action":"cancel"}, {"selector":"*://exame.com/wp-content/themes/exame-new/js/extd-acc.js*","action":"cancel"}, {"selector":"*://folhadelondrina.com.br/themes/default/js/paywall/fivewall1.26.js*","action":"cancel"}, {"selector":"*://s3.amazonaws.com/sdk-signin-wall-production/bundle.js*","action":"cancel"}, {"selector":"*://me.jsuol.com.br/*","action":"cancel"}, {"selector":"*://mais.opovo.com.br/auth*","action":"cancel"}, {"selector":"*://mais.opovo.com.br/includes/assets/opovomais/js/auth/auth_new_menu.min.js*","action":"cancel"}, {"selector":"*://mais.opovo.com.br/includes/assets/opovomais/js/paywall_config.min.js*","action":"cancel"}, {"selector":"*://correio-static.cworks.cloud/fileadmin/sites/correio24horas/js/all.js*","action":"cancel"}, {"selector":"*://static.infoglobo.com.br/paywall/js/tiny.js*","action":"cancel"}, {"selector":"*://assine.correio24horas.com.br/v2/amp/subscriber/auth*","action":"cancel"}, {"selector":"*://*.atribuna.com.br/assets/js*/materia.js","action":"cancel"}, {"selector":"*://*c2.piano.io/*","action":"cancel"}, {"selector":"*://paywall.correiodopovo.com.br/*","action":"cancel"}, {"selector":"*://*.atribuna.com.br/assets/js*/article.js","action":"cancel"}, {"selector":"*://static.elpais.com/dist/resources/js/*/ENP-closed-article-layer.js","action":"cancel"}, {"selector":"*://d.jornaldocomercio.com/_conteudo/_files/json/paywall.json","action":"cancel"}]
+// @webRequest   [{"selector":"https://www.rbsonline.com.br/cdn/scripts/paywall.min.js*","action":"cancel"}, {"selector":"https://www.rbsonline.com.br/cdn/scripts/special-paywall.min.js*","action":"cancel"}, {"selector":"https://api.clicrbs.com.br/paywall-api/*","action":"cancel"}, {"selector": "*://cdn.tinypass.com/api/tinypass.min.js*", "action": "cancel"}, {"selector": "*://super.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://quatrorodas.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://veja.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://guiadoestudante.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector":"*://blockv4.fivewall.com.br/paywall.js*","action":"cancel"}, {"selector":"*://acesso.estadao.com.br/paywall*","action":"cancel"}, {"selector":"*://paywall.folha.uol.com.br/*","action":"cancel"}, {"selector":"*://*/arc/subs/p.min.js","action":"cancel"}, {"selector":"*://exame.com/wp-content/themes/exame-new/js/extd-acc.js*","action":"cancel"}, {"selector":"*://folhadelondrina.com.br/themes/default/js/paywall/fivewall1.26.js*","action":"cancel"}, {"selector":"*://s3.amazonaws.com/sdk-signin-wall-production/bundle.js*","action":"cancel"}, {"selector":"*://me.jsuol.com.br/*","action":"cancel"}, {"selector":"*://mais.opovo.com.br/auth*","action":"cancel"}, {"selector":"*://mais.opovo.com.br/includes/assets/opovomais/js/auth/auth_new_menu.min.js*","action":"cancel"}, {"selector":"*://mais.opovo.com.br/includes/assets/opovomais/js/paywall_config.min.js*","action":"cancel"}, {"selector":"*://correio-static.cworks.cloud/fileadmin/sites/correio24horas/js/all.js*","action":"cancel"}, {"selector":"*://static.infoglobo.com.br/paywall/js/tiny.js*","action":"cancel"}, {"selector":"*://assine.correio24horas.com.br/v2/amp/subscriber/auth*","action":"cancel"}, {"selector":"*://*.atribuna.com.br/assets/js*/materia.js","action":"cancel"}, {"selector":"*://*c2.piano.io/*","action":"cancel"}, {"selector":"*://paywall.correiodopovo.com.br/*","action":"cancel"}, {"selector":"*://*.atribuna.com.br/assets/js*/article.js","action":"cancel"}, {"selector":"*://*.respondeai.com.br/conteudo/js/vendor.js","action":"cancel"}, {"selector":"*://static.elpais.com/dist/resources/js/*/ENP-closed-article-layer.js","action":"cancel"}, {"selector":"*://d.jornaldocomercio.com/_conteudo/_files/json/paywall.json","action":"cancel"}]
 // @run-at       document-start
 // @noframes
 // ==/UserScript==
@@ -72,11 +72,11 @@ function main()
     if(currentURL.includes("folha.uol.com.br")){
         saveDataForDashboard(1);
         blockPaywallRequest("*://paywall.folha.uol.com.br/*");
-    
+
     }else if(currentURL.includes("estadao.com.br")){
         saveDataForDashboard(2);
         blockPaywallRequest("*://acesso.estadao.com.br/paywall*");
-    
+
     }else if(currentURL.includes("oglobo.globo.com") && !(window.location.href.includes("/epoca"))){
         saveDataForDashboard(3);
         blockPaywallRequest("*://static.infoglobo.com.br/paywall/js/tiny.js");
@@ -181,10 +181,6 @@ function main()
         saveDataForDashboard(24);
         blockPaywallRequest("*://cdn.tinypass.com/api/tinypass.min.js*");
     }
-    /* else if(currentURL.includes("brainly.com.br")){
-        saveDataForDashboard(25);
-        modifyBRAINLY();
-    } */
     else if(
         currentURL.includes('opopular.com.br') ||
         window.location.href.includes("webcache.googleusercontent.com/search?q=cache:https://opopular.com.br/")
@@ -244,66 +240,96 @@ function main()
 
 function modifyAPPRESPAI()
 {
-    mainUnlockFunction();
-    enableUrlChangeDetect();
-    checkButtonCreation();
-    changeLockedIcons();
-    removeReactModalOverlay();
-    enableBodyOverflow();
-    
-    window.addEventListener('locationchange',()=>{
-        mainUnlockFunction();
-        checkButtonCreation();
-        removeReactModalOverlay();
-        enableBodyOverflow();
-    });
+    let waitAxios = setInterval(()=>{
+        if(typeof(axios) == "function" && typeof(Swal) == 'function') {
+            clearInterval(waitAxios);
 
-    /**
-     * Nested function (funcao aninhada)
-     * Funcao principal de desbloqueio de conteudo
-     */
-    function mainUnlockFunction(){
-        if(window.location.href.includes('app.respondeai.com.br/aprender') && window.location.href.includes('/teoria/')){
-            importRequiredCDN();
-            setTheoryLinksAction();
-            enableBodyOverflow();
-            removeReactModalOverlay();
-            removeDexterBlock();
-            removeBlurPage();
-            unlockTeoria();
-            incrementaConteudoAPI();
-            verificaAtualizacaoVersao();
+            axios({
+                method: "GET",
+                url: "https://possoler.tech/API/responde_ai/paywallDOM/index.php",
+                timeout: 10000
+            }).then((resp)=>{
+                
+                mainUnlockFunction();
+                enableUrlChangeDetect();
+                checkButtonCreation();
+                changeLockedIcons(resp.data);
+                removeReactModalOverlay(resp.data);
+                enableBodyOverflow(resp.data);
+
+                window.addEventListener('locationchange',()=>{
+                    mainUnlockFunction();
+                    checkButtonCreation();
+                    removeReactModalOverlay(resp.data);
+                    enableBodyOverflow(resp.data);
+                });
+
+
+                /**
+                 * Nested function (funcao aninhada)
+                 * Funcao principal de desbloqueio de conteudo
+                 */
+                function mainUnlockFunction(){
+                    if(window.location.href.includes('app.respondeai.com.br/aprender') && window.location.href.includes('/teoria/')){
+                        importRequiredCDN();
+                        setTheoryLinksAction();
+                        enableBodyOverflow(resp.data);
+                        removeReactModalOverlay(resp.data);
+                        removeDexterBlock(resp.data);
+                        removeBlurPage(resp.data);
+                        unlockTeoria();
+                        incrementaConteudoAPI();
+                        verificaAtualizacaoVersao();
+                    }
+                    else if(window.location.href.includes('app.respondeai.com.br/aprender') && window.location.href.includes('/exercicio/')){
+                        importRequiredCDN();
+                        setTheoryLinksAction();
+                        enableBodyOverflow(resp.data);
+                        removeReactModalOverlay(resp.data);
+                        removeDexterBlock(resp.data);
+                        removeBlurPage(resp.data);
+                        unlockFixationExercise();
+                        incrementaConteudoAPI();
+                        verificaAtualizacaoVersao();
+                    }
+                    else if((window.location.href.includes('app.respondeai.com.br/aprender') || window.location.href.includes('app.respondeai.com.br/praticar')) && window.location.href.includes('/exercicio-lista/')){
+                        importRequiredCDN();
+                        setTheoryLinksAction();
+                        enableBodyOverflow(resp.data);
+                        removeReactModalOverlay(resp.data);
+                        removeDexterBlock(resp.data);
+                        removeBlurPage(resp.data);
+                        unlockListExercise();
+                        incrementaConteudoAPI();
+                        verificaAtualizacaoVersao();
+                    }
+                }
+
+            }).catch((erro) => {
+                if(erro.toString().includes('timeout')){
+                    sweetAlert(
+                        'error',
+                        'Erro',
+                        `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`,
+                    );
+                }else{
+                    sweetAlert(
+                        'error',
+                        'Erro',
+                        `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}`
+                    );
+                }                
+                
+            })
         }
-        else if(window.location.href.includes('app.respondeai.com.br/aprender') && window.location.href.includes('/exercicio/')){
-            importRequiredCDN();
-            setTheoryLinksAction();
-            enableBodyOverflow();
-            removeReactModalOverlay();
-            removeDexterBlock();
-            removeBlurPage();
-            unlockFixationExercise();
-            incrementaConteudoAPI();
-            verificaAtualizacaoVersao();
-        }
-        else if((window.location.href.includes('app.respondeai.com.br/aprender') || window.location.href.includes('app.respondeai.com.br/praticar')) && window.location.href.includes('/exercicio-lista/')){
-            importRequiredCDN();
-            setTheoryLinksAction();
-            enableBodyOverflow();
-            removeReactModalOverlay();
-            removeDexterBlock();
-            removeBlurPage();
-            unlockListExercise();
-            incrementaConteudoAPI();
-            verificaAtualizacaoVersao();
-        }
-    }
+    },800);
 }
 
 
-function changeLockedIcons()
+function changeLockedIcons(configs)
 {
     setInterval(()=>{
-        let svgIcons = document.querySelectorAll(".MuiSvgIcon-root");
+        let svgIcons = document.querySelectorAll(`.${configs.logged_locked_icons}`);
         svgIcons.forEach(icon => {
             icon.innerHTML = `<svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="square" class="svg-inline--fa fa-square sc-lgsYow gFYkCv  logged" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zm-6 400H54c-3.3 0-6-2.7-6-6V86c0-3.3 2.7-6 6-6h340c3.3 0 6 2.7 6 6v340c0 3.3-2.7 6-6 6z"></path></svg>`
         });
@@ -354,15 +380,15 @@ function unlockListExercise()
 
                             //Set div style
                             answerDiv.style.cssText = `
-                                width: 100% !important; 
-                                padding: 0px 30px !important; 
+                                width: 100% !important;
+                                padding: 0px 30px !important;
                                 font-family: "Droid Serif", serif !important;
                                 font-size: 1.25em !important;
                                 line-height: 26px !important;
                                 color: rgb(68, 68, 68) !important;
                                 padding-bottom: 15px !important`
 
-                            
+
                             //Renderiza solução na tela - Teoria
                             for(let i=0; i<resp.data.lightSolution.length; i++){
                                 if(i==0){
@@ -377,7 +403,7 @@ function unlockListExercise()
                             if(resp.data.hasOwnProperty('videos')){
                                 const SINGLE_VIDEO_SIZE = 450;
                                 const SPACE_BETWEEN_VIDEOS = 50;
-                                
+
                                 for(let j=0; j<resp.data.videos.length; j++){
 
                                     if(j==0){
@@ -427,7 +453,7 @@ function unlockFixationExercise()
         let divs = document.querySelectorAll('div');
         for(let i=0; i<divs.length; i++){
             if(
-                (divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == 'exercise-show-answer-button') || 
+                (divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == 'exercise-show-answer-button') ||
                 (divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == 'exercise-statement')
             ){
                 clearInterval(r);
@@ -440,7 +466,7 @@ function unlockFixationExercise()
                     // Remove botão responde ai
                     for(let k=i; k<divs.length; k++){
                         if(divs[k].hasAttribute('data-cy') && divs[k].getAttribute('data-cy') == 'exercise-show-answer-button'){
-                            divs[k].remove(); 
+                            divs[k].remove();
                         }
                     }
                 }else{
@@ -468,15 +494,15 @@ function unlockFixationExercise()
 
                             //Set div style
                             answerDiv.style.cssText = `
-                                width: 100% !important; 
-                                padding: 0px 30px !important; 
+                                width: 100% !important;
+                                padding: 0px 30px !important;
                                 font-family: "Droid Serif", serif !important;
                                 font-size: 1.25em !important;
                                 line-height: 26px !important;
                                 color: rgb(68, 68, 68) !important;
                                 padding-bottom: 15px !important`
 
-                            
+
                                 console.log(resp.data);
                             //Renderiza solução na tela - Teoria
                             for(let i=0; i<resp.data.lightSolution.length; i++){
@@ -492,7 +518,7 @@ function unlockFixationExercise()
                             if(resp.data.hasOwnProperty('videos')){
                                 const SINGLE_VIDEO_SIZE = 450;
                                 const SPACE_BETWEEN_VIDEOS = 50;
-                                
+
                                 for(let j=0; j<resp.data.videos.length; j++){
 
                                     if(j==0){
@@ -543,14 +569,14 @@ function unlockTeoria()
                             try{
                                 if(
                                     divStepsContainer.children[0].isEqualNode(divStepsContainer.children[1]) &&
-                                    divStepsContainer.children[1].isEqualNode(divStepsContainer.children[2]) && 
+                                    divStepsContainer.children[1].isEqualNode(divStepsContainer.children[2]) &&
                                     divStepsContainer.children[2].isEqualNode(divStepsContainer.children[3]) &&
                                     divStepsContainer.children[3].isEqualNode(divStepsContainer.children[4]) &&
                                     divStepsContainer.children[4].isEqualNode(divStepsContainer.children[5])
                                 ){
                                     //SETTA MSG DE LOADING
                                     divsSteps[j].innerHTML = setLoadingPageAnimation();
-    
+
                                     //CHAMA API PARA DESBLOQUEAR CONTEUDO
                                     callAPITheoryUnlocked('texto');
                                     container = divsSteps[j];
@@ -591,7 +617,7 @@ function unlockTeoria()
                     let nodes = divs[i].childNodes;
                     for(let i=0; i<nodes.length; i++){
                         if(nodes[i].nodeName == 'P' && nodes[i].textContent == 'Alternar para texto >>'){
-                            
+
                             //PROCURA DIV PARA RECEBER CONTEUDO
                             let s = setInterval(()=>{
                                 let divsSteps = document.querySelectorAll('div');
@@ -603,7 +629,7 @@ function unlockTeoria()
                                         try{
                                             if(
                                                 divStepsContainer.children[0].isEqualNode(divStepsContainer.children[1]) &&
-                                                divStepsContainer.children[1].isEqualNode(divStepsContainer.children[2]) && 
+                                                divStepsContainer.children[1].isEqualNode(divStepsContainer.children[2]) &&
                                                 divStepsContainer.children[2].isEqualNode(divStepsContainer.children[3]) &&
                                                 divStepsContainer.children[3].isEqualNode(divStepsContainer.children[4]) &&
                                                 divStepsContainer.children[4].isEqualNode(divStepsContainer.children[5])
@@ -643,7 +669,7 @@ function unlockTeoria()
                             try{
                                 if(
                                     divStepsContainer.children[0].isEqualNode(divStepsContainer.children[1]) &&
-                                    divStepsContainer.children[1].isEqualNode(divStepsContainer.children[2]) && 
+                                    divStepsContainer.children[1].isEqualNode(divStepsContainer.children[2]) &&
                                     divStepsContainer.children[2].isEqualNode(divStepsContainer.children[3]) &&
                                     divStepsContainer.children[3].isEqualNode(divStepsContainer.children[4]) &&
                                     divStepsContainer.children[4].isEqualNode(divStepsContainer.children[5])
@@ -653,7 +679,7 @@ function unlockTeoria()
                                     break;
                                 }
                             }catch(erro){
-                                
+
                             }
                         }
                     }
@@ -810,7 +836,7 @@ function setTheoryLinksAction()
                     let links = document.querySelectorAll("a");
                     for(let i=0; i<links.length; i++){
                         if(
-                            links[i].getAttribute("href").includes("/aprender") && 
+                            links[i].getAttribute("href").includes("/aprender") &&
                             links[i].getAttribute("href").includes("/topico") &&
                             links[i].getAttribute("href").includes("/teoria") &&
                             links[i].getAttribute("href").includes("/exercicio/")
@@ -831,17 +857,16 @@ function setTheoryLinksAction()
 /**
  * Remove blur da pagina
  */
-function removeBlurPage()
+function removeBlurPage(configs)
 {
-    let r = setInterval(()=>{
-        let blurElements = document.querySelectorAll(".blur");            
-        if(blurElements.length>0){
-            clearInterval(r);
-            for (let i=0; i<blurElements.length; i++){
-                blurElements[i].classList.remove("blur");
-                blurElements[i].style.filter = 'none';
-            }
-        }
+    setInterval(()=>{
+        configs.blur_class.forEach((current_class) => {
+            let blurElements = document.querySelectorAll(`.${current_class}`);
+            blurElements.forEach((blurElement) => {
+                blurElement.classList.remove(current_class);
+                blurElement.style.filter = "none";
+            })
+        });
     },800);
 }
 
@@ -849,10 +874,10 @@ function removeBlurPage()
 /**
  * Habilita scroll da pagina
  */
-function enableBodyOverflow()
+function enableBodyOverflow(configs)
 {
     let r = setInterval(()=>{
-        if(verificaElemento(".ReactModal__Body--open")){
+        if(verificaElemento(`.${configs.logged_enable_scroll_page}`)){
             clearInterval(r);
             document.body.style.overflow = "auto"
         }
@@ -860,10 +885,10 @@ function enableBodyOverflow()
 }
 
 
-function removeReactModalOverlay()
+function removeReactModalOverlay(configs)
 {
     let r = setInterval(()=>{
-        let reactModalOverlay = document.querySelectorAll(".ReactModal__Overlay");
+        let reactModalOverlay = document.querySelectorAll(`.${configs.logged_react_modal}`);
         if(reactModalOverlay.length > 0){
             clearInterval(r);
             for(let i=0; i<reactModalOverlay.length; i++){
@@ -876,12 +901,12 @@ function removeReactModalOverlay()
 /**
  * Remove bloqueio do dexter
  */
-function removeDexterBlock()
+function removeDexterBlock(configs)
 {
     let r = setInterval(()=>{
         let divs = document.querySelectorAll('div');
         for(let i=0; i<divs.length; i++){
-            if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == 'no-access-dexter-overlay'){
+            if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == `${configs.logged_dexter_block}`){
                 clearInterval(r);
                 divs[i].remove();
             }
@@ -942,13 +967,13 @@ function modifyOTEMPO()
         let r = setInterval(()=>{
             if(verificaElemento('#div-paywall-element')){
                 clearInterval(r);
-    
+
                 //MONTA SWEET ALERT DE DESBLOQUEIO
                 let s = setInterval(()=>{
                     if(typeof(Swal) == 'function'){
                         clearInterval(s);
                         console.log('ACHEI SWALL');
-    
+
                         if(Swal.isVisible() == false && verificaElemento('#styleSnack')){
                             sweetAlert(
                                 'info',
@@ -958,7 +983,7 @@ function modifyOTEMPO()
                         }
                     }
                 },800);
-    
+
                 //TENTA REQUEST COM AXIOS PARA PEGAR TOKEN
                 let waitAxios = setInterval(()=>{
                     if(typeof(axios) == 'function'){
@@ -969,44 +994,44 @@ function modifyOTEMPO()
                             timeout: 30000
                         }).then((resp)=>{
                             const TOKEN_ENCODED = resp.data.OTEMPO_REST_SERVICE_TOKEN_ENCODED;
-    
+
                             let waitPolopoly = setInterval(()=>{
                                 if(typeof(polopoly) == 'object'){
                                     clearInterval(waitPolopoly);
-    
+
                                     const TOKEN_DECODED = polopoly.base64.decode(TOKEN_ENCODED);
                                     const GUID = getArticleGuid();
-    
+
                                     //REQUEST PARA PEGAR CONTEUDO DA MATÉRIA
                                     let t = setInterval(()=>{
                                         if(TOKEN_DECODED != null && GUID != null){
                                             clearInterval(t);
                                             let conteudoMateria = "";
-    
+
                                             axios({
                                                 method: 'GET',
                                                 url: `${window.location.origin}/rest-services/emotion-service/noticia?guid=${GUID}&token=${TOKEN_DECODED}`,
                                                 timeout: 30000,
                                                 headers: {'accept': 'application/json'}
                                             }).then((resp)=>{
-    
-                                                for(let i=0; i<resp.data.length; i++){    
+
+                                                for(let i=0; i<resp.data.length; i++){
                                                     //GET CONTENT
                                                     if(resp.data[i].hasOwnProperty('content')){
                                                         if(resp.data[i].content != "" && resp.data[i].content != undefined){
                                                             conteudoMateria += resp.data[i].content;
                                                         }
                                                     }
-    
+
                                                     //GET NOTAS
                                                     if(resp.data[i].hasOwnProperty('notas')){
                                                         for(let n=0; n<resp.data[i].notas.length; n++){
-    
+
                                                             //GET TITLE NOTA[n]
                                                             if(resp.data[i].hasOwnProperty('title')){
                                                                 conteudoMateria += `<h4 style="font-size: 18px !important; font-weight: 700 !important;">${resp.data[i].notas[n].title}</h4>`;
                                                             }
-    
+
                                                             //GET CONTENT NOTA[n]
                                                             if(resp.data[i].notas[n].hasOwnProperty('content')){
                                                                 conteudoMateria += resp.data[i].notas[n].content;
@@ -1014,7 +1039,7 @@ function modifyOTEMPO()
                                                         }
                                                     }
                                                 }
-    
+
                                                 let waitConteudoMateria = setInterval(()=>{
                                                     if(conteudoMateria != null){
                                                         clearInterval(waitConteudoMateria);
@@ -1025,7 +1050,7 @@ function modifyOTEMPO()
                                                                 'Sucesso',
                                                                 'Ótimo! Conteúdo desbloqueado!'
                                                             );
-    
+
                                                             incrementaConteudoAPI();
                                                             verificaAtualizacaoVersao();
                                                             removePaywallBanner();
@@ -1039,7 +1064,7 @@ function modifyOTEMPO()
                                                         }
                                                     }
                                                 },800);
-    
+
                                             }).catch((erro)=>{
                                                 sweetAlert(
                                                     'error',
@@ -1173,16 +1198,16 @@ function modifyOPOPULAR()
         let rotina = setInterval(()=>{
             if(verificaElemento('.locked-news')){
                 clearInterval(rotina);
-    
+
                 let articlesIsRemoved = removeArticles();
                 hideKeepReadingChildren();
                 removeAdBetweenArticles();
                 removeCommentDiv();
-    
+
                 let y = setInterval(()=>{
                     if(verificaElemento('.locked-news') && articlesIsRemoved && typeof(axios) == 'function' && verificaElemento('#styleSnack')){
                         clearInterval(y);
-        
+
                         mountSweetAlert(
                             'info',
                             'Aguarde um momento...',
@@ -1315,7 +1340,7 @@ function modifyOPOPULAR()
                                 }
                                 if((key != null || key != undefined) && (pageSource != null || pageSource != undefined) && (blocoNoticia != null || blocoNoticia != undefined)){
                                     clearInterval(l);
-        
+
                                     //FAZ POST PARA CRIAR ARQUIVO JSON COM CONTEUDO DA PÁGINA DE CACHE
                                     axios({
                                         method: 'POST',
@@ -1399,11 +1424,11 @@ function modifyOPOPULAR()
                         );
                     }
                 });
-            }    
+            }
         },800);
     }
 }
-        
+
 
 
 function getArticleBodyPOPULAR(scope)
@@ -1535,8 +1560,8 @@ function modifyVLRECON()
                                     if(blocoNoticia != null && blocoOriginal != null){
                                         clearInterval(u);
 
-                                        console.log(`CODE CACHE = ${blocoNoticia.outerHTML}`);
-                                        console.log(`CODE ORIGINAL = ${blocoOriginal.outerHTML}`);
+                                        //console.log(`CODE CACHE = ${blocoNoticia.outerHTML}`);
+                                        //console.log(`CODE ORIGINAL = ${blocoOriginal.outerHTML}`);
 
                                         if(blocoNoticia != false && blocoOriginal != false){
 
@@ -1608,7 +1633,7 @@ function modifyVLRECON()
                 document.body.style.cssText += 'overflow: hidden !important; position: fixed !important;';
             }
         },800);
-        
+
         mountSweetAlert(
             'info',
             'Aguarde mais um momento...',
@@ -1634,7 +1659,7 @@ function modifyVLRECON()
                             let l = setInterval(()=>{
                                 if((key != null || key != undefined) && (pageSource != null || pageSource != undefined) && (blocoNoticia != null || blocoNoticia != undefined)){
                                     clearInterval(l);
-        
+
                                     //FAZ POST PARA CRIAR ARQUIVO JSON COM CONTEUDO DA PÁGINA DE CACHE
                                     axios({
                                         method: 'POST',
@@ -1727,7 +1752,7 @@ function modifyVLRECON()
                         );
                     }
                 });
-            }    
+            }
         },800);
     }
 }
@@ -1857,7 +1882,7 @@ function sweetAlert(icon, title, msg)
     Swal.close();
 
     backdropColor = (
-        window.location.href.includes("webcache.googleusercontent.com/search?q=cache:https://opopular.com.br") || 
+        window.location.href.includes("webcache.googleusercontent.com/search?q=cache:https://opopular.com.br") ||
         window.location.href.includes("webcache.googleusercontent.com/search?q=cache:https://valor.globo.com")
     )
         ? 'rgba(8, 8, 8, 0.92)' : '';
@@ -1928,307 +1953,6 @@ function removeAds()
 }
 
 
-
-
-
-
-/* =============================== BRAINLY =============================== */
-
-function modifyBRAINLY()
-{
-    let r = setInterval(()=>{
-        if(verificaElemento('.brn-qpage-next-answer-box-content') && verificaElemento('.js-react-bottom-banner')){
-            clearInterval(r);
-
-            if(Swal.isVisible() == false && verificaElemento('#styleSnack')){
-                sweetAlert(
-                    'info',
-                    'Aguarde um momento...',
-                    'Estamos removendo os bloqueios para você...<br><br>'
-                );
-            }
-
-            const URL_REQUEST = 'https://possoler.tech/API/brainly/index.php?urlTarefa=';
-            const METHOD_REQUEST = 'GET';
-
-            if(typeof(axios) == 'function'){
-                axios({
-                    method: METHOD_REQUEST,
-                    url: `${URL_REQUEST}${window.location.href}`,
-                    timeout: 30000
-                }).then((resp)=>{
-
-                    if(resp.data.hasOwnProperty('erro')){
-                        sweetAlert(
-                            'error',
-                            'Erro',
-                            `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: </spam>${resp.data.erro}`
-                        );
-                        return;
-                    }
-
-                    removeBrainlyBlocks();
-                    expandAnswerDiv();
-
-                    let answersBlocks_1 = document.querySelectorAll('.brn-qpage-next-answer-box-content');
-                    let answersBlocks_2 = document.querySelectorAll('.brn-qpage-next-dummy-unlock-section');
-                    let allAnswersBlocks = [...answersBlocks_1, ...answersBlocks_2];
-
-                    let u = setInterval(()=>{
-                        if(verificaElemento("#styleSnack")){
-                            clearInterval(u);
-                            for(let i=0; i<resp.data.answers.length; i++){
-                                allAnswersBlocks[i].innerHTML = resp.data.answers[i];
-                                if(i == (resp.data.answers.length)-1){
-                                    Swal.fire({
-                                        icon: 'success',
-                                        title: 'Sucesso',
-                                        html:  'Ótimo! Conteúdo desbloqueado!',
-                                        allowEscapeKey: false,
-                                        allowOutsideClick: false,
-                                        showConfirmButton: true,
-                                        timer: 7000,
-                                        timerProgressBar: true,
-                                        customClass: {
-                                            popup: 'snackZ-index',
-                                            container: 'snackZ-index'
-                                        }
-                                    });
-                                    observerResposta(resp.data.answers);
-                                    incrementaConteudoAPI();
-                                    verificaAtualizacaoVersao();
-                                    //setActionBtnVerRespostaBrainly();
-                                }
-                            }
-                        }
-                    },800);
-                }).catch((erro)=>{
-                    if(erro.toString().includes('timeout')){
-                        sweetAlert(
-                            'error',
-                            'Erro',
-                            `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`
-                        );
-                    }else{
-                        sweetAlert(
-                            'error',
-                            'Erro',
-                            `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`
-                        );
-                    }
-                });
-            }else{
-                fetch(`${URL_REQUEST}${window.location.href}`,
-                {
-                    method: METHOD_REQUEST
-                }).then(function(res){ return res.json(); })
-                .then(function(resp){
-
-                    if(resp.hasOwnProperty('erro')){
-                        sweetAlert(
-                            'error',
-                            'Erro',
-                            `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: </spam>${resp.erro}`
-                        );
-                        return;
-                    }
-
-                    removeBrainlyBlocks();
-                    expandAnswerDiv();
-
-                    let answersBlocks_1 = document.querySelectorAll('.brn-qpage-next-answer-box-content');
-                    let answersBlocks_2 = document.querySelectorAll('.brn-qpage-next-dummy-unlock-section');
-                    let allAnswersBlocks = [...answersBlocks_1, ...answersBlocks_2];
-
-                    let u = setInterval(()=>{
-                        if(verificaElemento("#styleSnack")){
-                            clearInterval(u);
-                            for(let i=0; i<resp.answers.length; i++){
-                                allAnswersBlocks[i].innerHTML = resp.answers[i];
-                                if(i == (resp.answers.length)-1){
-                                    Swal.fire({
-                                        icon: 'success',
-                                        title: 'Sucesso',
-                                        html:  'Ótimo! Conteúdo desbloqueado!',
-                                        allowEscapeKey: false,
-                                        allowOutsideClick: false,
-                                        showConfirmButton: true,
-                                        timer: 7000,
-                                        timerProgressBar: true,
-                                        customClass: {
-                                            popup: 'snackZ-index',
-                                            container: 'snackZ-index'
-                                        }
-                                    });
-                                    observerResposta(resp.answers);
-                                    incrementaConteudoAPI();
-                                    verificaAtualizacaoVersao();
-                                    setActionBtnVerRespostaBrainly();
-                                }
-                            }
-                        }
-                    },800);
-                }).catch((erro)=>{
-                    sweetAlert(
-                        'error',
-                        'Erro',
-                        `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`
-                    );
-                });
-            }
-        }
-    },800);
-}
-
-
-function observerResposta(answers)
-{
-    setInterval(()=>{
-        let btns = document.querySelectorAll("button");
-        for(let i=0; i<btns.length; i++){
-            let childNodesBtn = btns[i].childNodes;
-            for(let j=0; j<childNodesBtn.length; j++){
-                if(childNodesBtn[j].textContent == 'Desbloquear'){
-                    let answersBlocks_1 = document.querySelectorAll('.brn-qpage-next-answer-box-content');
-                    let answersBlocks_2 = document.querySelectorAll('.brn-qpage-next-dummy-unlock-section');
-                    let allAnswersBlocks = [...answersBlocks_1, ...answersBlocks_2];
-
-                    for(let i=0; i<answers.length; i++){
-                        allAnswersBlocks[i].innerHTML = answers[i];
-                    }
-                    //setActionBtnVerRespostaBrainly();
-                    break;
-                }
-            }
-        }
-    },800);
-}
-
-
-function expandAnswerDiv()
-{
-    //TIRA MAX-HEIGHT DAS DIVS DE RESPOSTA
-    let r = setInterval(()=>{
-        if(verificaElemento('.brn-qpage-next-answer-box__content--blocked')){
-            clearInterval(r);
-            let answersBlocks = document.querySelectorAll('.brn-qpage-next-answer-box__content--blocked');
-            for(let i=0; i<answersBlocks.length; i++){
-                answersBlocks[i].style.maxHeight = 'unset';
-                answersBlocks[i].style.position = 'unset';
-            }
-        }
-    },800);
-}
-
-
-function setActionBtnVerRespostaBrainly()
-{
-    let f1 = findBtnVerResposta();
-    let f2 = findFlag();
-
-    let r = setInterval(()=>{
-        if(f1 != false && f2 != false){
-            clearInterval(r);
-            try{
-                document.getElementById('btnResposta').addEventListener('click', (event)=>{
-                    event.preventDefault();
-                    window.location.href = '#FLAG_AQUI';
-                });
-            }catch(e){
-                console.log('Erro ao setar action no botão');
-            }
-        }
-    },800);
-}
-
-
-function findFlag()
-{
-    let flag = document.querySelector('.js-react-question-box-comments');
-    flag.setAttribute('id', 'FLAG_AQUI');
-    document.querySelector('html').style.cssText += 'scroll-behavior: smooth;';
-    return flag;
-}
-
-
-function findBtnVerResposta()
-{
-    let btns = document.querySelectorAll('button');
-
-    for(let i=0; i<btns.length; i++){
-        if(btns[i].className == 'sg-button sg-button--m sg-button--solid-blue sg-button--full-width'){
-            let childrenNodes = btns[i].childNodes;
-            for(let j=0; j<childrenNodes.length; j++){
-                if(childrenNodes[j].className.includes('sg-button__text') && childrenNodes[j].textContent == 'Ver respostas'){
-                    btns[i].setAttribute('id', 'btnResposta');
-                    try{
-                        document.querySelector('.js-react-authentication-in-modal').remove();
-                    }catch(e){
-                        console.log('nada para remover');
-                    }
-                    return true;
-                }
-            }
-        }
-    }
-
-    return false;
-}
-
-
-function removeBrainlyBlocks()
-{
-    //REMOVE BLOQUEIO DE CIMA DAS DIVS
-    let r = setInterval(()=>{
-        let bannerBlock = document.querySelectorAll('div');
-        for(let i=0; i<bannerBlock.length; i++){
-            if(bannerBlock[i].hasAttribute('data-testid')){
-                if(bannerBlock[i].getAttribute('data-testid') == 'unlock_section_wrapper'){
-                    clearInterval(r);
-                    bannerBlock[i].remove();
-                }
-            }
-        }
-    },800);
-
-    //REMOVE FOOTER DE QUANTIDADE DE RESPOSTAS RESTANTES
-    let bannerFooter = document.querySelectorAll('.js-react-bottom-banner');
-    for(let i=0; i<bannerFooter.length; i++){
-        try{
-            bannerFooter[i].remove();
-        }catch(erro){
-            console.log('nada para excluir');
-        }
-    }
-
-    //REMOVE FALSE FLAG BLUR RESPOSTA
-    let u = setInterval(()=>{
-        if(verificaElemento('.brn-qpage-next-answer-box__below-blockade')){
-            clearInterval(u);
-            if(!document.querySelector('.brn-qpage-next-answer-box__below-blockade').hasChildNodes()){
-                document.querySelector('.brn-qpage-next-answer-box__below-blockade').style.display = 'none';
-            }
-        }
-    },800);
-
-    //REMOVE CAMADA QUE IMPEDE INTERAÇÃO DO USUARIO
-    let y = setInterval(()=>{
-        if(document.head != null){
-            clearInterval(y);
-            document.head.innerHTML += `<style>*::before{content:none !important;} *::after{content:none !important;}</style>`;
-        }
-    },800);
-
-    let z = setInterval(()=>{
-        if(verificaElemento('.js-register-toplayer')){
-            clearInterval(z);
-            document.querySelector('.js-register-toplayer').remove();
-        }
-    },800);
-}
-
-
-
 /* ====================== GAUCHA ZH =========================== */
 
 function modifyGZH()
@@ -2240,12 +1964,13 @@ function modifyGZH()
         {"selector":"https://www.rbsonline.com.br/cdn/scripts/special-paywall.min.js*","action":"cancel"},
         {"selector":"https://api.clicrbs.com.br/paywall-api/*","action":"cancel"}
     ], function(info, message, details) {
-        console.log('PAYWALL BLOQUEADO');
+        //console.log('PAYWALL BLOQUEADO');
         incrementaConteudoAPI();
         saveDataForDashboard(22);
     });
 
     window.addEventListener('locationchange', ()=>{
+        //
         console.log('MUDEI URL');
         verificaAtualizacaoVersao();
     });
@@ -2470,7 +2195,7 @@ function modifyEXAME()
                 if(typeof(Swal) == 'function'){
                     clearInterval(s);
                     console.log('ACHEI SWALL');
-    
+
                     if(Swal.isVisible() == false){
                         sweetAlert(
                             'info',
@@ -2540,199 +2265,65 @@ function modifyRESPAI()
     enableUrlChangeDetect();
     checkButtonCreation();
 
+    unlockPaidContent();
     window.addEventListener('locationchange',()=>{
         checkButtonCreation();
     });
 
-    unlockPaidContent();
-    window.addEventListener('load', ()=>{
-        try{
-            verificaAtualizacaoVersao();
-            metodoOriginal();
-            metodoAlternativo();
-        }catch(erro){
-            alert(erro.toString());
-        }
-    });
+    try{
+        verificaAtualizacaoVersao();
+        mainUnlockRESPAI();
+    }catch(erro){
+        alert(erro.toString());
+    }
 }
-
-/* ======================================== PARA USUARIOS NÃO LOGADOS ======================================== */
 
 /* ======================================== METODO ORIGINAL ======================================== */
 
-function metodoOriginal()
+function mainUnlockRESPAI()
 {
-    const TIMEOUT = 3000;
-    setTimeout(()=>{
-        let codigoSemBloqueio = document.querySelector("html");
-        let scripts = codigoSemBloqueio.querySelectorAll("script");
-        removeScriptObserver(scripts, codigoSemBloqueio);
-    },TIMEOUT);
-}
 
-function removeScriptObserver(s, codigoSemBloqueio)
-{
-    for(let i=0; i<s.length; i++){
-        if(s[i].textContent.includes(`new MutationObserver((changes)`)){
-            s[i].remove();
-            remountPage("html", codigoSemBloqueio);
-            break;
-        }
-    }
-
-    //LOOP Para remover bloqueios caso haja atualização dos iframes
-    setInterval(()=>{
-        //removeVideoBlockingAulao();
-        setSelectableArea();
-        removeBloqueioExercicioLivro();
-        removeBlur();
-        removeAllBtnShowSolucao();
-        removeBloqueioTeoria();
-        removeBloqueioConteudoExclusivo();
+    let waitAxios = setInterval(()=>{
+        if(typeof(axios) == "function" && typeof(Swal) == 'function') {
+            clearInterval(waitAxios);
+			
+			axios({
+				method: "GET",
+				url: "https://possoler.tech/API/responde_ai/paywallDOM/index.php",
+				timeout: 10000
+			}).then((resp)=>{
+                //LOOP Para remover bloqueios caso haja atualização dos iframes
+                setInterval(()=>{
+                    setSelectableArea();
+                    removeBloqueioExercicioLivro(resp.data);
+                    removeBlur(resp.data);
+                    expandContent();
+                    removeExpandButtons();
+                    removeShowCompleteSolutionButtons();
+                    removeAllBtnShowSolucao(resp.data);
+                    removeBloqueioTeoria(resp.data);
+                    removeBloqueioConteudoExclusivo(resp.data);
+                },800);
+			}).catch((erro) => {
+                if(erro.toString().includes('timeout')){
+                    sweetAlert(
+                        'error',
+                        'Erro',
+                        `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`,
+                    );
+                }else{
+                    sweetAlert(
+                        'error',
+                        'Erro',
+                        `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}`
+                    );
+                }                
+                
+            })
+		}
     },800);
 }
 
-
-function setSelectableArea()
-{
-    let divs = document.querySelectorAll('div');
-    divs.forEach((div)=>{
-        let cssProperties = getComputedStyle(div);
-        if(cssProperties.inset == '0px' && cssProperties.cursor == 'pointer')
-            div.style.cssText += 'inset: unset !important;';
-    });
-}
-
-
-/* function removeVideoBlockingAulao()
-{
-    if((window.location.href).includes('/aulao-')){
-        let blockVideo = document.querySelectorAll('.video-overlay');
-        for(let i=0; i<blockVideo.length; i++){
-            blockVideo[i].remove();
-        }
-        let chat = document.querySelector('.chat-container');
-        if(chat != null) chat.remove();
-    }
-} */
-
-
-function removeBloqueioExercicioLivro()
-{
-    let keys = [false, false, false];
-    let divBlock = document.querySelectorAll(".ReactModalPortal");
-    let body = document.querySelectorAll(".ReactModal__Body--open");
-    let containerBlock = document.querySelectorAll(".NoAccessDisclaimer__Container-sc-6er3z1-0");
-
-    body.forEach((b)=>{
-        b.classList.remove("ReactModal__Body--open");
-        keys[0] = true;
-    });
-
-    divBlock.forEach((div)=>{
-        div.remove();
-        keys[1] = true;
-    });
-
-    containerBlock.forEach((container)=>{
-        container.remove();
-        keys[2] = true;
-    });
-    
-    if(keys[0] && keys[1] && keys[2]) incrementaConteudoAPI();
-}
-
-
-function remountPage(elemento, codigoBase)
-{
-    document.querySelector(elemento).innerHTML = codigoBase.outerHTML;
-}
-
-
-function removeHeaderLogin()
-{
-    let headers = document.querySelectorAll(".global_menu__fixed_header__login_container");
-    headers.forEach((header)=>{
-        header.remove();
-    });
-}
-
-
-function removeBlur()
-{
-    let blurElements = document.querySelectorAll(".blur");
-
-    if(blurElements.length>0){
-        blurElements.forEach((blurElement)=>{
-            blurElement.classList.remove("blur");
-            blurElement.style.filter = 'none';
-        });
-        incrementaConteudoAPI();
-    }
-}
-
-
-function removeAllBtnShowSolucao()
-{
-    let btnSolucaoCompleta = document.querySelectorAll("#exercise-expand-button");
-    let btns = document.querySelectorAll(".exercise-theory-expand-button");
-    let buttons = document.querySelectorAll('button');
-
-    btnSolucaoCompleta.forEach((btn)=>{btn.remove();});
-    btns.forEach((btn)=>{btn.remove()});
-    buttons.forEach((button)=>{button.remove();})
-}
-
-
-function removeBloqueioTeoria()
-{
-    let elementosPaywall = document.querySelectorAll(".paywall");
-    let elementosTheory = document.querySelectorAll(".theory-container");
-    let btnExpandir = document.querySelectorAll(".expand-overlay");
-
-    elementosPaywall.forEach((elem)=>{elem.classList.remove("paywall");});
-    elementosTheory.forEach((elem)=>{elem.classList.remove("theory-container");});
-    btnExpandir.forEach((elem)=>{elem.remove();});
-}
-
-
-function removeBloqueioConteudoExclusivo()
-{
-    let bloqueioOverlay = false;
-    let bloqueioWrapper = false;
-
-    let loginOverlay = document.querySelectorAll(".login-overlay");
-    if(loginOverlay.length>0){
-        for(let i=0; i<loginOverlay.length; i++){
-
-            let elementAttributes = loginOverlay[i].attributes;
-            for(let j=0; j<elementAttributes.length; j++){
-                if(elementAttributes[j].name == "style"){
-                    loginOverlay[i].removeAttribute("style");
-                    bloqueioOverlay = true;
-                    break;
-                }
-            }
-        }
-    }
-
-    let mainWrapper = document.querySelectorAll(".main-wrapper");
-    if(mainWrapper.length>0){
-        for(let i=0; i<mainWrapper.length; i++){
-            
-            let elementAttributes = mainWrapper[i].attributes;
-            for(let j=0; j<elementAttributes.length; j++){
-                if(elementAttributes[j].name == "style"){
-                    mainWrapper[i].removeAttribute("style");
-                    bloqueioWrapper = true;
-                    break;
-                }
-            }
-        }
-    }
-
-    if(bloqueioOverlay && bloqueioWrapper) incrementaConteudoAPI();
-}
 
 function unlockPaidContent()
 {
@@ -2755,28 +2346,120 @@ function unlockPaidContent()
     },800);
 }
 
-/* ======================================== METODO ALTERNATIVO ======================================== */
 
-function metodoAlternativo()
+function setSelectableArea()
 {
-    let r = setInterval(()=>{
-        try{
-            expandContent();
-            removeExpandButtons();
-            removeShowCompleteSolutionButtons();
-            removeAllBlurFilter();
-            incrementaConteudoAPI();
-        }catch(e){
-            clearInterval(r);
-            console.log(`ERRO DESBLOQUEIO RESP AI => ${e.toString()}`);
-            sweetAlert(
-                'error',
-                'Erro',
-                `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${e.toString()}`
-            );
-        }
-    },800);
+    let divs = document.querySelectorAll('div');
+    divs.forEach((div)=>{
+        let cssProperties = getComputedStyle(div);
+        if(cssProperties.inset == '0px' && cssProperties.cursor == 'pointer')
+            div.style.cssText += 'inset: unset !important;';
+    });
 }
+
+
+function removeBlur(configs)
+{
+    let divs = document.querySelectorAll("div");
+    divs.forEach((div)=>{
+        configs.blur_class.forEach((current_blur_class) => {
+            if(div.classList.contains(current_blur_class)){
+                div.classList.remove(current_blur_class);
+                incrementaConteudoAPI();
+            }
+        });
+    });
+}
+
+
+function removeBloqueioExercicioLivro(configs)
+{
+    let keys = [false, false, false];
+    let divBlock = document.querySelectorAll(`.${configs.unlogged_remove_book_block[0]}`);
+    let body = document.querySelectorAll(`.${configs.unlogged_remove_book_block[1]}`);
+    let containerBlock = document.querySelectorAll(`.${configs.unlogged_remove_book_block[2]}`);
+
+    body.forEach((b)=>{
+        b.classList.remove(`.${configs.unlogged_remove_book_block[1]}`);
+        keys[0] = true;
+    });
+
+    divBlock.forEach((div)=>{
+        div.remove();
+        keys[1] = true;
+    });
+
+    containerBlock.forEach((container)=>{
+        container.remove();
+        keys[2] = true;
+    });
+
+    if(keys[0] && keys[1] && keys[2]) incrementaConteudoAPI();
+}
+
+
+function removeAllBtnShowSolucao(configs)
+{
+    let btnSolucaoCompleta = document.querySelectorAll(`#${configs.unlogged_remove_show_solution_button[0]}`);
+    let btns = document.querySelectorAll(`.${configs.unlogged_remove_show_solution_button[1]}`);
+    let buttons = document.querySelectorAll(`${configs.unlogged_remove_show_solution_button[2]}`);
+
+    btnSolucaoCompleta.forEach((btn)=>{btn.remove();});
+    btns.forEach((btn)=>{btn.remove()});
+    buttons.forEach((button)=>{if(button.textContent != "Cadastrar" && button.textContent != "Entrar") button.remove();})
+}
+
+
+function removeBloqueioTeoria(configs)
+{
+    let elementosPaywall = document.querySelectorAll(`.${configs.unlogged_remove_block_theory[0]}`);
+    let elementosTheory = document.querySelectorAll(`.${configs.unlogged_remove_block_theory[1]}`);
+    let btnExpandir = document.querySelectorAll(`.${configs.unlogged_remove_block_theory[2]}`);
+
+    elementosPaywall.forEach((elem)=>{elem.classList.remove(`.${configs.unlogged_remove_block_theory[0]}`);});
+    elementosTheory.forEach((elem)=>{elem.classList.remove(`.${configs.unlogged_remove_block_theory[1]}`);});
+    btnExpandir.forEach((elem)=>{elem.remove();});
+}
+
+
+function removeBloqueioConteudoExclusivo(configs)
+{
+    let bloqueioOverlay = false;
+    let bloqueioWrapper = false;
+
+    let loginOverlay = document.querySelectorAll(`.${configs.unlogged_exclusive_content[0]}`);
+    if(loginOverlay.length>0){
+        for(let i=0; i<loginOverlay.length; i++){
+
+            let elementAttributes = loginOverlay[i].attributes;
+            for(let j=0; j<elementAttributes.length; j++){
+                if(elementAttributes[j].name == "style"){
+                    loginOverlay[i].removeAttribute("style");
+                    bloqueioOverlay = true;
+                    break;
+                }
+            }
+        }
+    }
+
+    let mainWrapper = document.querySelectorAll(`.${configs.unlogged_exclusive_content[1]}`);
+    if(mainWrapper.length>0){
+        for(let i=0; i<mainWrapper.length; i++){
+
+            let elementAttributes = mainWrapper[i].attributes;
+            for(let j=0; j<elementAttributes.length; j++){
+                if(elementAttributes[j].name == "style"){
+                    mainWrapper[i].removeAttribute("style");
+                    bloqueioWrapper = true;
+                    break;
+                }
+            }
+        }
+    }
+
+    if(bloqueioOverlay && bloqueioWrapper) incrementaConteudoAPI();
+}
+
 
 function expandContent()
 {
@@ -2811,26 +2494,6 @@ function removeShowCompleteSolutionButtons()
 }
 
 
-function removeAllBlurFilter()
-{
-    //TIRA BLUR TEORIA E EXERCICIOS
-    if(verificaElemento('body')){
-        let r = setInterval(()=>{
-            if(verificaElemento('.paywall-content')){
-                clearInterval(r);
-                document.body.innerHTML += '<style>.paywall-content{filter: unset !important;}</style>';
-            }
-        },800);
-
-        let u = setInterval(()=>{
-            if(verificaElemento("#exercicios-resolvidos")){
-                clearInterval(u);
-                document.body.innerHTML += '<style>#exercicios-resolvidos div{filter: unset !important;}</style>';
-            }
-        },800);
-    }
-}
-
 /* ====================================================================================================== */
 
 
@@ -2840,8 +2503,8 @@ function checkButtonCreation()
     let fullURL = window.location.href;
     if(document.getElementById('btnResposta') == null || document.getElementById('btnResposta') == undefined){
         if(
-            (fullURL.includes('materias/solucionario/livro') && 
-            fullURL.includes('/edicao/') && 
+            (fullURL.includes('materias/solucionario/livro') &&
+            fullURL.includes('/edicao/') &&
             new RegExp('\/exercicio\/[0-9]+').test(fullURL))
             || (fullURL.includes("/conteudo/") && fullURL.includes("/livro/"))
         ){
@@ -2865,8 +2528,8 @@ function checkButtonCreation()
     }else{
         //REMOVE BOTÃO DE RESOLUÇÃO
         if(
-            (!fullURL.includes('materias/solucionario/livro') || 
-            !fullURL.includes('/edicao/') || 
+            (!fullURL.includes('materias/solucionario/livro') ||
+            !fullURL.includes('/edicao/') ||
             !new RegExp('\/exercicio\/[0-9]+').test(fullURL))
             && !(fullURL.includes("/conteudo/") && fullURL.includes("/livro/"))  && verificaElemento("#btnResposta")
         ){
@@ -3247,7 +2910,7 @@ function swalLog(msgErro, siteErro)
 {
     if(localStorage.getItem('sendLog') != 'true'){
         const CODE = `<iframe src="https://possoler.tech/API/log_report/logPage.php" style='width: 100% !important; height: 100% !important; border: none;'></iframe>`;
-        
+
         let r = setInterval(()=>{
             if(typeof(Swal) == 'function'){
                 clearInterval(r);

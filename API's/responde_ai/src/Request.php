@@ -9,60 +9,48 @@ use GuzzleHttp\Client;
 
 class Request
 {
-    private $link;
-    private $query;
-    private $payload;
-    private $header;
     private $client;
+    private $link;
+    private $header;
+    private $endpoint;
+    
+    
     private $response;
 
-    public function __construct()
+    public function __construct(string $userToken, string $exerciseId)
     {
         $this->client = new Client();
-        $this->link = 'https://content.respondeai.com.br/graphql';
-        $this->query = 'query bookExercise($id: ID!) {bookExercise(id: $id) {id solution answer topic {id name subject {id name __typename}theory {id __typename} exercises {id __typename } __typename } __typename }}';
-        $this->payload = [
-            'operationName' => 'bookExercise',
-            'query' => $this->query
+        $this->link = 'https://content.respondeai.com.br';
+        $this->endpoint = "/api/v2/books/bookExercise/{$exerciseId}";
+        $this->header = [
+            'Content-Type' => 'application/json',
+            'User-JWT' => $userToken
         ];
     }
 
-
-    public function getSolution($token, $exerciseId)
+    public function getSolution()
     {
-        $this->header = [
-            'Content-Type' => 'application/json',
-            'User-JWT' => $token
-        ];
-
-        $this->payload['variables'] = [
-            'id' => $exerciseId
-        ];
-
         $responseRequest = $this->doRequest();
 
-        if($responseRequest['response']){
-            return $this->parseToHtmlEntities($responseRequest);
-        }
-
-        return $responseRequest;
+        return ($responseRequest['response']) 
+            ? $this->parseToHtmlEntities($responseRequest) 
+            : $responseRequest; 
     }
 
 
     private function doRequest()
     {
         try{
-            $this->response = $this->client->request('POST', $this->link, [
+            $this->response = $this->client->request('GET', "{$this->link}{$this->endpoint}", [
                 'headers' => $this->header,
-                'json' => $this->payload
             ]);
 
             if($this->response->getStatusCode() == 200){
                 $jsonResponse = json_decode($this->response->getBody()->getContents());
                 try{
-                    $steps = $jsonResponse->data->bookExercise->solution ?? throw new Exception('Falha ao obter objeto Steps');
-                    $finalAnswer = $jsonResponse->data->bookExercise->answer ?? throw new Exception('Falha ao obter objeto FinalAnswer');
-                    return ['response' => true, 'steps' => $steps, 'answer' => $finalAnswer];
+                    $lightSolution = $jsonResponse->lightSolution ?? throw new Exception('Falha ao obter objeto LightSolution');
+                    $finalAnswer = $jsonResponse->lightAnswer ?? throw new Exception('Falha ao obter objeto LightAnswer');
+                    return ['response' => true, 'steps' => $lightSolution, 'answer' => $finalAnswer];
                 }catch(\Exception $e){
                     return ['response' => false, 'msg' => $e->getMessage()];
                 }

@@ -317,3 +317,11 @@
 # Ajuste Bypass El País;
 # Ajuste Bypass Jornal do Comercio;
 # Ajuste desbloqueio assincrono Responde Aí;
+
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-= v1.6.6 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+[01/11/2022]
+# Redução de 5kb no userscript (CRX);
+# Redução de 15kb no userscript;
+# Ajuste Bypass Responde Aí;
