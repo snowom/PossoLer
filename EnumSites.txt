@@ -35,3 +35,5 @@
 38 - Jornal A Tribuna - Santos
 39 - Um Dois Esportes
 40 - Correio do Povo
+41 - Revista Casa e Jardim
+42 - Veja Saúde

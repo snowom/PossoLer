@@ -1,4 +1,4 @@
-const CURRENT_VERSION = '155';
+const CURRENT_VERSION = '166';
 
 /**
  * Verifica qual URL de correspondencia o usuario está e aplica a 
@@ -68,7 +68,7 @@ function main()
         saveDataForDashboard(14);
         verificaAtualizacaoVersao();
     }
-    else if(currentURL.includes("revistagloborural.globo.com")){
+    else if(currentURL.includes("globorural.globo.com")){
         saveDataForDashboard(15);
         verificaAtualizacaoVersao();
     }
@@ -168,6 +168,14 @@ function main()
         saveDataForDashboard(40);
         verificaAtualizacaoVersao();
     }
+    else if(currentURL.includes("revistacasaejardim.globo.com")){
+        saveDataForDashboard(41);
+        verificaAtualizacaoVersao();
+    }
+    else if(currentURL.includes("saude.abril.com.br")){
+        saveDataForDashboard(42);
+        verificaAtualizacaoVersao();
+    }
 }
 
 
@@ -176,68 +184,97 @@ function main()
 function modifyAPPRESPAI()
 {
     let payload = `
-        mainUnlockFunction();
-        ${checkButtonCreation()};
-        changeLockedIcons();
-        enableBodyOverflow();
-        removeReactModalOverlay();
 
-        let urlBase = document.location.href;
-        setInterval(()=>{
-            let tmpUrl = document.location.href;
-            if(urlBase != tmpUrl){
-                urlBase = tmpUrl;
-                mainUnlockFunction();
-                checkButtonCreation();
-                enableBodyOverflow();
-                removeReactModalOverlay();
+        let waitAxios = setInterval(()=>{
+            if(typeof(axios) == "function" && typeof(Swal) == 'function') {
+                clearInterval(waitAxios);
+
+                axios({
+                    method: "GET",
+                    url: "https://possoler.tech/API/responde_ai/paywallDOM/index.php",
+                    timeout: 10000
+                }).then((resp)=>{
+        
+                    mainUnlockFunction();
+                    ${checkButtonCreation()};
+                    changeLockedIcons(resp.data);
+                    enableBodyOverflow(resp.data);
+                    removeReactModalOverlay(resp.data);
+        
+                    let urlBase = document.location.href;
+                    setInterval(()=>{
+                        let tmpUrl = document.location.href;
+                        if(urlBase != tmpUrl){
+                            urlBase = tmpUrl;
+                            mainUnlockFunction();
+                            checkButtonCreation();
+                            enableBodyOverflow();
+                            removeReactModalOverlay(resp.data);
+                        }
+                    },800);
+        
+                    /**
+                     * Nested function (funcao aninhada)
+                     * Funcao principal de desbloqueio de conteudo
+                     */
+                    function mainUnlockFunction(){
+                        if(window.location.href.includes('app.respondeai.com.br/aprender') && window.location.href.includes('/teoria/')){
+                            importRequiredCDN();
+                            setTheoryLinksAction(resp.data);
+                            enableBodyOverflow(resp.data);
+                            removeReactModalOverlay(resp.data);
+                            removeDexterBlock(resp.data);
+                            removeBlurPage(resp.data);
+                            unlockTeoria(resp.data);
+                            ${incrementaConteudoAPI()};
+                            ${verificaAtualizacaoVersao()};
+                        }
+                        else if(window.location.href.includes('app.respondeai.com.br/aprender') && window.location.href.includes('/exercicio/')){
+                            importRequiredCDN();
+                            setTheoryLinksAction(resp.data);
+                            enableBodyOverflow(resp.data);
+                            removeReactModalOverlay(resp.data);
+                            removeDexterBlock(resp.data);
+                            removeBlurPage(resp.data);
+                            unlockFixationExercise(resp.data);
+                            ${incrementaConteudoAPI()};
+                            ${verificaAtualizacaoVersao()};
+                        }
+                        else if((window.location.href.includes('app.respondeai.com.br/aprender') || window.location.href.includes('app.respondeai.com.br/praticar')) && window.location.href.includes('/exercicio-lista/')){
+                            importRequiredCDN();
+                            setTheoryLinksAction(resp.data);
+                            enableBodyOverflow(resp.data);
+                            removeReactModalOverlay(resp.data);
+                            removeDexterBlock(resp.data);
+                            removeBlurPage(resp.data);
+                            unlockListExercise(resp.data);
+                            ${incrementaConteudoAPI()};
+                            ${verificaAtualizacaoVersao()};
+                        }
+                    }
+                }).catch((erro) => {
+                    if(erro.toString().includes('timeout')){
+                        sweetAlert(
+                            'error',
+                            'Erro',
+                            'Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style="font-weight: bold !important;">Código do erro: </spam>' + erro.toString()
+                        );
+                    }else{
+                        sweetAlert(
+                            'error',
+                            'Erro',
+                            'Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style="font-weight: bold !important;">Código do erro: </spam>' + erro.toString()
+                        );
+                    }                 
+                });
             }
         },800);
-
-        /**
-         * Nested function (funcao aninhada)
-         * Funcao principal de desbloqueio de conteudo
-         */
-        function mainUnlockFunction(){
-            if(window.location.href.includes('app.respondeai.com.br/aprender') && window.location.href.includes('/teoria/')){
-                importRequiredCDN();
-                setTheoryLinksAction();
-                enableBodyOverflow();
-                removeReactModalOverlay();
-                removeDexterBlock();
-                removeBlurPage();
-                unlockTeoria();
-                ${incrementaConteudoAPI()};
-                ${verificaAtualizacaoVersao()};
-            }
-            else if(window.location.href.includes('app.respondeai.com.br/aprender') && window.location.href.includes('/exercicio/')){
-                importRequiredCDN();
-                setTheoryLinksAction();
-                enableBodyOverflow();
-                removeReactModalOverlay();
-                removeDexterBlock();
-                removeBlurPage();
-                unlockFixationExercise();
-                ${incrementaConteudoAPI()};
-                ${verificaAtualizacaoVersao()};
-            }
-            else if((window.location.href.includes('app.respondeai.com.br/aprender') || window.location.href.includes('app.respondeai.com.br/praticar')) && window.location.href.includes('/exercicio-lista/')){
-                importRequiredCDN();
-                setTheoryLinksAction();
-                enableBodyOverflow();
-                removeReactModalOverlay();
-                removeDexterBlock();
-                removeBlurPage();
-                unlockListExercise();
-                ${incrementaConteudoAPI()};
-                ${verificaAtualizacaoVersao()};
-            }
-        }
         
-        function changeLockedIcons()
+
+        function changeLockedIcons(configs)
         {
             setInterval(()=>{
-                let svgIcons = document.querySelectorAll(".MuiSvgIcon-root");
+                let svgIcons = document.querySelectorAll("."+configs.logged_locked_icons);
                 svgIcons.forEach(icon => {
                     icon.innerHTML = '<svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="square" class="svg-inline--fa fa-square sc-lgsYow gFYkCv  logged" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zm-6 400H54c-3.3 0-6-2.7-6-6V86c0-3.3 2.7-6 6-6h340c3.3 0 6 2.7 6 6v340c0 3.3-2.7 6-6 6z"></path></svg>'
                 });
@@ -245,13 +282,13 @@ function modifyAPPRESPAI()
         }
         
 
-        function unlockListExercise()
+        function unlockListExercise(configs)
         {
             //Remove format toogle
             let k = setInterval(()=>{
                 let divs = document.querySelectorAll('div');
                 for(let i=0; i<divs.length; i++){
-                    if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == 'content-format-toggle'){
+                    if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == configs.data_cy.format_toggle){
                         clearInterval(k);
                         divs[i].style.display = "none";
                         break;
@@ -262,7 +299,7 @@ function modifyAPPRESPAI()
             let r = setInterval(()=>{
                 let divs = document.querySelectorAll('div');
                 for(let i=0; i<divs.length; i++){
-                    if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == 'exercise-show-answer-button'){
+                    if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == configs.data_cy.exercise_answer_button){
                         clearInterval(r);
 
                         let answerDiv = divs[i];
@@ -327,13 +364,13 @@ function modifyAPPRESPAI()
         }
 
         
-        function unlockFixationExercise()
+        function unlockFixationExercise(configs)
         {
             //Remove format toogle
             let k = setInterval(()=>{
                 let divs = document.querySelectorAll('div');
                 for(let i=0; i<divs.length; i++){
-                    if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == 'content-format-toggle'){
+                    if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == configs.data_cy.format_toggle){
                         clearInterval(k);
                         divs[i].style.display = "none";
                         break;
@@ -345,19 +382,19 @@ function modifyAPPRESPAI()
                 let divs = document.querySelectorAll('div');
                 for(let i=0; i<divs.length; i++){
                     if(
-                        (divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == 'exercise-show-answer-button') || 
-                        (divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == 'exercise-statement')
+                        (divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == configs.data_cy.exercise_answer_button) || 
+                        (divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == configs.data_cy.exercise_statement)
                     ){
                         clearInterval(r);
                         let answerDiv;
 
-                        if(divs[i].getAttribute('data-cy') == 'exercise-statement'){
+                        if(divs[i].getAttribute('data-cy') == configs.data_cy.exercise_statement){
                             divs[i].innerHTML += '<div id="tmpAnswer"></div>';
                             answerDiv = document.getElementById("tmpAnswer");
 
                             // Remove botão responde ai
                             for(let k=i; k<divs.length; k++){
-                                if(divs[k].hasAttribute('data-cy') && divs[k].getAttribute('data-cy') == 'exercise-show-answer-button'){
+                                if(divs[k].hasAttribute('data-cy') && divs[k].getAttribute('data-cy') == configs.data_cy.exercise_answer_button){
                                     divs[k].remove(); 
                                 }
                             }
@@ -427,12 +464,12 @@ function modifyAPPRESPAI()
         }
 
 
-        function unlockTeoria()
+        function unlockTeoria(configs)
         {
             let r = setInterval(()=>{
                 let divs = document.querySelectorAll('div');
                 for(let i=0; i<divs.length; i++){
-                    if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == 'content-format-toggle'){
+                    if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == configs.data_cy.format_toggle){
                         clearInterval(r);
 
                         //VERIFICA SE NA 1 EXEC O CONTEUDO ESTA BLOQUEADO - TEXTO
@@ -440,7 +477,7 @@ function modifyAPPRESPAI()
                         let s = setInterval(()=>{
                             let divsSteps = document.querySelectorAll('div');
                             for(let j=0; j<divsSteps.length; j++){
-                                if(divsSteps[j].hasAttribute('data-cy') && divsSteps[j].getAttribute('data-cy') == 'theory-text-content'){
+                                if(divsSteps[j].hasAttribute('data-cy') && divsSteps[j].getAttribute('data-cy') == configs.data_cy.theory_text_content){
                                     clearInterval(s);
                                     let divStepsContainer = divsSteps[j].children[0].children[0];
                                     try{
@@ -455,7 +492,7 @@ function modifyAPPRESPAI()
                                             divsSteps[j].innerHTML = setLoadingPageAnimation();
     
                                             //CHAMA API PARA DESBLOQUEAR CONTEUDO
-                                            callAPITheoryUnlocked('texto');
+                                            callAPITheoryUnlocked('texto', configs);
                                             container = divsSteps[j];
                                             break;
                                         }
@@ -472,7 +509,7 @@ function modifyAPPRESPAI()
                         let v = setInterval(()=>{
                             let divsVideo = document.querySelectorAll('div');
                             for(let j=0; j<divsVideo.length; j++){
-                                if(divsVideo[j].hasAttribute('data-cy') && divsVideo[j].getAttribute('data-cy') == 'theory-video-content'){
+                                if(divsVideo[j].hasAttribute('data-cy') && divsVideo[j].getAttribute('data-cy') == configs.data_cy.theory_video_content){
                                     clearInterval(v);
                                     if(divsVideo[j].children.length == 0)
                                     {
@@ -480,7 +517,7 @@ function modifyAPPRESPAI()
                                         divsVideo[j].innerHTML = setLoadingPageAnimation();
 
                                         //CHAMA API PARA DESBLOQUEAR CONTEUDO
-                                        callAPITheoryUnlocked('video');
+                                        callAPITheoryUnlocked('video', configs);
                                         break;
                                     }
                                 }
@@ -498,7 +535,7 @@ function modifyAPPRESPAI()
                                     let s = setInterval(()=>{
                                         let divsSteps = document.querySelectorAll('div');
                                         for(let j=0; j<divsSteps.length; j++){
-                                            if(divsSteps[j].hasAttribute('data-cy') && divsSteps[j].getAttribute('data-cy') == 'theory-text-content'){
+                                            if(divsSteps[j].hasAttribute('data-cy') && divsSteps[j].getAttribute('data-cy') == configs.data_cy.theory_text_content){
                                                 clearInterval(s);
 
                                                 let divStepsContainer = divsSteps[j].children[0].children[0];
@@ -511,7 +548,7 @@ function modifyAPPRESPAI()
                                                         divStepsContainer.children[4].isEqualNode(divStepsContainer.children[5])
                                                     ){
                                                         divsSteps[j].innerHTML = setLoadingPageAnimation();
-                                                        callAPITheoryUnlocked("texto");
+                                                        callAPITheoryUnlocked("texto", configs);
                                                         break;
                                                     }
                                                 }catch(exception){
@@ -537,7 +574,7 @@ function modifyAPPRESPAI()
                         let s = setInterval(()=>{
                             let divsSteps = document.querySelectorAll('div');
                             for(let j=0; j<divsSteps.length; j++){
-                                if(divsSteps[j].hasAttribute('data-cy') && divsSteps[j].getAttribute('data-cy') == 'theory-text-content'){
+                                if(divsSteps[j].hasAttribute('data-cy') && divsSteps[j].getAttribute('data-cy') == configs.data_cy.theory_text_content){
                                     clearInterval(s);
 
                                     let divStepsContainer = divsSteps[j].children[0].children[0];
@@ -550,7 +587,7 @@ function modifyAPPRESPAI()
                                             divStepsContainer.children[4].isEqualNode(divStepsContainer.children[5])
                                         ){
                                             divsSteps[j].innerHTML = setLoadingPageAnimation();
-                                            callAPITheoryUnlocked("texto");
+                                            callAPITheoryUnlocked("texto", configs);
                                             break;
                                         }
                                     }catch(exception){
@@ -588,7 +625,7 @@ function modifyAPPRESPAI()
          * Faz chamada para API e popula página de acordo com o parametro typeContent
          * @param {*} typeContent
          */
-        function callAPITheoryUnlocked(typeContent)
+        function callAPITheoryUnlocked(typeContent, configs)
         {
             let token = getCookie('user_jwt');
             let topicId = getTopicId();
@@ -612,7 +649,7 @@ function modifyAPPRESPAI()
                             let r = setInterval(()=>{
                                 let divs = document.querySelectorAll('div');
                                 for(let i=0; i<divs.length; i++){
-                                    if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == 'theory-text-content' && typeof(MathJax) == "object"){
+                                    if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == configs.data_cy.theory_text_content && typeof(MathJax) == "object"){
                                         clearInterval(r);
                                         divs[i].innerHTML = '<div class="sc-jTzLTM fFEUnb rendered"><div>' + resp.data.lightBody + '</div></div>';
                                         MathJax.typeset();
@@ -628,7 +665,7 @@ function modifyAPPRESPAI()
                             let r = setInterval(()=>{
                                 let divs = document.querySelectorAll('div');
                                 for(let i=0; i<divs.length; i++){
-                                    if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == 'theory-video-content'){
+                                    if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == configs.data_cy.theory_video_content){
                                         clearInterval(r);
                                         if(divs[i].children[0].id == "containerLootieLoading")
                                         {
@@ -682,12 +719,12 @@ function modifyAPPRESPAI()
         /**
          * Sobrescreve acao padrao dos botoes
          */
-        function setTheoryLinksAction()
+        function setTheoryLinksAction(configs)
         {
             let r = setInterval(()=>{
                 let divs = document.querySelectorAll('div');
                 for(let i=0; i<divs.length; i++){
-                    if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == 'side-menu'){
+                    if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == configs.data_cy.side_menu){
                         clearInterval(r);
                         setTimeout(()=>{
                             let links = document.querySelectorAll("a");
@@ -715,17 +752,16 @@ function modifyAPPRESPAI()
         /**
          * Remove blur da pagina
          */
-        function removeBlurPage()
+        function removeBlurPage(configs)
         {
-            let r = setInterval(()=>{
-                let blurElements = document.querySelectorAll(".blur");            
-                if(blurElements.length>0){
-                    clearInterval(r);
-                    for (let i=0; i<blurElements.length; i++){
-                        blurElements[i].classList.remove("blur");
-                        blurElements[i].style.filter = 'none';
-                    }
-                }
+            setInterval(()=>{
+                configs.blur_class.forEach((current_class) => {
+                    let blurElements = document.querySelectorAll('.'+current_class);
+                    blurElements.forEach((blurElement) => {
+                        blurElement.classList.remove(current_class);
+                        blurElement.style.filter = "none";
+                    })
+                });
             },800);
         }
 
@@ -733,10 +769,10 @@ function modifyAPPRESPAI()
         /**
          * Habilita scroll da pagina
          */
-        function enableBodyOverflow()
+        function enableBodyOverflow(configs)
         {
             let r = setInterval(()=>{
-                if(document.querySelector(".ReactModal__Body--open") != null){
+                if(verificaElemento('.'+configs.logged_enable_scroll_page)){
                     clearInterval(r);
                     document.body.style.overflow = "auto"
                 }
@@ -744,10 +780,10 @@ function modifyAPPRESPAI()
         }
 
 
-        function removeReactModalOverlay()
+        function removeReactModalOverlay(configs)
         {
             let r = setInterval(()=>{
-                let reactModalOverlay = document.querySelectorAll(".ReactModal__Overlay");
+                let reactModalOverlay = document.querySelectorAll('.'+configs.logged_react_modal);
                 if(reactModalOverlay.length > 0){
                     clearInterval(r);
                     for(let i=0; i<reactModalOverlay.length; i++){
@@ -761,16 +797,16 @@ function modifyAPPRESPAI()
         /**
          * Remove bloqueio do dexter
          */
-        function removeDexterBlock()
+        function removeDexterBlock(configs)
         {
             let r = setInterval(()=>{
                 let divs = document.querySelectorAll('div');
-                for(let i=0; i<divs.length; i++){
-                    if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == 'no-access-dexter-overlay'){
+                divs.forEach((div)=>{
+                    if(div.hasAttribute('data-cy') && div.getAttribute('data-cy') == configs.logged_dexter_block){
                         clearInterval(r);
-                        divs[i].remove();
+                        div.remove();
                     }
-                }
+                });
             },800);
         }
         
@@ -905,7 +941,7 @@ function modifyAPPRESPAI()
                         document.body.appendChild(btnResposta);
 
                         //SET ESTILO BOTAO
-                        btnResposta.style.cssText = 'position: fixed; bottom: 20px; left: 30px; z-index: 99; border: none; outline: none; background-color: #28a745; color: white; cursor: pointer; padding: 15px; border-radius: 5px; font-size: 18px; -webkit-box-shadow: 10px 5px 5px 0 rgb(0 0 0 / 20%), 10px 5px 10px 0 rgb(0 0 0 / 10%); box-shadow: 10px 5px 5px 0 rgb(0 0 0 / 20%), 10px 5px 10px 0 rgb(0 0 0 / 10%); -webkit-transition: opacity 600ms, visibility 600ms; transition: opacity 600ms, visibility 600ms; opacity: 1;';
+                        btnResposta.style.cssText = 'position: fixed; bottom: 20px; left: 30px; z-index: 1050; border: none; outline: none; background-color: #28a745; color: white; cursor: pointer; padding: 15px; border-radius: 5px; font-size: 18px; -webkit-box-shadow: 10px 5px 5px 0 rgb(0 0 0 / 20%), 10px 5px 10px 0 rgb(0 0 0 / 10%); box-shadow: 10px 5px 5px 0 rgb(0 0 0 / 20%), 10px 5px 10px 0 rgb(0 0 0 / 10%); -webkit-transition: opacity 600ms, visibility 600ms; transition: opacity 600ms, visibility 600ms; opacity: 1;';
 
                         //ADD EVENTO NO BOTAO
                         document.getElementById('btnResposta').addEventListener('click', ()=>{
@@ -969,6 +1005,12 @@ function modifyAPPRESPAI()
             let urlParts = fullURL.split("/");
 
             return urlParts[urlParts.length-1];
+        }
+        
+        
+        function verificaElemento(elemento)
+        {
+            return (document.querySelector(elemento)!=null) ? true : false;
         }`;
 
 
@@ -979,7 +1021,7 @@ function modifyAPPRESPAI()
     sweetAlert.setAttribute('src', 'https://cdn.jsdelivr.net/npm/sweetalert2@10');
     document.head.appendChild(sweetAlert);
 
-    //IMPORT SWEET ALERT JS
+    //IMPORT AXIOS JS
     let axiosJS = document.createElement("script");
     axiosJS.type = "text/javascript";
     axiosJS.setAttribute('id', 'axiosJS');
@@ -2345,7 +2387,7 @@ function modifyEXAME()
             (__NEXT_DATA__.props.pageProps.postData).forEach((data)=>{
                 unlockedContent += (data.hasOwnProperty("content")) ? data.content : "";
             });
-            document.getElementById("news-body").innerHTML = unlockedContent;
+            document.querySelector(".news-content-container").innerHTML = unlockedContent;
 
             sweetAlert(
                 'success',
@@ -2353,7 +2395,6 @@ function modifyEXAME()
                 'Ótimo! Conteúdo desbloqueado!'
             );
             incrementaConteudoAPI();
-            document.querySelector(".xm-paywall").remove();
         }catch(erro){
             let r = setInterval(()=>{
                 let paywallBlock = document.querySelector(".xm-paywall");
@@ -2365,7 +2406,7 @@ function modifyEXAME()
                         timeout: 20000
                     }).then((resp)=>{
                         let codigoFonte = new DOMParser().parseFromString(resp.data, 'text/html');
-                        let newsBlock = codigoFonte.getElementById("news-body");
+                        let newsBlock = codigoFonte.querySelector(".news-content-container");
 
                         let u = setInterval(()=>{
                             if(newsBlock != null && newsBlock != undefined){
@@ -2376,8 +2417,7 @@ function modifyEXAME()
                                         'Sucesso',
                                         'Ótimo! Conteúdo desbloqueado!'
                                     );
-                                    document.getElementById("news-body").innerHTML = newsBlock.outerHTML;
-                                    paywallBlock.remove();
+                                    document.querySelector(".news-content-container").innerHTML = newsBlock.outerHTML;
                                     incrementaConteudoAPI();
                                 }else{
                                     sweetAlert(
@@ -2433,26 +2473,49 @@ function modifyRESPAI()
 
 function mainUnlockRESPAI()
 {
-   //LOOP Para remover bloqueios caso haja atualização dos iframes
-   setInterval(()=>{
-        removeBloqueioExercicioLivro();
-        removeBlur();
-        removeAllBtnShowSolucao();
-        removeBloqueioTeoria();
-        removeBloqueioConteudoExclusivo();
-        expandContent();
-        removeExpandButtons();
-        removeShowCompleteSolutionButtons();        
-    },800);
+    axios({
+        method: "GET",
+        url: "https://possoler.tech/API/responde_ai/paywallDOM/index.php",
+        timeout: 10000
+    }).then((resp)=>{
+
+        //LOOP Para remover bloqueios caso haja atualização dos iframes
+        setInterval(()=>{
+            removeBloqueioExercicioLivro(resp.data);
+            removeBlur(resp.data);
+            removeAllBtnShowSolucao(resp.data);
+            removeBloqueioTeoria(resp.data);
+            removeBloqueioConteudoExclusivo(resp.data);
+            expandContent(resp.data);
+            removeExpandButtons();
+            removeShowCompleteSolutionButtons();        
+        },800);
+
+    }).catch((erro) => {
+        if(erro.toString().includes('timeout')){
+            sweetAlert(
+                'error',
+                'Erro',
+                `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`,
+            );
+        }else{
+            sweetAlert(
+                'error',
+                'Erro',
+                `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}`
+            );
+        }                
+        
+    });
 }
 
 
-function expandContent()
+function expandContent(configs)
 {
     let sections = document.querySelectorAll('section');
 
     for(let i=0; i<sections.length; i++){
-        if(sections[i].offsetHeight == 300){
+        if(sections[i].offsetHeight == configs.paywall_height_size){
             sections[i].style.height = 'unset';
         }
     }
@@ -2474,24 +2537,23 @@ function removeExpandButtons()
 function removeShowCompleteSolutionButtons()
 {
     let btn = document.querySelectorAll('button');
-
-    for(let i=0; i<btn.length; i++){
-        if((btn[i].textContent).includes('Mostrar Solução Completa')){
-            btn[i].parentElement.remove();
+    btn.forEach((button)=>{
+        if((button.textContent).includes('Mostrar Solução Completa')){
+            button.parentElement.remove();
         }
-    }
+    });
 }
 
 
-function removeBloqueioExercicioLivro()
+function removeBloqueioExercicioLivro(configs)
 {
     let keys = [false, false, false];
-    let divBlock = document.querySelectorAll(".ReactModalPortal");
-    let body = document.querySelectorAll(".ReactModal__Body--open");
-    let containerBlock = document.querySelectorAll(".NoAccessDisclaimer__Container-sc-6er3z1-0");
+    let divBlock = document.querySelectorAll(`.${configs.unlogged_remove_book_block[0]}`);
+    let body = document.querySelectorAll(`.${configs.unlogged_remove_book_block[1]}`);
+    let containerBlock = document.querySelectorAll(`.${configs.unlogged_remove_book_block[2]}`);
 
     body.forEach((b)=>{
-        b.classList.remove("ReactModal__Body--open");
+        b.classList.remove(`.${configs.unlogged_remove_book_block[1]}`);
         keys[0] = true;
     });
 
@@ -2509,62 +2571,51 @@ function removeBloqueioExercicioLivro()
 }
 
 
-function removeBlur()
+function removeBlur(configs)
 {
     let divs = document.querySelectorAll("div");
     divs.forEach((div)=>{
-        if(div.classList.contains("htZGzZ")){
-            div.classList.remove("htZGzZ");
-            incrementaConteudoAPI();
-        }
-        if(div.classList.contains("blur")){
-            div.classList.remove("blur");
-            incrementaConteudoAPI();
-        }
+        configs.blur_class.forEach((current_blur_class) => {
+            if(div.classList.contains(current_blur_class)){
+                div.classList.remove(current_blur_class);
+                incrementaConteudoAPI();
+            }
+        });
     });
 }
 
 
-function removeAllBtnShowSolucao()
+function removeAllBtnShowSolucao(configs)
 {
-    let btnSolucaoCompleta = document.querySelectorAll("#exercise-expand-button");
-    if(btnSolucaoCompleta.length>0){
-        for(let i=0; i<btnSolucaoCompleta.length; i++){
-            btnSolucaoCompleta[i].remove();
-        }
-    }
-    let btns = document.querySelectorAll(".exercise-theory-expand-button");
-    if(btns.length>0){
-        for(let i=0; i<btns.length; i++){
-            btns[i].remove();
-        }
-    }
-    let buttons = document.querySelectorAll('button');
-    for(let i=0; i<buttons.length; i++){
-        if(buttons[i].textContent == 'Mostrar Solução Completa')
-            buttons[i].remove();
-    }
+    let btnSolucaoCompleta = document.querySelectorAll(`#${configs.unlogged_remove_show_solution_button[0]}`);
+    let btns = document.querySelectorAll(`.${configs.unlogged_remove_show_solution_button[1]}`);
+    let buttons = document.querySelectorAll(`${configs.unlogged_remove_show_solution_button[2]}`);
+
+    btnSolucaoCompleta.forEach((btn)=>{btn.remove();});
+    btns.forEach((btn)=>{btn.remove()});
+    buttons.forEach((button)=>{if(button.textContent != "Cadastrar" && button.textContent != "Entrar") button.remove();})
 }
 
 
-function removeBloqueioTeoria()
+function removeBloqueioTeoria(configs)
 {
-    let elementosPaywall = document.querySelectorAll(".paywall");
-    let elementosTheory = document.querySelectorAll(".theory-container");
-    let btnExpandir = document.querySelectorAll(".expand-overlay");
+    let elementosPaywall = document.querySelectorAll(`.${configs.unlogged_remove_block_theory[0]}`);
+    let elementosTheory = document.querySelectorAll(`.${configs.unlogged_remove_block_theory[1]}`);
+    let btnExpandir = document.querySelectorAll(`.${configs.unlogged_remove_block_theory[2]}`);
 
-    elementosPaywall.forEach((elem)=>{elem.classList.remove("paywall");});
-    elementosTheory.forEach((elem)=>{elem.classList.remove("theory-container");});
+    elementosPaywall.forEach((elem)=>{elem.classList.remove(`.${configs.unlogged_remove_block_theory[0]}`);});
+    elementosTheory.forEach((elem)=>{elem.classList.remove(`.${configs.unlogged_remove_block_theory[1]}`);});
     btnExpandir.forEach((elem)=>{elem.remove();});
 }
 
 
-function removeBloqueioConteudoExclusivo()
+function removeBloqueioConteudoExclusivo(configs)
 {
     let bloqueioOverlay = false;
     let bloqueioWrapper = false;
 
-    let loginOverlay = document.querySelectorAll(".login-overlay");
+    let loginOverlay = document.querySelectorAll(`.${configs.unlogged_exclusive_content[0]}`);
+    
     if(loginOverlay.length>0){
         for(let i=0; i<loginOverlay.length; i++){
 
@@ -2579,10 +2630,10 @@ function removeBloqueioConteudoExclusivo()
         }
     }
 
-    let mainWrapper = document.querySelectorAll(".main-wrapper");
+    let mainWrapper = document.querySelectorAll(`.${configs.unlogged_exclusive_content[1]}`);
     if(mainWrapper.length>0){
         for(let i=0; i<mainWrapper.length; i++){
-            
+
             let elementAttributes = mainWrapper[i].attributes;
             for(let j=0; j<elementAttributes.length; j++){
                 if(elementAttributes[j].name == "style"){
@@ -2689,7 +2740,7 @@ function createButtonResposta()
                 btnResposta.style.cssText = `position: fixed;
                 bottom: 20px;
                 left: 30px;
-                z-index: 99;
+                z-index: 1050;
                 border: none;
                 outline: none;
                 background-color: #28a745;

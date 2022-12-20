@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Posso Ler?
 // @namespace    URL
-// @version      1.5.5
+// @version      1.6.6
 // @description  Tenha acesso a noticias ilimitadas e conteudos exclusivos de forma gratuita e segura
 // @author       snowom
 // @supportURL   https://possoler.tech/
@@ -22,7 +22,7 @@
 // @match        *://*.revistagalileu.globo.com/*
 // @match        *://*.epocanegocios.globo.com/*
 // @match        *://*.revistamarieclaire.globo.com/*
-// @match        *://*.revistagloborural.globo.com/*
+// @match        *://*.globorural.globo.com/*
 // @match        *://*.autoesporte.globo.com/*
 // @match        *://*.revistapegn.globo.com/*
 // @match        *://*.jota.info/*
@@ -50,6 +50,8 @@
 // @match        *://*.atribuna.com.br/*
 // @match        *://*.umdoisesportes.com.br/*
 // @match        *://*.correiodopovo.com.br/*
+// @match        *://*.revistacasaejardim.globo.com/*
+// @match        *://*.saude.abril.com.br/*
 // @require      https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js
 // @require      https://possoler.tech/CDN/snackbar.js
 // @require      https://possoler.tech/CDN/[FF]blockCorePaywall.js
@@ -57,14 +59,14 @@
 // @grant        GM_setValue
 // @grant        GM_getValue
 // @grant        GM_deleteValue
-// @webRequest   [{"selector":"https://www.rbsonline.com.br/cdn/scripts/paywall.min.js*","action":"cancel"}, {"selector":"https://www.rbsonline.com.br/cdn/scripts/special-paywall.min.js*","action":"cancel"}, {"selector":"https://api.clicrbs.com.br/paywall-api/*","action":"cancel"}, {"selector": "*://cdn.tinypass.com/api/tinypass.min.js*", "action": "cancel"}, {"selector": "*://super.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://quatrorodas.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://veja.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://guiadoestudante.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector":"*://blockv4.fivewall.com.br/paywall.js*","action":"cancel"}, {"selector":"*://acesso.estadao.com.br/paywall*","action":"cancel"}, {"selector":"*://paywall.folha.uol.com.br/*","action":"cancel"}, {"selector":"*://*/arc/subs/p.min.js","action":"cancel"}, {"selector":"*://exame.com/wp-content/themes/exame-new/js/extd-acc.js*","action":"cancel"}, {"selector":"*://folhadelondrina.com.br/themes/default/js/paywall/fivewall1.26.js*","action":"cancel"}, {"selector":"*://s3.amazonaws.com/sdk-signin-wall-production/bundle.js*","action":"cancel"}, {"selector":"*://me.jsuol.com.br/*","action":"cancel"}, {"selector":"*://mais.opovo.com.br/auth*","action":"cancel"}, {"selector":"*://mais.opovo.com.br/includes/assets/opovomais/js/auth/auth_new_menu.min.js*","action":"cancel"}, {"selector":"*://mais.opovo.com.br/includes/assets/opovomais/js/paywall_config.min.js*","action":"cancel"}, {"selector":"*://correio-static.cworks.cloud/fileadmin/sites/correio24horas/js/all.js*","action":"cancel"}, {"selector":"*://static.infoglobo.com.br/paywall/js/tiny.js*","action":"cancel"}, {"selector":"*://assine.correio24horas.com.br/v2/amp/subscriber/auth*","action":"cancel"}, {"selector":"*://*.atribuna.com.br/assets/js*/materia.js","action":"cancel"}, {"selector":"*://*c2.piano.io/*","action":"cancel"}, {"selector":"*://paywall.correiodopovo.com.br/*","action":"cancel"}, {"selector":"*://*.atribuna.com.br/assets/js*/article.js","action":"cancel"}, {"selector":"*://*.respondeai.com.br/conteudo/js/vendor.js","action":"cancel"}, {"selector":"*://static.elpais.com/dist/resources/js/*/ENP-closed-article-layer.js","action":"cancel"}, {"selector":"*://d.jornaldocomercio.com/_conteudo/_files/json/paywall.json","action":"cancel"}]
+// @webRequest   [{"selector":"https://www.rbsonline.com.br/cdn/scripts/paywall.min.js*","action":"cancel"}, {"selector":"https://www.rbsonline.com.br/cdn/scripts/special-paywall.min.js*","action":"cancel"}, {"selector":"https://api.clicrbs.com.br/paywall-api/*","action":"cancel"}, {"selector": "*://cdn.tinypass.com/api/tinypass.min.js*", "action": "cancel"}, {"selector": "*://super.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://quatrorodas.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://veja.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector": "*://guiadoestudante.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall/js/*", "action": "cancel"}, {"selector":"*://blockv4.fivewall.com.br/paywall.js*","action":"cancel"}, {"selector":"*://acesso.estadao.com.br/paywall*","action":"cancel"}, {"selector":"*://paywall.folha.uol.com.br/*","action":"cancel"}, {"selector":"*://*/arc/subs/p.min.js","action":"cancel"}, {"selector":"*://exame.com/wp-content/themes/exame-new/js/extd-acc.js*","action":"cancel"}, {"selector":"*://folhadelondrina.com.br/themes/default/js/paywall/fivewall1.26.js*","action":"cancel"}, {"selector":"*://s3.amazonaws.com/sdk-signin-wall-production/bundle.js*","action":"cancel"}, {"selector":"*://me.jsuol.com.br/*","action":"cancel"}, {"selector":"*://mais.opovo.com.br/auth*","action":"cancel"}, {"selector":"*://mais.opovo.com.br/includes/assets/opovomais/js/auth/auth_new_menu.min.js*","action":"cancel"}, {"selector":"*://mais.opovo.com.br/includes/assets/opovomais/js/paywall_config.min.js*","action":"cancel"}, {"selector":"*://correio-static.cworks.cloud/fileadmin/sites/correio24horas/js/all.js*","action":"cancel"}, {"selector":"*://static.infoglobo.com.br/paywall/js/tiny.js*","action":"cancel"}, {"selector":"*://assine.correio24horas.com.br/v2/amp/subscriber/auth*","action":"cancel"}, {"selector":"*://*.atribuna.com.br/assets/js*/materia.js","action":"cancel"}, {"selector":"*://*c2.piano.io/*","action":"cancel"}, {"selector":"*://paywall.correiodopovo.com.br/*","action":"cancel"}, {"selector":"*://*.atribuna.com.br/assets/js*/article.js","action":"cancel"}, {"selector":"*://*.respondeai.com.br/conteudo/js/vendor.js","action":"cancel"}, {"selector":"*://static.elpais.com/dist/resources/js/*/ENP-closed-article-layer.js","action":"cancel"}, {"selector":"*://d.jornaldocomercio.com/_conteudo/_files/json/paywall.json","action":"cancel"}, {"selector":"*://*.jornaldocomercio.com/src/inove/paywall.php","action":"cancel"}, {"selector":"*://*saude.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall*","action":"cancel"}]
 // @run-at       document-start
 // @noframes
 // ==/UserScript==
 
 importCDNSnackBar();
 let currentURL = window.location.hostname;
-const CURRENT_VERSION = '155';
+const CURRENT_VERSION = '166';
 
 
 function main()
@@ -131,7 +133,7 @@ function main()
         saveDataForDashboard(14);
         blockPaywallRequest("*://cdn.tinypass.com/api/tinypass.min.js*");
     }
-    else if(currentURL.includes("revistagloborural.globo.com")){
+    else if(currentURL.includes("globorural.globo.com")){
         saveDataForDashboard(15);
         blockPaywallRequest("*://cdn.tinypass.com/api/tinypass.min.js*");
     }
@@ -233,6 +235,14 @@ function main()
         saveDataForDashboard(40);
         blockPaywallRequest("*://paywall.correiodopovo.com.br/*");
     }
+    else if(currentURL.includes("revistacasaejardim.globo.com")){
+        saveDataForDashboard(41);
+        blockPaywallRequest("*://static.infoglobo.com.br/paywall/js/tiny.js*");
+    }
+    else if(currentURL.includes("saude.abril.com.br")){
+        saveDataForDashboard(42);
+        blockPaywallRequest("*://*saude.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall*");
+    }
 }
 
 
@@ -272,34 +282,34 @@ function modifyAPPRESPAI()
                 function mainUnlockFunction(){
                     if(window.location.href.includes('app.respondeai.com.br/aprender') && window.location.href.includes('/teoria/')){
                         importRequiredCDN();
-                        setTheoryLinksAction();
+                        setTheoryLinksAction(resp.data);
                         enableBodyOverflow(resp.data);
                         removeReactModalOverlay(resp.data);
                         removeDexterBlock(resp.data);
                         removeBlurPage(resp.data);
-                        unlockTeoria();
+                        unlockTeoria(resp.data);
                         incrementaConteudoAPI();
                         verificaAtualizacaoVersao();
                     }
                     else if(window.location.href.includes('app.respondeai.com.br/aprender') && window.location.href.includes('/exercicio/')){
                         importRequiredCDN();
-                        setTheoryLinksAction();
+                        setTheoryLinksAction(resp.data);
                         enableBodyOverflow(resp.data);
                         removeReactModalOverlay(resp.data);
                         removeDexterBlock(resp.data);
                         removeBlurPage(resp.data);
-                        unlockFixationExercise();
+                        unlockFixationExercise(resp.data);
                         incrementaConteudoAPI();
                         verificaAtualizacaoVersao();
                     }
                     else if((window.location.href.includes('app.respondeai.com.br/aprender') || window.location.href.includes('app.respondeai.com.br/praticar')) && window.location.href.includes('/exercicio-lista/')){
                         importRequiredCDN();
-                        setTheoryLinksAction();
+                        setTheoryLinksAction(resp.data);
                         enableBodyOverflow(resp.data);
                         removeReactModalOverlay(resp.data);
                         removeDexterBlock(resp.data);
                         removeBlurPage(resp.data);
-                        unlockListExercise();
+                        unlockListExercise(resp.data);
                         incrementaConteudoAPI();
                         verificaAtualizacaoVersao();
                     }
@@ -337,14 +347,14 @@ function changeLockedIcons(configs)
 }
 
 
-function unlockListExercise()
+function unlockListExercise(configs)
 {
 
     //Remove format toogle
     let k = setInterval(()=>{
         let divs = document.querySelectorAll('div');
         for(let i=0; i<divs.length; i++){
-            if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == 'content-format-toggle'){
+            if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == configs.data_cy.format_toggle){
                 clearInterval(k);
                 divs[i].style.display = "none";
                 break;
@@ -355,7 +365,7 @@ function unlockListExercise()
     let r = setInterval(()=>{
         let divs = document.querySelectorAll('div');
         for(let i=0; i<divs.length; i++){
-            if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == 'exercise-show-answer-button'){
+            if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == configs.data_cy.exercise_answer_button){
                 clearInterval(r);
 
                 let answerDiv = divs[i];
@@ -435,13 +445,13 @@ function unlockListExercise()
 }
 
 
-function unlockFixationExercise()
+function unlockFixationExercise(configs)
 {
     //Remove format toogle
     let k = setInterval(()=>{
         let divs = document.querySelectorAll('div');
         for(let i=0; i<divs.length; i++){
-            if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == 'content-format-toggle'){
+            if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == configs.data_cy.format_toggle){
                 clearInterval(k);
                 divs[i].style.display = "none";
                 break;
@@ -453,19 +463,19 @@ function unlockFixationExercise()
         let divs = document.querySelectorAll('div');
         for(let i=0; i<divs.length; i++){
             if(
-                (divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == 'exercise-show-answer-button') ||
-                (divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == 'exercise-statement')
+                (divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == configs.data_cy.exercise_answer_button) ||
+                (divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == configs.data_cy.exercise_statement)
             ){
                 clearInterval(r);
                 let answerDiv;
 
-                if(divs[i].getAttribute('data-cy') == 'exercise-statement'){
+                if(divs[i].getAttribute('data-cy') == configs.data_cy.exercise_statement){
                     divs[i].innerHTML += `<div id="tmpAnswer"></div>`;
                     answerDiv = document.getElementById("tmpAnswer");
 
                     // Remove botão responde ai
                     for(let k=i; k<divs.length; k++){
-                        if(divs[k].hasAttribute('data-cy') && divs[k].getAttribute('data-cy') == 'exercise-show-answer-button'){
+                        if(divs[k].hasAttribute('data-cy') && divs[k].getAttribute('data-cy') == configs.data_cy.exercise_answer_button){
                             divs[k].remove();
                         }
                     }
@@ -550,12 +560,12 @@ function unlockFixationExercise()
 }
 
 
-function unlockTeoria()
+function unlockTeoria(configs)
 {
     let r = setInterval(()=>{
         let divs = document.querySelectorAll('div');
         for(let i=0; i<divs.length; i++){
-            if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == 'content-format-toggle'){
+            if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == configs.data_cy.format_toggle){
                 clearInterval(r);
 
                 //VERIFICA SE NA 1 EXEC O CONTEUDO ESTA BLOQUEADO - TEXTO
@@ -563,7 +573,7 @@ function unlockTeoria()
                 let s = setInterval(()=>{
                     let divsSteps = document.querySelectorAll('div');
                     for(let j=0; j<divsSteps.length; j++){
-                        if(divsSteps[j].hasAttribute('data-cy') && divsSteps[j].getAttribute('data-cy') == 'theory-text-content'){
+                        if(divsSteps[j].hasAttribute('data-cy') && divsSteps[j].getAttribute('data-cy') == configs.data_cy.theory_text_content){
                             clearInterval(s);
                             let divStepsContainer = divsSteps[j].children[0].children[0];
                             try{
@@ -578,7 +588,7 @@ function unlockTeoria()
                                     divsSteps[j].innerHTML = setLoadingPageAnimation();
 
                                     //CHAMA API PARA DESBLOQUEAR CONTEUDO
-                                    callAPITheoryUnlocked('texto');
+                                    callAPITheoryUnlocked('texto', configs);
                                     container = divsSteps[j];
                                     break;
                                 }
@@ -596,7 +606,7 @@ function unlockTeoria()
                 let v = setInterval(()=>{
                     let divsVideo = document.querySelectorAll('div');
                     for(let j=0; j<divsVideo.length; j++){
-                        if(divsVideo[j].hasAttribute('data-cy') && divsVideo[j].getAttribute('data-cy') == 'theory-video-content'){
+                        if(divsVideo[j].hasAttribute('data-cy') && divsVideo[j].getAttribute('data-cy') == configs.data_cy.theory_video_content){
                             clearInterval(v);
                             if(divsVideo[j].children.length == 0)
                             {
@@ -604,7 +614,7 @@ function unlockTeoria()
                                 divsVideo[j].innerHTML = setLoadingPageAnimation();
 
                                 //CHAMA API PARA DESBLOQUEAR CONTEUDO
-                                callAPITheoryUnlocked('video');
+                                callAPITheoryUnlocked('video', configs);
                                 break;
                             }
                         }
@@ -622,7 +632,7 @@ function unlockTeoria()
                             let s = setInterval(()=>{
                                 let divsSteps = document.querySelectorAll('div');
                                 for(let j=0; j<divsSteps.length; j++){
-                                    if(divsSteps[j].hasAttribute('data-cy') && divsSteps[j].getAttribute('data-cy') == 'theory-text-content'){
+                                    if(divsSteps[j].hasAttribute('data-cy') && divsSteps[j].getAttribute('data-cy') == configs.data_cy.theory_text_content){
                                         clearInterval(s);
 
                                         let divStepsContainer = divsSteps[j].children[0].children[0];
@@ -635,7 +645,7 @@ function unlockTeoria()
                                                 divStepsContainer.children[4].isEqualNode(divStepsContainer.children[5])
                                             ){
                                                 divsSteps[j].innerHTML = setLoadingPageAnimation();
-                                                callAPITheoryUnlocked("texto");
+                                                callAPITheoryUnlocked("texto", configs);
                                                 break;
                                             }
                                         }catch(erro){
@@ -647,7 +657,7 @@ function unlockTeoria()
                             break;
                         }
                         if(nodes[i].nodeName == 'P' && nodes[i].textContent == 'Alternar para video >>'){
-                            callAPITheoryUnlocked("video");
+                            callAPITheoryUnlocked("video", configs);
                             if(verificaElemento("#msgLottieDesbloqueio")){
                                 document.getElementById("msgLottieDesbloqueio").innerHTML = `
                                     <p class="lead">Aguarde um momento...<br>Estamos removendo os bloqueios para você...</p>`
@@ -662,7 +672,7 @@ function unlockTeoria()
                 let s = setInterval(()=>{
                     let divsSteps = document.querySelectorAll('div');
                     for(let j=0; j<divsSteps.length; j++){
-                        if(divsSteps[j].hasAttribute('data-cy') && divsSteps[j].getAttribute('data-cy') == 'theory-text-content'){
+                        if(divsSteps[j].hasAttribute('data-cy') && divsSteps[j].getAttribute('data-cy') == configs.data_cy.theory_text_content){
                             clearInterval(s);
 
                             let divStepsContainer = divsSteps[j].children[0].children[0];
@@ -675,7 +685,7 @@ function unlockTeoria()
                                     divStepsContainer.children[4].isEqualNode(divStepsContainer.children[5])
                                 ){
                                     divsSteps[j].innerHTML = setLoadingPageAnimation();
-                                    callAPITheoryUnlocked("texto");
+                                    callAPITheoryUnlocked("texto", configs);
                                     break;
                                 }
                             }catch(erro){
@@ -721,7 +731,7 @@ function importRequiredCDN()
  * Faz chamada para API e popula página de acordo com o parametro typeContent
  * @param {*} typeContent
  */
-function callAPITheoryUnlocked(typeContent)
+function callAPITheoryUnlocked(typeContent, configs)
 {
     let token = getCookie('user_jwt');
     let topicId = getTopicId();
@@ -745,7 +755,7 @@ function callAPITheoryUnlocked(typeContent)
                     let r = setInterval(()=>{
                         let divs = document.querySelectorAll('div');
                         for(let i=0; i<divs.length; i++){
-                            if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == 'theory-text-content' && typeof(MathJax) == "object"){
+                            if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == configs.data_cy.theory_text_content && typeof(MathJax) == "object"){
                                 clearInterval(r);
                                 divs[i].innerHTML = `
                                     <div class="sc-jTzLTM fFEUnb rendered">
@@ -764,7 +774,7 @@ function callAPITheoryUnlocked(typeContent)
                     let r = setInterval(()=>{
                         let divs = document.querySelectorAll('div');
                         for(let i=0; i<divs.length; i++){
-                            if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == 'theory-video-content'){
+                            if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == configs.data_cy.theory_video_content){
                                 clearInterval(r);
                                 if(divs[i].children[0].id == "containerLootieLoading")
                                 {
@@ -825,12 +835,12 @@ function getTopicId()
 /**
  * Sobrescreve acao padrao dos botoes
  */
-function setTheoryLinksAction()
+function setTheoryLinksAction(configs)
 {
     let r = setInterval(()=>{
         let divs = document.querySelectorAll('div');
         for(let i=0; i<divs.length; i++){
-            if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == 'side-menu'){
+            if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == configs.data_cy.side_menu){
                 clearInterval(r);
                 setTimeout(()=>{
                     let links = document.querySelectorAll("a");
@@ -2180,17 +2190,15 @@ function modifyEXAME()
 {
     verificaAtualizacaoVersao();
 
-    if(document.querySelector(".xm-paywall") != null){
+    if(document.querySelector(".xm-paywall") != null && typeof(__NEXT_DATA__) == "object"){
         try{
             let unlockedContent = "";
             (__NEXT_DATA__.props.pageProps.postData).forEach((data)=>{
                 unlockedContent += (data.hasOwnProperty("content")) ? data.content : "";
             });
-            document.getElementById("news-body").innerHTML = unlockedContent;
+            document.querySelector(".news-content-container").innerHTML = unlockedContent;
             incrementaConteudoAPI();
-            document.querySelector(".xm-paywall").remove();
         }catch(erro){
-
             let s = setInterval(()=>{
                 if(typeof(Swal) == 'function'){
                     clearInterval(s);
@@ -2198,54 +2206,11 @@ function modifyEXAME()
 
                     if(Swal.isVisible() == false){
                         sweetAlert(
-                            'info',
-                            'Aguarde um momento...',
-                            'Estamos removendo os bloqueios para você...<br><br>'
-                        );
-                    }
-                }
-            },800);
-
-            let r = setInterval(()=>{
-                let paywallBlock = document.querySelector(".xm-paywall");
-                if(paywallBlock != undefined && paywallBlock != null && typeof(axios) == 'function'){
-                    clearInterval(r);
-                    axios({
-                        method: 'GET',
-                        url: document.location.href,
-                        timeout: 20000
-                    }).then((resp)=>{
-                        let codigoFonte = new DOMParser().parseFromString(resp.data, 'text/html');
-                        let newsBlock = codigoFonte.getElementById("news-body");
-
-                        let u = setInterval(()=>{
-                            if(newsBlock != null && newsBlock != undefined){
-                                clearInterval(u);
-                                if(newsBlock != ''){
-                                    sweetAlert(
-                                        'success',
-                                        'Sucesso',
-                                        'Ótimo! Conteúdo desbloqueado!'
-                                    );
-                                    document.getElementById("news-body").innerHTML = newsBlock.outerHTML;
-                                    paywallBlock.remove();
-                                    incrementaConteudoAPI();
-                                }else{
-                                    sweetAlert(
-                                        'error',
-                                        'Erro',
-                                        `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>Erro ao montar newsBlock `
-                                    );
-                                }
-                            }
-                        },800);
-                    }).catch((erro)=>{
-                        sweetAlert(
                             'error',
                             'Erro',
                             `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}`
                         );
-                    });
+                    }
                 }
             },800);
         }
@@ -2297,7 +2262,7 @@ function mainUnlockRESPAI()
                     setSelectableArea();
                     removeBloqueioExercicioLivro(resp.data);
                     removeBlur(resp.data);
-                    expandContent();
+                    expandContent(resp.data);
                     removeExpandButtons();
                     removeShowCompleteSolutionButtons();
                     removeAllBtnShowSolucao(resp.data);
@@ -2461,11 +2426,11 @@ function removeBloqueioConteudoExclusivo(configs)
 }
 
 
-function expandContent()
+function expandContent(configs)
 {
     let sections = document.querySelectorAll('section');
     sections.forEach((section)=>{
-        if(section.offsetHeight == 300){
+        if(section.offsetHeight == configs.paywall_height_size){
             section.style.height = 'unset';
         }
     });
@@ -2556,7 +2521,7 @@ function createButtonResposta()
                 btnResposta.style.cssText = `position: fixed;
                 bottom: 20px;
                 left: 30px;
-                z-index: 99;
+                z-index: 1050;
                 border: none;
                 outline: none;
                 background-color: #28a745;

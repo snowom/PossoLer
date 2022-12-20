@@ -325,3 +325,13 @@
 # Redução de 5kb no userscript (CRX);
 # Redução de 15kb no userscript;
 # Ajuste Bypass Responde Aí;
+
+[18/12/2022]
+# Ajuste Z-Index botão resolução de livros;
+# Criação nova API para remover bloqueios Responde Aí;
+# Extensão mobile atualizada com nova arquitetura do Responde Aí;
+# Ajuste Bypass Exame;
+# Ajuste Bypass Globo Rural;
+# Ajuste Bypass Jornal do Comercio;
+# Adicionado Revista Casa e Jardim;
+# Adicionado Veja Saúde;

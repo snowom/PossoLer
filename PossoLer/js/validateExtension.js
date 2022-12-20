@@ -37,6 +37,11 @@ chrome.storage.local.get(['active'], (resp) => {
  */
 function activeExtension()
 {
+    if((window.location.hostname).includes("possoler.tech")){
+        modifyPossoLer();
+        return;
+    }
+
     clearPageContent();
     let r = setInterval(()=>{
         if(typeof(Swal) == 'function'){

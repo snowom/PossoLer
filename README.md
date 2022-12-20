@@ -8,8 +8,8 @@
 <br>
 <br>
 <img src="https://img.shields.io/badge/License-MIT-orange.svg"/>
-<img src="https://img.shields.io/badge/Versão atual-1.5.5-green.svg"/>
-<img src="https://img.shields.io/badge/Data atualização-05/09/2022-blue.svg"/>
+<img src="https://img.shields.io/badge/Versão atual-1.6.6-green.svg"/>
+<img src="https://img.shields.io/badge/Data atualização-20/12/2022-blue.svg"/>
 <img src="https://img.shields.io/badge/Tecnologia-PHP-red.svg"/>
 <img src="https://img.shields.io/badge/Tecnologia-Javascript-yellow.svg"/>
 <br>
@@ -54,6 +54,8 @@
 * [Jornal A Tribuna - Santos](https://www.atribuna.com.br/)
 * [Um Dois Esportes](https://www.umdoisesportes.com.br/)
 * [Correio do Povo](https://www.correiodopovo.com.br/)
+* [Revista Casa e Jardim](https://revistacasaejardim.globo.com/)
+* [Veja Saude](https://saude.abril.com.br/)
 
 ## Perguntas Frequentes
 
