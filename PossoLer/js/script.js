@@ -1,4 +1,4 @@
-const CURRENT_VERSION = '166';
+const CURRENT_VERSION = '276';
 
 /**
  * Verifica qual URL de correspondencia o usuario está e aplica a 
@@ -191,7 +191,7 @@ function modifyAPPRESPAI()
 
                 axios({
                     method: "GET",
-                    url: "https://possoler.tech/API/responde_ai/paywallDOM/index.php",
+                    url: "http://localhost:8080/API/paywalldom/respondeaiConfigs",
                     timeout: 10000
                 }).then((resp)=>{
         
@@ -313,12 +313,15 @@ function modifyAPPRESPAI()
                                 clearInterval(s);
                                 axios({
                                     method: "POST",
-                                    url: 'https://possoler.tech/API/responde_ai/signedUser/index.php?action=getListExercise',
+                                    url: 'http://localhost:8080/API/respondeai/getData?operation=getListExercise',
                                     timeout: 30000,
                                     data: JSON.stringify({
-                                        token: token,
-                                        listExerciseId: listExerciseId
-                                    })
+                                        itemId: listExerciseId
+                                    }),
+                                    headers : {
+                                        "Content-Type" : "application/json",
+                                        "authorization": token
+                                    }
                                 }).then((resp)=>{
                                     if(resp.data.status == 'failed') throw new Error(resp.data.message);
 
@@ -412,12 +415,15 @@ function modifyAPPRESPAI()
                                 clearInterval(s);
                                 axios({
                                     method: "POST",
-                                    url: 'https://possoler.tech/API/responde_ai/signedUser/index.php?action=getFixationExercise',
+                                    url: 'http://localhost:8080/API/respondeai/getData?operation=getFixationExercise',
                                     timeout: 30000,
                                     data: JSON.stringify({
-                                        token: token,
-                                        exerciseId: exerciseId
-                                    })
+                                        itemId: exerciseId
+                                    }),
+                                    headers : {
+                                        "Content-Type" : "application/json",
+                                        "authorization": token
+                                    }
                                 }).then((resp)=>{
                                     if(resp.data.status == 'failed') throw new Error(resp.data.message);
 
@@ -634,12 +640,15 @@ function modifyAPPRESPAI()
                     clearInterval(r);
                     axios({
                         method: "POST",
-                        url: 'https://possoler.tech/API/responde_ai/signedUser/index.php?action=getTheory',
+                        url: 'http://localhost:8080/API/respondeai/getData?operation=getTheory',
                         timeout: 30000,
                         data: JSON.stringify({
-                            token: token,
-                            topicId: topicId
-                        })
+                            itemId: topicId
+                        }),
+                        headers: {
+                            "Content-Type" : "application/json",
+                            "authorization": token
+                        }
                     }).then((resp)=>{
 
                         if(resp.data.status == 'failed')
@@ -679,7 +688,7 @@ function modifyAPPRESPAI()
 
                                                 //ITERA SOBRE OBJETO DE RESPOSTA PARA MONTAR PAGINA
                                                 for(let j=0; j<resp.data.videos.length; j++){
-                                                    divs[i].innerHTML += '<div data-cy="video-iframe" allowfullscreen="" frameborder="0" style="width: 100%; height: ' + 100/resp.data.videos.length + '%;"><div style="width: 100%; height: 100%;"><iframe frameborder="0" allowfullscreen="1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" title="YouTube video player" width="100%" height="100%" src="https://www.youtube.com/embed/' + resp.data.videos[j] + '?autoplay=0&amp;mute=0&amp;controls=1&amp;origin=https%3A%2F%2Fapp.respondeai.com.br&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;iv_load_policy=3&amp;modestbranding=1&amp;enablejsapi=1&amp;widgetid=1"></iframe></div></div><div style="height: ' + SPACE_BETWEEN_VIDEOS + 'px !important"></div>'
+                                                    divs[i].innerHTML += '<div data-cy="video-iframe" allowfullscreen="" frameborder="0" style="width: 100%; height: ' + 100/resp.data.videos.length + '%;"><div style="width: 100%; height: 100%;"><iframe frameborder="0" allowfullscreen="1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" title="YouTube video player" width="100%" height="100%" src="https://www.youtube.com/embed/' + resp.data.videos[j].providerId + '?autoplay=0&amp;mute=0&amp;controls=1&amp;origin=https%3A%2F%2Fapp.respondeai.com.br&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;iv_load_policy=3&amp;modestbranding=1&amp;enablejsapi=1&amp;widgetid=1"></iframe></div></div><div style="height: ' + SPACE_BETWEEN_VIDEOS + 'px !important"></div>'
                                                 }
                                             }else{
                                                 throw new Error('Falha ao obter objeto "videos"');
@@ -964,7 +973,7 @@ function modifyAPPRESPAI()
 
                     Swal.fire({
                         title: 'Resolução Completa',
-                        html: '<iframe src="https://possoler.tech/API/responde_ai/index.php?userToken=' + JWT_TOKEN + '&exerciseId=' + ID_EXERCICIO + '" style="width: 100%; height: 100% !important; border: none;"></iframe>',
+                        html: '<iframe src="http://localhost:8080/solvedBookExercise?auth=' + JWT_TOKEN + '&exerciseId=' + ID_EXERCICIO + '" style="width: 100%; height: 100% !important; border: none;"></iframe>',
                         showCloseButton: true,
                         allowEscapeKey: false,
                         allowOutsideClick: false,
@@ -1120,7 +1129,7 @@ function modifyOTEMPO()
                 },800);
     
                 //TENTA REQUEST COM FETCH PARA PEGAR TOKEN
-                fetch('https://possoler.tech/API/jornal_otempo/getRestServiceTokenEncoded.php')
+                fetch('http://localhost:8080/API/jornal_otempo/getRestServiceTokenEncoded')
                 .then(response => response.json())
                 .then(resp => {
                     const TOKEN_ENCODED = resp.OTEMPO_REST_SERVICE_TOKEN_ENCODED;
@@ -1424,77 +1433,78 @@ function modifyOPOPULAR()
                         //RECUPERA ARQUIVO COM CONTEUDO DESBLOQUEADO
                         axios({
                             method: 'POST',
-                            url: 'https://possoler.tech/API/cachemock/?options=get',
+                            url: 'http://localhost:8080/API/cachemock/getArticleContent',
                             timeout: 30000,
                             data: JSON.stringify({
                                 key: btoa(window.location.pathname)
-                            })
+                            }),
+                            headers: {
+                                "Content-Type" : "application/json"
+                            }
                         }).then((resp)=>{
                             console.clear();
                             console.log('SUCESSO GET PAGE CODE');
                             console.log(resp.data);
 
-                            if(resp.data.hasOwnProperty("content")){
-                                let cacheSourceCode = new DOMParser().parseFromString(resp.data.content, "text/html");
-                                let blocoNoticia = getArticleBodyPOPULAR(cacheSourceCode);
-                                let blocoOriginal = getArticleBodyPOPULAR(document);
+                            let cacheSourceCode = new DOMParser().parseFromString(resp.data.content, "text/html");
+                            let blocoNoticia = getArticleBodyPOPULAR(cacheSourceCode);
+                            let blocoOriginal = getArticleBodyPOPULAR(document);
 
-                                let u = setInterval(()=>{
-                                    if(blocoNoticia != null && blocoOriginal != null){
-                                        clearInterval(u);
+                            let u = setInterval(()=>{
+                                if(blocoNoticia != null && blocoOriginal != null){
+                                    clearInterval(u);
 
-                                        console.log(`CODE CACHE = ${blocoNoticia.outerHTML}`);
-                                        console.log(`CODE ORIGINAL = ${blocoOriginal.outerHTML}`);
+                                    console.log(`CODE CACHE = ${blocoNoticia.outerHTML}`);
+                                    console.log(`CODE ORIGINAL = ${blocoOriginal.outerHTML}`);
 
-                                        if(blocoNoticia != false && blocoOriginal != false){
+                                    if(blocoNoticia != false && blocoOriginal != false){
 
-                                            blocoOriginal.innerHTML = blocoNoticia.outerHTML;
-                                            sweetAlert(
-                                                'success',
-                                                'Sucesso',
-                                                'Ótimo! Conteúdo desbloqueado!'
-                                            );
+                                        blocoOriginal.innerHTML = blocoNoticia.outerHTML;
+                                        sweetAlert(
+                                            'success',
+                                            'Sucesso',
+                                            'Ótimo! Conteúdo desbloqueado!'
+                                        );
 
-                                            incrementaConteudoAPI();
-                                            verificaAtualizacaoVersao();
+                                        incrementaConteudoAPI();
+                                        verificaAtualizacaoVersao();
 
-                                            //VERIFICA E OCULTA KEEP READING CHILDREN
-                                            fixVideoRender();
-                                            hideKeepReadingChildren();
-                                            removeLockedNewsContainers();
-                                            removeArticles();
-                                            removeAdBetweenArticles();
-                                            removeCommentDiv();
+                                        //VERIFICA E OCULTA KEEP READING CHILDREN
+                                        fixVideoRender();
+                                        hideKeepReadingChildren();
+                                        removeLockedNewsContainers();
+                                        removeArticles();
+                                        removeAdBetweenArticles();
+                                        removeCommentDiv();
 
-                                        }else{
-                                            sweetAlert(
-                                                'warning',
-                                                'Atenção',
-                                                'Ops, ainda não é possível desbloquear essa página. <br>Por favor, tente acessar a noticia mais tarde.<br><br>'
-                                            );
-                                            return;
-                                        }
+                                    }else{
+                                        sweetAlert(
+                                            'warning',
+                                            'Atenção',
+                                            'Ops, ainda não é possível desbloquear essa página. <br>Por favor, tente acessar a noticia mais tarde.<br><br>'
+                                        );
+                                        return;
                                     }
-                                },800);
-                            }else{
-                                setTimeout(()=>{
-                                    window.location.assign(`https://webcache.googleusercontent.com/search?q=cache:${window.location.href}`);
-                                },1500);
-                            }
+                                }
+                            },800);
                         }).catch((erro)=>{
                             if(erro.toString().includes('timeout')){
                                 SwalTimeout(
                                     'error',
                                     'Erro',
-                                    `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style="font-weight: bold !important;">Código do erro: </spam>${erro}`,
+                                    `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style="font-weight: bold !important;">Código do erro: </spam>${erro.toString()}`,
                                     'https://opopular.com.br'
                                 );
-                            }else{
+                            }else if(erro.response.status != 404){
                                 sweetAlert(
-                                    'warning',
+                                    'error',
                                     'Atenção',
-                                    `Ops, tivemos um pequeno problema!<br> Por favor, recarregue a página para tentar novamente.<spam style="font-weight: bold !important;">Código do erro: [API FAILED REQUEST TO RESPONSE FILE] - </spam>`
+                                    `Ops, tivemos um pequeno problema!<br> Por favor, recarregue a página para tentar novamente.<spam style="font-weight: bold !important;">Código do erro: </spam>${erro.toString()}`
                                 );
+                            }else{
+                                setTimeout(()=>{
+                                    window.location.assign(`https://webcache.googleusercontent.com/search?q=cache:${window.location.href}`);
+                                },1500);
                             }
                         });
                     }
@@ -1551,14 +1561,17 @@ function modifyOPOPULAR()
                                     //FAZ POST PARA CRIAR ARQUIVO JSON COM CONTEUDO DA PÁGINA DE CACHE
                                     axios({
                                         method: 'POST',
-                                        url: 'https://possoler.tech/API/cachemock/?options=post',
+                                        url: 'http://localhost:8080/API/cachemock/saveArticleContent',
                                         timeout: 30000,
                                         data: JSON.stringify({
                                             key: btoa(key.hash),
                                             pageSource: blocoNoticia
-                                        })
+                                        }),
+                                        headers: {
+                                            "Content-Type" : "application/json"
+                                        }
                                     }).then((resp)=>{
-                                        if(resp.data == "success"){
+                                        if(resp.status == 201){
                                             window.location.replace(key.url);
                                         }else{
                                             SwalGotoHome(
@@ -1768,82 +1781,87 @@ function modifyVLRECON()
                         //RECUPERA ARQUIVO COM CONTEUDO DESBLOQUEADO
                         axios({
                             method: 'POST',
-                            url: 'https://possoler.tech/API/cachemock/?options=get',
+                            url: 'http://localhost:8080/API/cachemock/getArticleContent',
                             timeout: 30000,
                             data: JSON.stringify({
                                 key: btoa(window.location.pathname)
-                            })
+                            }),
+                            headers: {
+                                "Content-Type" : "application/json"
+                            }
                         }).then((resp)=>{
                             console.clear();
                             console.log('SUCESSO GET PAGE CODE');
                             console.log(resp);
 
-                            if(resp.data.hasOwnProperty("content")){
-                                let cacheSourceCode = new DOMParser().parseFromString(resp.data.content, "text/html");
-                                let blocoNoticia = getArticle(cacheSourceCode);
-                                let blocoOriginal = getArticle(document);
+                            let cacheSourceCode = new DOMParser().parseFromString(resp.data.content, "text/html");
+                            let blocoNoticia = getArticle(cacheSourceCode);
+                            let blocoOriginal = getArticle(document);
 
-                                let u = setInterval(()=>{
-                                    if(blocoNoticia != null && blocoOriginal != null){
-                                        clearInterval(u);
+                            let u = setInterval(()=>{
+                                if(blocoNoticia != null && blocoOriginal != null){
+                                    clearInterval(u);
 
-                                        console.log(`CODE CACHE = ${blocoNoticia.outerHTML}`);
-                                        console.log(`CODE ORIGINAL = ${blocoOriginal.outerHTML}`);
+                                    console.log(`CODE CACHE = ${blocoNoticia.outerHTML}`);
+                                    console.log(`CODE ORIGINAL = ${blocoOriginal.outerHTML}`);
 
-                                        if(blocoNoticia != false && blocoOriginal != false){
+                                    if(blocoNoticia != false && blocoOriginal != false){
 
-                                            blocoOriginal.innerHTML = blocoNoticia.outerHTML;
-                                            sweetAlert(
-                                                'success',
-                                                'Sucesso',
-                                                'Ótimo! Conteúdo desbloqueado!'
-                                            );
+                                        blocoOriginal.innerHTML = blocoNoticia.outerHTML;
+                                        sweetAlert(
+                                            'success',
+                                            'Sucesso',
+                                            'Ótimo! Conteúdo desbloqueado!'
+                                        );
 
-                                            setTimeout(()=>{
-                                                removeAds();
-                                                corrigeImgsCache();
-                                            },3000);
+                                        setTimeout(()=>{
+                                            removeAds();
+                                            corrigeImgsCache();
+                                        },3000);
 
-                                            //VERIFICA E REMOVE SOFT PAYWALLS
-                                            let f = setInterval(()=>{
-                                                if(verificaElemento('.paywall-cpt') || verificaElemento(".barber-barrier-cpnt")){
-                                                    clearInterval(f);
-                                                    if(verificaElemento('.paywall-cpt')){
-                                                        removeBloqueioGLOBO();
-                                                    }else if(verificaElemento(".barber-barrier-cpnt")){
-                                                        removeBlockCelularVLRECON();
-                                                    }
+                                        //VERIFICA E REMOVE SOFT PAYWALLS
+                                        let f = setInterval(()=>{
+                                            if(verificaElemento('.paywall-cpt') || verificaElemento(".barber-barrier-cpnt")){
+                                                clearInterval(f);
+                                                if(verificaElemento('.paywall-cpt')){
+                                                    removeBloqueioGLOBO();
+                                                }else if(verificaElemento(".barber-barrier-cpnt")){
+                                                    removeBlockCelularVLRECON();
                                                 }
-                                            },800);
-                                        }else{
-                                            sweetAlert(
-                                                'warning',
-                                                'Atenção',
-                                                'Ops, ainda não é possível desbloquear essa página. <br>Por favor, tente acessar a noticia mais tarde.<br><br>'
-                                            );
-                                            return;
-                                        }
+                                            }
+                                        },800);
+                                    }else{
+                                        sweetAlert(
+                                            'warning',
+                                            'Atenção',
+                                            'Ops, ainda não é possível desbloquear essa página. <br>Por favor, tente acessar a noticia mais tarde.<br><br>'
+                                        );
+                                        return;
                                     }
-                                },800);
-                            }else{
-                                setTimeout(()=>{
-                                    window.location.assign(`https://webcache.googleusercontent.com/search?q=cache:${window.location.href}`);
-                                },1500);
+                                }
+                            },800);
+
+                            if(resp.data.hasOwnProperty("content")){
+                                
                             }
                         }).catch((erro)=>{
                             if(erro.toString().includes('timeout')){
                                 SwalTimeout(
                                     'error',
                                     'Erro',
-                                    `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`,
+                                    `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}`,
                                     'https://valor.globo.com'
                                 );
-                            }else{
+                            }else if(erro.response.status != 404){
                                 sweetAlert(
                                     'error',
                                     'Erro',
-                                    `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`
+                                    `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}`
                                 );
+                            }else{
+                                setTimeout(()=>{
+                                    window.location.assign(`https://webcache.googleusercontent.com/search?q=cache:${window.location.href}`);
+                                },1500);
                             }
                         });
                     }
@@ -1890,14 +1908,17 @@ function modifyVLRECON()
                                     //FAZ POST PARA CRIAR ARQUIVO JSON COM CONTEUDO DA PÁGINA DE CACHE
                                     axios({
                                         method: 'POST',
-                                        url: 'https://possoler.tech/API/cachemock/?options=post',
+                                        url: 'http://localhost:8080/API/cachemock/saveArticleContent',
                                         timeout: 30000,
                                         data: JSON.stringify({
                                             key: btoa(key.hash),
                                             pageSource: blocoNoticia
-                                        })
+                                        }),
+                                        headers : {
+                                            "Content-Type" : "application/json"
+                                        }
                                     }).then((resp)=>{
-                                        if(resp.data == "success"){
+                                        if(resp.status == 201){
                                             window.location.replace(key.url);
                                         }else{
                                             SwalGotoHome(
@@ -2475,7 +2496,7 @@ function mainUnlockRESPAI()
 {
     axios({
         method: "GET",
-        url: "https://possoler.tech/API/responde_ai/paywallDOM/index.php",
+        url: "http://localhost:8080/API/paywalldom/respondeaiConfigs",
         timeout: 10000
     }).then((resp)=>{
 
@@ -2695,6 +2716,9 @@ function checkButtonCreation()
             new RegExp('\/exercicio\/[0-9]+').test(fullURL))
             || (fullURL.includes("/conteudo/") && fullURL.includes("/livro/"))
         ){
+            verificaAtualizacaoVersao();
+
+            //RESPOSTA LIVRO - DOMINIO ANTIGO
             if(fullURL.includes("/conteudo/") && fullURL.includes("/livro/")){
                 setInterval(()=>{
                     removeShowCompleteSolutionButtons();
@@ -2703,8 +2727,10 @@ function checkButtonCreation()
                         sections[i].style.filter = 'unset'
                     };
                 },800);
+                incrementaConteudoAPI();
                 saveDataForDashboard(8);
             }else{
+                incrementaConteudoAPI();
                 createButtonResposta();
                 saveDataForDashboard(8);
             }
@@ -2777,7 +2803,7 @@ function showSolution()
 
             Swal.fire({
                 title: 'Resolução Completa',
-                html: `<iframe src="https://possoler.tech/API/responde_ai/index.php?userToken=${JWT_TOKEN}&exerciseId=${ID_EXERCICIO}" style='width: 100%; height: 100% !important; border: none;'></iframe>`,
+                html: `<iframe src="http://localhost:8080/solvedBookExercise?auth=${JWT_TOKEN}&exerciseId=${ID_EXERCICIO}" style='width: 100%; height: 100% !important; border: none;'></iframe>`,
                 showCloseButton: true,
                 allowEscapeKey: false,
                 allowOutsideClick: false,
@@ -2833,7 +2859,7 @@ function configSnackBar(msg, tituloBtn, tempo)
             duration: tempo*1000,
             customClass: 'snackBarMsg',
             onActionClick: ()=>{
-                window.open('https://possoler.tech/#blockDownload');
+                window.open('http://localhost:8080/#blockDownload');
             }
         };
 }
@@ -2843,18 +2869,18 @@ function verificaAtualizacaoVersao()
 {
     if(window.location.href.includes('possoler.tech')) return;
 
-    const URL_API_UPDATE = 'https://possoler.tech/API/searchUpdates.php';
+    const URL_API_UPDATE = 'http://localhost:8080/API/searchUpdates';
     let tempoAwait = 5;
 
     axios({
-        method: 'get',
+        method: 'GET',
         url: URL_API_UPDATE,
         timeout: 20000,
     }).then((resposta)=>{
-        let updateVersion = resposta.data.update.currentVersion;
-        let msgUpdate = resposta.data.params.msg;
-        let tituloBtn = resposta.data.params.btnMgs;
-        let tempo = resposta.data.params.time;
+        let updateVersion = resposta.data.currentVersion;
+        let msgUpdate = resposta.data.message;
+        let tituloBtn = resposta.data.buttonMessage;
+        let tempo = resposta.data.time;
 
         if(CURRENT_VERSION<updateVersion){
 
@@ -2874,10 +2900,10 @@ function verificaAtualizacaoVersao()
 
 function verificaMensagensAPI(time)
 {
-    const URL_MESSAGES = 'https://possoler.tech/API/searchMessages.php';
+    const URL_MESSAGES = 'http://localhost:8080/API/searchMessages';
 
     axios({
-        method: 'get',
+        method: 'GET',
         url: URL_MESSAGES,
         timeout: 40000,
     }).then((resposta)=>{
@@ -2925,11 +2951,11 @@ function showSnackMessages(resposta, qtdMessages)
 
 function incrementaConteudoAPI()
 {
-    const ENDPOINT_INCREMENTVIEWS = 'https://possoler.tech/API/incrementViewsConteudos.php';
+    const ENDPOINT_INCREMENTVIEWS = 'http://localhost:8080/API/incrementViewsConteudos';
 
     if(typeof(axios) == 'function'){
         axios({
-            method: 'post',
+            method: 'POST',
             url: ENDPOINT_INCREMENTVIEWS,
             timeout: 60000
         }).then((resposta)=>{
@@ -2984,7 +3010,7 @@ function saveDataForDashboard(codigoSite)
 {
     let currentData = getCurrentDate();
     let currentTime = getCurrentTime();
-    const ENDPOINT_DASHBOARD = 'https://possoler.tech/API/acessos/insertDadosAcesso.php';
+    const ENDPOINT_DASHBOARD = 'http://localhost:8080/API/acessos/insertDadosAccess';
 
     let r = setInterval(()=>{
         if(currentData != null && currentTime != null){
@@ -2998,7 +3024,10 @@ function saveDataForDashboard(codigoSite)
                         codigo_site: codigoSite,
                         data: currentData,
                         horario: currentTime
-                    })
+                    }),
+                    headers : {
+                        "Content-Type" : "application/json"
+                    }
                 }).then((resp)=>{
                     if(resp.data.STATUS == 'Sucesso ao executar query!'){
                         console.log('[AXIOS] DASHBOARD DATA OK!');
@@ -3034,79 +3063,6 @@ function saveDataForDashboard(codigoSite)
     },800);
 }
 
-
-
-/* ========================== SEND LOG MESSAGE ===================================== */
-
-function swalLog(msgErro, siteErro)
-{
-    if(localStorage.getItem('sendLog') != 'true'){
-        const CODE = `<iframe src="https://possoler.tech/API/log_report/logPage.php" style='width: 100% !important; height: 100% !important; border: none;'></iframe>`;
-        
-        let r = setInterval(()=>{
-            if(typeof(Swal) == 'function'){
-                clearInterval(r);
-                Swal.fire({
-                    html: CODE,
-                    allowEscapeKey: false,
-                    allowOutsideClick: false,
-                    showConfirmButton: true,
-                    showCancelButton: true,
-                    confirmButtonText: "Enviar Log",
-                    cancelButtonText: "Não, obrigado",
-                    input: 'checkbox',
-                    inputValue: 0,
-                    inputPlaceholder: "Sempre reportar logs de erros dessa página",
-                    customClass: {
-                        popup: 'logReport',
-                        content: 'contentLogReport',
-                        htmlContainer: 'contentLogReport',
-                        actions: 'marginTop',
-                        container: 'zIndex'
-                    },
-                    inputValidator: (result) => {
-                        let response = (result) ? "true" : "false";
-                        localStorage.setItem('sendLog', response);
-                    },
-                }).then((result)=>{
-                    if(result.isConfirmed){
-                        sendLogRequest(msgErro, siteErro);
-                    }
-                });
-            }
-        },800);
-    }else{
-        sendLogRequest(msgErro, siteErro);
-    }
-}
-
-
-function sendLogRequest(msgErro, siteErro)
-{
-    let r = setInterval(()=>{
-        if(typeof(axios) == 'function'){
-            clearInterval(r);
-
-            axios({
-                method: 'POST',
-                url: 'https://possoler.tech/API/log_report/',
-                timeout: 30000,
-                data:{
-                    msg: msgErro,
-                    site: siteErro
-                }
-            }).then((resp)=>{
-                if(resp.data == "sucesso"){
-                    console.log('LOG CRIADO COM SUCESSO');
-                    return;
-                }
-                console.log(`FALHA AO CRIAR LOG - ${resp.data}`);
-            }).catch((erro)=>{
-                console.log(`FALHA AO CRIAR LOG - ${erro.toString()}`);
-            });
-        }
-    },800);
-}
 
 
 /* ========================== METODOS GLOBAIS ===================================== */
