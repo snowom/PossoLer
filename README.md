@@ -8,9 +8,10 @@
 <br>
 <br>
 <img src="https://img.shields.io/badge/License-MIT-orange.svg"/>
-<img src="https://img.shields.io/badge/Versão atual-1.6.6-green.svg"/>
-<img src="https://img.shields.io/badge/Data atualização-20/12/2022-blue.svg"/>
-<img src="https://img.shields.io/badge/Tecnologia-PHP-red.svg"/>
+<img src="https://img.shields.io/badge/Versão atual-2.7.6-green.svg"/>
+<img src="https://img.shields.io/badge/Data atualização-30/01/2023-blue.svg"/>
+<img src="https://img.shields.io/badge/Tecnologia-Java 14-red.svg"/>
+<img src="https://img.shields.io/badge/Tecnologia-Spring Boot 2.7.8-orange.svg"/>
 <img src="https://img.shields.io/badge/Tecnologia-Javascript-yellow.svg"/>
 <br>
 <br>
