@@ -335,3 +335,12 @@
 # Ajuste Bypass Jornal do Comercio;
 # Adicionado Revista Casa e Jardim;
 # Adicionado Veja Saúde;
+
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-= v2.7.6 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+[28/01/2023]
+# Término migração de sistema para Java;
+# Término de migração de endpoints;
+# Adicionado suporte a videos do Vimeo no Responde Aí;
+# Redução de 10Kb tamanho arquivo CRX;

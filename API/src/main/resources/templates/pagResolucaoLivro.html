@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Resolução</title>
+
+        <!-- GOOGLE FONTS CSS -->
+        <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900&display=swap" rel="stylesheet">
+        <link href='https://fonts.googleapis.com/css?family=Droid+Serif' rel='stylesheet' type='text/css'>
+
+        <!-- MATH JAX JS -->
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/mml-svg.js"></script>
+
+        <!-- LOTTIE JS -->
+        <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
+        <!-- BOOTSTRAP CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    </head>
+    <body>
+    </body>
+
+    <!-- AXIOS JS -->
+    <script src="/js/axios.js"></script>
+
+    <script>
+        setLoadingAnimation();
+        let token = "[[${authorization_token}]]";
+        let exerciseId = [[${exerciseId}]];
+        let endpointRequest = "[[${endpoint}]]";
+
+        let r = setInterval(()=>{
+            if(typeof(axios) == "function") {
+                clearInterval(r);
+
+                axios({
+                    method: "POST",
+                    url: `https://possoler.tech${endpointRequest}?operation=getBookExercise`,
+                    timeout: 30000,
+                    data: JSON.stringify({
+                        itemId: exerciseId
+                    }),
+                    headers: {
+                        "Content-Type" : "application/json",
+                        "authorization": token
+                    }
+                }).then((resp) => {
+                    console.log(resp);
+
+                    if(!resp.data.hasOwnProperty("lightSolution")){
+                        throw new Error("Falha ao obter objeto \"lightSolution\"")
+                    }
+                    if(!resp.data.hasOwnProperty("lightAnswer")){
+                        throw new Error("Falha ao obter objeto \"lightAnswer\"")
+                    }
+
+                    const STYLE_H2 = 'color: rgb(54, 170, 173); font-size: 1.5em; font-family: "Droid Serif", serif; margin: 0; font-weight: inherit; outline: none; box-sizing: border-box; font-size: 1.2em;';
+                    const STYLE_DIV_RESPOSTA = 'border-left: 4px solid rgb(54, 170, 173); padding: 20px; font-size: 1.2em;';
+                    const STYLE_FONT_STEPS = 'font-size: 1.25em; line-height: 26px; color: rgb(68, 68, 68); text-align: left; overflow: auto hidden; font-weight: 400; padding: 0px; margin: 0px;';
+                    const STYLE_FONT_ANSWER = 'color: rgb(136, 136, 136); margin-bottom: 15px; text-align: left; overflow: auto hidden;';
+
+                    let htmlResponse = "<div style='flex: 1 1 0%; align-self: center; background-color: white; width: 100%'>";
+                    htmlResponse += "<div style='padding: 0px 30px;'>";
+
+                    resp.data.lightSolution.forEach((step, index) => {
+                        let currentStep = index += 1;
+                        htmlResponse += `<div style="${STYLE_FONT_STEPS} margin: 60px 0px;">`;
+                        htmlResponse += `<h2 style="${STYLE_H2}">Passo ${currentStep}</h2>`;
+                        htmlResponse += `<div style='margin: 30px 0px; 60px;'>${step}</div>`;
+                        htmlResponse += `</div>`;
+                    });
+
+                    htmlResponse += `<div style='${STYLE_FONT_ANSWER} margin: 30px 0px;'>`;
+                    htmlResponse += `<h2 style='${STYLE_H2}'>Resposta</h2>`;
+                    htmlResponse += `<div style='${STYLE_DIV_RESPOSTA} user-select: none !important;'><div style='margin: 30px 0px;'>${resp.data.lightAnswer}</div></div>`;
+                    htmlResponse += `</div></div></div>`;
+
+                    document.body.innerHTML = htmlResponse;
+                    MathJax.typeset();
+
+                }).catch((erro) => {
+                    if(erro.hasOwnProperty("response") && erro.response.status == 401) {
+                        mountTokenErrorBlock();
+                        return;
+                    }
+                    if(erro.toString().includes('timeout')){
+                        //TODO:
+                        return;
+                    }
+                    mountGeneralErrorBlock(erro);
+                });
+            }
+        },800);
+
+
+        function setLoadingAnimation() {
+            const animations = [
+                'https://assets1.lottiefiles.com/packages/lf20_aBZEgS.json',
+                'https://assets2.lottiefiles.com/packages/lf20_x9pEKm.json',
+                'https://assets4.lottiefiles.com/packages/lf20_YrS71w.json',
+                'https://assets9.lottiefiles.com/packages/lf20_zwNx9A.json'
+            ];
+
+            document.body.innerHTML = `
+                <div class="container-fluid" id="loadingBlock">
+                    <div class="row">
+                        <div class="col-12">
+                            <lottie-player src="${animations[Math.floor(Math.random() * animations.length)]}" background="transparent"  speed="1"  style="height: 300px;"  loop  autoplay></lottie-player>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <p class="lead">Carregando conteúdo...</p>
+                        </div>
+                    </div>
+                </div>`;
+        }
+
+        function mountTokenErrorBlock() {
+            document.body.innerHTML = `
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <lottie-player src="https://assets9.lottiefiles.com/packages/lf20_csi2q9oq.json"  background="transparent"  speed="1"  style="height: 300px;"  loop  autoplay></lottie-player>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <p class="lead">Token inválido ou expirado!<br>Por favor, recarregue a página do <strong>Responde Aí</strong> e tente novamente.</p>
+                        </div>
+                    </div>
+                </div>`;
+        }
+
+        function mountGeneralErrorBlock(erro) {
+            document.body.innerHTML = `
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <lottie-player src="https://assets8.lottiefiles.com/packages/lf20_rjqeokgr.json"  background="transparent"  speed="1"  style="height: 300px;"  loop  autoplay></lottie-player>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <p class="lead">Desculpe, mas ocorreu um erro inesperado. Por favor, tente novamente mais tarde.</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 text-center">
+                        <p class="lead"><strong>Código do erro: </strong>${erro}</p>
+                        </div>
+                    </div>
+                </div>`;
+        }
+    </script>
+</html>

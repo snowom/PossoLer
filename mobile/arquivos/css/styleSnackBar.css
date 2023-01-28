@@ -1,0 +1,12 @@
+.snackZ-index{
+    z-index: 9999999999 !important;
+    white-space: pre-wrap
+}
+
+.snackBarMsg{
+    z-index: 9999999999 !important;
+    white-space: pre-wrap;
+    border: solid;
+    border-image-slice: 1;
+    border-image-source: linear-gradient(to left, #00C853, #a1ff00);
+}

@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="pt-BR" style="scroll-behavior: smooth;" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Posso Ler?</title>
+    <link rel = "icon" href = "/API/getCDN?file=possolerlogo" type = "image/x-icon">
+
+    <!-- JS GLIDE -->
+    <script src="js/glide.min.js" charset="UTF-8"></script>
+
+    <!-- CSS GLIDE -->
+    <link rel="stylesheet" href="css/glide.core.min.css">
+    <link rel="stylesheet" href="css/glide.theme.min.css">
+
+    <!-- CSS BOOTSTRAP -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+
+    <!-- MEUS CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/styleFooter.css">
+    <link rel="stylesheet" href="css/styleNav.css">
+
+    <!-- BOX ICONS CDN -->
+    <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet">
+</head>
+<body>
+<!-- MENU LATERAL -->
+<div id="wallSidebarOpen"></div>
+<div class="sidebar">
+    <div class="logo_content">
+        <div class="logo">
+            <div class="logo_name" th:text="${menuLateral.MenuLateralMenu}"></div>
+        </div>
+        <i id="btnMenu">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="transform: ;msFilter:;"><path d="M4 6H20V8H4zM4 11H20V13H4zM4 16H20V18H4z"></path></svg>
+        </i>
+    </div>
+    <ul class="nav_list">
+        <li>
+            <a id="home_icon" href="#">
+                <i>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="transform: ;msFilter:;"><path d="M3,13h1v2v5c0,1.103,0.897,2,2,2h3h6h3c1.103,0,2-0.897,2-2v-5v-2h1c0.404,0,0.77-0.244,0.924-0.617 c0.155-0.374,0.069-0.804-0.217-1.09l-9-9c-0.391-0.391-1.023-0.391-1.414,0l-9,9c-0.286,0.286-0.372,0.716-0.217,1.09 C2.23,12.756,2.596,13,3,13z M10,20v-5h4v5H10z M12,4.414l6,6V15l0,0l0.001,5H16v-5c0-1.103-0.897-2-2-2h-4c-1.103,0-2,0.897-2,2v5 H6v-5v-3v-1.586L12,4.414z"></path></svg>
+                </i>
+                <span class="links_name" th:text="${menuLateral.MenuLateralInicio}"></span>
+            </a>
+            <span class="tooltip" th:text="${menuLateral.MenuLateralInicio}"></span>
+        </li>
+        <li>
+            <a id="download_icon" href="#blockDownload">
+                <i>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="transform: ;msFilter:;"><path d="M12 16L16 11 13 11 13 4 11 4 11 11 8 11z"></path><path d="M20,18H4v-7H2v7c0,1.103,0.897,2,2,2h16c1.103,0,2-0.897,2-2v-7h-2V18z"></path></svg>
+                </i>
+                <span class="links_name" th:text="${menuLateral.MenuLateralDownload}"></span>
+            </a>
+            <span class="tooltip" th:text="${menuLateral.MenuLateralDownload}"></span>
+        </li>
+        <li>
+            <a id="info_icon" href="#blockSobre">
+                <i>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="transform: ;msFilter:;"><path d="M12,2C6.486,2,2,6.486,2,12s4.486,10,10,10s10-4.486,10-10S17.514,2,12,2z M12,20c-4.411,0-8-3.589-8-8s3.589-8,8-8 s8,3.589,8,8S16.411,20,12,20z"></path><path d="M11 11H13V17H11zM11 7H13V9H11z"></path></svg>
+                </i>
+                <span class="links_name" th:text="${menuLateral.MenuLateralSobre}"></span>
+            </a>
+            <span class="tooltip" th:text="${menuLateral.MenuLateralSobre}"></span>
+        </li>
+        <li>
+            <a id="donate_icon" href="#blocoDoacao">
+                <i>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" style="transform: ;msFilter:;"><path d="M20.92 2.38A15.72 15.72 0 0 0 17.5 2a8.26 8.26 0 0 0-6 2.06Q9.89 5.67 8.31 7.27c-1.21-.13-4.08-.2-6 1.74a1 1 0 0 0 0 1.41l11.3 11.32a1 1 0 0 0 1.41 0c1.95-2 1.89-4.82 1.77-6l3.21-3.2c3.19-3.19 1.74-9.18 1.68-9.43a1 1 0 0 0-.76-.73zm-2.36 8.75L15 14.67a1 1 0 0 0-.27.9 6.81 6.81 0 0 1-.54 3.94L4.52 9.82a6.67 6.67 0 0 1 4-.5A1 1 0 0 0 9.39 9s1.4-1.45 3.51-3.56A6.61 6.61 0 0 1 17.5 4a14.51 14.51 0 0 1 2.33.2c.24 1.43.62 5.04-1.27 6.93z"></path><circle cx="15.73" cy="8.3" r="2"></circle><path d="M5 16c-2 1-2 5-2 5a7.81 7.81 0 0 0 5-2z"></path></svg>
+                </i>
+                <span class="links_name" th:text="${menuLateral.MenuLateralApoiar}"></span>
+            </a>
+            <span class="tooltip" th:text="${menuLateral.MenuLateralApoiar}"></span>
+        </li>
+        <li>
+            <a id="question_icon" href="#blockPerguntas">
+                <i>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="transform: ;msFilter:;"><path d="M12 4C9.243 4 7 6.243 7 9h2c0-1.654 1.346-3 3-3s3 1.346 3 3c0 1.069-.454 1.465-1.481 2.255-.382.294-.813.626-1.226 1.038C10.981 13.604 10.995 14.897 11 15v2h2v-2.009c0-.024.023-.601.707-1.284.32-.32.682-.598 1.031-.867C15.798 12.024 17 11.1 17 9 17 6.243 14.757 4 12 4zM11 18H13V20H11z"></path></svg>
+                </i>
+                <span class="links_name" th:text="${menuLateral.MenuLateralPerguntas}"></span>
+            </a>
+            <span class="tooltip" th:text="${menuLateral.MenuLateralPerguntas}"></span>
+        </li>
+        <li>
+            <a id="tech_icon" href="#blockTecnologia">
+                <i>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" style="transform: ;msFilter:;"><path d="m7.375 16.781 1.25-1.562L4.601 12l4.024-3.219-1.25-1.562-5 4a1 1 0 0 0 0 1.562l5 4zm9.25-9.562-1.25 1.562L19.399 12l-4.024 3.219 1.25 1.562 5-4a1 1 0 0 0 0-1.562l-5-4zm-1.649-4.003-4 18-1.953-.434 4-18z"></path></svg>
+                </i>
+                <span class="links_name" th:text="${menuLateral.MenuLateralTecnologias}"></span>
+            </a>
+            <span class="tooltip" th:text="${menuLateral.MenuLateralTecnologias}"></span>
+        </li>
+        <li>
+            <a id="tutorials_icon" href="#blockTutorial">
+                <i>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" style="transform: ;msFilter:;"><path d="M20 3H4c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2zm.001 6c-.001 0-.001 0 0 0h-.465l-2.667-4H20l.001 4zM9.536 9 6.869 5h2.596l2.667 4H9.536zm5 0-2.667-4h2.596l2.667 4h-2.596zM4 5h.465l2.667 4H4V5zm0 14v-8h16l.002 8H4z"></path><path d="m10 18 5.5-3-5.5-3z"></path></svg>                </i>
+                <span class="links_name" th:text="${menuLateral.MenuLateralTutoriais}"></span>
+            </a>
+            <span class="tooltip" th:text="${menuLateral.MenuLateralTutoriais}"></span>
+        </li>
+        <li>
+            <a id="comments_icon" href="#divComentario">
+                <i>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="transform: ;msFilter:;"><path d="M20,2H4C2.897,2,2,2.897,2,4v18l5.333-4H20c1.103,0,2-0.897,2-2V4C22,2.897,21.103,2,20,2z M20,16H6.667L4,18V4h16V16z"></path></svg>
+                </i>
+                <span class="links_name" th:text="${menuLateral.MenuLateralComentarios}"></span>
+            </a>
+            <span class="tooltip" th:text="${menuLateral.MenuLateralComentarios}"></span>
+        </li>
+        <li>
+            <a id="github_icon" target="_blank" href="https://github.com/thomazf/PossoLer/">
+                <i>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="transform: ;msFilter:;"><path fill-rule="evenodd" clip-rule="evenodd" d="M12.026,2c-5.509,0-9.974,4.465-9.974,9.974c0,4.406,2.857,8.145,6.821,9.465 c0.499,0.09,0.679-0.217,0.679-0.481c0-0.237-0.008-0.865-0.011-1.696c-2.775,0.602-3.361-1.338-3.361-1.338 c-0.452-1.152-1.107-1.459-1.107-1.459c-0.905-0.619,0.069-0.605,0.069-0.605c1.002,0.07,1.527,1.028,1.527,1.028 c0.89,1.524,2.336,1.084,2.902,0.829c0.091-0.645,0.351-1.085,0.635-1.334c-2.214-0.251-4.542-1.107-4.542-4.93 c0-1.087,0.389-1.979,1.024-2.675c-0.101-0.253-0.446-1.268,0.099-2.64c0,0,0.837-0.269,2.742,1.021 c0.798-0.221,1.649-0.332,2.496-0.336c0.849,0.004,1.701,0.115,2.496,0.336c1.906-1.291,2.742-1.021,2.742-1.021 c0.545,1.372,0.203,2.387,0.099,2.64c0.64,0.696,1.024,1.587,1.024,2.675c0,3.833-2.33,4.675-4.552,4.922 c0.355,0.308,0.675,0.916,0.675,1.846c0,1.334-0.012,2.41-0.012,2.737c0,0.267,0.178,0.577,0.687,0.479 C19.146,20.115,22,16.379,22,11.974C22,6.465,17.535,2,12.026,2z"></path></svg>
+                </i>
+                <span class="links_name">GitHub</span>
+            </a>
+            <span class="tooltip">GitHub</span>
+        </li>
+        <li>
+            <a id="coffe_icon" target="_blank" href="https://www.paypal.com/donate?hosted_button_id=3UPQZZ2DQTPY8">
+                <i>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="transform: ;msFilter:;"><path d="M19 5h-1V4a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v9a4 4 0 0 0 4 4h6c1.858 0 3.411-1.279 3.858-3H19a3 3 0 0 0 3-3V8a3 3 0 0 0-3-3zm1 6a1 1 0 0 1-1 1h-1V7h1a1 1 0 0 1 1 1v3zm-2 8H3c0 1.654 1.346 3 3 3h11c1.654 0 3-1.346 3-3h-2z"></path></svg>
+                </i>
+                <span class="links_name" th:text="${menuLateral.MenuLateralVaiUmCafe}"></span>
+            </a>
+            <span class="tooltip" th:text="${menuLateral.MenuLateralVaiUmCafe}"></span>
+        </li>
+    </ul>
+</div>
+
+<!-- PAGE CONTENT -->
+<div id="page_content" class="page_content">
+
+    <!-- BLOCO IDIOMA -->
+    <form id="formIdioma" method="POST" action="/" style="display: none !important;">
+        <input id="inputHiddenLang" name="language" type="hidden" value="">
+        <button type="submit" id="blocoIdioma">
+            <div class="row">
+                <div class="col-12 col-lg-3 text-center">
+                    <img id="imgFlag" src="">
+                </div>
+                <div id="textIdioma" class="col-lg-9"></div>
+            </div>
+        </button>
+    </form>
+
+
+    <!-- HEAD DA PAGINA -->
+    <div id="jumbotron" class="jumbotron">
+        <div class="row">
+            <div class="col-12 d-flex justify-content-center">
+                <img src="/API/getCDN?file=possolerlogo"  style="width: 250px; height: 250px;" class="rounded-circle" alt="Posso Ler?" title="Posso Ler?">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 text-center">
+                <h1 class="display-3">Posso Ler?</h1>
+                <p class="lead" th:text="${head.headMessage}"></p>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- BLOCO QTD CONTEUDO -->
+    <div class="container-fluid">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 d-flex justify-content-center">
+                    <em class="qtdConteudos text-center skeleton-loader">
+                        <span id="numConteudosAcessados">0</span>
+                        <span th:text="${conteudos.labelQuantidadeConteudos}"></span>
+                    </em>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 d-flex justify-content-center">
+                <lottie-player src="https://assets.lottiefiles.com/packages/lf20_yAh844.json"  background="transparent"  speed="1"  style="width: 200px; height: 200px" autoplay loop></lottie-player>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <!-- FIM BLOCO QTD CONTEUDO -->
+
+
+    <!-- BLOCO DOWNLOAD -->
+    <div id="blockDownload" class="container-fluid">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 d-flex justify-content-center">
+                    <lottie-player id="lottie-confete" src="https://assets1.lottiefiles.com/packages/lf20_aMwMlF.json"  background="transparent"  speed="1" loop autoplay></lottie-player>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12  d-flex justify-content-center">
+                    <em class="qtdDownloads text-center skeleton-loader">
+                        <span id="numDownloads">0</span>
+                        <span th:text="${blocoDownload.labelPessoasAcesso}"></span>
+                    </em>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="display-4 mt-4 text-center" th:text="${blocoDownload.labelDownload}"></h2>
+
+        <div class="row mt-4 d-flex justify-content-center">
+            <div class="col-12 col-sm-4">
+                <div class="container text-center">
+                    <label th:text="${blocoDownload.labelPlataformaDownload}"></label>
+                </div>
+                <select class="custom-select" id="cbbPlataforma">
+                    <option value="NULL" selected th:text="${blocoDownload.labelOpcoes}"></option>
+                    <option value="Desk" th:text="${blocoDownload.labelDesktopDownload}"></option>
+                    <option value="Mob" th:text="${blocoDownload.labelMobileDownload}"></option>
+                </select>
+            </div>
+        </div>
+        <div id="containerDownload" class="container-fluid"><!-- MANIPULAÇÃO JS --></div>
+    </div>
+    <!-- FIM BLOCO DOWNLOAD -->
+
+
+    <!-- BLOCO SOBRE -->
+    <hr id="blockSobre">
+    <div class="container-fluid">
+        <h2 class="display-4 text-center" style="margin-top: 50px;" th:text="${blocoSobre.labelSobrePossoLer}"></h2>
+        <div class="row mt-4 marginHR">
+            <div class="col-12">
+                <p class="lead">
+                    <span th:text="${blocoSobre.label1}"></span>
+                    <em>
+                        <strong>
+                            <a target="_blank" href="https://github.com/snowom/PossoLer">
+                                <span th:text="${blocoSobre.label2}"></span>
+                            </a>
+                        </strong>
+                    </em>
+                    <span th:text="${blocoSobre.label3}"></span>
+                    <em>
+                        <span th:text="${blocoSobre.label4}"></span>
+                    </em>
+                    <span th:text="${blocoSobre.label5}"></span>
+                    <strong>Posso Ler?</strong>
+                    <span th:text="${blocoSobre.label6}"></span>
+                    <div id="containerPublicacoes"></div>
+                </p>
+
+                <p class="mt-4">
+                    <h5 style="display: inline;">
+                        <strong>
+                            <span th:text="${blocoSobre.label7}"></span>
+                        </strong>
+                    </h5>
+                    <span th:text="${blocoSobre.label8}"></span>
+                    <h6 style="display: inline;">
+                        <strong>
+                            <span th:text="${blocoSobre.label9}"></span>
+                        </strong>
+                    </h6>
+                    <span th:text="${blocoSobre.label10}"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <!-- FIM BLOCO SOBRE -->
+
+    <!-- INICIO BLOCO DOACOES -->
+    <div id="blocoDoacao" class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-lg-4 d-flex justify-content-center">
+                <lottie-player src="https://assets9.lottiefiles.com/packages/lf20_xhgpxevg.json" background="transparent"  speed="1"  style="width: 300px; height: 300px;"  loop  autoplay></lottie-player>
+            </div>
+            <div class="col-12 col-lg-8">
+                <h2 id="title_doacao" class="display-4 mt-4" style="margin-top: 50px;">
+                    <span th:text="${blocoDoacoes.tituloBlocoDoacoes}"></span>
+                </h2>
+                <div class="row">
+                    <div class="col-12">
+                        <p class="lead">
+                            <span th:text="${blocoDoacoes.label1}"></span>
+                        </p>
+                        <p class="lead">
+                            <span th:text="${blocoDoacoes.label2}"></span>
+                            <a target="_blank" href="https://www.paypal.com/donate/?hosted_button_id=3UPQZZ2DQTPY8">
+                                <span th:text="${blocoDoacoes.label3}"></span>
+                            </a>
+                            <span th:text="${blocoDoacoes.label4}"></span>
+                            <strong>
+                                <span th:text="${blocoDoacoes.label5}"></span>
+                            </strong>
+                            <span th:text="${blocoDoacoes.label6}"></span>
+                        </p>
+                        <p class="lead">
+                            <span th:text="${blocoDoacoes.label7}"></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <!-- FIM BLOCO DOACOES -->
+
+
+    <!-- BLOCO PERGUNTAS FREQUENTES -->
+    <div id="blockPerguntas" class="container-fluid">
+        <div class="row marginHR">
+            <div class="col-12 col-lg-8">
+                <h2 id="title_perguntas_frequentes" class="display-4 mt-4" th:text="${blocoPerguntas.labelPerguntasFrequentes}"></h2>
+
+                <div id="rowPerguntas" class="row">
+                    <div class="col-12">
+                        <ul>
+                            <li><a href="#pf1" th:text="${blocoPerguntas.label1}"></a></li>
+                            <li><a href="#pf2" th:text="${blocoPerguntas.label2}"></a></li>
+                            <li><a href="#pf3" th:text="${blocoPerguntas.label3}"></a></li>
+                            <li><a href="#pf4" th:text="${blocoPerguntas.label4}"></a></li>
+                            <li><a href="#pf4_1" th:text="${blocoPerguntas.label5}"></a></li>
+                            <li><a href="#pf5" th:text="${blocoPerguntas.label6}"></a></li>
+                            <li><a href="#pf6" th:text="${blocoPerguntas.label7}"></a></li>
+                            <li><a href="#pf7" th:text="${blocoPerguntas.label8}"></a></li>
+                            <li><a href="#pf8" th:text="${blocoPerguntas.label9}"></a></li>
+                            <li><a href="#pf9" th:text="${blocoPerguntas.label10}"></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div id="lottie_block_perguntas" class="col-12 col-lg-4">
+                <lottie-player src="https://assets4.lottiefiles.com/packages/lf20_lKvkGl.json"  background="transparent"  speed="1"  style="width: 300px; height: 300px;" loop  autoplay></lottie-player>
+            </div>
+        </div>
+        <span id="pf1"></span>
+        <div class="row mt-4">
+            <div class="col-12">
+                <h2 class="display-4 subtitulo" th:text="${blocoPerguntas.label11}"></h2>
+                <p class="lead">
+                    <span th:text="${blocoPerguntas.label12}"></span>
+                    <a target="_blank" href="https://www.devmedia.com.br/trabalhando-com-dom-em-javascript/29039" th:text="${blocoPerguntas.label13}"></a>
+                    <span th:text="${blocoPerguntas.label14}"></span>
+                </p>
+
+                <span id="pf2"></span>
+                <h2 class="display-4 subtitulo" th:text="${blocoPerguntas.label15}"></h2>
+                <p class="lead">
+                    <span th:text="${blocoPerguntas.label16}"></span>
+                    <strong th:text="${blocoPerguntas.label17}"></strong>
+                    <span th:text="${blocoPerguntas.label18}"></span>
+                </p>
+                <p class="lead">
+                    <span th:text="${blocoPerguntas.label19}"></span>
+                    <a target="_blank" href="https://www.tecmundo.com.br/blog/2770-o-que-e-seo-.htm" th:text="${blocoPerguntas.label20}"></a>
+                    <span th:text="${blocoPerguntas.label21}"></span>
+                </p>
+                <p class="lead">
+                    <strong style="color: red;" th:text="${blocoPerguntas.label22}"></strong>
+                    <span th:text="${blocoPerguntas.label23}"></span>
+                    <strong th:text="${blocoPerguntas.label24}"></strong>
+                    <span th:text="${blocoPerguntas.label25}"></span>
+                </p>
+
+                <span id="pf3"></span>
+                <h2 class="display-4 subtitulo" th:text="${blocoPerguntas.label26}"></h2>
+                <p class="lead">
+                    <span th:text="${blocoPerguntas.label27}"></span>
+                    <a href="#divComentario" th:text="${blocoPerguntas.label28}"></a>
+                    <span th:text="${blocoPerguntas.label29}"></span>
+                    <em>
+                        <strong th:text="${blocoPerguntas.label30}"></strong>
+                    </em>
+                    <span th:text="${blocoPerguntas.label31}"></span>
+                </p>
+
+
+                <span id="pf4"></span>
+                <h2 class="display-4 subtitulo" th:text="${blocoPerguntas.label32}"></h2>
+                <p class="lead">
+                    <em>
+                        <strong th:text="${blocoPerguntas.label33}"></strong>
+                    </em>
+                    <span th:text="${blocoPerguntas.label34}"></span>
+                    <strong>
+                        <u th:text="${blocoPerguntas.label35}"></u>
+                    </strong>
+                    <span th:text="${blocoPerguntas.label36}"></span>
+                    <em>
+                        <strong>
+                            <a target="_blank" href="https://en.wikipedia.org/wiki/Paywall" th:text="${blocoPerguntas.label37}"></a>
+                        </strong>
+                    </em>
+                    <span th:text="${blocoPerguntas.label38}"></span>
+                    <em>
+                        <strong>
+                            <a target="_blank" href="https://www.techtudo.com.br/listas/2020/07/o-que-e-cache-no-navegador-entenda-para-que-serve-e-como-limpar.ghtml" th:text="${blocoPerguntas.label39}"></a>
+                        </strong>
+                    </em>
+                    <span th:text="${blocoPerguntas.label40}"></span>
+                    <em th:text="${blocoPerguntas.label41}"></em>
+                    <span th:text="${blocoPerguntas.label42}"></span>
+                </p>
+
+                <span id="pf4_1"></span>
+                <h2 class="display-4 subtitulo" th:text="${blocoPerguntas.label43}"></h2>
+                <p class="lead">
+                    <span th:text="${blocoPerguntas.label44}"></span>
+                    <em>
+                        <strong th:text="${blocoPerguntas.label45}"></strong>
+                    </em>
+                    <span th:text="${blocoPerguntas.label46}"></span>
+                    <strong th:text="${blocoPerguntas.label47}"></strong>
+                    <span th:text="${blocoPerguntas.label48}"></span>
+                    <strong>
+                        <em>
+                            <a target="_blank" href="https://vertigo.com.br/entenda-o-que-e-uma-api/" th:text="${blocoPerguntas.label49}"></a>
+                        </em>
+                    </strong>
+                    <span th:text="${blocoPerguntas.label50}"></span>
+                    <strong th:text="${blocoPerguntas.label51}"></strong>
+                    <span th:text="${blocoPerguntas.label52}"></span>
+                    <strong>
+                        <em>
+                            <a target="_blank" href="https://www.kaspersky.com.br/resource-center/definitions/what-is-an-ip-address" th:text="${blocoPerguntas.label53}"></a>
+                        </em>
+                    </strong>
+                    <span th:text="${blocoPerguntas.label54}"></span>
+                    <strong>
+                        <em>
+                            <a target="_blank" href="https://www.kaspersky.com.br/resource-center/threats/ddos-attacks" th:text="${blocoPerguntas.label55}"></a>
+                        </em>
+                    </strong>
+                    <span th:text="${blocoPerguntas.label56}"></span>
+                    <strong>
+                        <em>
+                            <a target="_blank" href="https://canaltech.com.br/internet/o-que-e-captcha-recaptcha/" th:text="${blocoPerguntas.label57}"></a>
+                        </em>
+                    </strong>
+                    <span th:text="${blocoPerguntas.label58}"></span>
+                    <em th:text="${blocoPerguntas.label59}"></em>.
+                    <br><br>
+                    <strong style="color: red" th:text="${blocoPerguntas.label60}"></strong>
+                    <span th:text="${blocoPerguntas.label61}"></span>
+                </p>
+
+                <span id="pf5"></span>
+                <h2 class="display-4 subtitulo" th:text="${blocoPerguntas.label62}"></h2>
+                <p class="lead">
+                    <span th:text="${blocoPerguntas.label63}"></span>
+                </p>
+
+                <span id="pf6"></span>
+                <h2 class="display-4 subtitulo" th:text="${blocoPerguntas.label64}"></h2>
+                <p class="lead">
+                    <span th:text="${blocoPerguntas.label65}"></span>
+                </p>
+
+                <span id="pf7"></span>
+                <h2 class="display-4 subtitulo" th:text="${blocoPerguntas.label66}"></h2>
+                <p class="lead">
+                    <span th:text="${blocoPerguntas.label67}"></span>
+                    <strong th:text="${blocoPerguntas.label68}"></strong>
+                    <span th:text="${blocoPerguntas.label69}"></span>
+                    <em>
+                        <strong>
+                            <a target="_blank" href="https://academy.bit2me.com/pt/o-que-%C3%A9-hash/" th:text="${blocoPerguntas.label70}"></a>
+                        </strong>
+                    </em>
+                    <span th:text="${blocoPerguntas.label71}"></span>
+                    <strong th:text="${blocoPerguntas.label72}"></strong>
+                    <br><br>
+                    <strong th:text="${blocoPerguntas.label73}"></strong>
+                    <span th:text="${blocoPerguntas.label74}"></span>
+                    <strong th:text="${blocoPerguntas.label75}"></strong>
+                    <span th:text="${blocoPerguntas.label76}"></span>
+                </p>
+
+                <span id="pf8"></span>
+                <h2 class="display-4 subtitulo" th:text="${blocoPerguntas.label77}"></h2>
+                <p class="lead">
+                    <span th:text="${blocoPerguntas.label78}"></span>
+                    <strong th:text="${blocoPerguntas.label79}"></strong>
+                    <span th:text="${blocoPerguntas.label80}"></span>
+                </p>
+
+                <span id="pf9"></span>
+                <h2 class="display-4 subtitulo" th:text="${blocoPerguntas.label81}"></h2>
+                <p class="lead">
+                    <span th:text="${blocoPerguntas.label82}"></span>
+                    <strong th:text="${blocoPerguntas.label83}"></strong>
+                    <span th:text="${blocoPerguntas.label84}"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+    <!-- FIM BLOCO PERGUNTAS FREQUENTES -->
+
+
+    <!-- BLOCO TECNOLOGIAS USADAS -->
+    <hr id="blockTecnologia">
+    <div class="container-fluid">
+        <h2 class="display-4 text-center" style="margin-top: 50px;" th:text="${blocoTecnologias.labelTecnologiasUsadas}"></h2>
+        <div class="row mt-4">
+            <div class="col-12">
+                <p class="lead">
+                    <span th:text="${blocoTecnologias.label1}"></span>
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <h2 class="display-4 subtitulo" th:text="${blocoTecnologias.label2}"></h2>
+                <p class="lead">
+                    <span th:text="${blocoTecnologias.label3}"></span>
+                    <a target="_blank" href="https://www.devmedia.com.br/trabalhando-com-dom-em-javascript/29039" th:text="${blocoTecnologias.label4}"></a>
+                    <span th:text="${blocoTecnologias.label5}"></span>
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <h2 class="display-4 subtitulo" th:text="${blocoTecnologias.label6}"></h2>
+                <p class="lead">
+                    <span th:text="${blocoTecnologias.label7}"></span>
+                    <a target="_blank" href="https://www.alura.com.br/artigos/java-guia-iniciar-nessa-tecnologia" th:text="${blocoTecnologias.label6}"></a>
+                    <span th:text="${blocoTecnologias.label8}"></span>
+                    <em th:text="${blocoTecnologias.label9}"></em>
+                    <span th:text="${blocoTecnologias.label10}"></span>
+                    <a target="_blank" href="https://en.wikipedia.org/wiki/Paywall">
+                        <em th:text="${blocoTecnologias.label11}"></em>
+                    </a>
+                    <span th:text="${blocoTecnologias.label12}"></span>
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <h2 class="display-4 subtitulo" th:text="${blocoTecnologias.label13}"></h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-sm-6 col-lg-3 d-flex align-items-stretch">
+                <div class="card shadow p-3 mt-5 rounded" style="width: 100%">
+                                <span class="d-flex justify-content-center">
+                                    <img src="/API/getCDN?file=springlogo" alt="Spring Framework" height="300" width="100%"/>
+                                </span>
+                    <div class="card-body" style="margin-top: -50px !important">
+                        <h5 class="card-title" th:text="${blocoTecnologias.label14}"></h5>
+                        <p class="card-text" th:text="${blocoTecnologias.label15}"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-3 d-flex align-items-stretch">
+                <div class="card shadow p-3 mt-5 rounded">
+                    <img class="card-img-top" src="/API/getCDN?file=mavenlogo" style="margin-top: 90px !important" alt="Maven"/>
+                    <div class="card-body" style="margin-top: 50px !important">
+                        <h5 class="card-title" th:text="${blocoTecnologias.label20}"></h5>
+                        <p class="card-text" th:text="${blocoTecnologias.label21}"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-3 d-flex align-items-stretch">
+                <div class="card shadow p-3 mt-5 rounded">
+                    <div class="d-flex justify-content-center pt-4">
+                        <img class="card-img-top" src="/API/getCDN?file=lomboklogo" alt="Lombok" style="border-radius: 15px !important; width: 50% !important"/>
+                    </div>
+                    <div class="card-body" style="margin-top: 20px !important">
+                        <h5 class="card-title" th:text="${blocoTecnologias.label18}"></h5>
+                        <p class="card-text" th:text="${blocoTecnologias.label19}"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-3 d-flex align-items-stretch">
+                <div class="card shadow p-3 mt-5 rounded">
+                    <img class="card-img-top" style="padding-top: 55px !important" src="/API/getCDN?file=axioslogo" alt="Axios JS"/>
+                    <div class="card-body" style="margin-top: 30px !important">
+                        <h5 class="card-title" th:text="${blocoTecnologias.label16}"></h5>
+                        <p class="card-text" th:text="${blocoTecnologias.label17}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- FIM BLOCO TECNOLOGIAS -->
+
+
+    <!-- BLOCO TUTORIAIS -->
+    <hr id="blockTutorial">
+    <div class="container-fluid">
+        <div class="container d-flex justify-content-center">
+            <lottie-player id="left-lamp" src="https://assets4.lottiefiles.com/temp/lf20_eZyh21.json"  background="transparent"  speed="2"  style="width: 100px; height: 100px;" loop autoplay></lottie-player>
+            <h2 id="tituloTutorial" class="display-4 text-center" th:text="${blocoTutorial.tituloBlocoTutorial}"></h2>
+            <lottie-player id="right-lamp" class="invertImage" src="https://assets4.lottiefiles.com/temp/lf20_eZyh21.json"  background="transparent"  speed="2"  style="width: 100px; height: 100px;" loop autoplay></lottie-player>
+        </div>
+        <div class="mt-5" style="height: 10px; background-color: transparent;"></div>
+        <div class="row mt-2">
+            <div class="col-12 images glide">
+                <div class="card shadow p-3 mb-5 rounded">
+                    <p id="dicaTutorial" class="lead text-center">
+                        <em>
+                            <strong th:text="${blocoTutorial.label1}"></strong>
+                            <span th:text="${blocoTutorial.label2}"></span>
+                        </em>
+                    </p>
+                    <p id="labelTutorial" class="lead subtitulo text-center"></p>
+                    <div class="glide__track" data-glide-el="track">
+                        <ul class="glide__slides" style="display: flex !important; height: 500px;">
+                            <li class="glide__slide d-flex justify-content-center" style="margin: auto !important">
+                                <video id="videoDesk" controls>
+                                    <source src="videos/InstalacaoUserScript.mp4" type="video/mp4">
+                                    <span th:text="${blocoTutorial.label3}"></span>
+                                </video>
+                            </li>
+                            <li class="glide__slide d-flex justify-content-center" style="margin: auto !important">
+                                <video id="videoMobile" height="400" controls>
+                                    <source src="videos/InstalacaoAndroid.mp4" type="video/mp4">
+                                    <span th:text="${blocoTutorial.label3}"></span>
+                                </video>
+                            </li>
+                            <li class="glide__slide d-flex justify-content-center" style="margin: auto !important">
+                                <video id="videoDesk" height="240" controls>
+                                    <source src="videos/AttUserScript.mp4" type="video/mp4">
+                                    <span th:text="${blocoTutorial.label3}"></span>
+                                </video>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="glide__arrows" data-glide-el="controls">
+                    <button id="btnGlidePrev" class="glide__arrow glide__arrow--left" data-glide-dir="<">
+                        <span class="fas fa-arrow-left">&#10094;</span>
+                    </button>
+                    <button class="glide__arrow glide__arrow--right" data-glide-dir=">">
+                        <span class="fas fa-arrow-right">&#10095;</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- FIM BLOCO TUTORIAIS -->
+
+    <!-- INICIO BLOCO COMENTARIOS DISQUS -->
+    <hr id="divComentario">
+    <div class="container">
+        <h2 class="display-4 text-center" style="margin-top: 50px;" th:text="${blocoComentario.tituloBlocoComentario}"></h2>
+        <div class="container" style="margin-top: 100px; margin-bottom: 70px;">
+            <div id="disqus_thread"></div>
+        </div>
+    </div>
+
+    <!-- INICIO FOOTER -->
+    <footer class="footer-area footer--light">
+        <div class="footer-big">
+            <!-- start .container -->
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="footer-widget d-flex justify-content-center">
+                            <blockquote class="blockquote" >
+                                <p class="blockquote-footer lead text-center" th:text="${footer.label1}"></p>
+                                <br>
+                                <p style="color: #6c757d; font-size: 80%; margin-top: -40px;" class="text-center" th:text="${footer.label2}"></p>
+                            </blockquote>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <a target="_blank" href="https://github.com/snowom">
+                            <img class="img_icons" src="img/github_icon.png" alt="Posso Ler?"/>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mini-footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="copyright-text">
+                            <p th:text="${footer.label3}"></p>
+                            <br>
+                            <p class="copyright-text" th:text="${footer.label4}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
+
+
+        <script src="https://unpkg.com/@lottiefiles/lottie-player@0.4.0/dist/lottie-player.js"></script>
+        <!-- JS BOOTSTRAP -->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
+        <!-- AXIOS JS -->
+        <script src="js/axios.js"></script>
+        <!-- SWEET ALERT JS -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+        <!-- RESIZED JS -->
+        <script src="js/resizedMenu.js"></script>
+        <!-- NAVBAR JS -->
+        <script src="js/navJS.js"></script>
+        <!-- CHANGE LANGUAGE JS -->
+        <script src="js/changeLanguage.js"></script>
+        <!-- REMOVE ADS DISQUS JS -->
+        <script src="js/removeAdsDisqus.js"></script>
+        <!-- RESIZE LOTTIE ANIMATIONS -->
+        <script src="js/resizeLottieAnimations.js"></script>
+        <!-- ALERT FERIAS -->
+        <!-- <script src="js/alertFerias.js"></script> -->
+        <!-- DOWNLOAD EXTENSION -->
+        <script src="js/downloadExtension.js"></script>
+
+
+        <!-- GLIDE SCRIPT -->
+        <script th:inline="javascript">
+            let lblTitulo = document.getElementById("labelTutorial");
+            let lbl1 = /*[[${glideScriptLabel1}]]*/
+            let lbl2 = /*[[${glideScriptLabel2}]]*/
+            let lbl3 = /*[[${glideScriptLabel3}]]*/
+            let arrayTitulos = [lbl1, lbl2, lbl3];
+
+            let configs = {
+                type: "carousel",
+                perView: 1,
+                focusAt: "center"
+            };
+            var glide = new Glide(".images", configs);
+
+            glide.on(["mount.after", "run"], () => {
+                lblTitulo.innerHTML = arrayTitulos[glide.index];
+            });
+
+            glide.mount();
+
+
+            function setSlideIndex(index)
+            {
+                let btn = getElement("#btnGlidePrev");
+                try{
+                    btn.setAttribute("data-glide-dir", `=${index}`);
+                    btn.click();
+                }catch(erro) {
+                    console.error(`ERRO AO SETAR SLIDE = ${erro}`);
+                }finally{
+                    btn.setAttribute("data-glide-dir", `<`);
+                }
+            }
+        </script>
+
+        <!-- INFO VERSAO EXTENSAO SCRIPT -->
+        <script th:inline="javascript">
+            const DATA_PUBLICACAO = /*[[${versaoExtensaoScript_data}]]*/;
+            let VERSAO = /*[[${versaoExtensaoScript_versao}]]*/;
+            let VERSAO_INSTALADA = /*[[${versaoExtensaoScript_label1}]]*/;
+
+            function montaStringVersao(paramString)
+            {
+                let tmpString="";
+                for(let i=0; i<paramString.length; i++)
+                {
+                    tmpString = (tmpString=="") ? tmpString+paramString.charAt(i) : (i<(paramString-1)) ? `${tmpString}.${paramString.charAt(i)}` : `${tmpString}${paramString.charAt(i)}`;
+                }
+                return tmpString;
+            }
+
+
+            function setLabelVersaoInstalada()
+            {
+                if(typeof(VERSAO_ATUAL) != "undefined")
+                {
+                    return montaStringVersao(VERSAO_ATUAL);
+                }
+                return /*[[${versaoExtensaoScript_label1}]]*/;
+            }
+
+
+            function setMenuInstalacao(tutorial)
+            {
+                let lbl1 = /*[[${versaoExtensaoScript_label2}]]*/;
+                let lbl2 = /*[[${versaoExtensaoScript_label3}]]*/;
+                let lbl3 = /*[[${versaoExtensaoScript_label4}]]*/;
+
+                return `<spam class="container-fluid" style="margin-top: 50px !important;" id="spamSpace"></spam>
+                        <div class="row">
+                            <div class="col-12 col-sm-4">
+                                <button id=install_tab class="btn btn-block btnActive">${lbl1}</button>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <button id=generate_access_key_button class="btn btn-block btnDisabled">${lbl2}</button>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <button id=changelog_tab class="btn btn-block btnDisabled">${lbl3}</button>
+                            </div>
+                        </div>
+
+                        <div class="container-fluid" id="content">
+                            ${tutorial}
+                        </div>`;
+            }
+        </script>
+
+
+        <!-- INSTRUCOES DOWNLOAD DESKTOP -->
+        <script th:inline="javascript">
+            function montaPaginaDownloadDesk()
+            {
+                lbl1 = /*[[${instrucoesDownloadDesk_label1}]]*/;
+                lbl2 = /*[[${instrucoesDownloadDesk_label2}]]*/;
+                lbl3 = /*[[${instrucoesDownloadDesk_label3}]]*/;
+                lbl4 = /*[[${instrucoesDownloadDesk_label4}]]*/;
+                lbl5 = /*[[${instrucoesDownloadDesk_label5}]]*/;
+                lbl6 = /*[[${instrucoesDownloadDesk_label6}]]*/;
+                lbl7 = /*[[${instrucoesDownloadDesk_label7}]]*/;
+                lbl8 = /*[[${instrucoesDownloadDesk_label8}]]*/;
+                lbl9 = /*[[${instrucoesDownloadDesk_label9}]]*/;
+                lbl10 = /*[[${instrucoesDownloadDesk_label10}]]*/;
+                lbl11 = /*[[${instrucoesDownloadDesk_label11}]]*/;
+                lbl12 = /*[[${instrucoesDownloadDesk_label12}]]*/;
+                lbl13 = /*[[${instrucoesDownloadDesk_label13}]]*/;
+                lbl14 = /*[[${instrucoesDownloadDesk_label14}]]*/;
+                lbl15 = /*[[${instrucoesDownloadDesk_label15}]]*/;
+                lbl16 = /*[[${instrucoesDownloadDesk_label16}]]*/;
+                lbl17 = /*[[${instrucoesDownloadDesk_label17}]]*/;
+                lbl18 = /*[[${instrucoesDownloadDesk_label18}]]*/;
+
+                const TMPK =
+                `<div class="row marginHR card shadow p-3 mb-5 mt-5 rounded">
+                    <div class="col-12">
+                        <p class="lead subtitulo">${lbl1}</p>
+                        <div class="row mb-5">
+                            <div class="col-12">${lbl13}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <spam class="small_Lead"><strong>1)</strong>${lbl2}<a target="_blank" href="https://www.tampermonkey.net/">Tampermonkey</a></spam>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <spam class="small_Lead"><strong>2)</strong>${lbl3}<a id="btnDownloadDesk" href="" download>PossoLer.user.js</a></spam>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <spam class="small_Lead"><strong>3) </strong>${lbl4}</spam>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <spam class="small_Lead"><strong>4) </strong>${lbl5}</spam>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <spam class="small_Lead"><strong>5) </strong>${lbl6}</spam>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <spam class="small_Lead"><strong>6) </strong>${lbl7}</spam>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <spam class="small_Lead"><strong>7) </strong>${lbl8}</spam>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <spam class="small_Lead"><strong>8) </strong>${lbl9}</spam>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <spam class="small_Lead">${lbl10}</spam>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+
+                    <div class="col-12">
+                        <p class="lead subtitulo" style="margin-top: 30px !important">${lbl14}</p>
+                        <div class="row mb-5">
+                            <div class="col-12">${lbl18}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <spam class="small_Lead"><strong>1)</strong>${lbl15}</spam>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <spam class="small_Lead"><strong>2)</strong>${lbl3}<a id="btnAtualizacaoDesk" href="" download>PossoLer.user.js</a></spam>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <spam class="small_Lead"><strong>3) </strong>${lbl4}</spam>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <spam class="small_Lead"><strong>4) </strong>${lbl5}</spam>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <spam class="small_Lead"><strong>5) </strong>${lbl6}</spam>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <spam class="small_Lead"><strong>6) </strong>${lbl7}</spam>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <spam class="small_Lead"><strong>7) </strong>${lbl8}</spam>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <spam class="small_Lead"><strong>8) </strong>${lbl9}</spam>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <spam class="small_Lead">${lbl10}</spam>
+                            </div>
+                        </div>
+                    </div>
+                </div>`
+
+                let MANUAL = setMenuInstalacao(TMPK);
+                containerDownload.innerHTML = `${MANUAL}`;
+
+                //SETA AÇÃO PARA OS LINKS DE TUTORIAIS
+                gotoTutorial("linkTutAtt", 2);
+                gotoTutorial("linkTutDesk", 0);
+
+                //SETA AÇÃO NOS BOTOES "Instalação" e "O que há de novo?"
+                setDisableAndEnableButtons("#install_tab", ["#changelog_tab", "#generate_access_key_button"]);
+                setDisableAndEnableButtons("#changelog_tab", ["#install_tab", "#generate_access_key_button"]);
+                setDisableAndEnableButtons("#generate_access_key_button", ["#install_tab", "#changelog_tab"]);
+
+                getElement("#install_tab").addEventListener("click", ()=>{
+                    montaPaginaDownloadDesk();
+                });
+
+                getElement("#changelog_tab").addEventListener("click", ()=>{
+                    montaPaginaChengelog();
+                });
+
+                getElement("#generate_access_key_button").addEventListener("click", ()=>{
+                    montaCardChaveAcesso();
+                });
+
+                getElement("#btnDownloadDesk").addEventListener("click",(event)=>{
+                    event.preventDefault();
+                    downloadExtension("possoLer.user.js");
+                });
+
+                getElement("#btnAtualizacaoDesk").addEventListener("click",(event)=>{
+                    event.preventDefault();
+                    downloadExtension("possoLer.user.js");
+                });
+            }
+        </script>
+
+
+        <!-- =-=-=--=-=-= DISQUS SCRIPT =-=-=-=-=-=--= -->
+        <script>
+            (function() { // DONT EDIT BELOW THIS LINE
+            var d = document, s = d.createElement("script");
+            s.src = "https://posso-ler.disqus.com/embed.js";
+            s.setAttribute("data-timestamp", +new Date());
+            (d.head || d.body).appendChild(s);
+            })();
+        </script>
+
+        <noscript>
+            Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+
+
+
+        <!-- GLOBAL SCRIPT -->
+        <script>
+            function getElement(tag)
+            {
+                return document.querySelector(tag);
+            }
+
+
+            function setDisableAndEnableButtons(btnEnable, btnDisable)
+            {
+                getElement(btnEnable).addEventListener("click", function(){
+
+                    this.classList.remove("btnDisabled");
+                    this.classList.add("btnActive");
+                    this.style.color = "#fff";
+
+                    btnDisable.forEach((btn)=>{
+                        getElement(btn).classList.remove("btnActive");
+                        getElement(btn).classList.add("btnDisabled");
+                        getElement(btn).style.color = "#000";
+                    });
+                });
+            }
+
+
+            function gotoTutorial(idElement, indexTemplate)
+            {
+                getElement(`#${idElement}`).addEventListener("click", function(event){
+                    event.preventDefault();
+                    window.location.href = "#blockTutorial";
+                    setTimeout(()=>{
+                        setSlideIndex(indexTemplate);
+                    }, 1000);
+                });
+            }
+        </script>
+
+
+<!-- INSTRUCOES DOWNLOAD MOBILE -->
+<script th:inline="javascript">
+            function montaPaginaMobile()
+            {
+                let lbl1_mb = /*[[${instrucoesDownloadMobile_label1}]]*/;
+                let lbl2_mb = /*[[${instrucoesDownloadMobile_label2}]]*/;
+                let lbl3_mb = /*[[${instrucoesDownloadMobile_label3}]]*/;
+                let lbl4_mb = /*[[${instrucoesDownloadMobile_label4}]]*/;
+                let lbl5_mb = /*[[${instrucoesDownloadMobile_label5}]]*/;
+                let lbl6_mb = /*[[${instrucoesDownloadMobile_label6}]]*/;
+                let lbl7_mb = /*[[${instrucoesDownloadMobile_label7}]]*/;
+                let lbl8_mb = /*[[${instrucoesDownloadMobile_label8}]]*/;
+                let lbl9_mb = /*[[${instrucoesDownloadMobile_label9}]]*/;
+                let lbl10_mb = /*[[${instrucoesDownloadMobile_label10}]]*/;
+                let lbl11_mb = /*[[${instrucoesDownloadMobile_label11}]]*/;
+                let lbl12_mb = /*[[${instrucoesDownloadMobile_label12}]]*/;
+                let lbl13_mb = /*[[${instrucoesDownloadMobile_label13}]]*/;
+                let lbl14_mb = /*[[${instrucoesDownloadMobile_label14}]]*/;
+                let lbl15_mb = /*[[${instrucoesDownloadMobile_label15}]]*/;
+                let lbl16_mb = /*[[${instrucoesDownloadMobile_label16}]]*/;
+                let lbl17_mb = /*[[${instrucoesDownloadMobile_label17}]]*/;
+
+
+                let INSTRUCOES = `
+                <div class="row card shadow p-3 mb-5 mt-5 rounded">
+                    <div class="col-12">
+                        <p class="lead subtitulo">${lbl1_mb}</p>
+                            <div class="row mb-5">
+                                <div class="col-12">
+                                    <a class="small_Lead" id="linkTutMob" href=""><spam style="font-size: 16px">${lbl2_mb}</spam></a>
+                                </div>
+                            </div>
+                            <spam class="small_Lead"><strong>1) </strong>${lbl3_mb}</spam><br>
+                            <spam class="small_Lead"><strong>2) </strong>${lbl4_mb}</spam><br>
+                            <spam class="small_Lead"><strong>3) </strong>${lbl5_mb}</spam><br>
+                            <spam class="small_Lead"><strong>4) </strong>${lbl6_mb}</spam><br>
+                            <spam class="small_Lead"><strong>5) </strong>${lbl7_mb}</spam><br>
+                            <spam class="small_Lead"><strong>6) </strong>${lbl8_mb}</spam><br>
+                            <spam class="small_Lead"><strong>7) </strong>${lbl9_mb}</spam><br>
+                            <spam class="small_Lead"><strong>8) </strong>${lbl10_mb}</spam><br>
+                            <spam class="small_Lead"><strong>9) </strong>${lbl11_mb}</spam><br>
+                            <spam class="small_Lead"><strong>10) </strong>${lbl12_mb}</spam><br>
+                            <spam class="small_Lead"><strong>11) </strong>${lbl13_mb}</spam><br>
+                            <spam class="small_Lead"><strong>12) </strong>${lbl14_mb}</spam><br>
+                            <spam class="small_Lead"><strong>13) </strong>${lbl15_mb}</spam><br>
+                    </div>
+                    <div class="row mt-3">
+                            <div class="col-12">
+                                <spam class="small_Lead">
+                                    <strong>${lbl16_mb}</strong>
+                                    ${lbl17_mb}
+                                </spam>
+                            </div>
+                        </div>
+                </div>`;
+
+                let MANUAL = setMenuInstalacao(INSTRUCOES);
+                containerDownload.innerHTML = `${MANUAL}`;
+
+                //SETA AÇÃO PARA OS LINKS DE TUTORIAIS
+                gotoTutorial("linkTutMob", 1);
+
+                //SETA AÇÃO NOS BOTOES "Instalação" e "O que há de novo?"
+                setDisableAndEnableButtons("#install_tab", ["#changelog_tab", "#generate_access_key_button"]);
+                setDisableAndEnableButtons("#changelog_tab", ["#install_tab", "#generate_access_key_button"]);
+                setDisableAndEnableButtons("#generate_access_key_button", ["#install_tab", "#changelog_tab"]);
+
+
+                getElement("#install_tab").addEventListener("click", ()=>{
+                    montaPaginaMobile();
+                });
+
+                getElement("#changelog_tab").addEventListener("click", ()=>{
+                    montaPaginaChengelog();
+                });
+
+                getElement("#generate_access_key_button").addEventListener("click", ()=>{
+                    montaCardChaveAcesso();
+                });
+
+
+                getElement("#btnDownloadMob").addEventListener("click",(event)=>{
+                    event.preventDefault();
+                    downloadExtension("PossoLer.crx");
+                });
+            }
+        </script>
+
+        <script>
+            axios({
+                method: "GET",
+                url: "https://possoler.tech/API/getDownloads",
+                timeout: 30000
+            }).then((resposta)=>{
+
+                let r = setInterval(()=>{
+                    if(getElement(".qtdDownloads") != null && getElement(".qtdDownloads") != undefined){
+                        clearInterval(r);
+                        getElement("#numDownloads").textContent = resposta.data.qtdDownloads;
+                        getElement(".qtdDownloads").classList.remove("skeleton-loader");
+                        getElement(".qtdDownloads").style.color = "#212529";
+                        getElement(".qtdDownloads").style.marginTop = "-30px";
+                        getElement("#lottie-confete").style.display = "block";
+                    }
+                },800);
+            }).catch((erro)=>{
+                console.error(erro);
+            });
+
+            axios({
+                method: "get",
+                url: "https://possoler.tech/API/getConteudos",
+                timeout: 30000
+            }).then((resposta)=>{
+
+                let r = setInterval(()=>{
+                    if(getElement(".qtdConteudos") != null && getElement(".qtdConteudos") != undefined){
+                        clearInterval(r);
+                        getElement("#numConteudosAcessados").textContent = resposta.data.qtdConteudo;
+                        getElement(".qtdConteudos").classList.remove("skeleton-loader");
+                        getElement(".qtdConteudos").style.color = "#212529";
+                    }
+                },800);
+
+            }).catch((erro)=>{
+                getElement(".qtdConteudos").style.display = "none";
+            });
+        </script>
+
+
+        <!-- CARD CHANGELOG -->
+        <script th:inline="javascript">
+            function initAndSetChangelog()
+            {
+
+                lbl1 = /*[[${changelog_label1}]]*/;
+                lbl2 = /*[[${changelog_label2}]]*/;
+                lbl3 = /*[[${changelog_label3}]]*/;
+                lbl4 = /*[[${changelog_label4}]]*/;
+                lbl5 = /*[[${changelog_label5}]]*/;
+                lbl6 = /*[[${changelog_label6}]]*/;
+                lbl7 = /*[[${changelog_label7}]]*/;
+                lbl8 = /*[[${changelog_label8}]]*/;
+                lbl9 = /*[[${changelog_label9}]]*/;
+
+                let CHANGELOG =
+                `
+                <div class="row card shadow p-3 mb-5 mt-5 rounded">
+                    <div class="container-fluid">
+                        <p class="lead subtitulo">${lbl1}</p>
+                    </div>
+                    <div class="col-12">
+                        <spam class="small_Lead"><strong>${lbl2}</strong>${montaStringVersao(VERSAO)}</spam>
+                    </div>
+                    <div class="col-12">
+                        <spam class="small_Lead"><strong>${lbl3}</strong>${DATA_PUBLICACAO}</spam>
+                    </div>
+                    <div class="col-12">
+                        <spam class="small_Lead" style="display: ${(typeof(VERSAO_ATUAL)!="undefined") ? (parseInt(VERSAO_ATUAL)>=107) ? "inline" : "none" : "none"}"><strong>${lbl4}</strong>${setLabelVersaoInstalada()}</spam>
+                        <spam class="small_Lead" style="${(typeof(VERSAO_ATUAL)!="undefined") ? ((parseInt(VERSAO_ATUAL)>=107) && (parseInt(VERSAO_ATUAL)!=VERSAO)) ? "" : "display: none" :"display: none"}">${lbl5}</spam>
+                    </div>
+
+                    <div class="row">
+                        <div class="container-fluid">
+                            <p class="lead subtitulo">${lbl6}</p>
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <ul>${lbl7}</ul>
+                        </div>
+
+                        <div class="col-12 col-sm-6">
+                            <ul>${lbl8}</ul>
+                        </div>
+                        <br>
+                        <p class="ml-4">
+                            <a href="https://github.com/thomazf/ExtensoesChrome/blob/DEV/CHANGELOG.txt" target="_blank">${lbl9}</a>
+                        </p>
+                    </div>
+                </div>`;
+
+                return CHANGELOG;
+            }
+        </script>
+
+
+    <!-- MONTA CARD GEN CHAVE -->
+    <script th:inline="javascript">
+        function initAndSetGenAccessKey()
+        {
+            lbl5 = /*[[${cardChaveAcesso_label5}]]*/;
+            lbl6 = /*[[${cardChaveAcesso_label6}]]*/;
+            lbl7 = /*[[${cardChaveAcesso_label7}]]*/;
+            lbl8 = /*[[${cardChaveAcesso_label8}]]*/;
+
+
+            let PAYLOAD =
+            `
+            <div class="row card shadow p-3 mb-5 mt-5 rounded">
+                <div class="container-fluid">
+                    <p class="lead subtitulo">${lbl5}</p>
+                </div>
+                <div class="col-12">
+                    <spam class="small_Lead">
+                        ${lbl6}
+                        ${lbl7}
+                    </spam>
+                </div>
+                <div class="col-12">
+                    <a class="small_Lead" href="#pf7"><spam style="font-size: 16px">${lbl8}</spam></a>
+                </div>
+                <div class="col-12 d-flex justify-content-center mt-4 mb-4">
+                    <lottie-player id="lottie_new_access_key" src="https://assets10.lottiefiles.com/packages/lf20_gysrp57x.json"  background="transparent"  speed="1"  style="width: 300px; height: 300px;" loop autoplay></lottie-player>
+                    <!-- <lottie-player src="https://assets7.lottiefiles.com/private_files/lf30_hopr3v9i.json"  background="transparent"  speed="1"  style="width: 300px; height: 300px;"  loop  autoplay></lottie-player> -->
+                </div>
+                <div class="col-12 d-flex justify-content-center" style="margin-bottom: 50px;">
+                    <input readonly type="text" class="form-control" id="txtKey" value="">
+                </div>
+                <div class="col-12 d-flex justify-content-center" style="margin-bottom: 50px">
+                    <button id="btnGenAccessKey" class="btn btn-success" id="btnGenKey">${lbl1}</button>
+                </div>
+            </div>`;
+            return PAYLOAD;
+        }
+    </script>
+
+    <!-- MONTA CARD RECUPERA CHAVE DE ACESSO -->
+    <script th:inline="javascript">
+        function montaCardChaveAcesso()
+        {
+            lbl1 = /*[[${cardChaveAcesso_label1}]]*/;
+            lbl2 = /*[[${cardChaveAcesso_label2}]]*/;
+            lbl3 = /*[[${cardChaveAcesso_label3}]]*/;
+            lbl4 = /*[[${cardChaveAcesso_label4}]]*/;
+
+            const CONTEUDO = initAndSetGenAccessKey();
+            getElement("#content").innerHTML = `${CONTEUDO}`;
+
+            if(getElement("#linkInstalacao") != null)
+            {
+                getElement("#linkInstalacao").addEventListener("click", (event)=>{
+                    event.preventDefault();
+                    getElement("#install_tab").click();
+                });
+            }
+
+            resizeLotties();
+
+            //DEFINE AÇÃO BTN GERAR CHAVE DE ACESSO
+            let r = setInterval(()=>{
+                if(document.getElementById("btnGenAccessKey") != null){
+                    clearInterval(r);
+
+                    let btnGenKey = document.getElementById("btnGenAccessKey");
+                    btnGenKey.addEventListener("click", (e)=>{
+                        e.preventDefault();
+
+                        btnGenKey.disabled = true;
+                        btnGenKey.textContent = `${lbl2}`;
+
+                        axios({
+                            method: "POST",
+                            url: "https://possoler.tech/API/prepare_download",
+                            timeout: 10000
+                        }).then((resp)=>{
+                            if(resp.status == 201){
+                                document.getElementById("txtKey").value = resp.data.user_hash;
+                                btnGenKey.disabled = false;
+                                btnGenKey.textContent = `${lbl1}`;
+                            }else{
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Erro",
+                                    html: `${lbl3}${resp.data.response}`,
+                                });
+                                btnGenKey.disabled = false;
+                                btnGenKey.textContent = `${lbl1}`;
+                            }
+                        }).catch((erro)=>{
+                            if(erro.toString().includes("timeout")){
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Erro",
+                                    html: `${lbl4}${erro}`
+                                });
+                                btnGenKey.disabled = false;
+                                btnGenKey.textContent = `${lbl1}`;
+                            }else{
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Erro",
+                                    html: `${lbl3}${erro.toString()}`,
+                                });
+                                btnGenKey.disabled = false;
+                                btnGenKey.textContent = `${lbl1}`;
+                            }
+                        });
+                    });
+                }
+            },800);
+        }
+    </script>
+
+
+        <!-- MONTA PAGINA CHANGELOG -->
+        <script>
+            function montaPaginaChengelog()
+            {
+                const CHANGELOG = initAndSetChangelog();
+                getElement("#content").innerHTML = `${CHANGELOG}`;
+
+                if(getElement("#linkInstalacao") != null)
+                {
+                    getElement("#linkInstalacao").addEventListener("click", (event)=>{
+                        event.preventDefault();
+                        getElement("#install_tab").click();
+                    });
+                }
+            }
+        </script>
+
+
+        <script>
+            getElement("#cbbPlataforma").addEventListener("change",function(){
+
+                if(this[this.selectedIndex].value == "Desk"){
+
+                    montaPaginaDownloadDesk();
+                    getElement("#blockDownload").style.marginBottom = "0px";
+                    getElement("#containerDownload").style.display = "block";
+                    setTimeout(()=>{
+                        window.location.href = "#spamSpace";
+                    }, 500);
+
+                }else if(this[this.selectedIndex].value == "Mob"){
+
+                    montaPaginaMobile();
+                    getElement("#blockDownload").style.marginBottom = "0px";
+                    getElement("#containerDownload").style.display = "block";
+                    setTimeout(()=>{
+                        window.location.href = "#spamSpace";
+                    }, 500);
+                }
+
+                else{
+                    getElement("#containerDownload").style.display = "none";
+                    getElement("#blockDownload").style.marginBottom = "130px";
+                }
+            });
+
+            let containerDownload = getElement("#containerDownload");
+            containerDownload.innerHTML = "";
+        </script>
+    </body>
+</html>
+
+<!-- https://ip-api.com/json - GET -->
