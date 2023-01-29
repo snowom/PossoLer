@@ -6,18 +6,21 @@ import br.com.possoler.api.api_posso_ler.site.constants.i18n.en_us.en_VersaoExte
 import br.com.possoler.api.api_posso_ler.site.constants.i18n.es.es_VersaoExtensaoScriptEnum;
 import br.com.possoler.api.api_posso_ler.site.constants.i18n.pt_br.br_VersaoExtensaoScriptEnum;
 import br.com.possoler.api.api_posso_ler.site.interfaces.FactoryHTMLElements;
+import br.com.possoler.api.api_posso_ler.site.interfaces.PreventNullLanguage;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 @Service
-public class VersaoExtensaoScriptService implements FactoryHTMLElements {
+public class VersaoExtensaoScriptService implements FactoryHTMLElements, PreventNullLanguage {
 
+    @Override
     public void factoryElement(String idioma, Model model) {
+
+        idioma = this.preventNullLanguage(idioma);
+
         model.addAttribute("versaoExtensaoScript_versao", InfoExtensao.VERSAO_EXTENSAO.getLabel());
         model.addAttribute("versaoExtensaoScript_data", InfoExtensao.DATA_PUBLICACAO.getLabel());
-    }
 
-    public void versaoExtensaoScriptFactory(String idioma, Model model) {
         if(idioma.equalsIgnoreCase(ConstantsConfigs.LANG_EN.getIdioma())) {
             model.addAttribute("versaoExtensaoScript_label1", en_VersaoExtensaoScriptEnum.LABEL_1.getLabel());
             model.addAttribute("versaoExtensaoScript_label2", en_VersaoExtensaoScriptEnum.LABEL_2.getLabel());
@@ -36,5 +39,10 @@ public class VersaoExtensaoScriptService implements FactoryHTMLElements {
         model.addAttribute("versaoExtensaoScript_label2", br_VersaoExtensaoScriptEnum.LABEL_2.getLabel());
         model.addAttribute("versaoExtensaoScript_label3", br_VersaoExtensaoScriptEnum.LABEL_3.getLabel());
         model.addAttribute("versaoExtensaoScript_label4", br_VersaoExtensaoScriptEnum.LABEL_4.getLabel());
+    }
+
+    @Override
+    public String preventNullLanguage(String language) {
+        return (language == null) ? ConstantsConfigs.LANG_BR.getIdioma() : language;
     }
 }

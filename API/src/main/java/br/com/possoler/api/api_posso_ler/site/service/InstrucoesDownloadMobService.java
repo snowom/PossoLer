@@ -5,13 +5,17 @@ import br.com.possoler.api.api_posso_ler.site.constants.i18n.en_us.en_Instrucoes
 import br.com.possoler.api.api_posso_ler.site.constants.i18n.es.es_InstrucoesDownloadMobileEnum;
 import br.com.possoler.api.api_posso_ler.site.constants.i18n.pt_br.br_InstrucoesDownloadMobileEnum;
 import br.com.possoler.api.api_posso_ler.site.interfaces.FactoryHTMLElements;
+import br.com.possoler.api.api_posso_ler.site.interfaces.PreventNullLanguage;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 @Service
-public class InstrucoesDownloadMobService implements FactoryHTMLElements {
+public class InstrucoesDownloadMobService implements FactoryHTMLElements, PreventNullLanguage {
 
     public void factoryElement(String idioma, Model model) {
+
+        idioma = this.preventNullLanguage(idioma);
+
         if(idioma.equalsIgnoreCase(ConstantsConfigs.LANG_EN.getIdioma())) {
             model.addAttribute("instrucoesDownloadMobile_label1", en_InstrucoesDownloadMobileEnum.LABEL_1.getLabel());
             model.addAttribute("instrucoesDownloadMobile_label2", en_InstrucoesDownloadMobileEnum.LABEL_2.getLabel());
@@ -69,5 +73,10 @@ public class InstrucoesDownloadMobService implements FactoryHTMLElements {
         model.addAttribute("instrucoesDownloadMobile_label15", br_InstrucoesDownloadMobileEnum.LABEL_15.getLabel());
         model.addAttribute("instrucoesDownloadMobile_label16", br_InstrucoesDownloadMobileEnum.LABEL_16.getLabel());
         model.addAttribute("instrucoesDownloadMobile_label17", br_InstrucoesDownloadMobileEnum.LABEL_17.getLabel());
+    }
+
+    @Override
+    public String preventNullLanguage(String language) {
+        return (language == null) ? ConstantsConfigs.LANG_BR.getIdioma() : language;
     }
 }

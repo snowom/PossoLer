@@ -4,14 +4,18 @@ import br.com.possoler.api.api_posso_ler.site.constants.configs.ConstantsConfigs
 import br.com.possoler.api.api_posso_ler.site.constants.i18n.en_us.en_BlocoTecnologiasEnum;
 import br.com.possoler.api.api_posso_ler.site.constants.i18n.es.es_BlocoTecnologiasEnum;
 import br.com.possoler.api.api_posso_ler.site.constants.i18n.pt_br.br_BlocoTecnologiasEnum;
+import br.com.possoler.api.api_posso_ler.site.interfaces.PreventNullLanguage;
 import br.com.possoler.api.api_posso_ler.site.model.BlocoTecnologia;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
 @Service
-public class BlocoTecnologiaService {
+public class BlocoTecnologiaService implements PreventNullLanguage {
 
     public void blocoTecnologiaFactory(String idioma, ModelAndView modelAndView) {
+
+        idioma = this.preventNullLanguage(idioma);
+
         if(idioma.equalsIgnoreCase(ConstantsConfigs.LANG_EN.getIdioma())) {
             modelAndView.addObject(
     "blocoTecnologias",
@@ -98,5 +102,10 @@ public class BlocoTecnologiaService {
             .label21(br_BlocoTecnologiasEnum.LABEL_21.getLabel())
             .build()
         );
+    }
+
+    @Override
+    public String preventNullLanguage(String language) {
+        return (language == null) ? ConstantsConfigs.LANG_BR.getIdioma() : language;
     }
 }

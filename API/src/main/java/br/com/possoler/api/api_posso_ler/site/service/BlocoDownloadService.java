@@ -4,14 +4,18 @@ import br.com.possoler.api.api_posso_ler.site.constants.configs.ConstantsConfigs
 import br.com.possoler.api.api_posso_ler.site.constants.i18n.en_us.en_BlocoDownloadEnum;
 import br.com.possoler.api.api_posso_ler.site.constants.i18n.es.es_BlocoDownloadEnum;
 import br.com.possoler.api.api_posso_ler.site.constants.i18n.pt_br.br_BlocoDownloadEnum;
+import br.com.possoler.api.api_posso_ler.site.interfaces.PreventNullLanguage;
 import br.com.possoler.api.api_posso_ler.site.model.BlocoDownload;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
 @Service
-public class BlocoDownloadService {
+public class BlocoDownloadService implements PreventNullLanguage {
 
     public void blocoDownloadFactory(String idioma, ModelAndView modelAndView) {
+
+        idioma = this.preventNullLanguage(idioma);
+
         if(idioma.equalsIgnoreCase(ConstantsConfigs.LANG_EN.getIdioma())) {
             modelAndView.addObject(
     "blocoDownload",
@@ -51,5 +55,10 @@ public class BlocoDownloadService {
             .labelMobileDownload(br_BlocoDownloadEnum.LABEL_MOBILE_DOWNLOAD.getLabel())
             .build()
         );
+    }
+
+    @Override
+    public String preventNullLanguage(String language) {
+        return (language == null) ? ConstantsConfigs.LANG_BR.getIdioma() : language;
     }
 }

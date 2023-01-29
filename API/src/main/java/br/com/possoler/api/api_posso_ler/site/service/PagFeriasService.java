@@ -5,16 +5,20 @@ import br.com.possoler.api.api_posso_ler.site.constants.i18n.en_us.en_PagFeriasE
 import br.com.possoler.api.api_posso_ler.site.constants.i18n.es.es_PagFeriasEnum;
 import br.com.possoler.api.api_posso_ler.site.constants.i18n.pt_br.br_PagFeriasEnum;
 import br.com.possoler.api.api_posso_ler.site.interfaces.FactoryHTMLElements;
+import br.com.possoler.api.api_posso_ler.site.interfaces.PreventNullLanguage;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import java.util.Random;
 
 @Service
-public class PagFeriasService implements FactoryHTMLElements {
+public class PagFeriasService implements FactoryHTMLElements, PreventNullLanguage {
 
     @Override
     public void factoryElement(String idioma, Model model) {
+
+        idioma = this.preventNullLanguage(idioma);
+
         if(idioma.equalsIgnoreCase(ConstantsConfigs.LANG_EN.getIdioma())) {
             model.addAttribute("pagFerias_lbl1", en_PagFeriasEnum.LABEL_1.getLabel());
             model.addAttribute("pagFerias_lbl2", en_PagFeriasEnum.LABEL_2.getLabel());
@@ -58,5 +62,10 @@ public class PagFeriasService implements FactoryHTMLElements {
         Random random = new Random();
         String lottieAnimation = lottieArray[random.nextInt((lottieArray.length-1))];
         model.addAttribute("pagFerias_lottie", lottieAnimation);
+    }
+
+    @Override
+    public String preventNullLanguage(String language) {
+        return (language == null) ? ConstantsConfigs.LANG_BR.getIdioma() : language;
     }
 }

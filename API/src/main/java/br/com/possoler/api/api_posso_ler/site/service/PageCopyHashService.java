@@ -5,15 +5,16 @@ import br.com.possoler.api.api_posso_ler.site.constants.i18n.en_us.en_PageCopyHa
 import br.com.possoler.api.api_posso_ler.site.constants.i18n.es.es_PageCopyHashEnum;
 import br.com.possoler.api.api_posso_ler.site.constants.i18n.pt_br.br_PageCopyHashEnum;
 import br.com.possoler.api.api_posso_ler.site.interfaces.FactoryHTMLElements;
+import br.com.possoler.api.api_posso_ler.site.interfaces.PreventNullLanguage;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 @Service
-public class PageCopyHashService implements FactoryHTMLElements {
+public class PageCopyHashService implements FactoryHTMLElements, PreventNullLanguage {
 
     @Override
     public void factoryElement(String idioma, Model model) {
-        idioma = this.checkLangHeader(idioma);
+        idioma = this.preventNullLanguage(idioma);
 
         if(idioma.equalsIgnoreCase(ConstantsConfigs.LANG_EN.getIdioma())) {
             model.addAttribute("pagCopyHash_label1", en_PageCopyHashEnum.LABEL_1.getLabel());
@@ -40,9 +41,8 @@ public class PageCopyHashService implements FactoryHTMLElements {
             : "ERRO AO PEGAR CHAVE";
     }
 
-    private String checkLangHeader(String langHeader) {
-        return langHeader != null
-            ? langHeader
-            : ConstantsConfigs.LANG_BR.getIdioma();
+    @Override
+    public String preventNullLanguage(String language) {
+        return (language == null) ? ConstantsConfigs.LANG_BR.getIdioma() : language;
     }
 }

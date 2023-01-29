@@ -4,14 +4,18 @@ import br.com.possoler.api.api_posso_ler.site.constants.configs.ConstantsConfigs
 import br.com.possoler.api.api_posso_ler.site.constants.i18n.en_us.en_BlocoDoacoesEnum;
 import br.com.possoler.api.api_posso_ler.site.constants.i18n.es.es_BlocoDoacoesEnum;
 import br.com.possoler.api.api_posso_ler.site.constants.i18n.pt_br.br_BlocoDoacoesEnum;
+import br.com.possoler.api.api_posso_ler.site.interfaces.PreventNullLanguage;
 import br.com.possoler.api.api_posso_ler.site.model.BlocoDoacoes;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
 @Service
-public class BlocoDoacoesService {
+public class BlocoDoacoesService implements PreventNullLanguage {
 
     public void blocoDoacoesFactory(String idioma, ModelAndView modelAndView) {
+
+        idioma = this.preventNullLanguage(idioma);
+
         if(idioma.equalsIgnoreCase(ConstantsConfigs.LANG_EN.getIdioma())) {
             modelAndView.addObject(
     "blocoDoacoes",
@@ -57,5 +61,10 @@ public class BlocoDoacoesService {
             .label7(br_BlocoDoacoesEnum.LABEL_7.getLabel())
             .build()
         );
+    }
+
+    @Override
+    public String preventNullLanguage(String language) {
+        return (language == null) ? ConstantsConfigs.LANG_BR.getIdioma() : language;
     }
 }

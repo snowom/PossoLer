@@ -4,14 +4,18 @@ import br.com.possoler.api.api_posso_ler.site.constants.configs.ConstantsConfigs
 import br.com.possoler.api.api_posso_ler.site.constants.i18n.en_us.en_FooterEnum;
 import br.com.possoler.api.api_posso_ler.site.constants.i18n.es.es_FooterEnum;
 import br.com.possoler.api.api_posso_ler.site.constants.i18n.pt_br.br_FooterEnum;
+import br.com.possoler.api.api_posso_ler.site.interfaces.PreventNullLanguage;
 import br.com.possoler.api.api_posso_ler.site.model.Footer;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
 @Service
-public class FooterService {
+public class FooterService implements PreventNullLanguage {
 
     public void footerFactory(String idioma, ModelAndView modelAndView) {
+
+        idioma = this.preventNullLanguage(idioma);
+
         if(idioma.equalsIgnoreCase(ConstantsConfigs.LANG_EN.getIdioma())) {
             modelAndView.addObject(
     "footer",
@@ -45,5 +49,10 @@ public class FooterService {
             .label4(br_FooterEnum.LABEL_4.getLabel())
             .build()
         );
+    }
+
+    @Override
+    public String preventNullLanguage(String language) {
+        return (language == null) ? ConstantsConfigs.LANG_BR.getIdioma() : language;
     }
 }

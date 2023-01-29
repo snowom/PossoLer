@@ -68,9 +68,8 @@ public class HomeController {
         blocoTutorialService.blocoTutorialFactory(homeLanguage, mv);
         blocoComentarioService.blocoComentarioFactory(homeLanguage, mv);
         footerService.footerFactory(homeLanguage, mv);
-        versaoExtensaoScriptService.versaoExtensaoScriptFactory(homeLanguage, model);
-        glideScriptService.factoryElement(homeLanguage, model);
         versaoExtensaoScriptService.factoryElement(homeLanguage, model);
+        glideScriptService.factoryElement(homeLanguage, model);
         instrucoesDownloadDeskService.factoryElement(homeLanguage, model);
         instrucoesDownloadMobService.factoryElement(homeLanguage, model);
         cardChangelogService.factoryElement(homeLanguage, model);
@@ -98,9 +97,8 @@ public class HomeController {
         blocoTutorialService.blocoTutorialFactory(homeLanguage, mv);
         blocoComentarioService.blocoComentarioFactory(homeLanguage, mv);
         footerService.footerFactory(homeLanguage, mv);
-        versaoExtensaoScriptService.versaoExtensaoScriptFactory(homeLanguage, model);
-        glideScriptService.factoryElement(homeLanguage, model);
         versaoExtensaoScriptService.factoryElement(homeLanguage, model);
+        glideScriptService.factoryElement(homeLanguage, model);
         instrucoesDownloadDeskService.factoryElement(homeLanguage, model);
         instrucoesDownloadMobService.factoryElement(homeLanguage, model);
         cardChangelogService.factoryElement(homeLanguage, model);

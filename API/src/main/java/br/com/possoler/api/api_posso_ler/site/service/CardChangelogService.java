@@ -5,13 +5,17 @@ import br.com.possoler.api.api_posso_ler.site.constants.i18n.en_us.en_CardChange
 import br.com.possoler.api.api_posso_ler.site.constants.i18n.es.es_CardChangelogEnum;
 import br.com.possoler.api.api_posso_ler.site.constants.i18n.pt_br.br_CardChangelogEnum;
 import br.com.possoler.api.api_posso_ler.site.interfaces.FactoryHTMLElements;
+import br.com.possoler.api.api_posso_ler.site.interfaces.PreventNullLanguage;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 @Service
-public class CardChangelogService implements FactoryHTMLElements {
+public class CardChangelogService implements FactoryHTMLElements, PreventNullLanguage {
 
     public void factoryElement(String idioma, Model model) {
+
+        idioma = this.preventNullLanguage(idioma);
+
         if(idioma.equalsIgnoreCase(ConstantsConfigs.LANG_EN.getIdioma())) {
             model.addAttribute("changelog_label1", en_CardChangelogEnum.LABEL_1.getLabel());
             model.addAttribute("changelog_label2", en_CardChangelogEnum.LABEL_2.getLabel());
@@ -45,5 +49,10 @@ public class CardChangelogService implements FactoryHTMLElements {
         model.addAttribute("changelog_label7", br_CardChangelogEnum.LABEL_7.getLabel());
         model.addAttribute("changelog_label8", br_CardChangelogEnum.LABEL_8.getLabel());
         model.addAttribute("changelog_label9", br_CardChangelogEnum.LABEL_9.getLabel());
+    }
+
+    @Override
+    public String preventNullLanguage(String language) {
+        return (language == null) ? ConstantsConfigs.LANG_BR.getIdioma() : language;
     }
 }

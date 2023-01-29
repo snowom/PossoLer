@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+        <style>
+          /* Personalização Scroll Bar */
+          ::-webkit-scrollbar {
+              width: 8px;
+          }
+
+          ::-webkit-scrollbar-thumb {
+              background: rgb(153, 153, 153);
+              border-radius: 10px;
+          }
+
+          ::-webkit-scrollbar-track {
+              background: transparent;
+          }
+      </style>
+    </head>
+    <body style="background-color: #fff">
+        <div class="container-fluid">
+            <div class="row mt-3">
+                <div class="col-12 d-flex justify-content-center">
+                    <div style="text-align:center">
+                        <div class="lead" style="padding:0px 20px">
+                            <h2 th:text="${pagFimMigracao_label1}"></h2>
+                        </div>
+                        <img id="springlogo" src="img/spring_logo.png">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <p class="lead text-center">
+                        <span th:text="${pagFimMigracao_label2}"></span>
+                        <br><br>
+                        <span th:text="${pagFimMigracao_label3}"></span>
+                        <br>
+                        <span th:text="${pagFimMigracao_label4}"></span><strong th:text="${pagFimMigracao_label5}"></strong><span th:text="${pagFimMigracao_label6}"></span>
+                        <br><br>
+                        <span th:text="${pagFimMigracao_label7}"></span><u><strong th:text="${pagFimMigracao_label8}"></strong></u>.
+                        <span th:text="${pagFimMigracao_label9}"></span><strong th:text="${pagFimMigracao_label10}"></strong><span th:text="${pagFimMigracao_label11}"></span>
+                        <br>
+                        <span th:text="${pagFimMigracao_label12}"></span><strong th:text="${pagFimMigracao_label13}"></strong><span th:text="${pagFimMigracao_label14}"></span>
+                        <br><br>
+                        <span th:text="${pagFimMigracao_label15}"></span>
+                        <br>
+                        <span th:text="${pagFimMigracao_label16}"></span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </body>
+
+    <script>
+        window.addEventListener('resize', ()=>{
+            let imgSpring = document.getElementById("springlogo");
+            let currentWidth = window.innerWidth;
+            if(currentWidth < 330) imgSpring.width = 150;
+            else if(currentWidth >= 330 && currentWidth < 576) imgSpring.width = 200;
+            else if(currentWidth >= 576 && currentWidth < 767) imgSpring.width = 300;
+            else imgSpring.width = 350;
+        });
+    </script>
+</html>
