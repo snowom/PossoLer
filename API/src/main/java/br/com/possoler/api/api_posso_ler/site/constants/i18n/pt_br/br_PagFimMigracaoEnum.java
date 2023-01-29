@@ -18,8 +18,7 @@ public enum br_PagFimMigracaoEnum {
     LABEL_12("Também, "),
     LABEL_13("é aconselhável desinstalar qualquer versão anterior da extensão"),
     LABEL_14(" que esteja intalada em seu dispositivo antes de instalar a nova versão."),
-    LABEL_15("Por fim, agradeço demais pelo apoio de vocês durante todo esse tempo de projeto!"),
-    LABEL_16("Valeuzão e bora aproveitar a nova versão da extensão!");
+    LABEL_15("Por fim, agradeço demais pelo apoio de vocês durante todo esse tempo de projeto!");
 
     @Getter
     private String label;

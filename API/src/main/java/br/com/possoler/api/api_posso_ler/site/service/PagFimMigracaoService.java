@@ -33,7 +33,6 @@ public class PagFimMigracaoService implements FactoryHTMLElements, PreventNullLa
             model.addAttribute("pagFimMigracao_label13", en_PagFimMigracaoEnum.LABEL_13.getLabel());
             model.addAttribute("pagFimMigracao_label14", en_PagFimMigracaoEnum.LABEL_14.getLabel());
             model.addAttribute("pagFimMigracao_label15", en_PagFimMigracaoEnum.LABEL_15.getLabel());
-            model.addAttribute("pagFimMigracao_label16", en_PagFimMigracaoEnum.LABEL_16.getLabel());
             return;
         }
         if(idioma.equalsIgnoreCase(ConstantsConfigs.LANG_ES.getIdioma())) {
@@ -52,7 +51,6 @@ public class PagFimMigracaoService implements FactoryHTMLElements, PreventNullLa
             model.addAttribute("pagFimMigracao_label13", es_PagFimMigracaoEnum.LABEL_13.getLabel());
             model.addAttribute("pagFimMigracao_label14", es_PagFimMigracaoEnum.LABEL_14.getLabel());
             model.addAttribute("pagFimMigracao_label15", es_PagFimMigracaoEnum.LABEL_15.getLabel());
-            model.addAttribute("pagFimMigracao_label16", es_PagFimMigracaoEnum.LABEL_16.getLabel());
             return;
         }
         model.addAttribute("pagFimMigracao_label1", br_PagFimMigracaoEnum.LABEL_1.getLabel());
@@ -70,7 +68,6 @@ public class PagFimMigracaoService implements FactoryHTMLElements, PreventNullLa
         model.addAttribute("pagFimMigracao_label13", br_PagFimMigracaoEnum.LABEL_13.getLabel());
         model.addAttribute("pagFimMigracao_label14", br_PagFimMigracaoEnum.LABEL_14.getLabel());
         model.addAttribute("pagFimMigracao_label15", br_PagFimMigracaoEnum.LABEL_15.getLabel());
-        model.addAttribute("pagFimMigracao_label16", br_PagFimMigracaoEnum.LABEL_16.getLabel());
     }
 
     @Override
