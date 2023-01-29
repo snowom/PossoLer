@@ -31,7 +31,7 @@
                         <div class="lead" style="padding:0px 20px">
                             <h2 th:text="${pagFimMigracao_label1}"></h2>
                         </div>
-                        <img id="springlogo" src="img/java_logo.png">
+                        <img id="javalogo" src="img/java_logo.png">
                     </div>
                 </div>
             </div>
@@ -58,13 +58,18 @@
     </body>
 
     <script>
-        window.addEventListener('resize', ()=>{
-            let imgSpring = document.getElementById("springlogo");
+        function setImageSize() {
+            let javalogo = document.getElementById("javalogo");
             let currentWidth = window.innerWidth;
-            if(currentWidth < 330) imgSpring.width = 150;
-            else if(currentWidth >= 330 && currentWidth < 576) imgSpring.width = 200;
-            else if(currentWidth >= 576 && currentWidth < 767) imgSpring.width = 300;
-            else imgSpring.width = 350;
+            if(currentWidth < 330) javalogo.width = 150;
+            else if(currentWidth >= 330 && currentWidth < 576) javalogo.width = 200;
+            else if(currentWidth >= 576 && currentWidth < 767) javalogo.width = 300;
+            else javalogo.width = 350;
+        }
+
+        setImageSize();
+        window.addEventListener('resize', ()=>{
+            setImageSize();
         });
     </script>
 </html>
