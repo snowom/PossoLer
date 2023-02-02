@@ -1,7 +1,7 @@
 
 # Posso Ler?
 <p align=center>
- <img src="https://possoler.tech/img/128.png" height="300"/>
+ <img src="https://user-images.githubusercontent.com/70149250/216201385-2b41732b-457b-4185-b318-5c6da8e7fa01.png" height="300"/>
 </p>
 
 É um projeto open source criado com o intuito de democratizar o acesso à informação, pois nesse momento, em meio a tantas _fake news_, é mais que fundamental ter acesso a notícias e conteúdos de fontes confiáveis. Com a extensão __Posso Ler?__ você é capaz de burlar o paywall e visualizar conteúdos exclusivos de alguns jornais e sites. [Ir para site](https://possoler.tech)
