@@ -344,3 +344,15 @@
 # Término de migração de endpoints;
 # Adicionado suporte a videos do Vimeo no Responde Aí;
 # Redução de 10Kb tamanho arquivo CRX;
+
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-= v2.8.7 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+[18/02/2023]
+# Ajuste Bypass Valor Economico;
+
+[26/02/2023]
+# Adicionado Jornal Gazeta - GAZ;
+
+[22/03/2023]
+# CRX Atualizado;

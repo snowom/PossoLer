@@ -37,3 +37,4 @@
 40 - Correio do Povo
 41 - Revista Casa e Jardim
 42 - Veja Saúde
+43 - GAZ
