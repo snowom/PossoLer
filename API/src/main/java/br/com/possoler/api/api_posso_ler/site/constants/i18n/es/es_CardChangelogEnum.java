@@ -10,9 +10,8 @@ public enum es_CardChangelogEnum {
     LABEL_5("- Descargue la última versión <a id=\"linkInstalacao\" href=\"\"> AQUÍ </a>"),
     LABEL_6("¿Que hay de nuevo en esta versión?"),
     LABEL_7(
-    "<li class=\"lead\">Migración del sistema a Java</li>" +
-        "<li class=\"lead\">Se agregó soporte para videos de Vimeo en Responde Aí</li>" +
-        "<li class=\"lead\">Reducción de 10 KB en el tamaño de la extensión móvil</li>"
+    "<li class=\"lead\">Corrección bypass Valor Econômico</li>" +
+        "<li class=\"lead\">Se agregó soporte Periódico GAZ - Gazeta Santa Cruz do Sul</li>"
     ),
     LABEL_8(
         "<li class=\"lead\">Mejoras en el rendimiento de la extensión</li>" +

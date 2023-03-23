@@ -18,7 +18,7 @@ public class DadosAcessoDTO {
     
     @NotNull(message = "O campo 'codigo_site' não pode ser vazio")
     @Min(value = 1, message = "Jornal invalido")
-    @Max(value = 38, message = "Jornal invalido")
+    @Max(value = 43, message = "Jornal invalido")
     private Integer codigo_site;
     @NotNull(message = "O campo 'data' não pode ser vazio")
     private LocalDate data;
