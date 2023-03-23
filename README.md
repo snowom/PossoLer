@@ -8,8 +8,8 @@
 <br>
 <br>
 <img src="https://img.shields.io/badge/License-MIT-orange.svg"/>
-<img src="https://img.shields.io/badge/Versão atual-2.7.6-green.svg"/>
-<img src="https://img.shields.io/badge/Data atualização-30/01/2023-blue.svg"/>
+<img src="https://img.shields.io/badge/Versão atual-2.8.7-green.svg"/>
+<img src="https://img.shields.io/badge/Data atualização-23/03/2023-blue.svg"/>
 <img src="https://img.shields.io/badge/Tecnologia-Java 14-red.svg"/>
 <img src="https://img.shields.io/badge/Tecnologia-Spring Boot 2.7.8-orange.svg"/>
 <img src="https://img.shields.io/badge/Tecnologia-Javascript-yellow.svg"/>
@@ -26,7 +26,6 @@
 * [Veja](https://veja.abril.com.br/)
 * [Responde Ai](https://www.respondeai.com.br/)
 * [Exame](https://exame.com/)
-* [Guia do Estudante](https://guiadoestudante.abril.com.br/)
 * [Revista Época](https://epoca.globo.com/)
 * [Revista Época Negocios](https://epocanegocios.globo.com/)
 * [Revista Galileu](https://revistagalileu.globo.com/)
@@ -57,6 +56,7 @@
 * [Correio do Povo](https://www.correiodopovo.com.br/)
 * [Revista Casa e Jardim](https://revistacasaejardim.globo.com/)
 * [Veja Saude](https://saude.abril.com.br/)
+* [GAZ](https://www.gaz.com.br/)
 
 ## Perguntas Frequentes
 
