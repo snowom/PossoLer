@@ -56,7 +56,7 @@
 * [Correio do Povo](https://www.correiodopovo.com.br/)
 * [Revista Casa e Jardim](https://revistacasaejardim.globo.com/)
 * [Veja Saude](https://saude.abril.com.br/)
-* [GAZ](https://www.gaz.com.br/)
+* [GAZ](https://www.gaz.com.br/) - Ler sobre <i>**Cache Mock**</i> na seção de <i>Perguntas Frequentes</i>
 
 ## Perguntas Frequentes
 
