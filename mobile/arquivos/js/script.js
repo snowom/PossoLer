@@ -1,4 +1,4 @@
-const CURRENT_VERSION = '287';
+const CURRENT_VERSION = '297';
 
 /**
  * Verifica qual URL de correspondencia o usuario está e aplica a 
@@ -182,6 +182,14 @@ function main()
     ){
         saveDataForDashboard(43);
         modifyGAZ();
+    }
+    else if(currentURL.includes("semprefamilia.com.br")){
+        //saveDataForDashboard(44)
+        verificaAtualizacaoVersao();
+    }
+    else if(currentURL.includes("uol.com.br")){
+        //saveDataForDashboard(45)
+        verificaAtualizacaoVersao();
     }
 }
 
@@ -600,10 +608,12 @@ function modifyAPPRESPAI()
             let k = setInterval(()=>{
                 let divs = document.querySelectorAll('div');
                 for(let i=0; i<divs.length; i++){
-                    if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == configs.data_cy.format_toggle){
-                        clearInterval(k);
-                        divs[i].style.display = "none";
-                        break;
+                    for(let iConfig=0; iConfig<configs.data_cy.format_toggle.length; iConfig++){
+                        if(divs[i].classList.contains(configs.data_cy.format_toggle[iConfig])){
+                            clearInterval(k);
+                            divs[i].style.display = "none";
+                            break;
+                        }
                     }
                 }
             },800);
@@ -611,70 +621,71 @@ function modifyAPPRESPAI()
             let r = setInterval(()=>{
                 let divs = document.querySelectorAll('div');
                 for(let i=0; i<divs.length; i++){
-                    if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == configs.data_cy.exercise_answer_button){
-                        clearInterval(r);
-
-                        let answerDiv = divs[i];
-                        let token = getCookie('user_jwt');
-                        let listExerciseId = getTopicId();
-
-                        answerDiv.innerHTML = setLoadingPageAnimation();
-
-                        let s = setInterval(()=>{
-                            if(typeof(axios) == 'function' && token != null && listExerciseId != null){
-                                clearInterval(s);
-                                axios({
-                                    method: "POST",
-                                    url: 'https://possoler.tech/API/respondeai/getData?operation=getListExercise',
-                                    timeout: 30000,
-                                    data: JSON.stringify({
-                                        itemId: listExerciseId
-                                    }),
-                                    headers : {
-                                        "Content-Type" : "application/json",
-                                        "authorization": token
-                                    }
-                                }).then((resp)=>{
-                                    if(resp.data.status == 'failed') throw new Error(resp.data.message);
-
-                                    //Set div style
-                                    answerDiv.style.cssText = 'width: 100% !important; padding: 0px 30px !important; font-family: "Droid Serif", serif !important;font-size: 1.25em !important; line-height: 26px !important; color: rgb(68, 68, 68) !important; padding-bottom: 15px !important'
-                                    
-                                    //Renderiza solução na tela - Teoria
-                                    for(let i=0; i<resp.data.lightSolution.length; i++){
-                                        if(i==0){
-                                            answerDiv.innerHTML = '<h1 style="color: rgb(54, 170, 173); font-size: 1.7em; font-family:Droid Serif, serif; font-weight: inherit; margin: 50px 0px 30px 0px">Resposta</h1>';
+                    for(let iConfig=0; iConfig<configs.data_cy.exercise_answer_button.length; iConfig++){
+                        if(divs[i].classList.contains(configs.data_cy.exercise_answer_button[iConfig])){
+                            clearInterval(r);
+    
+                            let answerDiv = divs[i];
+                            let token = getCookie('user_jwt');
+                            let listExerciseId = getTopicId();
+    
+                            answerDiv.innerHTML = setLoadingPageAnimation();
+    
+                            let s = setInterval(()=>{
+                                if(typeof(axios) == 'function' && token != null && listExerciseId != null){
+                                    clearInterval(s);
+                                    axios({
+                                        method: "POST",
+                                        url: 'https://possoler.tech/API/respondeai/getData?operation=getListExercise',
+                                        timeout: 30000,
+                                        data: JSON.stringify({
+                                            itemId: listExerciseId
+                                        }),
+                                        headers : {
+                                            "Content-Type" : "application/json",
+                                            "authorization": token
                                         }
-                                        answerDiv.innerHTML += resp.data.lightSolution[i];
-                                        MathJax.typeset();
-                                    }
-
-
-                                    //Renderiza solução na tela - Videos
-                                    if(resp.data.hasOwnProperty('videos')){
-                                        const SINGLE_VIDEO_SIZE = 450;
-                                        const SPACE_BETWEEN_VIDEOS = 50;
+                                    }).then((resp)=>{
+                                        if(resp.data.status == 'failed') throw new Error(resp.data.message);
+    
+                                        //Set div style
+                                        answerDiv.style.cssText = 'width: 100% !important; padding: 0px 30px !important; font-family: "Droid Serif", serif !important;font-size: 1.25em !important; line-height: 26px !important; color: rgb(68, 68, 68) !important; padding-bottom: 15px !important'
                                         
-                                        for(let j=0; j<resp.data.videos.length; j++){
-
-                                            if(j==0){
-                                                answerDiv.innerHTML += '<h1 style="color: rgb(54, 170, 173); font-size: 1.7em; font-family:Droid Serif, serif; font-weight: inherit; margin: 50px 0px 30px 0px">Vídeo Tutorial</h1>';
+                                        //Renderiza solução na tela - Teoria
+                                        for(let i=0; i<resp.data.lightSolution.length; i++){
+                                            if(i==0){
+                                                answerDiv.innerHTML = '<h1 style="color: rgb(54, 170, 173); font-size: 1.7em; font-family:Droid Serif, serif; font-weight: inherit; margin: 50px 0px 30px 0px">Resposta</h1>';
                                             }
-                                            answerDiv.innerHTML += (resp.data.videos[j].provider.includes("youtube"))
-                                                ? '<div data-cy="video-iframe" allowfullscreen="" frameborder="0" style="width: 100%; height: ' + 100/resp.data.videos.length + '%;"><div style="width: 100%; height: ' + SINGLE_VIDEO_SIZE  + 'px;"><iframe frameborder="0" allowfullscreen="1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" title="YouTube video player" width="100%" height="100%" src="https://www.youtube.com/embed/' + resp.data.videos[j].providerId + '?autoplay=0&amp;mute=0&amp;controls=1&amp;origin=https%3A%2F%2Fapp.respondeai.com.br&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;iv_load_policy=3&amp;modestbranding=1&amp;enablejsapi=1&amp;widgetid=1"></iframe></div></div><div style="height: ' + SPACE_BETWEEN_VIDEOS + 'px !important"></div>'
-                                                : '<div style="padding:56.25% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/' + resp.data.videos[j].providerId + '" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div><div style="height: ' + SPACE_BETWEEN_VIDEOS + 'px !important"></div>';
+                                            answerDiv.innerHTML += resp.data.lightSolution[i];
+                                            MathJax.typeset();
                                         }
-                                    }
-                                }).catch((erro)=>{
-                                    sweetAlert(
-                                        'error',
-                                        'Erro',
-                                        'Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style="font-weight: bold !important;">Código do erro: </spam>' + erro.toString()
-                                    );
-                                });
-                            }
-                        },800);
-                        break;
+    
+    
+                                        //Renderiza solução na tela - Videos
+                                        if(resp.data.hasOwnProperty('videos')){
+                                            const SINGLE_VIDEO_SIZE = 450;
+                                            const SPACE_BETWEEN_VIDEOS = 50;
+                                            
+                                            for(let j=0; j<resp.data.videos.length; j++){
+    
+                                                if(j==0){
+                                                    answerDiv.innerHTML += '<h1 style="color: rgb(54, 170, 173); font-size: 1.7em; font-family:Droid Serif, serif; font-weight: inherit; margin: 50px 0px 30px 0px">Vídeo Tutorial</h1>';
+                                                }
+                                                answerDiv.innerHTML += (resp.data.videos[j].provider.includes("youtube"))
+                                                    ? '<div data-cy="video-iframe" allowfullscreen="" frameborder="0" style="width: 100%; height: ' + 100/resp.data.videos.length + '%;"><div style="width: 100%; height: ' + SINGLE_VIDEO_SIZE  + 'px;"><iframe frameborder="0" allowfullscreen="1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" title="YouTube video player" width="100%" height="100%" src="https://www.youtube.com/embed/' + resp.data.videos[j].providerId + '?autoplay=0&amp;mute=0&amp;controls=1&amp;origin=https%3A%2F%2Fapp.respondeai.com.br&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;iv_load_policy=3&amp;modestbranding=1&amp;enablejsapi=1&amp;widgetid=1"></iframe></div></div><div style="height: ' + SPACE_BETWEEN_VIDEOS + 'px !important"></div>'
+                                                    : '<div style="padding:56.25% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/' + resp.data.videos[j].providerId + '" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div><div style="height: ' + SPACE_BETWEEN_VIDEOS + 'px !important"></div>';
+                                            }
+                                        }
+                                    }).catch((erro)=>{
+                                        sweetAlert(
+                                            'error',
+                                            'Erro',
+                                            'Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style="font-weight: bold !important;">Código do erro: </spam>' + erro.toString()
+                                        );
+                                    });
+                                }
+                            },800);
+                        }
                     }
                 }
             },800);
@@ -687,10 +698,12 @@ function modifyAPPRESPAI()
             let k = setInterval(()=>{
                 let divs = document.querySelectorAll('div');
                 for(let i=0; i<divs.length; i++){
-                    if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == configs.data_cy.format_toggle){
-                        clearInterval(k);
-                        divs[i].style.display = "none";
-                        break;
+                    for(let iConfig=0; iConfig<configs.data_cy.format_toggle.length; iConfig++){
+                        if(divs[i].classList.contains(configs.data_cy.format_toggle[iConfig])){
+                            clearInterval(k);
+                            divs[i].style.display = "none";
+                            break;
+                        }
                     }
                 }
             },800);
@@ -698,89 +711,93 @@ function modifyAPPRESPAI()
             let r = setInterval(()=>{
                 let divs = document.querySelectorAll('div');
                 for(let i=0; i<divs.length; i++){
-                    if(
-                        (divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == configs.data_cy.exercise_answer_button) || 
-                        (divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == configs.data_cy.exercise_statement)
-                    ){
-                        clearInterval(r);
-                        let answerDiv;
-
-                        if(divs[i].getAttribute('data-cy') == configs.data_cy.exercise_statement){
-                            divs[i].innerHTML += '<div id="tmpAnswer"></div>';
-                            answerDiv = document.getElementById("tmpAnswer");
-
-                            // Remove botão responde ai
-                            for(let k=i; k<divs.length; k++){
-                                if(divs[k].hasAttribute('data-cy') && divs[k].getAttribute('data-cy') == configs.data_cy.exercise_answer_button){
-                                    divs[k].remove(); 
+                    for(let iConfig=0; iConfig<configs.data_cy.exercise_answer_button.length; iConfig++){
+                        for(let jConfig=0; jConfig<configs.data_cy.exercise_statement.length; jConfig++){
+                            if(
+                                (divs[i].classList.contains(configs.data_cy.exercise_answer_button[iConfig])) || 
+                                (divs[i].classList.contains(configs.data_cy.exercise_statement[jConfig]))
+                            ){
+                                clearInterval(r);
+                                let answerDiv;
+        
+                                if(divs[i].classList.contains(configs.data_cy.exercise_statement[jConfig])){
+                                    divs[i].innerHTML += '<div id="tmpAnswer"></div>';
+                                    answerDiv = document.getElementById("tmpAnswer");
+        
+                                    // Remove botão responde ai
+                                    for(let k=i; k<divs.length; k++){
+                                        if(divs[k].classList.contains(configs.data_cy.exercise_answer_button[iConfig])){
+                                            divs[k].remove(); 
+                                        }
+                                    }
+                                }else{
+                                    answerDiv = divs[i];
                                 }
+        
+                                let token = getCookie('user_jwt');
+                                let exerciseId = getTopicId();
+        
+                                answerDiv.innerHTML = setLoadingPageAnimation();
+        
+                                let s = setInterval(()=>{
+                                    if(typeof(axios) == 'function' && token != null && exerciseId != null){
+                                        clearInterval(s);
+                                        axios({
+                                            method: "POST",
+                                            url: 'https://possoler.tech/API/respondeai/getData?operation=getFixationExercise',
+                                            timeout: 30000,
+                                            data: JSON.stringify({
+                                                itemId: exerciseId
+                                            }),
+                                            headers : {
+                                                "Content-Type" : "application/json",
+                                                "authorization": token
+                                            }
+                                        }).then((resp)=>{
+                                            if(resp.data.status == 'failed') throw new Error(resp.data.message);
+        
+                                            //Set div style
+                                            answerDiv.style.cssText = 'width: 100% !important; padding: 0px 30px !important; font-family: "Droid Serif", serif !important; font-size: 1.25em !important; line-height: 26px !important; color: rgb(68, 68, 68) !important; padding-bottom: 15px !important'
+        
+                                                console.log(resp.data);
+                                                //Renderiza solução na tela - Teoria
+                                                for(let i=0; i<resp.data.lightSolution.length; i++){
+                                                    if(i==0){
+                                                        answerDiv.innerHTML = '<h1 style="color: rgb(247, 172, 60); font-size: 1.7em; font-family:Droid Serif, serif; font-weight: inherit; margin: 50px 0px 30px 0px">Resposta</h1>';
+                                                    }
+                                                    answerDiv.innerHTML += resp.data.lightSolution[i];
+                                                    MathJax.typeset();
+                                                }
+        
+        
+                                                //Renderiza solução na tela - Videos
+                                                if(resp.data.hasOwnProperty('videos')){
+                                                    const SINGLE_VIDEO_SIZE = 450;
+                                                    const SPACE_BETWEEN_VIDEOS = 50;
+                                                
+                                                for(let j=0; j<resp.data.videos.length; j++){
+        
+                                                    if(j==0){
+                                                        answerDiv.innerHTML += '<h1 style="color: rgb(247, 172, 60); font-size: 1.7em; font-family:Droid Serif, serif; font-weight: inherit; margin: 50px 0px 30px 0px">Vídeo Tutorial</h1>';
+                                                    }
+        
+                                                    answerDiv.innerHTML += (resp.data.videos[j].provider.includes("youtube"))
+                                                        ? '<div data-cy="video-iframe" allowfullscreen="" frameborder="0" style="width: 100%; height: ' + 100/resp.data.videos.length + '%;"><div style="width: 100%; height: ' + SINGLE_VIDEO_SIZE + 'px;"><iframe frameborder="0" allowfullscreen="1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" title="YouTube video player" width="100%" height="100%" src="https://www.youtube.com/embed/' + resp.data.videos[j].providerId + '?autoplay=0&amp;mute=0&amp;controls=1&amp;origin=https%3A%2F%2Fapp.respondeai.com.br&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;iv_load_policy=3&amp;modestbranding=1&amp;enablejsapi=1&amp;widgetid=1"></iframe></div></div><div style="height: ' + SPACE_BETWEEN_VIDEOS + 'px !important"></div>'
+                                                        : '<div style="padding:56.25% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/' + resp.data.videos[j].providerId + '" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div><div style="height: ' + SPACE_BETWEEN_VIDEOS + 'px !important"></div>';    
+                                                }
+                                            }
+                                        }).catch((erro)=>{
+                                            sweetAlert(
+                                                'error',
+                                                'Erro',
+                                                'Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style="font-weight: bold !important;">Código do erro: </spam>' + erro.toString()
+                                            );
+                                        });
+                                    }
+                                },800);
+                                break;
                             }
-                        }else{
-                            answerDiv = divs[i];
                         }
-
-                        let token = getCookie('user_jwt');
-                        let exerciseId = getTopicId();
-
-                        answerDiv.innerHTML = setLoadingPageAnimation();
-
-                        let s = setInterval(()=>{
-                            if(typeof(axios) == 'function' && token != null && exerciseId != null){
-                                clearInterval(s);
-                                axios({
-                                    method: "POST",
-                                    url: 'https://possoler.tech/API/respondeai/getData?operation=getFixationExercise',
-                                    timeout: 30000,
-                                    data: JSON.stringify({
-                                        itemId: exerciseId
-                                    }),
-                                    headers : {
-                                        "Content-Type" : "application/json",
-                                        "authorization": token
-                                    }
-                                }).then((resp)=>{
-                                    if(resp.data.status == 'failed') throw new Error(resp.data.message);
-
-                                    //Set div style
-                                    answerDiv.style.cssText = 'width: 100% !important; padding: 0px 30px !important; font-family: "Droid Serif", serif !important; font-size: 1.25em !important; line-height: 26px !important; color: rgb(68, 68, 68) !important; padding-bottom: 15px !important'
-
-                                        console.log(resp.data);
-                                        //Renderiza solução na tela - Teoria
-                                        for(let i=0; i<resp.data.lightSolution.length; i++){
-                                            if(i==0){
-                                                answerDiv.innerHTML = '<h1 style="color: rgb(247, 172, 60); font-size: 1.7em; font-family:Droid Serif, serif; font-weight: inherit; margin: 50px 0px 30px 0px">Resposta</h1>';
-                                            }
-                                            answerDiv.innerHTML += resp.data.lightSolution[i];
-                                            MathJax.typeset();
-                                        }
-
-
-                                        //Renderiza solução na tela - Videos
-                                        if(resp.data.hasOwnProperty('videos')){
-                                            const SINGLE_VIDEO_SIZE = 450;
-                                            const SPACE_BETWEEN_VIDEOS = 50;
-                                        
-                                        for(let j=0; j<resp.data.videos.length; j++){
-
-                                            if(j==0){
-                                                answerDiv.innerHTML += '<h1 style="color: rgb(247, 172, 60); font-size: 1.7em; font-family:Droid Serif, serif; font-weight: inherit; margin: 50px 0px 30px 0px">Vídeo Tutorial</h1>';
-                                            }
-
-                                            answerDiv.innerHTML += (resp.data.videos[j].provider.includes("youtube"))
-                                                ? '<div data-cy="video-iframe" allowfullscreen="" frameborder="0" style="width: 100%; height: ' + 100/resp.data.videos.length + '%;"><div style="width: 100%; height: ' + SINGLE_VIDEO_SIZE + 'px;"><iframe frameborder="0" allowfullscreen="1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" title="YouTube video player" width="100%" height="100%" src="https://www.youtube.com/embed/' + resp.data.videos[j].providerId + '?autoplay=0&amp;mute=0&amp;controls=1&amp;origin=https%3A%2F%2Fapp.respondeai.com.br&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;iv_load_policy=3&amp;modestbranding=1&amp;enablejsapi=1&amp;widgetid=1"></iframe></div></div><div style="height: ' + SPACE_BETWEEN_VIDEOS + 'px !important"></div>'
-                                                : '<div style="padding:56.25% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/' + resp.data.videos[j].providerId + '" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div><div style="height: ' + SPACE_BETWEEN_VIDEOS + 'px !important"></div>';    
-                                        }
-                                    }
-                                }).catch((erro)=>{
-                                    sweetAlert(
-                                        'error',
-                                        'Erro',
-                                        'Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style="font-weight: bold !important;">Código do erro: </spam>' + erro.toString()
-                                    );
-                                });
-                            }
-                        },800);
-                        break;
                     }
                 }
             },800);
@@ -792,133 +809,143 @@ function modifyAPPRESPAI()
             let r = setInterval(()=>{
                 let divs = document.querySelectorAll('div');
                 for(let i=0; i<divs.length; i++){
-                    if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == configs.data_cy.format_toggle){
-                        clearInterval(r);
-
-                        //VERIFICA SE NA 1 EXEC O CONTEUDO ESTA BLOQUEADO - TEXTO
-                        //CASO POSITIVO, CHAMA API E MONTA TEXTO
-                        let s = setInterval(()=>{
-                            let divsSteps = document.querySelectorAll('div');
-                            for(let j=0; j<divsSteps.length; j++){
-                                if(divsSteps[j].hasAttribute('data-cy') && divsSteps[j].getAttribute('data-cy') == configs.data_cy.theory_text_content){
-                                    clearInterval(s);
-                                    let divStepsContainer = divsSteps[j].children[0].children[0];
-                                    try{
-                                        if(
-                                            divStepsContainer.children[0].isEqualNode(divStepsContainer.children[1]) &&
-                                            divStepsContainer.children[1].isEqualNode(divStepsContainer.children[2]) && 
-                                            divStepsContainer.children[2].isEqualNode(divStepsContainer.children[3]) &&
-                                            divStepsContainer.children[3].isEqualNode(divStepsContainer.children[4]) &&
-                                            divStepsContainer.children[4].isEqualNode(divStepsContainer.children[5])
-                                        ){
-                                            //SETTA MSG DE LOADING
-                                            divsSteps[j].innerHTML = setLoadingPageAnimation();
+                    for(let iConfig=0; iConfig<configs.data_cy.format_toggle.length; iConfig++){
+                        if(divs[i].classList.contains(configs.data_cy.format_toggle[iConfig])){
+                            clearInterval(r);
     
-                                            //CHAMA API PARA DESBLOQUEAR CONTEUDO
-                                            callAPITheoryUnlocked('texto', configs);
-                                            container = divsSteps[j];
-                                            break;
+                            //VERIFICA SE NA 1 EXEC O CONTEUDO ESTA BLOQUEADO - TEXTO
+                            //CASO POSITIVO, CHAMA API E MONTA TEXTO
+                            let s = setInterval(()=>{
+                                let divsSteps = document.querySelectorAll('div');
+                                for(let j=0; j<divsSteps.length; j++){
+                                    for(let iConfig2=0; iConfig2<configs.data_cy.theory_text_content.length; iConfig2++){
+                                        if(divsSteps[j].classList.contains(configs.data_cy.theory_text_content[iConfig2])){
+                                            clearInterval(s);
+                                            let divStepsContainer = divsSteps[j].children[0];
+                                            try{
+                                                if(
+                                                    divStepsContainer.children[0].isEqualNode(divStepsContainer.children[1]) &&
+                                                    divStepsContainer.children[1].isEqualNode(divStepsContainer.children[2]) && 
+                                                    divStepsContainer.children[2].isEqualNode(divStepsContainer.children[3]) &&
+                                                    divStepsContainer.children[3].isEqualNode(divStepsContainer.children[4]) &&
+                                                    divStepsContainer.children[4].isEqualNode(divStepsContainer.children[5])
+                                                ){
+                                                    //SETTA MSG DE LOADING
+                                                    divsSteps[j].innerHTML = setLoadingPageAnimation();
+            
+                                                    //CHAMA API PARA DESBLOQUEAR CONTEUDO
+                                                    callAPITheoryUnlocked('texto', configs);
+                                                    container = divsSteps[j];
+                                                    break;
+                                                }
+                                            }catch(exception){
+                                                
+                                            }
                                         }
-                                    }catch(exception){
-                                        
                                     }
                                 }
-                            }
-                        },800);
-
-
-                        //VERIFICA SE NA 1 EXEC O CONTEUDO ESTA BLOQUEADO - VIDEO
-                        //CASO POSITIVO, CHAMA API E MONTA VIDEO
-                        let v = setInterval(()=>{
-                            let divsVideo = document.querySelectorAll('div');
-                            for(let j=0; j<divsVideo.length; j++){
-                                if(divsVideo[j].hasAttribute('data-cy') && divsVideo[j].getAttribute('data-cy') == configs.data_cy.theory_video_content){
-                                    clearInterval(v);
-                                    if(divsVideo[j].children.length == 0)
-                                    {
-                                        //SETTA MSG DE LOADING
-                                        divsVideo[j].innerHTML = setLoadingPageAnimation();
-
-                                        //CHAMA API PARA DESBLOQUEAR CONTEUDO
-                                        callAPITheoryUnlocked('video', configs);
+                            },800);
+    
+    
+                            //VERIFICA SE NA 1 EXEC O CONTEUDO ESTA BLOQUEADO - VIDEO
+                            //CASO POSITIVO, CHAMA API E MONTA VIDEO
+                            let v = setInterval(()=>{
+                                let divsVideo = document.querySelectorAll('div');
+                                for(let j=0; j<divsVideo.length; j++){
+                                    for(let iConfig2=0; iConfig2<configs.data_cy.theory_video_content.length; iConfig2++){
+                                        if(divsVideo[j].classList.contains(configs.data_cy.theory_video_content[iConfig2])){
+                                            clearInterval(v);
+                                            if(divsVideo[j].children.length == 0)
+                                            {
+                                                //SETTA MSG DE LOADING
+                                                divsVideo[j].innerHTML = setLoadingPageAnimation();
+        
+                                                //CHAMA API PARA DESBLOQUEAR CONTEUDO
+                                                callAPITheoryUnlocked('video', configs);
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            },800);
+    
+    
+                            //DEFINE NOVA ACAO AO CLICAR NO BOTAO
+                            divs[i].addEventListener("click", ()=>{
+                                let nodes = divs[i].childNodes;
+                                for(let i=0; i<nodes.length; i++){
+                                    if(nodes[i].nodeName == 'P' && nodes[i].textContent == 'Alternar para texto >>'){
+                                        
+                                        //PROCURA DIV PARA RECEBER CONTEUDO
+                                        let s = setInterval(()=>{
+                                            let divsSteps = document.querySelectorAll('div');
+                                            for(let j=0; j<divsSteps.length; j++){
+                                                for(let iConfig2=0; iConfig2<configs.data_cy.theory_text_content.length; iConfig2++){
+                                                    if(divsSteps[j].classList.contains(configs.data_cy.theory_text_content[iConfig2])){
+                                                        clearInterval(s);
+        
+                                                        let divStepsContainer = divsSteps[j].children[0];
+                                                        try{
+                                                            if(
+                                                                divStepsContainer.children[0].isEqualNode(divStepsContainer.children[1]) &&
+                                                                divStepsContainer.children[1].isEqualNode(divStepsContainer.children[2]) && 
+                                                                divStepsContainer.children[2].isEqualNode(divStepsContainer.children[3]) &&
+                                                                divStepsContainer.children[3].isEqualNode(divStepsContainer.children[4]) &&
+                                                                divStepsContainer.children[4].isEqualNode(divStepsContainer.children[5])
+                                                            ){
+                                                                divsSteps[j].innerHTML = setLoadingPageAnimation();
+                                                                callAPITheoryUnlocked("texto", configs);
+                                                                break;
+                                                            }
+                                                        }catch(exception){
+                                                            
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },800);
+                                        break;
+                                    }
+                                    if(nodes[i].nodeName == 'P' && nodes[i].textContent == 'Alternar para video >>'){
+                                        callAPITheoryUnlocked("video");
+                                        if(verificaElemento("#msgLottieDesbloqueio")){
+                                            document.getElementById("msgLottieDesbloqueio").innerHTML = '<p class="lead">Aguarde um momento...<br>Estamos removendo os bloqueios para você...</p>'
+                                        }
                                         break;
                                     }
                                 }
-                            }
-                        },800);
-
-
-                        //DEFINE NOVA ACAO AO CLICAR NO BOTAO
-                        divs[i].addEventListener("click", ()=>{
-                            let nodes = divs[i].childNodes;
-                            for(let i=0; i<nodes.length; i++){
-                                if(nodes[i].nodeName == 'P' && nodes[i].textContent == 'Alternar para texto >>'){
-                                    
-                                    //PROCURA DIV PARA RECEBER CONTEUDO
-                                    let s = setInterval(()=>{
-                                        let divsSteps = document.querySelectorAll('div');
-                                        for(let j=0; j<divsSteps.length; j++){
-                                            if(divsSteps[j].hasAttribute('data-cy') && divsSteps[j].getAttribute('data-cy') == configs.data_cy.theory_text_content){
-                                                clearInterval(s);
-
-                                                let divStepsContainer = divsSteps[j].children[0].children[0];
-                                                try{
-                                                    if(
-                                                        divStepsContainer.children[0].isEqualNode(divStepsContainer.children[1]) &&
-                                                        divStepsContainer.children[1].isEqualNode(divStepsContainer.children[2]) && 
-                                                        divStepsContainer.children[2].isEqualNode(divStepsContainer.children[3]) &&
-                                                        divStepsContainer.children[3].isEqualNode(divStepsContainer.children[4]) &&
-                                                        divStepsContainer.children[4].isEqualNode(divStepsContainer.children[5])
-                                                    ){
-                                                        divsSteps[j].innerHTML = setLoadingPageAnimation();
-                                                        callAPITheoryUnlocked("texto", configs);
-                                                        break;
-                                                    }
-                                                }catch(exception){
-                                                    
+                            });
+                            break;
+                        }else{
+                            //PROCURA DIV PARA RECEBER CONTEUDO
+                            let s = setInterval(()=>{
+                                let divsSteps = document.querySelectorAll('div');
+                                for(let j=0; j<divsSteps.length; j++){
+                                    for(let iConfig2=0; iConfig2<configs.data_cy.theory_text_content.length; iConfig2++){
+                                        if(divsSteps[j].classList.contains(configs.data_cy.theory_text_content[iConfig2])){
+                                            clearInterval(s);
+        
+                                            let divStepsContainer = divsSteps[j].children[0];
+                                            try{
+                                                if(
+                                                    divStepsContainer.children[0].isEqualNode(divStepsContainer.children[1]) &&
+                                                    divStepsContainer.children[1].isEqualNode(divStepsContainer.children[2]) && 
+                                                    divStepsContainer.children[2].isEqualNode(divStepsContainer.children[3]) &&
+                                                    divStepsContainer.children[3].isEqualNode(divStepsContainer.children[4]) &&
+                                                    divStepsContainer.children[4].isEqualNode(divStepsContainer.children[5])
+                                                ){
+                                                    divsSteps[j].innerHTML = setLoadingPageAnimation();
+                                                    callAPITheoryUnlocked("texto", configs);
+                                                    break;
                                                 }
+                                            }catch(exception){
+                                                
                                             }
                                         }
-                                    },800);
-                                    break;
-                                }
-                                if(nodes[i].nodeName == 'P' && nodes[i].textContent == 'Alternar para video >>'){
-                                    callAPITheoryUnlocked("video");
-                                    if(verificaElemento("#msgLottieDesbloqueio")){
-                                        document.getElementById("msgLottieDesbloqueio").innerHTML = '<p class="lead">Aguarde um momento...<br>Estamos removendo os bloqueios para você...</p>'
-                                    }
-                                    break;
-                                }
-                            }
-                        });
-                        break;
-                    }else{
-                        //PROCURA DIV PARA RECEBER CONTEUDO
-                        let s = setInterval(()=>{
-                            let divsSteps = document.querySelectorAll('div');
-                            for(let j=0; j<divsSteps.length; j++){
-                                if(divsSteps[j].hasAttribute('data-cy') && divsSteps[j].getAttribute('data-cy') == configs.data_cy.theory_text_content){
-                                    clearInterval(s);
-
-                                    let divStepsContainer = divsSteps[j].children[0].children[0];
-                                    try{
-                                        if(
-                                            divStepsContainer.children[0].isEqualNode(divStepsContainer.children[1]) &&
-                                            divStepsContainer.children[1].isEqualNode(divStepsContainer.children[2]) && 
-                                            divStepsContainer.children[2].isEqualNode(divStepsContainer.children[3]) &&
-                                            divStepsContainer.children[3].isEqualNode(divStepsContainer.children[4]) &&
-                                            divStepsContainer.children[4].isEqualNode(divStepsContainer.children[5])
-                                        ){
-                                            divsSteps[j].innerHTML = setLoadingPageAnimation();
-                                            callAPITheoryUnlocked("texto", configs);
-                                            break;
-                                        }
-                                    }catch(exception){
-                                        
                                     }
                                 }
-                            }
-                        },800);
+                            },800);
+                        }
                     }
                 }
             },800);
@@ -975,11 +1002,13 @@ function modifyAPPRESPAI()
                             let r = setInterval(()=>{
                                 let divs = document.querySelectorAll('div');
                                 for(let i=0; i<divs.length; i++){
-                                    if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == configs.data_cy.theory_text_content && typeof(MathJax) == "object"){
-                                        clearInterval(r);
-                                        divs[i].innerHTML = '<div class="sc-jTzLTM fFEUnb rendered"><div>' + resp.data.lightBody + '</div></div>';
-                                        MathJax.typeset();
-                                        return;
+                                    for(let iConfig2=0; iConfig2<configs.data_cy.theory_text_content.length; iConfig2++){
+                                        if(divs[i].classList.contains(configs.data_cy.theory_text_content[iConfig2]) && typeof(MathJax) == "object"){
+                                            clearInterval(r);
+                                            divs[i].innerHTML = '<div class="sc-jTzLTM fFEUnb rendered"><div>' + resp.data.lightBody + '</div></div>';
+                                            MathJax.typeset();
+                                            return;
+                                        }
                                     }
                                 }
                             },800);
@@ -991,26 +1020,28 @@ function modifyAPPRESPAI()
                             let r = setInterval(()=>{
                                 let divs = document.querySelectorAll('div');
                                 for(let i=0; i<divs.length; i++){
-                                    if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == configs.data_cy.theory_video_content){
-                                        clearInterval(r);
-                                        if(divs[i].children[0].id == "containerLootieLoading")
-                                        {
-                                            if(resp.data.hasOwnProperty('videos'))
+                                    for(let iConfig2=0; iConfig2<configs.data_cy.theory_video_content.length; iConfig2++){
+                                        if(divs[i].classList.contains(configs.data_cy.theory_video_content[iConfig2])){
+                                            clearInterval(r);
+                                            if(divs[i].children[0].id == "containerLootieLoading")
                                             {
-                                                //REMOVE ANIMACAO DE CARREGAMENTO
-                                                document.getElementById("containerLootieLoading").remove();
-
-                                                //SETA TAMANHO DA PAGINA
-                                                divs[i].style.cssText += 'height: ' + ((SINGLE_VIDEO_SIZE*resp.data.videos.length) + (SPACE_BETWEEN_VIDEOS*resp.data.videos.length)) + 'px !important';
-
-                                                //ITERA SOBRE OBJETO DE RESPOSTA PARA MONTAR PAGINA
-                                                for(let j=0; j<resp.data.videos.length; j++){
-                                                    divs[i].innerHTML += (resp.data.videos[j].provider.includes("youtube"))
-                                                        ? '<div data-cy="video-iframe" allowfullscreen="" frameborder="0" style="width: 100%; height: ' + 100/resp.data.videos.length + '%;"><div style="width: 100%; height: ' + SINGLE_VIDEO_SIZE  + 'px;"><iframe frameborder="0" allowfullscreen="1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" title="YouTube video player" width="100%" height="100%" src="https://www.youtube.com/embed/' + resp.data.videos[j].providerId + '?autoplay=0&amp;mute=0&amp;controls=1&amp;origin=https%3A%2F%2Fapp.respondeai.com.br&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;iv_load_policy=3&amp;modestbranding=1&amp;enablejsapi=1&amp;widgetid=1"></iframe></div></div><div style="height: ' + SPACE_BETWEEN_VIDEOS + 'px !important"></div>'
-                                                        : '<div style="padding:56.25% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/' + resp.data.videos[j].providerId + '" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div><div style="height: ' + SPACE_BETWEEN_VIDEOS + 'px !important"></div>';
+                                                if(resp.data.hasOwnProperty('videos'))
+                                                {
+                                                    //REMOVE ANIMACAO DE CARREGAMENTO
+                                                    document.getElementById("containerLootieLoading").remove();
+    
+                                                    //SETA TAMANHO DA PAGINA
+                                                    divs[i].style.cssText += 'height: ' + ((SINGLE_VIDEO_SIZE*resp.data.videos.length) + (SPACE_BETWEEN_VIDEOS*resp.data.videos.length)) + 'px !important';
+    
+                                                    //ITERA SOBRE OBJETO DE RESPOSTA PARA MONTAR PAGINA
+                                                    for(let j=0; j<resp.data.videos.length; j++){
+                                                        divs[i].innerHTML += (resp.data.videos[j].provider.includes("youtube"))
+                                                            ? '<div data-cy="video-iframe" allowfullscreen="" frameborder="0" style="width: 100%; height: ' + 100/resp.data.videos.length + '%;"><div style="width: 100%; height: ' + SINGLE_VIDEO_SIZE  + 'px;"><iframe frameborder="0" allowfullscreen="1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" title="YouTube video player" width="100%" height="100%" src="https://www.youtube.com/embed/' + resp.data.videos[j].providerId + '?autoplay=0&amp;mute=0&amp;controls=1&amp;origin=https%3A%2F%2Fapp.respondeai.com.br&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;iv_load_policy=3&amp;modestbranding=1&amp;enablejsapi=1&amp;widgetid=1"></iframe></div></div><div style="height: ' + SPACE_BETWEEN_VIDEOS + 'px !important"></div>'
+                                                            : '<div style="padding:56.25% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/' + resp.data.videos[j].providerId + '" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div><div style="height: ' + SPACE_BETWEEN_VIDEOS + 'px !important"></div>';
+                                                    }
+                                                }else{
+                                                    throw new Error('Falha ao obter objeto "videos"');
                                                 }
-                                            }else{
-                                                throw new Error('Falha ao obter objeto "videos"');
                                             }
                                         }
                                     }
@@ -1052,25 +1083,30 @@ function modifyAPPRESPAI()
             let r = setInterval(()=>{
                 let divs = document.querySelectorAll('div');
                 for(let i=0; i<divs.length; i++){
-                    if(divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == configs.data_cy.side_menu){
-                        clearInterval(r);
-                        setTimeout(()=>{
-                            let links = document.querySelectorAll("a");
-                            for(let i=0; i<links.length; i++){
-                                if(
-                                    links[i].getAttribute("href").includes("/aprender") && 
-                                    links[i].getAttribute("href").includes("/topico") &&
-                                    links[i].getAttribute("href").includes("/teoria") &&
-                                    links[i].getAttribute("href").includes("/exercicio/")
-                                ){
-                                    links[i].addEventListener("click", (event)=>{
-                                        event.preventDefault();
-                                        window.location.assign('https://'+ window.location.hostname + links[i].getAttribute("href"));
-                                    });
+                    for(let iConfig=0; iConfig<configs.data_cy.side_menu.length; iConfig++){
+                        if(
+                            (divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == configs.data_cy.side_menu[iConfig]) || 
+                            (divs[i].classList.contains(configs.data_cy.side_menu[iConfig]))
+                        ){
+                            clearInterval(r);
+                            setTimeout(()=>{
+                                let links = document.querySelectorAll("a");
+                                for(let i=0; i<links.length; i++){
+                                    if(
+                                        links[i].getAttribute("href").includes("/aprender") && 
+                                        links[i].getAttribute("href").includes("/topico") &&
+                                        links[i].getAttribute("href").includes("/teoria") &&
+                                        links[i].getAttribute("href").includes("/exercicio/")
+                                    ){
+                                        links[i].addEventListener("click", (event)=>{
+                                            event.preventDefault();
+                                            window.location.assign('https://'+ window.location.hostname + links[i].getAttribute("href"));
+                                        });
+                                    }
                                 }
-                            }
-                        },2000);
-                        break;
+                            },2000);
+                            break;
+                        }
                     }
                 }
             },800);
@@ -1100,9 +1136,11 @@ function modifyAPPRESPAI()
         function enableBodyOverflow(configs)
         {
             let r = setInterval(()=>{
-                if(verificaElemento('.'+configs.logged_enable_scroll_page)){
-                    clearInterval(r);
-                    document.body.style.overflow = "auto"
+                for(let i=0; i<configs.logged_enable_scroll_page.length; i++){
+                    if(verificaElemento('.'+configs.logged_enable_scroll_page[i])){
+                        clearInterval(r);
+                        document.body.style.overflow = "auto"
+                    }
                 }
             },800);
         }
@@ -1111,11 +1149,14 @@ function modifyAPPRESPAI()
         function removeReactModalOverlay(configs)
         {
             let r = setInterval(()=>{
-                let reactModalOverlay = document.querySelectorAll('.'+configs.logged_react_modal);
-                if(reactModalOverlay.length > 0){
-                    clearInterval(r);
-                    for(let i=0; i<reactModalOverlay.length; i++){
-                        reactModalOverlay[i].remove();
+                for(let i=0; i<configs.logged_react_modal.length; i++) {
+                    let reactModalOverlay = document.querySelectorAll('.'+configs.logged_react_modal);
+                    if(reactModalOverlay.length > 0){
+                        clearInterval(r);
+                        reactModalOverlay.forEach((element) => {
+                            element.remove();
+                        })
+                        return;
                     }
                 }
             },800);
@@ -1128,13 +1169,13 @@ function modifyAPPRESPAI()
         function removeDexterBlock(configs)
         {
             let r = setInterval(()=>{
-                let divs = document.querySelectorAll('div');
-                divs.forEach((div)=>{
-                    if(div.hasAttribute('data-cy') && div.getAttribute('data-cy') == configs.logged_dexter_block){
+                for(let iConfig=0; iConfig<configs.logged_dexter_block.length; iConfig++){
+                    if(verificaElemento('.'+ configs.logged_dexter_block[iConfig])){
                         clearInterval(r);
-                        div.remove();
+                        document.querySelector('.' + configs.logged_dexter_block[iConfig]).remove();
+                        return;
                     }
-                });
+                }
             },800);
         }
         
@@ -2090,168 +2131,188 @@ function modifyGZH()
 
 function modifyVLRECON()
 {
-    if(window.location.hostname == "valor.globo.com"){
-        let rotina = setInterval(()=>{
-            if(verificaElemento('.paywall-cpt') || verificaElemento(".barber-barrier-cpnt") || verificaElemento(".paywall")){
-                clearInterval(rotina);
+    axios({
+        method: "GET",
+        url: "https://possoler.tech/API/paywalldom/valoreconomicoConfigs",
+        timeout: 10000
+    }).then((responseConfigs)=>{
+        if(!responseConfigs.data.enabledCacheMock) return;
 
-                let intervalRequest = setInterval(()=>{
-                    if(typeof(axios) == 'function'){
-                        clearInterval(intervalRequest);
+        let intervalRequest = setInterval(()=>{
+            if(typeof(axios) == 'function'){
+                clearInterval(intervalRequest);
 
-                        mountSweetAlert(
-                            'info',
-                            'Aguarde um momento...',
-                            'Estamos removendo os bloqueios para você...<br><br>'
-                        );
-
-                        //RECUPERA ARQUIVO COM CONTEUDO DESBLOQUEADO
-                        axios({
-                            method: 'POST',
-                            url: 'https://possoler.tech/API/cachemock/getArticleContent',
-                            timeout: 30000,
-                            data: JSON.stringify({
-                                key: btoa(window.location.pathname)
-                            }),
-                            headers: {
-                                "Content-Type" : "application/json"
-                            }
-                        }).then((resp)=>{
-                            console.clear();
-                            console.log('SUCESSO GET PAGE CODE');
-                            console.log(resp);
-
-                            let blocoNoticia = resp.data.content;
-                            let blocoOriginal = getArticle(document);
-
-                            let u = setInterval(()=>{
-                                if(blocoNoticia != null && blocoOriginal != null){
-                                    clearInterval(u);
-
-                                    if(blocoNoticia != null && blocoOriginal != false){
-
-                                        blocoOriginal.innerHTML = blocoNoticia;
-                                        sweetAlert(
-                                            'success',
-                                            'Sucesso',
-                                            'Ótimo! Conteúdo desbloqueado!'
-                                        );
-
-                                        setTimeout(()=>{
-                                            removeAds();
-                                            corrigeImgsCache();
-                                        },3000);
-
-                                        //VERIFICA E REMOVE SOFT PAYWALLS
-                                        let f = setInterval(()=>{
-                                            if(verificaElemento('.paywall-cpt') || verificaElemento(".barber-barrier-cpnt")){
-                                                clearInterval(f);
-                                                if(verificaElemento('.paywall-cpt')){
-                                                    removeBloqueioGLOBO();
-                                                }else if(verificaElemento(".barber-barrier-cpnt")){
-                                                    removeBlockCelularVLRECON();
+                if(window.location.hostname == "valor.globo.com"){
+                    let rotina = setInterval(()=>{
+                        if(elementExistInList(responseConfigs.data.paywallNames)){
+                            clearInterval(rotina);
+            
+                            mountSweetAlert(
+                                'info',
+                                'Aguarde um momento...',
+                                'Estamos removendo os bloqueios para você...<br><br>'
+                            );
+            
+                            //RECUPERA ARQUIVO COM CONTEUDO DESBLOQUEADO
+                            axios({
+                                method: 'POST',
+                                url: 'https://possoler.tech/API/cachemock/getArticleContent',
+                                timeout: 30000,
+                                data: JSON.stringify({
+                                    key: btoa(window.location.pathname)
+                                }),
+                                headers: {
+                                    "Content-Type" : "application/json"
+                                }
+                            }).then((resp)=>{
+                                console.clear();
+                                console.log('SUCESSO GET PAGE CODE');
+                                console.log(resp);
+            
+                                let blocoNoticia = resp.data.content;
+                                let blocoOriginal = getArticleValorEconomico(document, responseConfigs.data.containerContent);
+            
+                                let u = setInterval(()=>{
+                                    if(blocoNoticia != null && blocoOriginal != null){
+                                        clearInterval(u);
+            
+                                        if(blocoNoticia != null && blocoOriginal != false){
+            
+                                            blocoOriginal.innerHTML = blocoNoticia;
+                                            sweetAlert(
+                                                'success',
+                                                'Sucesso',
+                                                'Ótimo! Conteúdo desbloqueado!'
+                                            );
+            
+                                            setTimeout(()=>{
+                                                removeAds(responseConfigs.data.adsModel);
+                                                corrigeImgsCache(responseConfigs.data.skeletonImage);
+                                            },3000);
+            
+                                            //VERIFICA E REMOVE SOFT PAYWALLS
+                                            let f = setInterval(()=>{
+                                                if(elementExistInList(responseConfigs.data.paywallNames)){
+                                                    clearInterval(f);
+                                                    removeBlockCelularVLRECON(responseConfigs.data.phonePaywallName);
                                                 }
+                                            },800);
+                                        }else{
+                                            sweetAlert(
+                                                'warning',
+                                                'Atenção',
+                                                'Ops, ainda não é possível desbloquear essa página. <br>Por favor, tente acessar a noticia mais tarde.<br><br>'
+                                            );
+                                            return;
+                                        }
+                                    }
+                                },800);
+            
+                                if(resp.data.hasOwnProperty("content")){
+                                    
+                                }
+                            }).catch((erro)=>{
+                                if(erro.toString().includes('timeout')){
+                                    SwalTimeout(
+                                        'error',
+                                        'Erro',
+                                        `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}`,
+                                        'https://valor.globo.com'
+                                    );
+                                }else if(erro.response.status != 404){
+                                    sweetAlert(
+                                        'error',
+                                        'Erro',
+                                        `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}`
+                                    );
+                                }else{
+                                    setTimeout(()=>{
+                                        window.location.assign(`https://webcache.googleusercontent.com/search?q=cache:${window.location.href}`);
+                                    },1500);
+                                }
+                            });
+                        }
+                    },800)
+                }else{
+                    //TRECHO DO CÓDIGO RESPONSÁVEL POR PEGAR CACHE DA PÁGINA
+            
+                    //SET NO SCROLL PAGE
+                    let u = setInterval(()=>{
+                        if(verificaElemento('body')){
+                            clearInterval(u);
+                            document.body.style.cssText += 'overflow: hidden !important; position: fixed !important;';
+                        }
+                    },800);
+                    
+                    mountSweetAlert(
+                        'info',
+                        'Aguarde mais um momento...',
+                        'Estamos removendo os bloqueios para você...<br><br>'
+                    );
+            
+                    let waitAxios = setInterval(()=>{
+                        if(typeof(axios) == 'function'){
+                            clearInterval(waitAxios);
+            
+                            let key = genHashKey();
+            
+                            //FAZ GET PARA PRÓPRIA PAGINA PARA PEGAR CÓDIGO FONTE DELA
+                            fetch(document.location.href)
+                            .then((response) => {
+                                if(response.status == 200){
+                                    response.text().then(pageSource => {
+            
+                                        pageSource = new DOMParser().parseFromString(pageSource, 'text/html');
+                                        let article = getArticleValorEconomico(pageSource, responseConfigs.data.containerContent);
+                                        let blocoNoticia = (article != false) ? article.outerHTML : pageSource.outerHTML;
+            
+                                        let l = setInterval(()=>{
+                                            if((key != null || key != undefined) && (pageSource != null || pageSource != undefined) && (blocoNoticia != null || blocoNoticia != undefined)){
+                                                clearInterval(l);
+                    
+                                                //FAZ POST PARA CRIAR ARQUIVO JSON COM CONTEUDO DA PÁGINA DE CACHE
+                                                axios({
+                                                    method: 'POST',
+                                                    url: 'https://possoler.tech/API/cachemock/saveArticleContent',
+                                                    timeout: 30000,
+                                                    data: JSON.stringify({
+                                                        key: btoa(key.hash),
+                                                        pageSource: blocoNoticia
+                                                    }),
+                                                    headers : {
+                                                        "Content-Type" : "application/json"
+                                                    }
+                                                }).then((resp)=>{
+                                                    if(resp.status == 201){
+                                                        window.location.replace(key.url);
+                                                    }else{
+                                                        SwalGotoHome(
+                                                            'error',
+                                                            'Erro',
+                                                            `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: [API FAILED TO CREATE FILE] - </spam>${resp.data}`,
+                                                            "https://valor.globo.com"
+                                                        );
+                                                    }
+                                                }).catch((erro)=>{
+                                                    if(erro.toString().includes('timeout')){
+                                                        SwalTimeout(
+                                                            'error',
+                                                            'Erro',
+                                                            `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`,
+                                                            "https://valor.globo.com"
+                                                        );
+                                                    }else{
+                                                        SwalGotoHome(
+                                                            'error',
+                                                            'Erro',
+                                                            `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`,
+                                                            "https://valor.globo.com"
+                                                        );
+                                                    }
+                                                });
                                             }
                                         },800);
-                                    }else{
-                                        sweetAlert(
-                                            'warning',
-                                            'Atenção',
-                                            'Ops, ainda não é possível desbloquear essa página. <br>Por favor, tente acessar a noticia mais tarde.<br><br>'
-                                        );
-                                        return;
-                                    }
-                                }
-                            },800);
-
-                            if(resp.data.hasOwnProperty("content")){
-                                
-                            }
-                        }).catch((erro)=>{
-                            if(erro.toString().includes('timeout')){
-                                SwalTimeout(
-                                    'error',
-                                    'Erro',
-                                    `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}`,
-                                    'https://valor.globo.com'
-                                );
-                            }else if(erro.response.status != 404){
-                                sweetAlert(
-                                    'error',
-                                    'Erro',
-                                    `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}`
-                                );
-                            }else{
-                                setTimeout(()=>{
-                                    window.location.assign(`https://webcache.googleusercontent.com/search?q=cache:${window.location.href}`);
-                                },1500);
-                            }
-                        });
-                    }
-                },800);
-            }
-        },800);
-    }else{
-        //TRECHO DO CÓDIGO RESPONSÁVEL POR PEGAR CACHE DA PÁGINA
-
-        //SET NO SCROLL PAGE
-        let u = setInterval(()=>{
-            if(verificaElemento('body')){
-                clearInterval(u);
-                document.body.style.cssText += 'overflow: hidden !important; position: fixed !important;';
-            }
-        },800);
-        
-        mountSweetAlert(
-            'info',
-            'Aguarde mais um momento...',
-            'Estamos removendo os bloqueios para você...<br><br>'
-        );
-
-        let waitAxios = setInterval(()=>{
-            if(typeof(axios) == 'function'){
-                clearInterval(waitAxios);
-
-                let key = genHashKey();
-
-                //FAZ GET PARA PRÓPRIA PAGINA PARA PEGAR CÓDIGO FONTE DELA
-                fetch(document.location.href)
-                .then((response) => {
-                    if(response.status == 200){
-                        response.text().then(pageSource => {
-
-                            pageSource = new DOMParser().parseFromString(pageSource, 'text/html');
-                            let article = getArticle(pageSource);
-                            let blocoNoticia = (article != false) ? article.outerHTML : pageSource.outerHTML;
-
-                            let l = setInterval(()=>{
-                                if((key != null || key != undefined) && (pageSource != null || pageSource != undefined) && (blocoNoticia != null || blocoNoticia != undefined)){
-                                    clearInterval(l);
-        
-                                    //FAZ POST PARA CRIAR ARQUIVO JSON COM CONTEUDO DA PÁGINA DE CACHE
-                                    axios({
-                                        method: 'POST',
-                                        url: 'https://possoler.tech/API/cachemock/saveArticleContent',
-                                        timeout: 30000,
-                                        data: JSON.stringify({
-                                            key: btoa(key.hash),
-                                            pageSource: blocoNoticia
-                                        }),
-                                        headers : {
-                                            "Content-Type" : "application/json"
-                                        }
-                                    }).then((resp)=>{
-                                        if(resp.status == 201){
-                                            window.location.replace(key.url);
-                                        }else{
-                                            SwalGotoHome(
-                                                'error',
-                                                'Erro',
-                                                `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: [API FAILED TO CREATE FILE] - </spam>${resp.data}`,
-                                                "https://valor.globo.com"
-                                            );
-                                        }
-                                    }).catch((erro)=>{
+                                    }).catch((erro) => {
                                         if(erro.toString().includes('timeout')){
                                             SwalTimeout(
                                                 'error',
@@ -2260,25 +2321,34 @@ function modifyVLRECON()
                                                 "https://valor.globo.com"
                                             );
                                         }else{
-                                            SwalGotoHome(
-                                                'error',
-                                                'Erro',
-                                                `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`,
-                                                "https://valor.globo.com"
-                                            );
+                                            if(erro.toString().includes('timeout')){
+                                                SwalTimeout(
+                                                    'error',
+                                                    'Erro',
+                                                    `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`,
+                                                    "https://valor.globo.com"
+                                                );
+                                            }else{
+                                                SwalGotoHome(
+                                                    'error',
+                                                    'Erro',
+                                                    `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`,
+                                                    "https://valor.globo.com"
+                                                );
+                                            }
                                         }
                                     });
+                                }else if(response.status == 404){
+                                    SwalGotoHome(
+                                        'warning',
+                                        'Atenção',
+                                        'Ops, ainda não é possível desbloquear essa página. <br>Por favor, tente acessar a noticia mais tarde.<br><br>',
+                                        "https://valor.globo.com"
+                                    );
+                                }else{
+                                    throw `Wrong HTTPS Status on get cache content - HTTPS STATUS ${response.status}`;
                                 }
-                            },800);
-                        }).catch((erro) => {
-                            if(erro.toString().includes('timeout')){
-                                SwalTimeout(
-                                    'error',
-                                    'Erro',
-                                    `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`,
-                                    "https://valor.globo.com"
-                                );
-                            }else{
+                            }).catch((erro)=>{
                                 if(erro.toString().includes('timeout')){
                                     SwalTimeout(
                                         'error',
@@ -2294,38 +2364,27 @@ function modifyVLRECON()
                                         "https://valor.globo.com"
                                     );
                                 }
-                            }
-                        });
-                    }else if(response.status == 404){
-                        SwalGotoHome(
-                            'warning',
-                            'Atenção',
-                            'Ops, ainda não é possível desbloquear essa página. <br>Por favor, tente acessar a noticia mais tarde.<br><br>',
-                            "https://valor.globo.com"
-                        );
-                    }else{
-                        throw `Wrong HTTPS Status on get cache content - HTTPS STATUS ${response.status}`;
-                    }
-                }).catch((erro)=>{
-                    if(erro.toString().includes('timeout')){
-                        SwalTimeout(
-                            'error',
-                            'Erro',
-                            `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`,
-                            "https://valor.globo.com"
-                        );
-                    }else{
-                        SwalGotoHome(
-                            'error',
-                            'Erro',
-                            `Ops, tivemos um pequeno problema!<br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro}`,
-                            "https://valor.globo.com"
-                        );
-                    }
-                });
-            }    
-        },800);
-    }
+                            });
+                        }    
+                    },800);
+                }
+            }
+        },800); 
+    }).catch((erro)=>{
+        if(erro.toString().includes('timeout')){
+            sweetAlert(
+                'error',
+                'Erro',
+                `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}`,
+            );
+        }else{
+            sweetAlert(
+                'error',
+                'Erro',
+                `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}`
+            );
+        }
+    })
 }
 
 
@@ -2422,23 +2481,24 @@ function mountSweetAlert(icon, title, msg)
 }
 
 
-function corrigeImgsCache()
+function corrigeImgsCache(skeletonImageConfig)
 {
     let divs = document.querySelectorAll('div');
 
     for(let i=0; i<divs.length; i++){
-        if(divs[i].classList.contains("glb-skeleton-box")){
-            divs[i].classList.remove("glb-skeleton-box");
+        if(divs[i].classList.contains(`${skeletonImageConfig}`)){
+            divs[i].classList.remove(`${skeletonImageConfig}`);
             divs[i].style.cssText += 'padding-top: 0 !important;';
         }
     }
 }
 
 
-function removeBlockCelularVLRECON()
+function removeBlockCelularVLRECON(phonePaywall)
 {
+
     try{
-        let block = document.querySelector(".barber-barrier-cpnt");
+        let block = document.querySelector(`.${phonePaywall}`);
 
         if(block != null || block != undefined)
         {
@@ -2501,42 +2561,28 @@ function sweetAlert(icon, title, msg)
 }
 
 
-function getArticle(scope)
+function getArticleValorEconomico(scope, containerContentConfig)
 {
-    let protectedArticle = scope.querySelector(".protected-content");
+    let protectedArticle = scope.querySelector(`.${containerContentConfig}`);
     return (protectedArticle != null && protectedArticle != undefined) 
         ? protectedArticle 
         : false;
 }
 
 
-function removeAds()
+function removeAds(adsConfig)
 {
     let divs = document.querySelectorAll('div');
 
     for(let i=0; i<divs.length; i++){
-        if(divs[i].hasAttribute("data-block-type")){
-            if(divs[i].getAttribute("data-block-type").includes("ads")){
+        if(divs[i].hasAttribute(`${adsConfig.adsClassName}`)){
+            if(divs[i].getAttribute(`${adsConfig.adsClassName}`).includes(`${adsConfig.adsKeyword}`)){
                 divs[i].remove();
             }
         }
     }
 }
 
-
-function removeBloqueioGLOBO()
-{
-    document.querySelector('.paywall-cpt').remove();
-    document.body.style.overflow = 'auto';
-    document.body.style.position = 'unset';
-    try{
-        document.querySelector('.banner-bottom-fixed-cpnt').remove();
-    }catch(erro){
-        console.log('ERRO AO REMOVER FOOTER = ' + erro);
-    }
-    verificaAtualizacaoVersao();
-    incrementaConteudoAPI();
-}
 
 
 /* ====================== EL PAIS =========================== */
@@ -2728,7 +2774,7 @@ function modifyEXAME()
 
         try{
             let unlockedContent = "";
-            (__NEXT_DATA__.props.pageProps.postData).forEach((data)=>{
+            (__NEXT_DATA__.props.pageProps.postOrSubcategoryProps.postData).forEach((data)=>{
                 unlockedContent += (data.hasOwnProperty("content")) ? data.content : "";
             });
             document.querySelector(".news-content-container").innerHTML = unlockedContent;
@@ -3391,6 +3437,18 @@ function saveDataForDashboard(codigoSite)
 /* ========================== METODOS GLOBAIS ===================================== */
 
 var contMessageIndex=0;
+
+
+function elementExistInList(elementList)
+{
+    for(let i=0; i<elementList.length; i++) {
+        if(document.querySelector(`.${elementList[i]}`) != null){
+            return true;
+        }
+    }
+    return false;
+}
+
 
 function verificaElemento(elemento)
 {

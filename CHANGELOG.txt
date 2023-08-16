@@ -356,3 +356,23 @@
 
 [22/03/2023]
 # CRX Atualizado;
+
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-= v2.9.7 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+[01/05/2023]
+# Adicionado Sempre Familia;
+
+[31/05/2023]
+# Adicionado Uol;
+# Adicionado CDN de configuração de bloqueio de paywall Valor Economico;
+# Atualização da API para versão 0.3.2-RELEASE;
+
+[03/06/2023]
+# Bypass Responde Aí atualizado;
+# Remoção bloqueio de detecção da extensão em Responde Aí;
+# CRX Atualizado;
+
+[26/06/2023]
+# Ajuste Bypass Revista Exame;
+# Ajuste Bypass Veja;
