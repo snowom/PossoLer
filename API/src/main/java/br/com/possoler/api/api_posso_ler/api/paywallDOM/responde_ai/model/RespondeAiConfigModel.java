@@ -22,7 +22,7 @@ public class RespondeAiConfigModel {
     private DataCyModel data_cy;
     private Integer paywall_height_size;
     private String logged_locked_icons;
-    private String logged_enable_scroll_page;
-    private String logged_react_modal;
-    private String logged_dexter_block;
+    private List<String> logged_enable_scroll_page;
+    private List<String> logged_react_modal;
+    private List<String> logged_dexter_block;
 }

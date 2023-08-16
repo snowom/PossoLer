@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin(origins = "*")
-public class paywallDOMController {
+public class RespondeAiPaywallDOMController {
 
     @Autowired
     RespondeAiPaywallDOMService respondeAiPaywallDOMService;

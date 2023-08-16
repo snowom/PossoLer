@@ -12,6 +12,7 @@ public enum en_MenuLateralEnum {
     MENU_LATERAL_PERGUNTAS("Asks"),
     MENU_LATERAL_TECNOLOGIAS("Technologies"),
     MENU_LATERAL_TUTORIAIS("Tutorials"),
+    MENU_LATERAL_SOBREMIM("About_Me"),
     MENU_LATERAL_COMENTARIOS("Comments"),
     MENU_LATERAL_VAIUMCAFE("#WantACoffee?");
 

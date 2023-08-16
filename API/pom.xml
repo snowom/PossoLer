@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>br.com.possoler.api</groupId>
 	<artifactId>api_posso_ler</artifactId>
-	<version>0.2.2-RELEASE</version>
+	<version>0.3.2-RELEASE</version>
 	<name>api_posso_ler</name>
 	<description>API da extensão Posso Ler? em Spring Boot</description>
 	<properties>

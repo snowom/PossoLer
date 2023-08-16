@@ -19,6 +19,7 @@ public class MenuLateral {
     private String MenuLateralPerguntas;
     private String MenuLateralTecnologias;
     private String MenuLateralTutoriais;
+    private String MenuLateralSobreMim;
     private String MenuLateralComentarios;
     private String MenuLateralVaiUmCafe;
 

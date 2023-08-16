@@ -53,6 +53,9 @@ public class CDNFileService {
         if(file.equalsIgnoreCase(CDNEnum.SPRING_LOGO.getFileParamName())) {
             return CDNEnum.SPRING_LOGO.getFilename();
         }
+        if(file.equalsIgnoreCase(CDNEnum.RESPONDE_AI_LOGO.getFileParamName())) {
+            return CDNEnum.RESPONDE_AI_LOGO.getFilename();
+        }
         throw new NotFoundException("Arquivo CDN não encontrado");
     }
 }

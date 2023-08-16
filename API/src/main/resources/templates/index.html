@@ -94,11 +94,21 @@
         <li>
             <a id="tutorials_icon" href="#blockTutorial">
                 <i>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" style="transform: ;msFilter:;"><path d="M20 3H4c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2zm.001 6c-.001 0-.001 0 0 0h-.465l-2.667-4H20l.001 4zM9.536 9 6.869 5h2.596l2.667 4H9.536zm5 0-2.667-4h2.596l2.667 4h-2.596zM4 5h.465l2.667 4H4V5zm0 14v-8h16l.002 8H4z"></path><path d="m10 18 5.5-3-5.5-3z"></path></svg>                </i>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" style="transform: ;msFilter:;"><path d="M20 3H4c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V5c0-1.103-.897-2-2-2zm.001 6c-.001 0-.001 0 0 0h-.465l-2.667-4H20l.001 4zM9.536 9 6.869 5h2.596l2.667 4H9.536zm5 0-2.667-4h2.596l2.667 4h-2.596zM4 5h.465l2.667 4H4V5zm0 14v-8h16l.002 8H4z"></path><path d="m10 18 5.5-3-5.5-3z"></path></svg>
+                </i>
                 <span class="links_name" th:text="${menuLateral.MenuLateralTutoriais}"></span>
             </a>
             <span class="tooltip" th:text="${menuLateral.MenuLateralTutoriais}"></span>
         </li>
+        <!-- <li>
+            <a id="aboutme_icon" href="#blockSobreMim">
+                <i>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="transform: ;msFilter:;"><path d="M12 2a5 5 0 1 0 5 5 5 5 0 0 0-5-5zm0 8a3 3 0 1 1 3-3 3 3 0 0 1-3 3zm9 11v-1a7 7 0 0 0-7-7h-4a7 7 0 0 0-7 7v1h2v-1a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v1z"></path></svg>
+                </i>
+                <span class="links_name" th:text="${menuLateral.MenuLateralSobreMim}"></span>
+            </a>
+            <span class="tooltip" th:text="${menuLateral.MenuLateralSobreMim}"></span>
+        </li> -->
         <li>
             <a id="comments_icon" href="#divComentario">
                 <i>
@@ -638,6 +648,53 @@
     </div>
     <!-- FIM BLOCO TUTORIAIS -->
 
+
+    <!-- BLOCO SOBRE MIM -->
+    <!-- <hr id="blockSobreMim">
+    <div class="container-fluid">
+        <div class="container d-flex justify-content-center">
+            <h2 class="display-4 text-center">Sobre Mim</h2>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow p-3 mt-5 rounded">
+                    <div class="row">
+                        <div class="col-12 col-md-4 d-flex justify-content-center">
+                            <img class="img-fluid card-img-top rounded-circle" style="width: 400px !important; height: 400px !important; margin-top: 100px !important" src="https://avatars.githubusercontent.com/u/70149250?v=4" alt="Sobre mim"/>
+                        </div>
+                        <div class="col-12 col-md-8">
+                            <div class="card-body">
+                                <h2 class="display-4 subtitulo">Thomaz - Desenvolvedor de Software Backend</h2>
+                                <p class="card-text">
+                                    <p class="lead">
+                                        Falaaa galera! Tudo certo com vocês? Decidi dar as caras e vim aqui contar um pouquinho sobre mim!
+                                        <br>
+                                        Meu nome é Thomaz, tenho 24 anos, e sou o idealizador, criador e desenvolvedor responsável por esse projeto aqui!
+                                    </p>
+                                    <p class="lead">
+                                        Atualmente, sou um estudante sofredor de Bacharelado Interdisciplinar em Ciência e Tecnologia, e Bacharelado em Ciência da Computação na Universidade Federal do ABC (UFABC), e trabalho como desenvolvedor backend Java e Golang. Também curto bastante a parte de Cybersegurança, principalmente sobre vulnerabilidades e como elas podem ser exploradas. 
+                                    </p>
+                                    <p class="lead">
+                                        No meu tempo livre, curto descansar bastante e dormir para recuperar todas as noites mal dormidas e o desgaste que a facul me proporciona, curto sair e andar de bicicleta pelas ruas de SP, e por incrível que pareça, gosto de uma boa festa, inclusive as universitárias, e de estar com meus amigos batendo um bom papo em uma mesinha de bar acompanhada de boas histórias e risadas!
+                                    </p>
+                                    <p class="lead">
+                                        Estou sempre pensando em como fazer as coisas de maneira mais simples e fáceis, e como posso transformar o mundo (ou pelo menos a vida das pessoas) um pouco melhor usando meus conhecimentos! 
+                                        <br><br>
+                                        <em><strong>Da ZN para o mundão! 🚀</strong></em>
+                                        <br><br>
+                                        <em><q>Entre milhões de views e milhões de ninguém viu</q></em> - Black Alien - Take Ten
+                                    </p>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <!-- FIM BLOCO SOBRE MIM -->
+
+
     <!-- INICIO BLOCO COMENTARIOS DISQUS -->
     <hr id="divComentario">
     <div class="container">
@@ -646,6 +703,7 @@
             <div id="disqus_thread"></div>
         </div>
     </div>
+
 
     <!-- INICIO FOOTER -->
     <footer class="footer-area footer--light">
@@ -714,6 +772,8 @@
         <!-- <script src="js/alertFerias.js"></script> -->
         <!-- DOWNLOAD EXTENSION -->
         <script src="js/downloadExtension.js"></script>
+        <!-- ALERT RESPONDE AI -->
+        <script src="js/alertRespai.js"></script>
         <!-- ALERT FIM MANUTENCAO -->
         <!--<script src="js/alertFimManutencao.js"></script>-->
 

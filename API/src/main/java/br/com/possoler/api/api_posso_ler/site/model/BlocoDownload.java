@@ -16,4 +16,5 @@ public class BlocoDownload {
     private String labelOpcoes;
     private String labelDesktopDownload;
     private String labelMobileDownload;
+    private String labelRecuperacaoChaveDeAcesso;
 }

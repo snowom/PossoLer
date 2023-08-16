@@ -6,16 +6,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class DataCyModel {
-    private String format_toggle;
-    private String theory_text_content;
-    private String theory_video_content;
-    private String exercise_answer_button;
-    private String exercise_statement;
-    private String side_menu;
+    private List<String> format_toggle;
+    private List<String> theory_text_content;
+    private List<String> theory_video_content;
+    private List<String> exercise_answer_button;
+    private List<String> exercise_statement;
+    private List<String> side_menu;
 }

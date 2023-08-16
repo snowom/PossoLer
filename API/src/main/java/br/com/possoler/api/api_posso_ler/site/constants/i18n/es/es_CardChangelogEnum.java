@@ -10,10 +10,14 @@ public enum es_CardChangelogEnum {
     LABEL_5("- Descargue la última versión <a id=\"linkInstalacao\" href=\"\"> AQUÍ </a>"),
     LABEL_6("¿Que hay de nuevo en esta versión?"),
     LABEL_7(
-    "<li class=\"lead\">Corrección bypass Valor Econômico</li>" +
-        "<li class=\"lead\">Se agregó soporte Periódico GAZ - Gazeta Santa Cruz do Sul</li>"
+    "<li class=\"lead\">Se agregó soporte Uol</li>"+
+        "<li class=\"lead\">Se agregó soporte Sempre Família</li>" +
+        "<li class=\"lead\">Corrección bypass en Veja</li>" +
+        "<li class=\"lead\">Corrección bypass en Revista Exame y Exame Invest</li>"
     ),
     LABEL_8(
+    "<li class=\"lead\">Corrección bypass en Responde Aí</li>" +
+        "<li class=\"lead\">Eliminación del bloqueo de detección de la extensión en Responde Aí</li>" +
         "<li class=\"lead\">Mejoras en el rendimiento de la extensión</li>" +
         "<li class=\"lead\">Se corrigieron algunos errores en versiones anteriores</li>"
     ),
