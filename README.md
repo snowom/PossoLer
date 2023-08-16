@@ -8,8 +8,8 @@
 <br>
 <br>
 <img src="https://img.shields.io/badge/License-MIT-orange.svg"/>
-<img src="https://img.shields.io/badge/Versão atual-2.8.7-green.svg"/>
-<img src="https://img.shields.io/badge/Data atualização-23/03/2023-blue.svg"/>
+<img src="https://img.shields.io/badge/Versão atual-2.9.7-green.svg"/>
+<img src="https://img.shields.io/badge/Data atualização-16/08/2023-blue.svg"/>
 <img src="https://img.shields.io/badge/Tecnologia-Java 14-red.svg"/>
 <img src="https://img.shields.io/badge/Tecnologia-Spring Boot 2.7.8-orange.svg"/>
 <img src="https://img.shields.io/badge/Tecnologia-Javascript-yellow.svg"/>
@@ -57,6 +57,8 @@
 * [Revista Casa e Jardim](https://revistacasaejardim.globo.com/)
 * [Veja Saude](https://saude.abril.com.br/)
 * [GAZ](https://www.gaz.com.br/) - Ler sobre <i>**Cache Mock**</i> na seção de <i>Perguntas Frequentes</i>
+* [Uol Tab](https://tab.uol.com.br/)
+* [Sempre Familia](https://www.semprefamilia.com.br/)
 
 ## Perguntas Frequentes
 
