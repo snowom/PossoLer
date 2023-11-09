@@ -18,11 +18,15 @@ public class OTempoService {
      */
     public OTempoDTO returnDTOObject()
     {
+        String dashboardApiUrl = getEnvConfig("jornal-o-tempo-api.variable.dashboard-api-url");
+        String cookieAllowCredit = getEnvConfig("jornal-o-tempo-api.variable.cookie-allow-credit");
+        String restServiceTokenEncoded = getEnvConfig("jornal-o-tempo-api.variable.o-tempo-rest-service-token-encoded");
+
         return OTempoDTO.builder()
-                .DASHBOARD_API_URL(this.getEnvConfig("jornal-o-tempo-api.variable.dashboard-api-url"))
-                .COOKIE_ALLOW_CREDIT(this.getEnvConfig("jornal-o-tempo-api.variable.cookie-allow-credit"))
-                .OTEMPO_REST_SERVICE_TOKEN_ENCODED(this.getEnvConfig("jornal-o-tempo-api.variable.o-tempo-rest-service-token-encoded"))
-                .build();
+            .DASHBOARD_API_URL(dashboardApiUrl)
+            .COOKIE_ALLOW_CREDIT(cookieAllowCredit)
+            .OTEMPO_REST_SERVICE_TOKEN_ENCODED(restServiceTokenEncoded)
+            .build();
     }
 
     /**
@@ -33,6 +37,6 @@ public class OTempoService {
      */
     private String getEnvConfig(String configName)
     {
-        return this.env.getProperty(configName);
+        return env.getProperty(configName);
     }
 }

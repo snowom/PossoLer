@@ -21,11 +21,11 @@ public class CDNFileService {
     //private final String CDN_PATH = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\CDN\\";
 
     public void readCdnFile(String fileParamName) throws IOException, NotFoundException {
-        String filename = this.getFileName(fileParamName);
-        File file = new File(this.CDN_PATH + filename);
+        String filename = getFileName(fileParamName);
+        File file = new File(CDN_PATH + filename);
         FileInputStream inputStream = new FileInputStream(file);
-        IOUtils.copy(inputStream, this.response.getOutputStream());
-        this.response.flushBuffer();
+        IOUtils.copy(inputStream, response.getOutputStream());
+        response.flushBuffer();
     }
 
     private String getFileName(String file) {
