@@ -35,32 +35,32 @@ public class RespondeAiService {
      */
     public Object getData(String operation, ExerciseRequestDTO payload, String token)
     {
-        HttpHeaders header = this.setHeaders(token);
+        HttpHeaders header = setHeaders(token);
         String URI = buildURIRequest(operation, payload.getItemId());
 
         if((isBookData(operation))){
-            this.httpMethod = HttpMethod.GET;
-            this.entity = new HttpEntity<>(header);
+            httpMethod = HttpMethod.GET;
+            entity = new HttpEntity<>(header);
         }else{
-            this.httpMethod = HttpMethod.POST;
+            httpMethod = HttpMethod.POST;
             String operationName = defineOperationName(operation);
             String query = defineQuery(operation);
-            ExerciseRequestPayloadDTO bodyRequest = this.buildBodyRequest(operationName, query, payload.getItemId());
-            this.entity = new HttpEntity<>(bodyRequest, header);
+            ExerciseRequestPayloadDTO bodyRequest = buildBodyRequest(operationName, query, payload.getItemId());
+            entity = new HttpEntity<>(bodyRequest, header);
         }
 
-        this.response = restTemplate.exchange(URI, this.httpMethod, entity, String.class);
+        response = restTemplate.exchange(URI, httpMethod, entity, String.class);
 
-        if(!this.response.hasBody())
+        if(!response.hasBody())
             throw new NotFoundException("Não há conteúdos para exibir");
 
-        String responseBody = this.response.getBody().toString();
+        String responseBody = response.getBody().toString();
 
         var responseFunction = switch (operation) {
-            case Request.OPERATION_THEORY -> this.mountTheoryResponse(responseBody);
-            case Request.OPERATION_FIXATION_EXERCISE -> this.mountExerciseFixationResponse(responseBody);
-            case Request.OPERATION_LIST_EXERCISE -> this.mountListExerciseResponse(responseBody);
-            default -> this.parseResponseToEntity(responseBody);
+            case Request.OPERATION_THEORY -> mountTheoryResponse(responseBody);
+            case Request.OPERATION_FIXATION_EXERCISE -> mountExerciseFixationResponse(responseBody);
+            case Request.OPERATION_LIST_EXERCISE -> mountListExerciseResponse(responseBody);
+            default -> parseResponseToEntity(responseBody);
         };
 
         return responseFunction;
@@ -85,7 +85,7 @@ public class RespondeAiService {
                 videos.add(VideoResponseDTO.builder()
                     .providerId((String) videoResponse.getJSONObject(i).get("providerId"))
                     .provider((String) videoResponse.getJSONObject(i).get("provider"))
-                    .__typename((String) videoResponse.getJSONObject(i).get("__typename"))
+                    .typename((String) videoResponse.getJSONObject(i).get("__typename"))
                     .build());
             }
         }catch (Exception e) {
@@ -118,12 +118,16 @@ public class RespondeAiService {
         try{
             JSONObject theoryObject = jsonObject.getJSONObject("data").getJSONObject("exercise");
             JSONArray videoResponse = (JSONArray) theoryObject.get("videos");
+
             for(int i=0; i<videoResponse.length(); i++) {
-                videos.add(VideoResponseDTO.builder()
+
+                var videoResponseDTO = VideoResponseDTO.builder()
                     .providerId((String) videoResponse.getJSONObject(i).get("providerId"))
                     .provider((String) videoResponse.getJSONObject(i).get("provider"))
-                    .__typename((String) videoResponse.getJSONObject(i).get("__typename"))
-                    .build());
+                    .typename((String) videoResponse.getJSONObject(i).get("__typename"))
+                    .build();
+
+                videos.add(videoResponseDTO);
             }
         }catch (Exception e) {
             throw new ServerErrorException("[Exercise fixation] - Falha ao obter objeto \"videos\"");
@@ -155,12 +159,16 @@ public class RespondeAiService {
         try{
             JSONObject theoryObject = jsonObject.getJSONObject("data").getJSONObject("listExercise");
             JSONArray videoResponse = (JSONArray) theoryObject.get("videos");
+
             for(int i=0; i<videoResponse.length(); i++) {
-                videos.add(VideoResponseDTO.builder()
+
+                var videoResponseDto = VideoResponseDTO.builder()
                     .providerId((String) videoResponse.getJSONObject(i).get("providerId"))
                     .provider((String) videoResponse.getJSONObject(i).get("provider"))
-                    .__typename((String) videoResponse.getJSONObject(i).get("__typename"))
-                    .build());
+                    .typename((String) videoResponse.getJSONObject(i).get("__typename"))
+                    .build();
+
+                videos.add(videoResponseDto);
             }
         }catch (Exception e) {
             throw new ServerErrorException("[List exercise] - Falha ao obter objeto \"videos\"");
