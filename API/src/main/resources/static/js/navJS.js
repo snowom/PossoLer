@@ -11,7 +11,7 @@ btnMenu.onclick = () =>{
 let elements = [
     "download_icon", "home_icon", "info_icon", "question_icon", "comments_icon",
     "github_icon", "coffe_icon", "donate_icon", "wallSidebarOpen", "tech_icon",
-    "tutorials_icon", "aboutme_icon"
+    "tutorials_icon"
 ]
 
 elements.forEach((element)=>{

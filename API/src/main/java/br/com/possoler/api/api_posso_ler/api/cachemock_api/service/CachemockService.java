@@ -10,9 +10,7 @@ import exceptions.ServerErrorException;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,6 +20,8 @@ public class CachemockService {
 
     @Autowired
     private Environment env;
+    @Autowired
+    private ObjectMapper objectMapper;
     private final String RESOURCES_PATH = System.getProperty("user.dir") + PathConstants.FOLDER_POSSOLER_INTEGRATOR + "/cachemock/jsonFiles/";
     //private final String RESOURCES_PATH = System.getProperty("user.dir") + "\\src\\main\\resources\\cachemock\\jsonFiles\\";
 
@@ -34,12 +34,11 @@ public class CachemockService {
     public Boolean createUnlockedFile(PostArticleEntity postModel)
     {
         try {
-            if(this.checkPostBodyParameters(postModel)){
-                ObjectMapper mapper = new ObjectMapper();
-                mapper.writeValue(new File(this.RESOURCES_PATH + postModel.getKey()), PostModelDTO.parseToDTO(postModel));
-                return true;
+            if(!checkPostBodyParameters(postModel)){
+                return false;
             }
-            return false;
+            objectMapper.writeValue(new File(this.RESOURCES_PATH + postModel.getKey()), PostModelDTO.parseToDTO(postModel));
+            return true;
         } catch (IOException | ClientErrorException e) {
             throw new RuntimeException(e);
         }
@@ -70,8 +69,7 @@ public class CachemockService {
      */
     public PostModelDTO getUnlockedFileContent(String key) {
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            return mapper.readValue(new File(this.RESOURCES_PATH + key), PostModelDTO.class);
+            return objectMapper.readValue(new File(this.RESOURCES_PATH + key), PostModelDTO.class);
         } catch (IOException | RuntimeException e) {
             throw new NotFoundException("o arquivo solicitado não foi encontrado em cache");
         }
