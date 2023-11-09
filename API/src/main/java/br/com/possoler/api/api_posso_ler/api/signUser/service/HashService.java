@@ -20,15 +20,15 @@ public class HashService {
     private String userCode;
 
     public String generateHash() {
-        this.userCode = this.mountUserCode();
-        return DigestUtils.sha3_256Hex(this.userCode);
+        userCode = mountUserCode();
+        return DigestUtils.sha3_256Hex(userCode);
     }
 
     private String mountUserCode() {
-        Integer quantidadeDownloads = this.getQuantidadeDownloads();
-        String currentDate = this.getCurrentDateOrTime("dd/MM/yyyy");
-        String currentTime = this.getCurrentDateOrTime("HH:mm:ss");
-        Integer randomCode = this.generateRandomCode();
+        Integer quantidadeDownloads = getQuantidadeDownloads();
+        String currentDate = getCurrentDateOrTime("dd/MM/yyyy");
+        String currentTime = getCurrentDateOrTime("HH:mm:ss");
+        Integer randomCode = generateRandomCode();
         return quantidadeDownloads.toString() + "~" + currentDate + "~" + currentTime + "~" + randomCode;
     }
 

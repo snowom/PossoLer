@@ -27,7 +27,7 @@ public class UsuarioService{
 
     public HashMap<String, String> isUniqueUser(String hash) {
         HashMap<String, String> response = new HashMap<>();
-        List<Usuario> usuarios = this.buscaUsuariosPorHash(hash);
+        List<Usuario> usuarios = buscaUsuariosPorHash(hash);
 
         switch (usuarios.toArray().length) {
             case 0 -> {
@@ -52,7 +52,7 @@ public class UsuarioService{
     }
 
     public void activeUser(String hash) {
-        List<Usuario> usuarios = this.findUserByHashAndAtivo(hash, false);
+        List<Usuario> usuarios = findUserByHashAndAtivo(hash, false);
         switch (usuarios.toArray().length) {
             case 0 -> throw new NotFoundException("chave inválida!");
             case 1 -> {
