@@ -1323,15 +1323,16 @@ function removeBlurPage(configs)
  */
 function enableBodyOverflow(configs)
 {
-    let r = setInterval(()=>{
-        for(let i=0; i<configs.logged_enable_scroll_page.length; i++){
-            if(verificaElemento(`.${configs.logged_enable_scroll_page[i]}`)){
-                clearInterval(r);
-                document.body.style.overflow = "auto"
-                return;
-            }
+    for(let i=0; i<configs.logged_enable_scroll_page.length; i++){
+        if(verificaElemento(`.${configs.logged_enable_scroll_page[i]}`)){
+            document.body.style.overflow = "auto"
+            return;
         }
-    },800);
+    }
+
+    setTimeout(() => {
+        enableBodyOverflow(configs);
+    }, 800);
 }
 
 
