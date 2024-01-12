@@ -2967,26 +2967,11 @@ function checkButtonCreation()
             new RegExp('\/exercicio\/[0-9]+').test(fullURL))
             || (fullURL.includes("/conteudo/") && fullURL.includes("/livro/"))
         ){
-            verificaAtualizacaoVersao();
-
-            //RESPOSTA LIVRO - USUARIO DESLOGADO
-            if(fullURL.includes("/conteudo/") && fullURL.includes("/livro/")){
-                setInterval(()=>{
-                    removeShowCompleteSolutionButtons();
-                    let sections = document.querySelectorAll('section');
-                    for(let i = 0; i<sections.length; i++){
-                        sections[i].style.filter = 'unset'
-                    };
-                },800);
-                incrementaConteudoAPI();
-                saveDataForDashboard(8);
-            }
             //RESPOSTA LIVRO USUARIO LOGADO
-            else{
-                incrementaConteudoAPI();
-                createButtonResposta();
-                saveDataForDashboard(8);
-            }
+            incrementaConteudoAPI();
+            createButtonResposta();
+            saveDataForDashboard(8);
+            verificaAtualizacaoVersao();
         }
     }else{
         //REMOVE BOTÃO DE RESOLUÇÃO
