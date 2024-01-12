@@ -959,106 +959,26 @@ function unlockFixationExercise(configs)
 
 function unlockTeoria(configs)
 {
-    let r = setInterval(()=>{
+    main(configs);
+
+
+    function main(configs) {
+        let flag = false;
         let divs = document.querySelectorAll('div');
+
         for(let i=0; i<divs.length; i++){
             for(let iConfig=0; iConfig<configs.data_cy.format_toggle.length; iConfig++){
                 if(divs[i].classList.contains(`${configs.data_cy.format_toggle[iConfig]}`)){
-                    clearInterval(r);
+                    flag = true;
+                    montaConteudoTexto(configs);
+                    montaConteudoVideo(configs);
 
-                    //VERIFICA SE NA 1 EXEC O CONTEUDO ESTA BLOQUEADO - TEXTO
-                    //CASO POSITIVO, CHAMA API E MONTA TEXTO
-                    let s = setInterval(()=>{
-                        let divsSteps = document.querySelectorAll('div');
-                        for(let j=0; j<divsSteps.length; j++){
-                            for(let iConfig2=0; iConfig2<configs.data_cy.theory_text_content.length; iConfig2++){
-                                if(divsSteps[j].classList.contains(`${configs.data_cy.theory_text_content[iConfig2]}`)){
-                                    clearInterval(s);
-                                    let divStepsContainer = divsSteps[j].children[0];
-                                    try{
-                                        if(
-                                            divStepsContainer.children[0].isEqualNode(divStepsContainer.children[1]) &&
-                                            divStepsContainer.children[1].isEqualNode(divStepsContainer.children[2]) &&
-                                            divStepsContainer.children[2].isEqualNode(divStepsContainer.children[3]) &&
-                                            divStepsContainer.children[3].isEqualNode(divStepsContainer.children[4]) &&
-                                            divStepsContainer.children[4].isEqualNode(divStepsContainer.children[5])
-                                        ){
-                                            //SETTA MSG DE LOADING
-                                            divsSteps[j].innerHTML = setLoadingPageAnimation();
-
-                                            //CHAMA API PARA DESBLOQUEAR CONTEUDO
-                                            callAPITheoryUnlocked('texto', configs);
-                                            container = divsSteps[j];
-                                            break;
-                                        }
-                                    }catch(erro){
-
-                                    }
-                                    break;
-                                }
-                            }
-                        }
-                    },800);
-
-
-                    //VERIFICA SE NA 1 EXEC O CONTEUDO ESTA BLOQUEADO - VIDEO
-                    //CASO POSITIVO, CHAMA API E MONTA VIDEO
-                    let v = setInterval(()=>{
-                        let divsVideo = document.querySelectorAll('div');
-                        for(let j=0; j<divsVideo.length; j++){
-                            for(let iConfig2=0; iConfig2<configs.data_cy.theory_video_content.length; iConfig2++){
-                                if(divsVideo[j].classList.contains(`${configs.data_cy.theory_video_content[iConfig2]}`)){
-                                    clearInterval(v);
-                                    if(divsVideo[j].children.length == 0)
-                                    {
-                                        //SETTA MSG DE LOADING
-                                        divsVideo[j].innerHTML = setLoadingPageAnimation();
-
-                                        //CHAMA API PARA DESBLOQUEAR CONTEUDO
-                                        callAPITheoryUnlocked('video', configs);
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    },800);
-
-
-                    //DEFINE NOVA ACAO AO CLICAR NO BOTAO
+                    // DEFINE NOVA ACAO AO CLICAR NO BOTAO
                     divs[i].addEventListener("click", ()=>{
                         let nodes = divs[i].childNodes;
                         for(let i=0; i<nodes.length; i++){
                             if(nodes[i].nodeName == 'P' && nodes[i].textContent == 'Alternar para texto >>'){
-
-                                //PROCURA DIV PARA RECEBER CONTEUDO
-                                let s = setInterval(()=>{
-                                    let divsSteps = document.querySelectorAll('div');
-                                    for(let j=0; j<divsSteps.length; j++){
-                                        for(let iConfig2=0; iConfig2<configs.data_cy.theory_text_content.length; iConfig2++){
-                                            if(divsSteps[j].classList.contains(`${configs.data_cy.theory_text_content[iConfig2]}`)){
-                                                clearInterval(s);
-
-                                                let divStepsContainer = divsSteps[j].children[0];
-                                                try{
-                                                    if(
-                                                        divStepsContainer.children[0].isEqualNode(divStepsContainer.children[1]) &&
-                                                        divStepsContainer.children[1].isEqualNode(divStepsContainer.children[2]) &&
-                                                        divStepsContainer.children[2].isEqualNode(divStepsContainer.children[3]) &&
-                                                        divStepsContainer.children[3].isEqualNode(divStepsContainer.children[4]) &&
-                                                        divStepsContainer.children[4].isEqualNode(divStepsContainer.children[5])
-                                                    ){
-                                                        divsSteps[j].innerHTML = setLoadingPageAnimation();
-                                                        callAPITheoryUnlocked("texto", configs);
-                                                        break;
-                                                    }
-                                                }catch(erro){
-
-                                                }
-                                            }
-                                        }
-                                    }
-                                },800);
-                                break;
+                                procuraDivRecipiente(configs);
                             }
                             if(nodes[i].nodeName == 'P' && nodes[i].textContent == 'Alternar para video >>'){
                                 callAPITheoryUnlocked("video", configs);
@@ -1071,39 +991,117 @@ function unlockTeoria(configs)
                         }
                     });
                     break;
-                }else{
-                    //PROCURA DIV PARA RECEBER CONTEUDO
-                    let s = setInterval(()=>{
-                        let divsSteps = document.querySelectorAll('div');
-                        for(let j=0; j<divsSteps.length; j++){
-                            for(let iConfig2=0; iConfig2<configs.data_cy.theory_text_content.length; iConfig2++){
-                                if(divsSteps[j].classList.contains(`${configs.data_cy.theory_text_content[iConfig2]}`)){
-                                    clearInterval(s);
-
-                                    let divStepsContainer = divsSteps[j].children[0];
-                                    try{
-                                        if(
-                                            divStepsContainer.children[0].isEqualNode(divStepsContainer.children[1]) &&
-                                            divStepsContainer.children[1].isEqualNode(divStepsContainer.children[2]) &&
-                                            divStepsContainer.children[2].isEqualNode(divStepsContainer.children[3]) &&
-                                            divStepsContainer.children[3].isEqualNode(divStepsContainer.children[4]) &&
-                                            divStepsContainer.children[4].isEqualNode(divStepsContainer.children[5])
-                                        ){
-                                            divsSteps[j].innerHTML = setLoadingPageAnimation();
-                                            callAPITheoryUnlocked("texto", configs);
-                                            break;
-                                        }
-                                    }catch(erro){
-
-                                    }
-                                }
-                            }
-                        }
-                    },800);
+                } else{
+                    procuraDivRecipiente(configs);
                 }
             }
         }
-    },800);
+        if(!flag) {
+            setTimeout(() => {
+                main(configs);
+            }, 800);
+        }
+    }
+
+
+    function montaConteudoTexto(configs) {
+        let flag = false;
+        let divsSteps = document.querySelectorAll('div');
+        for(let j=0; j<divsSteps.length; j++){
+            for(let iConfig2=0; iConfig2<configs.data_cy.theory_text_content.length; iConfig2++){
+                if(divsSteps[j].classList.contains(`${configs.data_cy.theory_text_content[iConfig2]}`)){
+                    let divStepsContainer = divsSteps[j].children[0];
+                    try{
+                        if(
+                            divStepsContainer.children[0].isEqualNode(divStepsContainer.children[1]) &&
+                            divStepsContainer.children[1].isEqualNode(divStepsContainer.children[2]) &&
+                            divStepsContainer.children[2].isEqualNode(divStepsContainer.children[3]) &&
+                            divStepsContainer.children[3].isEqualNode(divStepsContainer.children[4]) &&
+                            divStepsContainer.children[4].isEqualNode(divStepsContainer.children[5])
+                        ){
+                            flag = true;
+
+                            //SETTA MSG DE LOADING
+                            divsSteps[j].innerHTML = setLoadingPageAnimation();
+
+                            //CHAMA API PARA DESBLOQUEAR CONTEUDO
+                            callAPITheoryUnlocked('texto', configs);
+                            container = divsSteps[j];
+                            break;
+                        }
+                    }catch(erro){
+
+                    }
+                    break;
+                }
+            }
+        }
+        if(!flag) {
+            setTimeout(() => {
+                montaConteudoTexto(configs);
+            },800);
+        }
+    }
+
+
+    function montaConteudoVideo(configs) {
+        let flag = false;
+        let divsVideo = document.querySelectorAll('div');
+
+        for(let j=0; j<divsVideo.length; j++){
+            for(let iConfig2=0; iConfig2<configs.data_cy.theory_video_content.length; iConfig2++) {
+                if(divsVideo[j].classList.contains(`${configs.data_cy.theory_video_content[iConfig2]}`)) {
+                    if(divsVideo[j].children.length == 0) {
+                        flag = true;
+                        divsVideo[j].innerHTML = setLoadingPageAnimation();
+                        callAPITheoryUnlocked('video', configs);
+                        break;
+                    }
+                }
+            }
+        }
+        if(!flag) {
+            setTimeout(() => {
+                montaConteudoVideo(configs);
+            },800);
+        }
+    }
+
+
+    function procuraDivRecipiente(configs) {
+        let flag = false;
+        
+        //PROCURA DIV PARA RECEBER CONTEUDO
+        let divsSteps = document.querySelectorAll('div');
+        for(let j=0; j<divsSteps.length; j++){
+            for(let iConfig2=0; iConfig2<configs.data_cy.theory_text_content.length; iConfig2++){
+                if(divsSteps[j].classList.contains(`${configs.data_cy.theory_text_content[iConfig2]}`)){
+                    flag = true;
+                    let divStepsContainer = divsSteps[j].children[0];
+                    try{
+                        if(
+                            divStepsContainer.children[0].isEqualNode(divStepsContainer.children[1]) &&
+                            divStepsContainer.children[1].isEqualNode(divStepsContainer.children[2]) &&
+                            divStepsContainer.children[2].isEqualNode(divStepsContainer.children[3]) &&
+                            divStepsContainer.children[3].isEqualNode(divStepsContainer.children[4]) &&
+                            divStepsContainer.children[4].isEqualNode(divStepsContainer.children[5])
+                        ){
+                            divsSteps[j].innerHTML = setLoadingPageAnimation();
+                            callAPITheoryUnlocked("texto", configs);
+                            break;
+                        }
+                    }catch(erro){
+
+                    }
+                }
+            }
+        }
+        if(!flag) {
+            setTimeout(() => {
+                procuraDivRecipiente(configs);
+            },800);
+        }
+    }
 }
 
 
@@ -1313,7 +1311,7 @@ function removeBlurPage(configs)
             blurElement.style.filter = "none";
         })
     });
-    
+
     setTimeout(() => {
         removeBlurPage(configs);
     }, 800);
