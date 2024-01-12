@@ -1306,15 +1306,17 @@ function setTheoryLinksAction(configs)
  */
 function removeBlurPage(configs)
 {
-    setInterval(()=>{
-        configs.blur_class.forEach((current_class) => {
-            let blurElements = document.querySelectorAll(`.${current_class}`);
-            blurElements.forEach((blurElement) => {
-                blurElement.classList.remove(current_class);
-                blurElement.style.filter = "none";
-            })
-        });
-    },800);
+    configs.blur_class.forEach((current_class) => {
+        let blurElements = document.querySelectorAll(`.${current_class}`);
+        blurElements.forEach((blurElement) => {
+            blurElement.classList.remove(current_class);
+            blurElement.style.filter = "none";
+        })
+    });
+    
+    setTimeout(() => {
+        removeBlurPage(configs);
+    }, 800);
 }
 
 
@@ -1357,7 +1359,6 @@ function removeReactModalOverlay(configs)
  */
 function removeDexterBlock(configs)
 {
-
     for(let iConfig=0; iConfig<configs.logged_dexter_block.length; iConfig++){
         if(verificaElemento(`.${configs.logged_dexter_block[iConfig]}`)){
             document.querySelector(`.${configs.logged_dexter_block[iConfig]}`).remove();
