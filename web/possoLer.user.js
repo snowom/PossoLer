@@ -1357,15 +1357,17 @@ function removeReactModalOverlay(configs)
  */
 function removeDexterBlock(configs)
 {
-    let r = setInterval(()=>{
-        for(let iConfig=0; iConfig<configs.logged_dexter_block.length; iConfig++){
-            if(verificaElemento(`.${configs.logged_dexter_block[iConfig]}`)){
-                clearInterval(r);
-                document.querySelector(`.${configs.logged_dexter_block[iConfig]}`).remove();
-                return;
-            }
+
+    for(let iConfig=0; iConfig<configs.logged_dexter_block.length; iConfig++){
+        if(verificaElemento(`.${configs.logged_dexter_block[iConfig]}`)){
+            document.querySelector(`.${configs.logged_dexter_block[iConfig]}`).remove();
+            return;
         }
-    },800);
+    }
+
+    setTimeout(() => {
+        removeDexterBlock(configs);
+    }, 800);
 }
 
 
