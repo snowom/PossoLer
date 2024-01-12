@@ -1140,108 +1140,131 @@ function importRequiredCDN()
  */
 function callAPITheoryUnlocked(typeContent, configs)
 {
-    let token = getCookie('user_jwt');
-    let topicId = getTopicId();
-    let r = setInterval(()=>{
-        if(typeof(axios) == 'function' && token != null && topicId != null){
-            clearInterval(r);
-            axios({
-                method: "POST",
-                url: "https://possoler.tech/API/respondeai/getData?operation=getTheory",
-                timeout: 30000,
-                data: JSON.stringify({
-                    itemId: topicId
-                }),
-                headers: {
-                    "Content-Type" : "application/json",
-                    "authorization": token
-                }
-            }).then((resp)=>{
+    main(typeContent, configs);
 
-                if(resp.data.status == 'failed')
-                    throw new Error(resp.data.message);
 
-                if(typeContent == 'texto'){
-                    let r = setInterval(()=>{
-                        let divs = document.querySelectorAll('div');
-                        for(let i=0; i<divs.length; i++){
-                            for(let iConfig2=0; iConfig2<configs.data_cy.theory_text_content.length; iConfig2++){
-                                if(divs[i].classList.contains(`${configs.data_cy.theory_text_content[iConfig2]}`) && typeof(MathJax) == "object"){
-                                    clearInterval(r);
-                                    divs[i].innerHTML = `
-                                        <div class="sc-jTzLTM fFEUnb rendered">
-                                            <div>${resp.data.lightBody}</div>
-                                        </div>`;
-                                    MathJax.typeset();
-                                    return;
-                                }
-                            }
-                        }
-                    },800);
-                }
-                else if(typeContent == 'video'){
-                    const SINGLE_VIDEO_SIZE = 450;
-                    const SPACE_BETWEEN_VIDEOS = 50;
-
-                    let r = setInterval(()=>{
-                        let divs = document.querySelectorAll('div');
-                        for(let i=0; i<divs.length; i++){
-                            for(let iConfig2=0; iConfig2<configs.data_cy.theory_video_content.length; iConfig2++){
-                                if(divs[i].classList.contains(`${configs.data_cy.theory_video_content[iConfig2]}`)){
-                                    clearInterval(r);
-                                    if(divs[i].children[0].id == "containerLootieLoading")
-                                    {
-                                        if(resp.data.hasOwnProperty('videos'))
-                                        {
-                                            importVimeoPlayerJS();
-
-                                            //REMOVE ANIMACAO DE CARREGAMENTO
-                                            document.getElementById("containerLootieLoading").remove();
-
-                                            //SETA TAMANHO DA PAGINA
-                                            divs[i].style.cssText += `height: ${(SINGLE_VIDEO_SIZE*resp.data.videos.length) + (SPACE_BETWEEN_VIDEOS*resp.data.videos.length)}px !important`;
-
-                                            //ITERA SOBRE OBJETO DE RESPOSTA PARA MONTAR PAGINA
-                                            for(let j=0; j<resp.data.videos.length; j++){
-
-                                                divs[i].innerHTML += (resp.data.videos[j].provider.includes("youtube"))
-
-                                                ?`<div data-cy="video-iframe" allowfullscreen="" frameborder="0" style="width: 100%; height: ${100/resp.data.videos.length}%;">
-                                                        <div style="width: 100%; height: 100%;">
-                                                            <iframe frameborder="0" allowfullscreen="1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" title="YouTube video player" width="100%" height="100%" src="https://www.youtube.com/embed/${resp.data.videos[j].providerId}?autoplay=0&amp;mute=0&amp;controls=1&amp;origin=https%3A%2F%2Fapp.respondeai.com.br&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;iv_load_policy=3&amp;modestbranding=1&amp;enablejsapi=1&amp;widgetid=1"></iframe>
-                                                        </div>
-                                                    </div>
-                                                    <div style="height: ${SPACE_BETWEEN_VIDEOS}px !important"></div>`
-
-                                                :`<div style="padding:56.25% 0 0 0;position:relative;">
-                                                    <iframe src="https://player.vimeo.com/video/${resp.data.videos[j].providerId}" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
-                                                </div>
-                                                <div style="height: ${SPACE_BETWEEN_VIDEOS}px !important"></div>`;
-                                            }
-                                        }else{
-                                            throw new Error("Falha ao obter objeto \"videos\"");
-                                        }
-                                    }
-                                    break;
-                                }
-                            }
-                        }
-                    },800);
-                }
-            }).catch((erro)=>{
-                sweetAlert(
-                    'error',
-                    'Erro',
-                    `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}`
-                );
-                if(verificaElemento("#msgLottieDesbloqueio")){
-                    document.getElementById("msgLottieDesbloqueio").innerHTML = `
-                        <p>Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.</p>
-                        <p><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}</p>`
-                }
-            })
+    function main(typeContent, configs) {
+        let token = getCookie('user_jwt');
+        let topicId = getTopicId();
+        if(typeof(axios) != 'function' || token == null || topicId == null){
+            setTimeout(() => {
+                main(typeContent, configs);
+                return;
+            },800);
         }
-    },800);
+
+        axios({
+            method: "POST",
+            url: "https://possoler.tech/API/respondeai/getData?operation=getTheory",
+            timeout: 30000,
+            data: JSON.stringify({
+                itemId: topicId
+            }),
+            headers: {
+                "Content-Type" : "application/json",
+                "authorization": token
+            }
+        }).then((resp)=>{
+
+            if(resp.data.status == 'failed')
+                throw new Error(resp.data.message);
+
+            if(typeContent == 'texto'){
+                setTextTheoryUnlocked(resp);
+            }
+            else if(typeContent == 'video'){
+                setVideoTheoryUnlocked(resp);
+            }
+        }).catch((erro)=>{
+            sweetAlert(
+                'error',
+                'Erro',
+                `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}`
+            );
+            if(verificaElemento("#msgLottieDesbloqueio")){
+                document.getElementById("msgLottieDesbloqueio").innerHTML = `
+                    <p>Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.</p>
+                    <p><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}</p>`
+            }
+        })
+    }
+
+
+    function setTextTheoryUnlocked(resp) {
+        let flag = false;
+        let divs = document.querySelectorAll('div');
+        for(let i=0; i<divs.length; i++){
+            for(let iConfig2=0; iConfig2<configs.data_cy.theory_text_content.length; iConfig2++){
+                if(divs[i].classList.contains(`${configs.data_cy.theory_text_content[iConfig2]}`) && typeof(MathJax) == "object"){
+                    flag = true;
+                    divs[i].innerHTML = `
+                        <div class="sc-jTzLTM fFEUnb rendered">
+                            <div>${resp.data.lightBody}</div>
+                        </div>`;
+                    MathJax.typeset();
+                    return;
+                }
+            }
+        }
+        if(!flag) {
+            setTimeout(() => {
+                setTextTheoryUnlocked(resp);
+            });
+        }
+    }
+
+
+    function setVideoTheoryUnlocked(resp) {
+        const SINGLE_VIDEO_SIZE = 450;
+        const SPACE_BETWEEN_VIDEOS = 50;
+        let flag = false;
+
+        let divs = document.querySelectorAll('div');
+        for(let i=0; i<divs.length; i++){
+            for(let iConfig2=0; iConfig2<configs.data_cy.theory_video_content.length; iConfig2++) {
+                if(divs[i].classList.contains(`${configs.data_cy.theory_video_content[iConfig2]}`)) {
+                    flag = true;
+                    if(divs[i].children[0].id == "containerLootieLoading") {
+                        if(resp.data.hasOwnProperty('videos')) {
+                            importVimeoPlayerJS();
+
+                            //REMOVE ANIMACAO DE CARREGAMENTO
+                            document.getElementById("containerLootieLoading").remove();
+
+                            //SETA TAMANHO DA PAGINA
+                            divs[i].style.cssText += `height: ${(SINGLE_VIDEO_SIZE*resp.data.videos.length) + (SPACE_BETWEEN_VIDEOS*resp.data.videos.length)}px !important`;
+
+                            //ITERA SOBRE OBJETO DE RESPOSTA PARA MONTAR PAGINA
+                            for(let j=0; j<resp.data.videos.length; j++){
+
+                                divs[i].innerHTML += (resp.data.videos[j].provider.includes("youtube"))
+
+                                ?`<div data-cy="video-iframe" allowfullscreen="" frameborder="0" style="width: 100%; height: ${100/resp.data.videos.length}%;">
+                                        <div style="width: 100%; height: 100%;">
+                                            <iframe frameborder="0" allowfullscreen="1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" title="YouTube video player" width="100%" height="100%" src="https://www.youtube.com/embed/${resp.data.videos[j].providerId}?autoplay=0&amp;mute=0&amp;controls=1&amp;origin=https%3A%2F%2Fapp.respondeai.com.br&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;iv_load_policy=3&amp;modestbranding=1&amp;enablejsapi=1&amp;widgetid=1"></iframe>
+                                        </div>
+                                    </div>
+                                    <div style="height: ${SPACE_BETWEEN_VIDEOS}px !important"></div>`
+
+                                :`<div style="padding:56.25% 0 0 0;position:relative;">
+                                    <iframe src="https://player.vimeo.com/video/${resp.data.videos[j].providerId}" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+                                </div>
+                                <div style="height: ${SPACE_BETWEEN_VIDEOS}px !important"></div>`;
+                            }
+                        }else{
+                            throw new Error("Falha ao obter objeto \"videos\"");
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+        if(!flag) {
+            setTimeout(() => {
+                setVideoTheoryUnlocked();
+            });
+        }
+    }
 }
 
 /**
