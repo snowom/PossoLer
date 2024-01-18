@@ -6,7 +6,6 @@ import br.com.possoler.api.api_posso_ler.api.respondeai_api.dto.VideoResponseDTO
 import br.com.possoler.api.api_posso_ler.api.respondeai_api.interfaces.RespondeAiConnection;
 import br.com.possoler.api.api_posso_ler.api.respondeai_api.configs.RestConfigs;
 import exceptions.ClientErrorException;
-import exceptions.NotFoundException;
 import exceptions.ServerErrorException;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -43,7 +42,7 @@ public class getTheory extends RestConfigs implements RespondeAiConnection {
             throw new ServerErrorException("Falha ao obter os dados");
         }
         if(response.getStatusCode() == HttpStatus.OK && !response.hasBody()) {
-            throw new NotFoundException("Não há conteúdos para exibir");
+            throw new ServerErrorException("Não há conteúdos para exibir");
         }
     }
 

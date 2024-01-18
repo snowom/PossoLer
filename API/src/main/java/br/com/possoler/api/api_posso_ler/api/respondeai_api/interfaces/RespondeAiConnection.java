@@ -10,5 +10,12 @@ public interface RespondeAiConnection {
      * @return DataBookExerciseResponseDTO
      */
     Object getData(String itemId, String token);
+
+    /**
+     * Gera URI de request para API do Responde Aí
+     * @author snowon
+     * @param exerciseId
+     * @return String
+     */
     String buildURIRequest(String exerciseId);
 }
