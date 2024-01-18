@@ -3,25 +3,25 @@ package br.com.possoler.api.api_posso_ler.api.respondeai_api.controller;
 import br.com.possoler.api.api_posso_ler.api.respondeai_api.dto.ExerciseRequestDTO;
 import br.com.possoler.api.api_posso_ler.api.respondeai_api.interfaces.RespondeAiConnection;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.*;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @RestController
 @CrossOrigin(origins = "*")
-public class GetTheoryController {
+public class ExerciseController {
 
-    private final @Qualifier("getTheory") RespondeAiConnection respondeAiConnection;
+    private final RespondeAiConnection respondeAiConnection;
 
-    public GetTheoryController(RespondeAiConnection respondeAiConnection) {
+    public ExerciseController(@Qualifier("getExercise") RespondeAiConnection respondeAiConnection) {
         this.respondeAiConnection = respondeAiConnection;
     }
 
-    @PostMapping("${respondeai-api.endpoint.getData}")
-    private ResponseEntity<Object> getDataRespondeAi(
-            @RequestHeader(name = "Authorization") String token,
-            @RequestBody @Valid ExerciseRequestDTO payload
+    @PostMapping("${respondeai-api.endpoint.getExerciseData}")
+    private ResponseEntity<Object> getExerciseData(
+        @RequestHeader(name = "Authorization") String token,
+        @RequestBody @Valid ExerciseRequestDTO payload
     ){
         Object response = respondeAiConnection.getData(payload.getItemId(), token);
         return ResponseEntity.ok().body(response);

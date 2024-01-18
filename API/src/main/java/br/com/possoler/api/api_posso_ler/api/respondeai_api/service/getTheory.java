@@ -21,7 +21,6 @@ public class getTheory extends RestConfigs implements RespondeAiConnection {
 
     @Override
     public Object getData(String itemId, String token) {
-
         HttpHeaders header = setHeaders(token);
         final String URI = buildURIRequest(itemId);
 
@@ -49,32 +48,40 @@ public class getTheory extends RestConfigs implements RespondeAiConnection {
     }
 
     private TheoryResponseDTO mountTheoryResponse(String responseBody) {
-        List<VideoResponseDTO> videos = new ArrayList<>();
-        JSONObject jsonObject = new JSONObject(responseBody);
-        String lightBody;
-
-        try{
-            lightBody = jsonObject.get("lightBody").toString();
-        }catch (Exception e) {
-            throw new ServerErrorException("[Theory] - Falha ao obter objeto \"lightBody\"");
-        }
-
-        try{
-            JSONArray videoResponse = (JSONArray) jsonObject.get("videos");
-            for(int i=0; i<videoResponse.length(); i++) {
-                videos.add(VideoResponseDTO.builder()
-                    .providerId((String) videoResponse.getJSONObject(i).get("providerId"))
-                    .provider((String) videoResponse.getJSONObject(i).get("provider"))
-                    .build());
-            }
-        }catch (Exception e) {
-            throw new ServerErrorException("[Theory] - Falha ao obter objeto \"videos\"");
-        }
+        var jsonObject = new JSONObject(responseBody);
+        var lightBody = buildLightBodyResponse(jsonObject);
+        var videos = buildVideoResponse(jsonObject);
 
         return TheoryResponseDTO.builder()
             .lightBody(lightBody)
             .videos(videos)
             .build();
+    }
+
+    private String buildLightBodyResponse(JSONObject jsonObject) {
+        try{
+            return jsonObject.get("lightBody").toString();
+        }catch (Exception e) {
+            throw new ServerErrorException("[Theory] - Falha ao obter objeto \"lightBody\"");
+        }
+    }
+
+    private List<VideoResponseDTO> buildVideoResponse(JSONObject jsonObject) {
+        List<VideoResponseDTO> videos = new ArrayList<>();
+
+        try{
+            JSONArray videoResponse = (JSONArray) jsonObject.get("videos");
+            for(int i=0; i<videoResponse.length(); i++) {
+                videos.add(VideoResponseDTO.builder()
+                .providerId((String) videoResponse.getJSONObject(i).get("providerId"))
+                .provider((String) videoResponse.getJSONObject(i).get("provider"))
+                .build());
+            }
+        }catch (Exception e) {
+            throw new ServerErrorException("[Theory] - Falha ao obter objeto \"videos\"");
+        }
+
+        return videos;
     }
 
     @Override

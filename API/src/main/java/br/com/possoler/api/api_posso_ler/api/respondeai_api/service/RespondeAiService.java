@@ -52,38 +52,6 @@ public class RespondeAiService {
         return responseFunction;
     } */
 
-//    private TheoryResponseDTO mountTheoryResponse(String responseBody) {
-//        List<VideoResponseDTO> videos = new ArrayList<>();
-//        JSONObject jsonObject = new JSONObject(responseBody);
-//        String lightBody;
-//
-//        try{
-//            JSONObject theoryObject = jsonObject.getJSONObject("data").getJSONObject("theory");
-//            lightBody = (String) theoryObject.get("lightBody");
-//        }catch (Exception e) {
-//            throw new ServerErrorException("[Theory] - Falha ao obter objeto \"lightBody\"");
-//        }
-//
-//        try{
-//            JSONObject theoryObject = jsonObject.getJSONObject("data").getJSONObject("theory");
-//            JSONArray videoResponse = (JSONArray) theoryObject.get("videos");
-//            for(int i=0; i<videoResponse.length(); i++) {
-//                videos.add(VideoResponseDTO.builder()
-//                    .providerId((String) videoResponse.getJSONObject(i).get("providerId"))
-//                    .provider((String) videoResponse.getJSONObject(i).get("provider"))
-//                    .typename((String) videoResponse.getJSONObject(i).get("__typename"))
-//                    .build());
-//            }
-//        }catch (Exception e) {
-//            throw new ServerErrorException("[Theory] - Falha ao obter objeto \"videos\"");
-//        }
-//
-//        return TheoryResponseDTO.builder()
-//            .lightBody(lightBody)
-//            .videos(videos)
-//            .build();
-//    }
-
 
 //    private GenericResponseDTO mountExerciseFixationResponse(String responseBody) {
 //        List<VideoResponseDTO> videos = new ArrayList<>();

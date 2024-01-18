@@ -11,7 +11,8 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GenericResponseDTO {
+public class ExerciseResponseDTO {
     private List<String> lightSolution;
+    private String lightAnswer;
     private List<VideoResponseDTO> videos;
 }
