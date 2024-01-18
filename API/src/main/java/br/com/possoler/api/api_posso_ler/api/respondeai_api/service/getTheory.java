@@ -34,18 +34,6 @@ public class getTheory extends RestConfigs implements RespondeAiConnection {
         return theoryResponse;
     }
 
-    private void validateResponse(ResponseEntity<String> response) {
-        if(response.getStatusCode() == HttpStatus.UNAUTHORIZED) {
-            throw new ClientErrorException("Token de autenticação expirado");
-        }
-        if(response.getStatusCode().is5xxServerError()) {
-            throw new ServerErrorException("Falha ao obter os dados");
-        }
-        if(response.getStatusCode() == HttpStatus.OK && !response.hasBody()) {
-            throw new ServerErrorException("Não há conteúdos para exibir");
-        }
-    }
-
     private TheoryResponseDTO buildTheoryResponse(String responseBody) {
         var jsonObject = new JSONObject(responseBody);
         var lightBody = buildLightBodyResponse(jsonObject);

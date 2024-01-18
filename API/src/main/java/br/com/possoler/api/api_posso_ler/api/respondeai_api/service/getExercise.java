@@ -89,18 +89,6 @@ public class getExercise extends RestConfigs implements RespondeAiConnection  {
         return videos;
     }
 
-    private void validateResponse(ResponseEntity<String> response) {
-        if(response.getStatusCode() == HttpStatus.UNAUTHORIZED) {
-            throw new ClientErrorException("Token de autenticação expirado");
-        }
-        if(response.getStatusCode().is5xxServerError()) {
-            throw new ServerErrorException("Falha ao obter os dados");
-        }
-        if(response.getStatusCode() == HttpStatus.OK && !response.hasBody()) {
-            throw new NotFoundException("Não há conteúdos para exibir");
-        }
-    }
-
     @Override
     public String buildURIRequest(String exerciseId) {
         return Request.DOMAIN_REQUEST + Request.FIXATION_EXERCISE_ENDPOINT + exerciseId;

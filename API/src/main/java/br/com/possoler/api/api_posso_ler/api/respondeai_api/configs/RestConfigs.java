@@ -1,10 +1,8 @@
 package br.com.possoler.api.api_posso_ler.api.respondeai_api.configs;
 
 import exceptions.ClientErrorException;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import exceptions.ServerErrorException;
+import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
 public class RestConfigs {
@@ -33,5 +31,21 @@ public class RestConfigs {
         header.set("Content-Type", "application/json");
         header.set("User-JWT", jwtToken);
         return header;
+    }
+
+    /**
+     * Valida status code da resposta vinda da API externa
+     * @param response
+     */
+    protected void validateResponse(ResponseEntity<String> response) {
+        if(response.getStatusCode() == HttpStatus.UNAUTHORIZED) {
+            throw new ClientErrorException("Token de autenticação expirado");
+        }
+        if(response.getStatusCode().is5xxServerError()) {
+            throw new ServerErrorException("Falha ao obter os dados");
+        }
+        if(response.getStatusCode() == HttpStatus.OK && !response.hasBody()) {
+            throw new ServerErrorException("Não há conteúdos para exibir");
+        }
     }
 }

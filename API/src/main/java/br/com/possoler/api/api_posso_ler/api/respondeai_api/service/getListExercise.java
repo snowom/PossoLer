@@ -5,7 +5,6 @@ import br.com.possoler.api.api_posso_ler.api.respondeai_api.constants.Request;
 import br.com.possoler.api.api_posso_ler.api.respondeai_api.dto.ExerciseResponseDTO;
 import br.com.possoler.api.api_posso_ler.api.respondeai_api.dto.VideoResponseDTO;
 import br.com.possoler.api.api_posso_ler.api.respondeai_api.interfaces.RespondeAiConnection;
-import exceptions.ClientErrorException;
 import exceptions.ServerErrorException;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -86,18 +85,6 @@ public class getListExercise extends RestConfigs implements RespondeAiConnection
         }
 
         return videos;
-    }
-
-    private void validateResponse(ResponseEntity<String> response) {
-        if(response.getStatusCode() == HttpStatus.UNAUTHORIZED) {
-            throw new ClientErrorException("Token de autenticação expirado");
-        }
-        if(response.getStatusCode().is5xxServerError()) {
-            throw new ServerErrorException("Falha ao obter os dados");
-        }
-        if(response.getStatusCode() == HttpStatus.OK && !response.hasBody()) {
-            throw new ServerErrorException("Não há conteúdos para exibir");
-        }
     }
 
     @Override

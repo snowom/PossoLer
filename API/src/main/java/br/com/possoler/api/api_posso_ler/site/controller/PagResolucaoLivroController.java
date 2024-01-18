@@ -1,6 +1,5 @@
 package br.com.possoler.api.api_posso_ler.site.controller;
 
-import br.com.possoler.api.api_posso_ler.api.respondeai_api.service.RespondeAiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
@@ -12,8 +11,6 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class PagResolucaoLivroController {
 
-    @Autowired
-    private RespondeAiService respondeAiService;
     @Autowired
     private Environment environment;
 

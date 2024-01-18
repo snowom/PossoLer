@@ -77,18 +77,6 @@ public class getBookExercise extends RestConfigs implements RespondeAiConnection
         }
     }
 
-    private void validateResponse(ResponseEntity<String> response) {
-        if(response.getStatusCode() == HttpStatus.UNAUTHORIZED) {
-            throw new ClientErrorException("Token de autenticação expirado");
-        }
-        if(response.getStatusCode().is5xxServerError()) {
-            throw new ServerErrorException("Falha ao obter os dados");
-        }
-        if(response.getStatusCode() == HttpStatus.OK && !response.hasBody()) {
-            throw new ServerErrorException("Não há conteúdos para exibir");
-        }
-    }
-
     @Override
     public String buildURIRequest(String exerciseId) {
         return Request.DOMAIN_REQUEST + Request.BOOK_EXERCISE_ENDPOINT_REQUEST + exerciseId;
