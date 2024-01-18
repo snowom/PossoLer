@@ -4,7 +4,6 @@ import br.com.possoler.api.api_posso_ler.api.respondeai_api.configs.RestConfigs;
 import br.com.possoler.api.api_posso_ler.api.respondeai_api.constants.Request;
 import br.com.possoler.api.api_posso_ler.api.respondeai_api.dto.BookExerciseResponseDTO;
 import br.com.possoler.api.api_posso_ler.api.respondeai_api.interfaces.RespondeAiConnection;
-import exceptions.ClientErrorException;
 import exceptions.ServerErrorException;
 import org.json.JSONArray;
 import org.json.JSONObject;

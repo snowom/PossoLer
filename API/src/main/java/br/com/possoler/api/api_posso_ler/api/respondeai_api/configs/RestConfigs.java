@@ -38,9 +38,6 @@ public class RestConfigs {
      * @param response
      */
     protected void validateResponse(ResponseEntity<String> response) {
-        if(response.getStatusCode() == HttpStatus.UNAUTHORIZED) {
-            throw new ClientErrorException("Token de autenticação expirado");
-        }
         if(response.getStatusCode().is5xxServerError()) {
             throw new ServerErrorException("Falha ao obter os dados");
         }
