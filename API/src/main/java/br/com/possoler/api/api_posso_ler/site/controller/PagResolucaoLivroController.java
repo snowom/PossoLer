@@ -23,7 +23,7 @@ public class PagResolucaoLivroController {
         ModelAndView mv = new ModelAndView();
         model.addAttribute("authorization_token", token);
         model.addAttribute("exerciseId", exerciseId);
-        model.addAttribute("endpoint", this.environment.getProperty("respondeai-api.endpoint.getData"));
+        model.addAttribute("endpoint", this.environment.getProperty("respondeai-api.endpoint.getBookExerciseData"));
         mv.setViewName("pagResolucaoLivro");
         return mv;
     }

@@ -37,7 +37,7 @@
 
                 axios({
                     method: "POST",
-                    url: `https://possoler.tech${endpointRequest}?operation=getBookExercise`,
+                    url: `http://localhost:8080${endpointRequest}`,
                     timeout: 30000,
                     data: JSON.stringify({
                         itemId: exerciseId
