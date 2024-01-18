@@ -15,6 +15,4 @@ public class VideoResponseDTO {
     private String provider;
     @JsonProperty("providerId")
     private String providerId;
-    @JsonProperty("__typename")
-    private String typename;
 }

@@ -98,6 +98,15 @@
 					<target>14</target>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.httpcomponents</groupId>
+				<artifactId>httpclient</artifactId>
+				<configuration>
+					<systemPropertyVariables>
+						<sun.net.http.allowRestrictedHeaders>true</sun.net.http.allowRestrictedHeaders>
+					</systemPropertyVariables>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
