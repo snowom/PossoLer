@@ -16,8 +16,8 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component("getExercise")
-public class getExercise extends RestConfigs implements RespondeAiConnection  {
+@Component("getListExercise")
+public class getListExercise extends RestConfigs implements RespondeAiConnection {
 
     @Override
     public Object getData(String itemId, String token) {
@@ -30,12 +30,12 @@ public class getExercise extends RestConfigs implements RespondeAiConnection  {
 
         validateResponse(response);
         var responseBody = response.getBody();
-        ExerciseResponseDTO exerciseResponse = buildExerciseResponse(responseBody);
+        ExerciseResponseDTO exerciseResponse = buildListExerciseResponse(responseBody);
 
         return exerciseResponse;
     }
 
-    private ExerciseResponseDTO buildExerciseResponse(String responseBody) {
+    private ExerciseResponseDTO buildListExerciseResponse(String responseBody) {
         JSONObject jsonObject = new JSONObject(responseBody);
 
         var lightAnswer = buildLightAnswerResponse(jsonObject);
@@ -103,6 +103,6 @@ public class getExercise extends RestConfigs implements RespondeAiConnection  {
 
     @Override
     public String buildURIRequest(String exerciseId) {
-        return Request.DOMAIN_REQUEST + Request.FIXATION_EXERCISE_ENDPOINT + exerciseId;
+        return Request.DOMAIN_REQUEST + Request.LIST_EXERCISE_ENDPOINT + exerciseId;
     }
 }

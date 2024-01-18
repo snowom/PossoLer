@@ -30,7 +30,7 @@ public class getTheory extends RestConfigs implements RespondeAiConnection {
 
         validateResponse(response);
         var responseBody = response.getBody();
-        TheoryResponseDTO theoryResponse = mountTheoryResponse(responseBody);
+        TheoryResponseDTO theoryResponse = buildTheoryResponse(responseBody);
 
         return theoryResponse;
     }
@@ -47,7 +47,7 @@ public class getTheory extends RestConfigs implements RespondeAiConnection {
         }
     }
 
-    private TheoryResponseDTO mountTheoryResponse(String responseBody) {
+    private TheoryResponseDTO buildTheoryResponse(String responseBody) {
         var jsonObject = new JSONObject(responseBody);
         var lightBody = buildLightBodyResponse(jsonObject);
         var videos = buildVideoResponse(jsonObject);

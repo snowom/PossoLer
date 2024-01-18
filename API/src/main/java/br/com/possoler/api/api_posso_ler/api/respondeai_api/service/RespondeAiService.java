@@ -53,46 +53,6 @@ public class RespondeAiService {
     } */
 
 
-//    private GenericResponseDTO mountExerciseFixationResponse(String responseBody) {
-//        List<VideoResponseDTO> videos = new ArrayList<>();
-//        List<String> lightSolution = new ArrayList<>();
-//        JSONObject jsonObject = new JSONObject(responseBody);
-//        JSONArray lightSolutionResponse;
-//
-//        try{
-//            JSONObject theoryObject = jsonObject.getJSONObject("data").getJSONObject("exercise");
-//            lightSolutionResponse = theoryObject.getJSONArray("lightSolution");
-//            for(int i=0; i<lightSolutionResponse.length(); i++) {
-//                lightSolution.add(lightSolutionResponse.get(i).toString());
-//            }
-//        }catch (Exception e) {
-//            throw new ServerErrorException("[Exercise fixation] - Falha ao obter objeto \"lightSolution\"");
-//        }
-//
-//        try{
-//            JSONObject theoryObject = jsonObject.getJSONObject("data").getJSONObject("exercise");
-//            JSONArray videoResponse = (JSONArray) theoryObject.get("videos");
-//
-//            for(int i=0; i<videoResponse.length(); i++) {
-//
-//                var videoResponseDTO = VideoResponseDTO.builder()
-//                    .providerId((String) videoResponse.getJSONObject(i).get("providerId"))
-//                    .provider((String) videoResponse.getJSONObject(i).get("provider"))
-//                    .typename((String) videoResponse.getJSONObject(i).get("__typename"))
-//                    .build();
-//
-//                videos.add(videoResponseDTO);
-//            }
-//        }catch (Exception e) {
-//            throw new ServerErrorException("[Exercise fixation] - Falha ao obter objeto \"videos\"");
-//        }
-//
-//        return GenericResponseDTO.builder()
-//            .lightSolution(lightSolution)
-//            .videos(videos)
-//            .build();
-//    }
-
 
 //    private GenericResponseDTO mountListExerciseResponse(String responseBody) {
 //        List<VideoResponseDTO> videos = new ArrayList<>();
