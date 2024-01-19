@@ -1,6 +1,5 @@
 package br.com.possoler.api.api_posso_ler.site.controller;
 
-import br.com.possoler.api.api_posso_ler.api.respondeai_api.service.RespondeAiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
@@ -13,8 +12,6 @@ import org.springframework.web.servlet.ModelAndView;
 public class PagResolucaoLivroController {
 
     @Autowired
-    private RespondeAiService respondeAiService;
-    @Autowired
     private Environment environment;
 
     @GetMapping("${view.solvedBookExercisePage}")
@@ -26,7 +23,7 @@ public class PagResolucaoLivroController {
         ModelAndView mv = new ModelAndView();
         model.addAttribute("authorization_token", token);
         model.addAttribute("exerciseId", exerciseId);
-        model.addAttribute("endpoint", this.environment.getProperty("respondeai-api.endpoint.getData"));
+        model.addAttribute("endpoint", this.environment.getProperty("respondeai-api.endpoint.getBookExerciseData"));
         mv.setViewName("pagResolucaoLivro");
         return mv;
     }

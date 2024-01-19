@@ -1,4 +1,4 @@
-package br.com.possoler.api.api_posso_ler.api.respondeai_api.dto;
+package br.com.possoler.api.api_posso_ler.api.respondeai_api.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,11 +7,12 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Builder
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TheoryResponseDTO {
+public class BookExerciseResponseDTO {
+    private List<String> lightSolution;
+    private String lightAnswer;
     private String lightBody;
-    private List<VideoResponseDTO> videos;
 }

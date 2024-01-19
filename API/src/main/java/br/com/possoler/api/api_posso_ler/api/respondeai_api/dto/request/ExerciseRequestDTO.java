@@ -1,4 +1,4 @@
-package br.com.possoler.api.api_posso_ler.api.respondeai_api.dto;
+package br.com.possoler.api.api_posso_ler.api.respondeai_api.dto.request;
 
 import lombok.Getter;
 import javax.validation.constraints.NotEmpty;
