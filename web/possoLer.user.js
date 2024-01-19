@@ -72,7 +72,7 @@
 
 importCDNSnackBar();
 let currentURL = window.location.hostname;
-const DOMAIN = "https://possoler.tech";
+const DOMAIN = "http://localhost:8080";
 const CURRENT_VERSION = '297';
 
 
@@ -1196,7 +1196,7 @@ function callAPITheoryUnlocked(typeContent, configs)
 
         axios({
             method: "POST",
-            url: `https://possoler.tech${ENDPOINT}`,
+            url: `${DOMAIN}${ENDPOINT}`,
             timeout: 30000,
             data: JSON.stringify({
                 itemId: topicId
@@ -3054,44 +3054,44 @@ function checkButtonCreation()
 
 function createButtonResposta()
 {
-    let r = setInterval(()=>{
-        if(document.body != null && document.body != undefined && typeof(Swal) == 'function'){
-            clearInterval(r);
+    
+    if(document.body == null || document.body == undefined || typeof(Swal) != 'function'){
+        setTimeout(() => {
+            createButtonResposta();
+            return;
+        },800);
+    }
 
-            if(document.getElementById('btnResposta') == null || document.getElementById('btnResposta') == undefined){
-                let btnResposta = document.createElement('button');
-                btnResposta.setAttribute('id','btnResposta');
-                btnResposta.setAttribute('title','Ver Resolução');
-                btnResposta.innerText = 'Ver resolução do exercício';
-                document.body.appendChild(btnResposta);
+    let btnResposta = document.createElement('button');
+    btnResposta.setAttribute('id','btnResposta');
+    btnResposta.setAttribute('title','Ver Resolução');
+    btnResposta.innerText = 'Ver resolução do exercício';
+    document.body.appendChild(btnResposta);
 
-                //SET ESTILO BOTAO
-                btnResposta.style.cssText = `position: fixed;
-                bottom: 20px;
-                left: 30px;
-                z-index: 1050;
-                border: none;
-                outline: none;
-                background-color: #28a745;
-                color: white;
-                cursor: pointer;
-                padding: 15px;
-                border-radius: 5px;
-                font-size: 18px;
-                -webkit-box-shadow: 10px 5px 5px 0 rgb(0 0 0 / 20%), 10px 5px 10px 0 rgb(0 0 0 / 10%);
-                box-shadow: 10px 5px 5px 0 rgb(0 0 0 / 20%), 10px 5px 10px 0 rgb(0 0 0 / 10%);
+    //SET ESTILO BOTAO
+    btnResposta.style.cssText = `position: fixed;
+    bottom: 20px;
+    left: 30px;
+    z-index: 1050;
+    border: none;
+    outline: none;
+    background-color: #28a745;
+    color: white;
+    cursor: pointer;
+    padding: 15px;
+    border-radius: 5px;
+    font-size: 18px;
+    -webkit-box-shadow: 10px 5px 5px 0 rgb(0 0 0 / 20%), 10px 5px 10px 0 rgb(0 0 0 / 10%);
+    box-shadow: 10px 5px 5px 0 rgb(0 0 0 / 20%), 10px 5px 10px 0 rgb(0 0 0 / 10%);
 
-                -webkit-transition: opacity 600ms, visibility 600ms;
-                transition: opacity 600ms, visibility 600ms;
-                opacity: 1;`;
+    -webkit-transition: opacity 600ms, visibility 600ms;
+    transition: opacity 600ms, visibility 600ms;
+    opacity: 1;`;
 
-                //ADD EVENTO NO BOTAO
-                document.getElementById('btnResposta').addEventListener('click', ()=>{
-                    showSolution();
-                });
-            }
-        }
-    },800);
+    //ADD EVENTO NO BOTAO
+    document.getElementById('btnResposta').addEventListener('click', ()=>{
+        showSolution();
+    });
 }
 
 
@@ -3100,26 +3100,27 @@ function showSolution()
     let JWT_TOKEN = getCookie('user_jwt');
     let ID_EXERCICIO = getExerciseId();
 
-    let wait = setInterval(()=>{
-        if(JWT_TOKEN != null && ID_EXERCICIO != null){
-            clearInterval(wait);
+    if(JWT_TOKEN == null || ID_EXERCICIO == null){
+        setTimeout(() => {
+            showSolution();
+            return;
+        },800);
+    }
 
-            Swal.fire({
-                title: 'Resolução Completa',
-                html: `<iframe src="${DOMAIN}/solvedBookExercise?auth=${JWT_TOKEN}&exerciseId=${ID_EXERCICIO}" style='width: 100%; height: 100% !important; border: none;'></iframe>`,
-                showCloseButton: true,
-                allowEscapeKey: false,
-                allowOutsideClick: false,
-                showConfirmButton: false,
-                customClass: {
-                    popup: 'respai',
-                    content: 'contentSolution',
-                    htmlContainer: 'contentSolution',
-                    header: 'headerPopup'
-                }
-            });
+    Swal.fire({
+        title: 'Resolução Completa',
+        html: `<iframe src="${DOMAIN}/solvedBookExercise?auth=${JWT_TOKEN}&exerciseId=${ID_EXERCICIO}" style='width: 100%; height: 100% !important; border: none;'></iframe>`,
+        showCloseButton: true,
+        allowEscapeKey: false,
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        customClass: {
+            popup: 'respai',
+            content: 'contentSolution',
+            htmlContainer: 'contentSolution',
+            header: 'headerPopup'
         }
-    },800);
+    });
 }
 
 
