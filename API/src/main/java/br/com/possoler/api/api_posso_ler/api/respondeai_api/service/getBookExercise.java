@@ -1,8 +1,8 @@
 package br.com.possoler.api.api_posso_ler.api.respondeai_api.service;
 
 import br.com.possoler.api.api_posso_ler.api.respondeai_api.configs.RestConfigs;
-import br.com.possoler.api.api_posso_ler.api.respondeai_api.constants.Request;
-import br.com.possoler.api.api_posso_ler.api.respondeai_api.dto.BookExerciseResponseDTO;
+import br.com.possoler.api.api_posso_ler.api.respondeai_api.constants.RequestEndpoints;
+import br.com.possoler.api.api_posso_ler.api.respondeai_api.dto.response.BookExerciseResponseDTO;
 import br.com.possoler.api.api_posso_ler.api.respondeai_api.interfaces.RespondeAiConnection;
 import exceptions.ServerErrorException;
 import org.json.JSONArray;
@@ -78,6 +78,6 @@ public class getBookExercise extends RestConfigs implements RespondeAiConnection
 
     @Override
     public String buildURIRequest(String exerciseId) {
-        return Request.DOMAIN_REQUEST + Request.BOOK_EXERCISE_ENDPOINT_REQUEST + exerciseId;
+        return RequestEndpoints.DOMAIN_REQUEST + RequestEndpoints.BOOK_EXERCISE_ENDPOINT_REQUEST + exerciseId;
     }
 }

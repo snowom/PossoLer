@@ -1,4 +1,4 @@
-package br.com.possoler.api.api_posso_ler.api.respondeai_api.dto;
+package br.com.possoler.api.api_posso_ler.api.respondeai_api.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

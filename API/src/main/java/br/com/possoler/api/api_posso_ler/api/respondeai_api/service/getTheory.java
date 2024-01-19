@@ -1,8 +1,8 @@
 package br.com.possoler.api.api_posso_ler.api.respondeai_api.service;
 
-import br.com.possoler.api.api_posso_ler.api.respondeai_api.constants.Request;
-import br.com.possoler.api.api_posso_ler.api.respondeai_api.dto.TheoryResponseDTO;
-import br.com.possoler.api.api_posso_ler.api.respondeai_api.dto.VideoResponseDTO;
+import br.com.possoler.api.api_posso_ler.api.respondeai_api.constants.RequestEndpoints;
+import br.com.possoler.api.api_posso_ler.api.respondeai_api.dto.response.TheoryResponseDTO;
+import br.com.possoler.api.api_posso_ler.api.respondeai_api.dto.response.VideoResponseDTO;
 import br.com.possoler.api.api_posso_ler.api.respondeai_api.interfaces.RespondeAiConnection;
 import br.com.possoler.api.api_posso_ler.api.respondeai_api.configs.RestConfigs;
 import exceptions.ClientErrorException;
@@ -73,6 +73,6 @@ public class getTheory extends RestConfigs implements RespondeAiConnection {
 
     @Override
     public String buildURIRequest(String exerciseId) throws ClientErrorException {
-        return Request.DOMAIN_REQUEST + Request.THEORY_ENDPOINT + exerciseId;
+        return RequestEndpoints.DOMAIN_REQUEST + RequestEndpoints.THEORY_ENDPOINT + exerciseId;
     }
 }

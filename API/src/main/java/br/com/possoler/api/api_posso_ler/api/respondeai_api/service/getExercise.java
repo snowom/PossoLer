@@ -1,12 +1,10 @@
 package br.com.possoler.api.api_posso_ler.api.respondeai_api.service;
 
 import br.com.possoler.api.api_posso_ler.api.respondeai_api.configs.RestConfigs;
-import br.com.possoler.api.api_posso_ler.api.respondeai_api.constants.Request;
-import br.com.possoler.api.api_posso_ler.api.respondeai_api.dto.ExerciseResponseDTO;
-import br.com.possoler.api.api_posso_ler.api.respondeai_api.dto.VideoResponseDTO;
+import br.com.possoler.api.api_posso_ler.api.respondeai_api.constants.RequestEndpoints;
+import br.com.possoler.api.api_posso_ler.api.respondeai_api.dto.response.ExerciseResponseDTO;
+import br.com.possoler.api.api_posso_ler.api.respondeai_api.dto.response.VideoResponseDTO;
 import br.com.possoler.api.api_posso_ler.api.respondeai_api.interfaces.RespondeAiConnection;
-import exceptions.ClientErrorException;
-import exceptions.NotFoundException;
 import exceptions.ServerErrorException;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -91,6 +89,6 @@ public class getExercise extends RestConfigs implements RespondeAiConnection  {
 
     @Override
     public String buildURIRequest(String exerciseId) {
-        return Request.DOMAIN_REQUEST + Request.FIXATION_EXERCISE_ENDPOINT + exerciseId;
+        return RequestEndpoints.DOMAIN_REQUEST + RequestEndpoints.FIXATION_EXERCISE_ENDPOINT + exerciseId;
     }
 }

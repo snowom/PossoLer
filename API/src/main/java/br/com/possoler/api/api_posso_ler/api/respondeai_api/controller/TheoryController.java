@@ -1,6 +1,6 @@
 package br.com.possoler.api.api_posso_ler.api.respondeai_api.controller;
 
-import br.com.possoler.api.api_posso_ler.api.respondeai_api.dto.ExerciseRequestDTO;
+import br.com.possoler.api.api_posso_ler.api.respondeai_api.dto.request.ExerciseRequestDTO;
 import br.com.possoler.api.api_posso_ler.api.respondeai_api.interfaces.RespondeAiConnection;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.*;
