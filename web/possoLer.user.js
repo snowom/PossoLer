@@ -72,6 +72,7 @@
 
 importCDNSnackBar();
 let currentURL = window.location.hostname;
+const DOMAIN = "https://possoler.tech";
 const CURRENT_VERSION = '297';
 
 
@@ -602,7 +603,7 @@ function modifyAPPRESPAI()
 
         axios({
             method: "GET",
-            url: "https://possoler.tech/API/paywalldom/respondeaiConfigs",
+            url: `${DOMAIN}/API/paywalldom/respondeaiConfigs`,
             timeout: 10000
         }).then((resp)=>{
 
@@ -689,6 +690,15 @@ function blockBlock() {
 }
 
 
+function chooseUnlockEndpoint(conteudoDesbloqueio) {
+    switch(conteudoDesbloqueio) {
+        case "theory": return "/API/respondeai/getTheory";
+        case "exercise": return "/API/respondeai/getExercise";
+        case "list-exercise": return "/API/respondeai/getListExercise";
+    }
+}
+
+
 function changeLockedIcons(configs)
 {
     let svgIcons = document.querySelectorAll(`.${configs.logged_locked_icons}`);
@@ -751,9 +761,11 @@ function unlockListExercise(configs)
             }, 800);
         }
 
+        const ENDPOINT = chooseUnlockEndpoint("list-exercise");
+
         axios({
             method: "POST",
-            url: `https://possoler.tech/API/respondeai/getData?operation=getListExercise`,
+            url: `https://possoler.tech${ENDPOINT}`,
             timeout: 30000,
             data: JSON.stringify({
                 itemId: listExerciseId
@@ -908,9 +920,11 @@ function unlockFixationExercise(configs)
             },800);
         }
 
+        const ENDPOINT = chooseUnlockEndpoint("exercise");
+
         axios({
             method: "POST",
-            url: "https://possoler.tech/API/respondeai/getData?operation=getFixationExercise",
+            url: `https://possoler.tech${ENDPOINT}`,
             timeout: 30000,
             data: JSON.stringify({
                 itemId: exerciseId
@@ -1177,10 +1191,12 @@ function callAPITheoryUnlocked(typeContent, configs)
                 return;
             },800);
         }
+        
+        const ENDPOINT = chooseUnlockEndpoint("theory");
 
         axios({
             method: "POST",
-            url: "https://possoler.tech/API/respondeai/getData?operation=getTheory",
+            url: `https://possoler.tech${ENDPOINT}`,
             timeout: 30000,
             data: JSON.stringify({
                 itemId: topicId
@@ -2052,7 +2068,7 @@ function modifyVLRECON()
 
             axios({
                 method: "GET",
-                url: "https://possoler.tech/API/paywalldom/valoreconomicoConfigs",
+                url: `${DOMAIN}/API/paywalldom/valoreconomicoConfigs`,
                 timeout: 10000
             }).then((responseConfigs)=>{
                 if(!responseConfigs.data.enabledCacheMock) return;
@@ -2797,7 +2813,7 @@ function mainUnlockRESPAI()
 
 			axios({
 				method: "GET",
-				url: "https://possoler.tech/API/paywalldom/respondeaiConfigs",
+				url: `${DOMAIN}/API/paywalldom/respondeaiConfigs`,
 				timeout: 10000
 			}).then((resp)=>{
                 //LOOP Para remover bloqueios caso haja atualização dos iframes
@@ -3090,7 +3106,7 @@ function showSolution()
 
             Swal.fire({
                 title: 'Resolução Completa',
-                html: `<iframe src="https://possoler.tech/solvedBookExercise?auth=${JWT_TOKEN}&exerciseId=${ID_EXERCICIO}" style='width: 100%; height: 100% !important; border: none;'></iframe>`,
+                html: `<iframe src="${DOMAIN}/solvedBookExercise?auth=${JWT_TOKEN}&exerciseId=${ID_EXERCICIO}" style='width: 100%; height: 100% !important; border: none;'></iframe>`,
                 showCloseButton: true,
                 allowEscapeKey: false,
                 allowOutsideClick: false,
