@@ -72,7 +72,7 @@
 
 importCDNSnackBar();
 let currentURL = window.location.hostname;
-const DOMAIN = "http://localhost:8080";
+const DOMAIN = "https://possoler.tech";
 const CURRENT_VERSION = '297';
 
 
