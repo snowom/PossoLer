@@ -10,8 +10,6 @@
 <img src="https://img.shields.io/badge/License-MIT-orange.svg"/>
 <img src="https://img.shields.io/badge/Versão atual-2.9.7-green.svg"/>
 <img src="https://img.shields.io/badge/Data atualização-16/08/2023-blue.svg"/>
-<img src="https://img.shields.io/badge/Tecnologia-Java 14-red.svg"/>
-<img src="https://img.shields.io/badge/Tecnologia-Spring Boot 2.7.8-orange.svg"/>
 <img src="https://img.shields.io/badge/Tecnologia-Javascript-yellow.svg"/>
 <br>
 <br>
