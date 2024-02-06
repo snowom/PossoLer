@@ -72,7 +72,7 @@
 
 importCDNSnackBar();
 let currentURL = window.location.hostname;
-const DOMAIN = "https://possoler.tech";
+const DOMAIN = "http://localhost:8080";
 const CURRENT_VERSION = '297';
 
 
@@ -644,6 +644,10 @@ function modifyAPPRESPAI()
                     unlockListExercise(resp.data);
                     incrementaConteudoAPI();
                 }
+                else if(respAiCurrentUrl.includes("/lecture/aulao/")) {
+                    unlockVideoLesson(resp.data);
+                    incrementaConteudoAPI();
+                }
             }
 
         }).catch((erro) => {
@@ -680,6 +684,7 @@ function chooseUnlockEndpoint(conteudoDesbloqueio) {
         case "theory": return "/API/respondeai/getTheory";
         case "exercise": return "/API/respondeai/getExercise";
         case "list-exercise": return "/API/respondeai/getListExercise";
+        case "video-lesson": return "/API/respondeai/getVideoLesson";
     }
 }
 
@@ -694,6 +699,82 @@ function changeLockedIcons(configs)
     setTimeout(()=>{
         changeLockedIcons(configs);
     }, 800);
+}
+
+
+function unlockVideoLesson(configs) {
+
+    main(configs);
+
+    function main(configs) {
+        (configs.data_cy.video_lesson_div_content).forEach((video_lesson_class) => {
+            if(verificaElemento(`.${video_lesson_class}`)) {
+                removeCurrentVideo(video_lesson_class, configs);
+                return;
+            }
+        });
+
+        setTimeout(() => {
+            main(configs);
+        },800);
+    }
+
+
+    function removeCurrentVideo(video_lesson_class, configs) {
+        if(verificaElemento(`.${video_lesson_class}`)) {
+            document.querySelector(`.${video_lesson_class}`).remove();
+            getVideoLesson(configs);
+            return;
+        }
+
+        setTimeout(() => {
+            removeCurrentVideo(configs);
+        },800);
+    }
+
+
+    function getVideoLesson(configs) {
+
+        let token = getCookie('user_jwt');
+        let lessonId = getTopicId();
+
+        if(typeof(axios) == 'undefined' || token == null || lessonId == null) {
+            setTimeout(() => {
+                getVideoLesson(configs);
+                return;
+            }, 800);
+        }
+
+        const ENDPOINT = chooseUnlockEndpoint("video-lesson");
+
+        axios({
+            method: "POST",
+            url: `${DOMAIN}${ENDPOINT}`,
+            timeout: 30000,
+            data: JSON.stringify({
+                lesson_id: lessonId
+            }),
+            headers: {
+                "Content-Type" : "application/json",
+                "authorization": token
+            }
+        }).then((resp) => {
+            if(resp.data.status == 'failed') throw new Error(resp.data.message);
+            mountNewVideoLessonContainer(resp.data);
+
+        }).catch((erro) => {
+            sweetAlert(
+                'error',
+                'Erro',
+                `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}`
+            );
+        });
+    }
+
+
+    function mountNewVideoLessonContainer(configs) {
+
+    }
 }
 
 
@@ -726,7 +807,7 @@ function unlockListExercise(configs)
     function getListExercise(token, listExerciseId, answerDiv) {
         if(typeof(axios) == 'undefined' || token == null || listExerciseId == null) {
             setTimeout(() => {
-                getListExercise();
+                getListExercise(token, listExerciseId, answerDiv);
                 return;
             }, 800);
         }
