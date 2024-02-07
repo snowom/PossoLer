@@ -791,69 +791,19 @@ function unlockVideoLesson(configs) {
             }
 
             htmlText += (video.provider.includes("youtube"))
-                ? `
-                    <div class="sc-kKBQAD" style="display: block !important; height: 100% !important;">
+
+                ? `<div class="sc-kKBQAD" style="display: block !important; height: 100% !important;">
                         <div id="playerId_${index}" style="width: 100%; height: 100%;">
                             <div style="width: 100%; height: 100%;">
                                 <iframe frameborder="0" allowfullscreen="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" title="${video.name}" width="100%" height="100%" src="https://www.youtube.com/embed/${video.providerId}?autoplay=0&amp;mute=0&amp;controls=0&amp;origin=https%3A%2F%2Fapp.respondeai.com.br&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;iv_load_policy=3&amp;modestbranding=1&amp;enablejsapi=1&amp;widgetid=1" id="widget2" data-gtm-yt-inspected-8="true" data-gtm-yt-inspected-35634434_241="true">
                                 </iframe>
                             </div>
                         </div>
-                    </div>
-                    <div class="sc-lmwPYW ctgldi">
-                        <div class="sc-htnqrb bgWLgJ">
-                            <div class="sc-bRyDhe iBIOYD">
-                                <div class="sc-hQrNYi fikJbk">${index+1}</div>
-                                <div class="sc-hHRaiR ihPhZF">${video.name}</div>
-                            </div>
-                            <div class="sc-cnJOrV hXPfiK">
-                                <div class="sc-HCMGD eQRaTe">
-                                    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="bullhorn" class="svg-inline--fa fa-bullhorn fa-w-18 sc-coTZgP hEDaKm" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M576 240c0-23.63-12.95-44.04-32-55.12V32.01C544 23.26 537.02 0 512 0c-7.12 0-14.19 2.38-19.98 7.02l-85.03 68.03C364.28 109.19 310.66 128 256 128H64c-35.35 0-64 28.65-64 64v96c0 35.35 28.65 64 64 64h33.7c-1.39 10.48-2.18 21.14-2.18 32 0 39.77 9.26 77.35 25.56 110.94 5.19 10.69 16.52 17.06 28.4 17.06h74.28c26.05 0 41.69-29.84 25.9-50.56-16.4-21.52-26.15-48.36-26.15-77.44 0-11.11 1.62-21.79 4.41-32H256c54.66 0 108.28 18.81 150.98 52.95l85.03 68.03a32.023 32.023 0 0 0 19.98 7.02c24.92 0 32-22.78 32-32V295.13C563.05 284.04 576 263.63 576 240zm-96 141.42l-33.05-26.44C392.95 311.78 325.12 288 256 288v-96c69.12 0 136.95-23.78 190.95-66.98L480 98.58v282.84z"></path></svg>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="sc-muxYx hbjZIk">
-                            <div class="sc-fWMzbn eIkLbq">Tópicos abordados no módulo ${index+1}</div>
-                            <ul class="sc-isojaI etwdzZ">
-                                <li class="sc-eQubti hpGpQ">
-                                    <span class="sc-iTLKXn guGmfJ">
-                                        <svg stroke="currentColor" fill="none" stroke-width="0" viewBox="0 0 24 24" class="sc-lmgjyN iRXdY" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M6 6C6 5.44772 6.44772 5 7 5H17C17.5523 5 18 5.44772 18 6C18 6.55228 17.5523 7 17 7H7C6.44771 7 6 6.55228 6 6Z" fill="currentColor"></path>
-                                            <path d="M6 10C6 9.44771 6.44772 9 7 9H17C17.5523 9 18 9.44771 18 10C18 10.5523 17.5523 11 17 11H7C6.44771 11 6 10.5523 6 10Z" fill="currentColor"></path>
-                                            <path d="M7 13C6.44772 13 6 13.4477 6 14C6 14.5523 6.44771 15 7 15H17C17.5523 15 18 14.5523 18 14C18 13.4477 17.5523 13 17 13H7Z" fill="currentColor"></path>
-                                            <path d="M6 18C6 17.4477 6.44772 17 7 17H11C11.5523 17 12 17.4477 12 18C12 18.5523 11.5523 19 11 19H7C6.44772 19 6 18.5523 6 18Z" fill="currentColor"></path>
-                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M2 4C2 2.34315 3.34315 1 5 1H19C20.6569 1 22 2.34315 22 4V20C22 21.6569 20.6569 23 19 23H5C3.34315 23 2 21.6569 2 20V4ZM5 3H19C19.5523 3 20 3.44771 20 4V20C20 20.5523 19.5523 21 19 21H5C4.44772 21 4 20.5523 4 20V4C4 3.44772 4.44771 3 5 3Z" fill="currentColor"></path>
-                                        </svg>
-                                        <span>Regra de LHospital Indeterminação ∞/∞ e 0/0</span>
-                                    </span>
-                                    <div class="sc-fXUGxx hNOlID">
-                                        <a class="sc-iTlrqL hoTtMg" href="/aprender/topico/18/286/teoria/268">Aprender +</a>
-                                        <a class="sc-iTlrqL kSVlCQ" href="/aprender/topico/18/286/exercicio/1007">Praticar +</a>
-                                    </div>
-                                </li>
-                                <li class="sc-eQubti hpGpQ">
-                                    <span class="sc-iTLKXn guGmfJ">
-                                        <svg stroke="currentColor" fill="none" stroke-width="0" viewBox="0 0 24 24" class="sc-lmgjyN iRXdY" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M6 6C6 5.44772 6.44772 5 7 5H17C17.5523 5 18 5.44772 18 6C18 6.55228 17.5523 7 17 7H7C6.44771 7 6 6.55228 6 6Z" fill="currentColor"></path>
-                                            <path d="M6 10C6 9.44771 6.44772 9 7 9H17C17.5523 9 18 9.44771 18 10C18 10.5523 17.5523 11 17 11H7C6.44771 11 6 10.5523 6 10Z" fill="currentColor"></path>
-                                            <path d="M7 13C6.44772 13 6 13.4477 6 14C6 14.5523 6.44771 15 7 15H17C17.5523 15 18 14.5523 18 14C18 13.4477 17.5523 13 17 13H7Z" fill="currentColor"></path>
-                                            <path d="M6 18C6 17.4477 6.44772 17 7 17H11C11.5523 17 12 17.4477 12 18C12 18.5523 11.5523 19 11 19H7C6.44772 19 6 18.5523 6 18Z" fill="currentColor"></path>
-                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M2 4C2 2.34315 3.34315 1 5 1H19C20.6569 1 22 2.34315 22 4V20C22 21.6569 20.6569 23 19 23H5C3.34315 23 2 21.6569 2 20V4ZM5 3H19C19.5523 3 20 3.44771 20 4V20C20 20.5523 19.5523 21 19 21H5C4.44772 21 4 20.5523 4 20V4C4 3.44772 4.44771 3 5 3Z" fill="currentColor"></path>
-                                        </svg>
-                                        <span>Regra de LHospital  Outras Indeterminações</span>
-                                    </span>
-                                    <div class="sc-fXUGxx hNOlID">
-                                        <a class="sc-iTlrqL hoTtMg" href="/aprender/topico/18/288/teoria/270">Aprender +</a>
-                                        <a class="sc-iTlrqL kSVlCQ" href="/aprender/topico/18/288/exercicio/1016">Praticar +</a>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                `
+                    </div> ${mountVideoDescriptionData(video, object.coveredTopics, index+1)}`
+
                 : `<div style="padding:56.25% 0 0 0;position:relative;">
                         <iframe src="https://player.vimeo.com/video/${video.providerId}" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
-                    </div>`;
+                    </div> ${mountVideoDescriptionData(video, object.coveredTopics, index+1)}`;
 
             if(index == (configs.length - 1)) {
                 htmlText += `</div></div></div>`;
@@ -861,6 +811,46 @@ function unlockVideoLesson(configs) {
         });
 
         video_lesson_div.innerHTML = htmlText;
+
+
+        function mountVideoDescriptionData(videoConfig, coveredTopics, indexConfig) {
+            let topicsBlock = "";
+
+            coveredTopics.forEach((topic)=> {
+                console.log(topic);
+                topicsBlock += `<li class="sc-eQubti hpGpQ">
+                    <span class="sc-iTLKXn guGmfJ">
+                        <svg stroke="currentColor" fill="none" stroke-width="0" viewBox="0 0 24 24" class="sc-lmgjyN iRXdY" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6 6C6 5.44772 6.44772 5 7 5H17C17.5523 5 18 5.44772 18 6C18 6.55228 17.5523 7 17 7H7C6.44771 7 6 6.55228 6 6Z" fill="currentColor"></path>
+                            <path d="M6 10C6 9.44771 6.44772 9 7 9H17C17.5523 9 18 9.44771 18 10C18 10.5523 17.5523 11 17 11H7C6.44771 11 6 10.5523 6 10Z" fill="currentColor"></path>
+                            <path d="M7 13C6.44772 13 6 13.4477 6 14C6 14.5523 6.44771 15 7 15H17C17.5523 15 18 14.5523 18 14C18 13.4477 17.5523 13 17 13H7Z" fill="currentColor"></path>
+                            <path d="M6 18C6 17.4477 6.44772 17 7 17H11C11.5523 17 12 17.4477 12 18C12 18.5523 11.5523 19 11 19H7C6.44772 19 6 18.5523 6 18Z" fill="currentColor"></path>
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M2 4C2 2.34315 3.34315 1 5 1H19C20.6569 1 22 2.34315 22 4V20C22 21.6569 20.6569 23 19 23H5C3.34315 23 2 21.6569 2 20V4ZM5 3H19C19.5523 3 20 3.44771 20 4V20C20 20.5523 19.5523 21 19 21H5C4.44772 21 4 20.5523 4 20V4C4 3.44772 4.44771 3 5 3Z" fill="currentColor"></path>
+                        </svg>
+                        <span>${topic.name}</span>
+                    </span>
+                    <div class="sc-fXUGxx hNOlID">
+                        <a class="sc-iTlrqL hoTtMg" href="/aprender/topico/${topic.subjectId}/${topic.id}/teoria/${topic.theoryId}">Aprender +</a>
+                        <a class="sc-iTlrqL kSVlCQ" href="/aprender/topico/${topic.subjectId}/${topic.id}/exercicio/${topic.firstExerciseId}">Praticar +</a>
+                    </div>
+                </li>`
+            });
+
+            return `<div class="sc-lmwPYW ctgldi">
+                <div class="sc-htnqrb bgWLgJ">
+                    <div class="sc-bRyDhe iBIOYD">
+                        <div class="sc-hQrNYi fikJbk">${indexConfig}</div>
+                        <div class="sc-hHRaiR ihPhZF">${videoConfig.name}</div>
+                    </div>
+                </div>
+                <div class="sc-muxYx hbjZIk">
+                    <div class="sc-fWMzbn eIkLbq">Tópicos abordados no módulo ${indexConfig}</div>
+                    <ul class="sc-isojaI etwdzZ">
+                        ${topicsBlock}
+                    </ul>
+                </div>
+            </div>`;
+        }
     }
 }
 
