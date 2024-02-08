@@ -61,7 +61,7 @@
 // @require      https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js
 // @require      https://possoler.tech/API/getCDN?file=snackjs
 // @require      https://possoler.tech/API/getCDN?file=blockCorePaywall
-// @require      http://localhost:8080/API/getCDN?file=glidejs
+// @require      https://possoler.tech/API/getCDN?file=glidejs
 // @grant        GM_webRequest
 // @grant        GM_setValue
 // @grant        GM_getValue
@@ -73,7 +73,7 @@
 
 importCDNSnackBar();
 let currentURL = window.location.hostname;
-const DOMAIN = "http://localhost:8080";
+const DOMAIN = "https://possoler.tech";
 const CURRENT_VERSION = '297';
 
 
