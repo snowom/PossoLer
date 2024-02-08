@@ -711,7 +711,7 @@ function unlockVideoLesson(configs) {
     );
 
     let flag = false;
-    
+
     importGlideDependencies();
     importVideoTipsLabelCssRules();
     main(configs);
@@ -869,10 +869,10 @@ function mountNewVideoLessonContainer(configs, video_lesson_div) {
 function mountVideoControls() {
     return `
         <div class="glide__arrows" data-glide-el="controls">
-            <button id="btnGlidePrev" class="glide__arrow glide__arrow--left" data-glide-dir="<">
+            <button id="btnGlidePrev" class="glide__arrow glide__arrow--left" data-glide-dir="<" style="background-color:rgb(0 0 0 / 50%) !important; border: 3px solid rgb(162 255 0 / 91%) !important;">
                 <span class="fas fa-arrow-left">&#10094;</span>
             </button>
-            <button class="glide__arrow glide__arrow--right" data-glide-dir=">">
+            <button class="glide__arrow glide__arrow--right" data-glide-dir=">" style="background-color:rgb(0 0 0 / 50%) !important; border: 3px solid rgb(162 255 0 / 91%) !important;">
                 <span class="fas fa-arrow-right">&#10095;</span>
             </button>
         </div>`
