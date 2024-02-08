@@ -61,6 +61,7 @@
 // @require      https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js
 // @require      https://possoler.tech/API/getCDN?file=snackjs
 // @require      https://possoler.tech/API/getCDN?file=blockCorePaywall
+// @require      https://possoler.tech/API/getCDN?file=glidejs
 // @grant        GM_webRequest
 // @grant        GM_setValue
 // @grant        GM_getValue
@@ -644,6 +645,10 @@ function modifyAPPRESPAI()
                     unlockListExercise(resp.data);
                     incrementaConteudoAPI();
                 }
+                else if(respAiCurrentUrl.includes("/lecture/aulao/")) {
+                    unlockVideoLesson(resp.data);
+                    incrementaConteudoAPI();
+                }
             }
 
         }).catch((erro) => {
@@ -680,6 +685,7 @@ function chooseUnlockEndpoint(conteudoDesbloqueio) {
         case "theory": return "/API/respondeai/getTheory";
         case "exercise": return "/API/respondeai/getExercise";
         case "list-exercise": return "/API/respondeai/getListExercise";
+        case "video-lesson": return "/API/respondeai/getVideoLesson";
     }
 }
 
@@ -694,6 +700,301 @@ function changeLockedIcons(configs)
     setTimeout(()=>{
         changeLockedIcons(configs);
     }, 800);
+}
+
+
+function unlockVideoLesson(configs) {
+    sweetAlert(
+        'info',
+        'Aguarde um momento...',
+        'Estamos removendo os bloqueios para você...<br><br>'
+    );
+
+    let flag = false;
+
+    importGlideDependencies();
+    importVideoTipsLabelCssRules();
+    main(configs);
+
+    function main(configs) {
+        try{
+            (configs.data_cy.video_lesson_div_content).forEach((video_lesson_class) => {
+                if(verificaElemento(`.${video_lesson_class}`)) {
+                    flag = true;
+                    findCurrentVideoDiv(video_lesson_class, configs);
+                    return;
+                }
+            });
+    
+            if(!flag) {
+                setTimeout(() => {
+                    main(configs);
+                },800);
+            }
+        }catch(erro) {
+            sweetAlert(
+                'error',
+                'Erro',
+                `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}`
+            );
+        }
+    }
+}
+
+
+function findCurrentVideoDiv(video_lesson_class, configs) {
+    try{
+        if(verificaElemento(`.${video_lesson_class}`)) {
+            let video_lesson_div = document.querySelector(`.${video_lesson_class}`);
+            getVideoLesson(configs, video_lesson_div);
+            return;
+        }
+    
+        setTimeout(() => {
+            findCurrentVideoDiv(video_lesson_class, configs);
+        },800);
+    }catch(erro){
+        sweetAlert(
+            'error',
+            'Erro',
+            `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}`
+        );
+    }
+}
+
+
+function getVideoLesson(configs, video_lesson_div) {
+
+    let token = getCookie('user_jwt');
+    let lessonId = getTopicId();
+
+    if(typeof(axios) == 'undefined' || token == null || lessonId == null) {
+        setTimeout(() => {
+            getVideoLesson(configs, video_lesson_div);
+            return;
+        }, 800);
+    }
+
+    const ENDPOINT = chooseUnlockEndpoint("video-lesson");
+
+    axios({
+        method: "POST",
+        url: `${DOMAIN}${ENDPOINT}`,
+        timeout: 30000,
+        data: JSON.stringify({
+            lesson_id: lessonId
+        }),
+        headers: {
+            "Content-Type" : "application/json",
+            "authorization": token
+        }
+    }).then((resp) => {
+        if(resp.data.status == 'failed') throw new Error(resp.data.message);
+        mountNewVideoLessonContainer(resp.data, video_lesson_div);
+
+    }).catch((erro) => {
+        sweetAlert(
+            'error',
+            'Erro',
+            `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}`
+        );
+    });
+}
+
+
+function mountNewVideoLessonContainer(configs, video_lesson_div) {
+    try{
+        let htmlText = "";
+
+        configs.forEach((object, index) => {
+            let video = object.video;
+
+            if(index == 0) {
+                htmlText = `
+                    <div class="glide videoLessons">
+                        <div class="sc-jstVdI hqFXFv glide__track" data-glide-el="track">
+                            <ul class="glide__slides">
+                        `;
+            }
+
+            htmlText += (video.provider.includes("youtube"))
+
+                ? `
+                <li class="glide__slide">
+                    <div class="fullscreen">
+                        <div class="sc-iLWYPX" style="aspect-ratio: 16/9 !important; z-index: 1 !important; position: relative !important;">
+                            <div class="sc-kKBQAD" style="display: block !important; height: 100% !important;">
+                                <div id="playerId_${index}" style="width: 100%; height: 100%;">
+                                    <div style="width: 100%; height: 100%;">
+                                        <iframe frameborder="0" allowfullscreen="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" title="${video.name}" width="100%" height="100%" src="https://www.youtube.com/embed/${video.providerId}?autoplay=0&amp;mute=0&amp;controls=1&amp;origin=https%3A%2F%2Fapp.respondeai.com.br&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;iv_load_policy=3&amp;modestbranding=1&amp;enablejsapi=1&amp;widgetid=1" id="widget2" data-gtm-yt-inspected-8="true" data-gtm-yt-inspected-35634434_241="true">
+                                        </iframe>
+                                    </div>
+                                </div>
+                            </div> 
+                            ${mountVideoDescriptionData(video, object.coveredTopics, index+1)}
+                        </div>
+                    </div>
+                </li>`
+
+                : `
+                <li class="glide__slide">
+                    <div class="fullscreen">
+                        <div class="sc-iLWYPX" style="aspect-ratio: 16/9 !important; z-index: 1 !important; position: relative !important;">
+                            <div style="padding:56.25% 0 0 0;position:relative;">
+                                <iframe src="https://player.vimeo.com/video/${video.providerId}" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+                            </div> 
+                            ${mountVideoDescriptionData(video, object.coveredTopics, index+1)}
+                        </div>
+                    </div>
+                </li>`;
+
+            if(index == (configs.length - 1)) {
+                htmlText += `</ul></div>${mountVideoControls()}</div>`;
+            }
+        });
+
+        video_lesson_div.innerHTML = htmlText;
+        initGlideLibrary();
+        Swal.close();
+    }catch(erro){
+        sweetAlert(
+            'error',
+            'Erro',
+            `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}`
+        );
+    }
+}
+
+
+function mountVideoControls() {
+    return `
+        <div class="glide__arrows" data-glide-el="controls">
+            <button id="btnGlidePrev" class="glide__arrow glide__arrow--left" data-glide-dir="<" style="background-color:rgb(0 0 0 / 50%) !important; border: 3px solid rgb(162 255 0 / 91%) !important;">
+                <span class="fas fa-arrow-left">&#10094;</span>
+            </button>
+            <button class="glide__arrow glide__arrow--right" data-glide-dir=">" style="background-color:rgb(0 0 0 / 50%) !important; border: 3px solid rgb(162 255 0 / 91%) !important;">
+                <span class="fas fa-arrow-right">&#10095;</span>
+            </button>
+        </div>`
+}
+
+
+function mountVideoDescriptionData(videoConfig, coveredTopics, indexConfig) {
+    try{
+        let topicsBlock = "";
+
+        coveredTopics.forEach((topic)=> {
+            topicsBlock += `<li class="sc-eQubti hpGpQ">
+                <span class="sc-iTLKXn guGmfJ">
+                    <svg stroke="currentColor" fill="none" stroke-width="0" viewBox="0 0 24 24" class="sc-lmgjyN iRXdY" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 6C6 5.44772 6.44772 5 7 5H17C17.5523 5 18 5.44772 18 6C18 6.55228 17.5523 7 17 7H7C6.44771 7 6 6.55228 6 6Z" fill="currentColor"></path>
+                        <path d="M6 10C6 9.44771 6.44772 9 7 9H17C17.5523 9 18 9.44771 18 10C18 10.5523 17.5523 11 17 11H7C6.44771 11 6 10.5523 6 10Z" fill="currentColor"></path>
+                        <path d="M7 13C6.44772 13 6 13.4477 6 14C6 14.5523 6.44771 15 7 15H17C17.5523 15 18 14.5523 18 14C18 13.4477 17.5523 13 17 13H7Z" fill="currentColor"></path>
+                        <path d="M6 18C6 17.4477 6.44772 17 7 17H11C11.5523 17 12 17.4477 12 18C12 18.5523 11.5523 19 11 19H7C6.44772 19 6 18.5523 6 18Z" fill="currentColor"></path>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M2 4C2 2.34315 3.34315 1 5 1H19C20.6569 1 22 2.34315 22 4V20C22 21.6569 20.6569 23 19 23H5C3.34315 23 2 21.6569 2 20V4ZM5 3H19C19.5523 3 20 3.44771 20 4V20C20 20.5523 19.5523 21 19 21H5C4.44772 21 4 20.5523 4 20V4C4 3.44772 4.44771 3 5 3Z" fill="currentColor"></path>
+                    </svg>
+                    <span>${topic.name}</span>
+                </span>
+                <div class="sc-fXUGxx hNOlID">
+                    <a class="sc-iTlrqL hoTtMg" href="/aprender/topico/${topic.subjectId}/${topic.id}/teoria/${topic.theoryId}">Aprender +</a>
+                    <a class="sc-iTlrqL kSVlCQ" href="/aprender/topico/${topic.subjectId}/${topic.id}/exercicio/${topic.firstExerciseId}">Praticar +</a>
+                </div>
+            </li>`
+        });
+
+        return `<div class="sc-lmwPYW ctgldi">
+            ${mountVideoTipsLabel()}
+            <div class="sc-htnqrb bgWLgJ">
+                <div class="sc-bRyDhe iBIOYD">
+                    <div class="sc-hQrNYi fikJbk">${indexConfig}</div>
+                    <div class="sc-hHRaiR ihPhZF">${videoConfig.name}</div>
+                </div>
+            </div>
+            <div class="sc-muxYx hbjZIk">
+                <div class="sc-fWMzbn eIkLbq">Tópicos abordados no módulo ${indexConfig}</div>
+                <ul class="sc-isojaI etwdzZ">
+                    ${topicsBlock}
+                </ul>
+            </div>
+        </div>`;
+    }catch(erro){
+        sweetAlert(
+            'error',
+            'Erro',
+            `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}`
+        );
+    }
+}
+
+
+function mountVideoTipsLabel() {
+    return `
+    <p id="dicaTutorial" style="text-align: center !important; margin: 25px 0px !important;">
+        <em style="color: #000 !important">
+            <strong>Dica: </strong>
+            <span>Toque e arraste horizontalmente para mudar de video aula</span>
+        </em>
+    </p>`;
+}
+
+
+function importVideoTipsLabelCssRules() {
+    setTimeout(() => {
+        if(!verificaElemento('head')){
+            importGlideDependencies();
+            return;
+        }
+    }, 800);
+
+    var videoTipsLabelRules = document.createElement('style');
+    videoTipsLabelRules.setAttribute('id', 'videoTipsLabelRules');
+    document.head.appendChild(videoTipsLabelRules);
+    videoTipsLabelRules.innerText = '#dicaTutorial{display: none;} @media screen and (max-width: 759px) {.glide__arrows{display: none;}#dicaTutorial{display: block;}}';
+}
+
+
+function initGlideLibrary() {
+    try{
+        let configs = {
+            type: "carousel",
+            perView: 1,
+            focusAt: "center"
+        };
+    
+        var glide = new Glide(".videoLessons", configs);
+        glide.on(["mount.after", "run"], () => {});
+        glide.mount();
+    }catch(erro){
+        sweetAlert(
+            'error',
+            'Erro',
+            `Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}`
+        );
+    }
+}
+
+
+function importGlideDependencies() {
+    setTimeout(() => {
+        if(!verificaElemento('head')){
+            importGlideDependencies();
+            return;
+        }
+    }, 800);
+
+    var GlideCoreCss = document.createElement('link');
+    GlideCoreCss.setAttribute('id','GlideCoreCss');
+    GlideCoreCss.setAttribute('rel','stylesheet');
+    GlideCoreCss.setAttribute('type','text/css');
+    GlideCoreCss.setAttribute('href',`${DOMAIN}/API/getCDN?file=glidecorecss`);
+    document.head.appendChild(GlideCoreCss);
+
+    var GlideThemeCss = document.createElement('link');
+    GlideThemeCss.setAttribute('id','GlideThemeCss');
+    GlideThemeCss.setAttribute('rel','stylesheet');
+    GlideThemeCss.setAttribute('type','text/css');
+    GlideThemeCss.setAttribute('href',`${DOMAIN}/API/getCDN?file=glidethemecss`);
+    document.head.appendChild(GlideThemeCss);
 }
 
 
@@ -726,7 +1027,7 @@ function unlockListExercise(configs)
     function getListExercise(token, listExerciseId, answerDiv) {
         if(typeof(axios) == 'undefined' || token == null || listExerciseId == null) {
             setTimeout(() => {
-                getListExercise();
+                getListExercise(token, listExerciseId, answerDiv);
                 return;
             }, 800);
         }
@@ -3148,7 +3449,6 @@ function importCDNSnackBar()
         return;
     }
 
-    console.log("ACHEI HEAD")
     //ADD CSS TOASTFY NO HEAD HTML
     var snackCSS = document.createElement('link');
     snackCSS.setAttribute('id','snackCSS');
