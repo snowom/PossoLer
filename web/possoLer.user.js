@@ -1270,55 +1270,11 @@ function unlockFixationExercise(configs)
 
 function unlockTeoria(configs)
 {
+    removeFormatToogle(configs)
     main(configs);
 
 
     function main(configs) {
-        montaConteudoTexto(configs);
-        montaConteudoVideo(configs);
-        setActionNewOnChangeFormatToggle(configs);
-    }
-
-
-    function setActionNewOnChangeFormatToggle(configs) {
-        let flag = false;
-        let divs = document.querySelectorAll('div');
-
-        divs.forEach((div) => {
-            (configs.data_cy.format_toggle).forEach((format_toggle_class) => {
-                if(div.classList.contains(`${format_toggle_class}`)) {
-                    flag = true;
-
-                    div.addEventListener("click", ()=>{
-                        let nodes = div.childNodes;
-                        for(let i=0; i<nodes.length; i++){
-                            if(nodes[i].nodeName == 'P' && nodes[i].textContent == 'Alternar para texto >>'){
-                                procuraDivRecipiente(configs);
-                            }
-                            if(nodes[i].nodeName == 'P' && nodes[i].textContent == 'Alternar para video >>'){
-                                callAPITheoryUnlocked("video", configs, null);
-                                if(verificaElemento("#msgLottieDesbloqueio")){
-                                    document.getElementById("msgLottieDesbloqueio").innerHTML = `
-                                        <p class="lead">Aguarde um momento...<br>Estamos removendo os bloqueios para você...</p>`
-                                }
-                                break;
-                            }
-                        }
-                    });
-                    return;
-                }
-            });
-        });
-
-        if(!flag) {
-            setTimeout(() => {
-                setActionNewOnChangeFormatToggle(configs);
-            }, 800);
-        }
-    }
-
-
-    function montaConteudoTexto(configs) {
         let flag = false;
         let divsSteps = document.querySelectorAll('div');
         for(let j=0; j<divsSteps.length; j++){
@@ -1342,7 +1298,8 @@ function unlockTeoria(configs)
                             divStepsContainer.innerHTML = setLoadingPageAnimation();
 
                             //CHAMA API PARA DESBLOQUEAR CONTEUDO
-                            callAPITheoryUnlocked('texto', configs, randomId);
+                            callAPITheoryUnlocked(configs, randomId);
+                            callAPITheoryUnlocked(configs, randomId);
                             break;
                         }
                     }catch(erro){
@@ -1354,71 +1311,7 @@ function unlockTeoria(configs)
         }
         if(!flag) {
             setTimeout(() => {
-                montaConteudoTexto(configs);
-            },800);
-        }
-    }
-
-
-    function montaConteudoVideo(configs) {
-        let flag = false;
-        let divsVideo = document.querySelectorAll('div');
-
-        for(let j=0; j<divsVideo.length; j++){
-            for(let iConfig2=0; iConfig2<configs.data_cy.theory_video_content.length; iConfig2++) {
-                if(divsVideo[j].classList.contains(`${configs.data_cy.theory_video_content[iConfig2]}`)) {
-                    if(divsVideo[j].children.length == 0) {
-                        flag = true;
-                        divsVideo[j].innerHTML = setLoadingPageAnimation();
-                        callAPITheoryUnlocked('video', configs, null);
-                        break;
-                    }
-                }
-            }
-        }
-        if(!flag) {
-            setTimeout(() => {
-                montaConteudoVideo(configs);
-            },800);
-        }
-    }
-
-
-    function procuraDivRecipiente(configs) {
-        let flag = false;
-
-        //PROCURA DIV PARA RECEBER CONTEUDO
-        let divsSteps = document.querySelectorAll('div');
-        for(let j=0; j<divsSteps.length; j++){
-            for(let iConfig2=0; iConfig2<configs.data_cy.theory_text_content.length; iConfig2++){
-                if(divsSteps[j].classList.contains(`${configs.data_cy.theory_text_content[iConfig2]}`)){
-
-                    let randomId = Math.round(Math.random()*100000000);
-                    let divStepsContainer = divsSteps[j].children[0];
-                    divStepsContainer.setAttribute("id", randomId);
-                    flag = true;
-
-                    try{
-                        if(
-                            divStepsContainer.children[0].isEqualNode(divStepsContainer.children[1]) &&
-                            divStepsContainer.children[1].isEqualNode(divStepsContainer.children[2]) &&
-                            divStepsContainer.children[2].isEqualNode(divStepsContainer.children[3]) &&
-                            divStepsContainer.children[3].isEqualNode(divStepsContainer.children[4]) &&
-                            divStepsContainer.children[4].isEqualNode(divStepsContainer.children[5])
-                        ){
-                            divStepsContainer.innerHTML = setLoadingPageAnimation();
-                            callAPITheoryUnlocked("texto", configs, randomId);
-                            break;
-                        }
-                    }catch(erro){
-
-                    }
-                }
-            }
-        }
-        if(!flag) {
-            setTimeout(() => {
-                procuraDivRecipiente(configs);
+                main(configs);
             },800);
         }
     }
@@ -1475,18 +1368,18 @@ function importRequiredCDN()
  * Faz chamada para API e popula página de acordo com o parametro typeContent
  * @param {*} typeContent
  */
-function callAPITheoryUnlocked(typeContent, configs, randomId)
+function callAPITheoryUnlocked(configs, randomId)
 {
-    main(typeContent, configs, randomId);
+    main(configs, randomId);
 
 
-    function main(typeContent, configs, randomId) {
+    function main(configs, randomId) {
         let token = getCookie('user_jwt');
         let topicId = getTopicId();
 
         if(typeof(axios) != 'function' || token == null || topicId == null){
             setTimeout(() => {
-                main(typeContent, configs, randomId);
+                main(configs, randomId);
                 return;
             },800);
         }
@@ -1509,12 +1402,9 @@ function callAPITheoryUnlocked(typeContent, configs, randomId)
             if(resp.data.status == 'failed')
                 throw new Error(resp.data.message);
 
-            if(typeContent == 'texto'){
-                setTextTheoryUnlocked(resp, randomId);
-            }
-            else if(typeContent == 'video'){
-                setVideoTheoryUnlocked(resp);
-            }
+            setTheoryUnlocked(resp, randomId);
+                
+
         }).catch((erro)=>{
             sweetAlert(
                 'error',
@@ -1530,14 +1420,15 @@ function callAPITheoryUnlocked(typeContent, configs, randomId)
     }
 
 
-    function setTextTheoryUnlocked(resp, randomId) {
+    function setTheoryUnlocked(resp, randomId) {
         console.log("setTextTheory", randomId);
         let div = document.getElementById(`${randomId}`);
         if(div) {
             div.innerHTML = `
                 <div class="sc-jTzLTM fFEUnb rendered">
                     <div>${resp.data.lightBody}</div>
-                </div>`;
+                </div>${setVideoTheoryUnlocked(resp)}`;
+
             MathJax.typeset();
             return;
         }
@@ -1547,53 +1438,42 @@ function callAPITheoryUnlocked(typeContent, configs, randomId)
     function setVideoTheoryUnlocked(resp) {
         const SINGLE_VIDEO_SIZE = 450;
         const SPACE_BETWEEN_VIDEOS = 50;
-        let flag = false;
+        let htmlText = ``;
+        
+        if(resp.data.hasOwnProperty('videos')) {
+            importVimeoPlayerJS();
 
-        let divs = document.querySelectorAll('div');
-        for(let i=0; i<divs.length; i++){
-            for(let iConfig2=0; iConfig2<configs.data_cy.theory_video_content.length; iConfig2++) {
-                if(divs[i].classList.contains(`${configs.data_cy.theory_video_content[iConfig2]}`)) {
-                    flag = true;
-                    if(divs[i].children[0].id == "containerLootieLoading") {
-                        if(resp.data.hasOwnProperty('videos')) {
-                            importVimeoPlayerJS();
 
-                            //REMOVE ANIMACAO DE CARREGAMENTO
-                            document.getElementById("containerLootieLoading").remove();
+            //SETA TAMANHO DA PAGINA
+            let height = (SINGLE_VIDEO_SIZE*resp.data.videos.length) + (SPACE_BETWEEN_VIDEOS*resp.data.videos.length);
+            htmlText += `<div style="height: ${height}px !important;">`
 
-                            //SETA TAMANHO DA PAGINA
-                            divs[i].style.cssText += `height: ${(SINGLE_VIDEO_SIZE*resp.data.videos.length) + (SPACE_BETWEEN_VIDEOS*resp.data.videos.length)}px !important`;
+            //SETA LABEL TITULO VIDEO AULA
+            htmlText += `<h1 style="color: #00b8d6; font-size: 1.7em; font-family:Droid Serif, serif; font-weight: inherit; margin: 50px 0px 30px 0px">Vídeo Aula</h1>`;
 
-                            //ITERA SOBRE OBJETO DE RESPOSTA PARA MONTAR PAGINA
-                            for(let j=0; j<resp.data.videos.length; j++){
+            //ITERA SOBRE OBJETO DE RESPOSTA PARA MONTAR PAGINA
+            (resp.data.videos).forEach((video) => {
 
-                                divs[i].innerHTML += (resp.data.videos[j].provider.includes("youtube"))
+                htmlText += (video.provider.includes("youtube"))
 
-                                ?`<div data-cy="video-iframe" allowfullscreen="" frameborder="0" style="width: 100%; height: ${100/resp.data.videos.length}%;">
-                                        <div style="width: 100%; height: 100%;">
-                                            <iframe frameborder="0" allowfullscreen="1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" title="YouTube video player" width="100%" height="100%" src="https://www.youtube.com/embed/${resp.data.videos[j].providerId}?autoplay=0&amp;mute=0&amp;controls=1&amp;origin=https%3A%2F%2Fapp.respondeai.com.br&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;iv_load_policy=3&amp;modestbranding=1&amp;enablejsapi=1&amp;widgetid=1"></iframe>
-                                        </div>
-                                    </div>
-                                    <div style="height: ${SPACE_BETWEEN_VIDEOS}px !important"></div>`
+                    ?  `<div data-cy="video-iframe" allowfullscreen="" frameborder="0" style="width: 100%; height: ${100/resp.data.videos.length}%;">
+                            <div style="width: 100%; height: 100%;">
+                                <iframe frameborder="0" allowfullscreen="1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" title="YouTube video player" width="100%" height="100%" src="https://www.youtube.com/embed/${video.providerId}?autoplay=0&amp;mute=0&amp;controls=1&amp;origin=https%3A%2F%2Fapp.respondeai.com.br&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;iv_load_policy=3&amp;modestbranding=1&amp;enablejsapi=1&amp;widgetid=1"></iframe>
+                            </div>
+                        </div>
+                        <div style="height: ${SPACE_BETWEEN_VIDEOS}px !important"></div>`
 
-                                :`<div style="padding:56.25% 0 0 0;position:relative;">
-                                    <iframe src="https://player.vimeo.com/video/${resp.data.videos[j].providerId}" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
-                                </div>
-                                <div style="height: ${SPACE_BETWEEN_VIDEOS}px !important"></div>`;
-                            }
-                        }else{
-                            throw new Error("Falha ao obter objeto \"videos\"");
-                        }
-                    }
-                    break;
-                }
-            }
+                    :  `<div style="padding:56.25% 0 0 0;position:relative;">
+                          <iframe src="https://player.vimeo.com/video/${video.providerId}" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                        <div style="height: ${SPACE_BETWEEN_VIDEOS}px !important"></div>`;
+            });
+            htmlText += `</div>`
+        }else{
+            throw new Error("Falha ao obter objeto \"videos\"");
         }
-        if(!flag) {
-            setTimeout(() => {
-                setVideoTheoryUnlocked();
-            },800);
-        }
+
+        return htmlText;
     }
 }
 
