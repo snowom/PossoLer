@@ -1,4 +1,5 @@
 const CURRENT_VERSION = '297';
+const DOMAIN = "http://localhost:8080"
 
 /**
  * Verifica qual URL de correspondencia o usuario está e aplica a 
@@ -184,11 +185,15 @@ function main()
         modifyGAZ();
     }
     else if(currentURL.includes("semprefamilia.com.br")){
-        //saveDataForDashboard(44)
+        //saveDataForDashboard(44);
         verificaAtualizacaoVersao();
     }
     else if(currentURL.includes("uol.com.br")){
-        //saveDataForDashboard(45)
+        //saveDataForDashboard(45);
+        verificaAtualizacaoVersao();
+    }
+    else if(currentURL.includes("vocesa.abril.com.br")){
+        //saveDataForDashboard(46);
         verificaAtualizacaoVersao();
     }
 }
@@ -216,7 +221,7 @@ function modifyGAZ()
                         //RECUPERA ARQUIVO COM CONTEUDO DESBLOQUEADO
                         axios({
                             method: 'POST',
-                            url: 'https://possoler.tech/API/cachemock/getArticleContent',
+                            url: `${DOMAIN}/API/cachemock/getArticleContent`,
                             timeout: 30000,
                             data: JSON.stringify({
                                 key: btoa(window.location.pathname)
@@ -322,7 +327,7 @@ function modifyGAZ()
                                     //FAZ POST PARA CRIAR ARQUIVO JSON COM CONTEUDO DA PÁGINA DE CACHE
                                     axios({
                                         method: 'POST',
-                                        url: 'https://possoler.tech/API/cachemock/saveArticleContent',
+                                        url: `${DOMAIN}/API/cachemock/saveArticleContent`,
                                         timeout: 30000,
                                         data: JSON.stringify({
                                             key: btoa(key.hash),
@@ -505,191 +510,223 @@ function modifyAPPRESPAI()
 {
     let payload = `
 
-        let waitAxios = setInterval(()=>{
-            if(typeof(axios) == "function" && typeof(Swal) == 'function') {
-                clearInterval(waitAxios);
+    blockBlock();
+    importRequiredCDN();
+    ${verificaAtualizacaoVersao()};
+    main();
 
-                axios({
-                    method: "GET",
-                    url: "https://possoler.tech/API/paywalldom/respondeaiConfigs",
-                    timeout: 10000
-                }).then((resp)=>{
-        
+    /**
+     * Função aninhada para auardar carregamento de recursos
+     */
+    function main() {
+
+        if(!typeof(axios) == "undefined" || typeof(Swal) == 'undefined') {
+            setTimeout(() => {
+                main();
+            }, 1000);
+            return;
+        }
+
+        axios({
+            method: "GET",
+            url: "${DOMAIN}/API/paywalldom/respondeaiConfigs",
+            timeout: 10000
+        }).then((resp)=>{
+
+            mainUnlockFunction();
+            enableUrlChangeDetect();
+            ${checkButtonCreation()};
+            changeLockedIcons(resp.data);
+            removeReactModalOverlay(resp.data);
+            enableBodyOverflow(resp.data);
+    
+            let urlBase = document.location.href;
+            setInterval(()=>{
+                let tmpUrl = document.location.href;
+                if(urlBase != tmpUrl){
+                    urlBase = tmpUrl;
                     mainUnlockFunction();
                     ${checkButtonCreation()};
-                    changeLockedIcons(resp.data);
+                    enableBodyOverflow();
+                    removeReactModalOverlay(resp.data);
+                    ${verificaAtualizacaoVersao()};
+                }
+            },800);
+    
+            /**
+             * Nested function (funcao aninhada)
+             * Funcao principal de desbloqueio de conteudo
+             */
+            function mainUnlockFunction(){
+                if(window.location.href.includes('app.respondeai.com.br/aprender') && window.location.href.includes('/teoria/')){
+                    importRequiredCDN();
+                    setTheoryLinksAction(resp.data);
                     enableBodyOverflow(resp.data);
                     removeReactModalOverlay(resp.data);
+                    removeDexterBlock(resp.data);
+                    removeBlurPage(resp.data);
+                    unlockTeoria(resp.data);
+                    ${incrementaConteudoAPI()};
+                    ${verificaAtualizacaoVersao()};
+                }
+                else if(window.location.href.includes('app.respondeai.com.br/aprender') && window.location.href.includes('/exercicio/')){
+                    importRequiredCDN();
+                    setTheoryLinksAction(resp.data);
+                    enableBodyOverflow(resp.data);
+                    removeReactModalOverlay(resp.data);
+                    removeDexterBlock(resp.data);
+                    removeBlurPage(resp.data);
+                    unlockFixationExercise(resp.data);
+                    ${incrementaConteudoAPI()};
+                    ${verificaAtualizacaoVersao()};
+                }
+                else if((window.location.href.includes('app.respondeai.com.br/aprender') || window.location.href.includes('app.respondeai.com.br/praticar')) && window.location.href.includes('/exercicio-lista/')){
+                    importRequiredCDN();
+                    setTheoryLinksAction(resp.data);
+                    enableBodyOverflow(resp.data);
+                    removeReactModalOverlay(resp.data);
+                    removeDexterBlock(resp.data);
+                    removeBlurPage(resp.data);
+                    unlockListExercise(resp.data);
+                    ${incrementaConteudoAPI()};
+                    ${verificaAtualizacaoVersao()};
+                }
+            }
+        }).catch((erro) => {
+            if(erro.toString().includes('timeout')){
+                sweetAlert(
+                    'error',
+                    'Erro',
+                    'Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}',
+                );
+            }else{
+                sweetAlert(
+                    'error',
+                    'Erro',
+                    'Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}'
+                );
+            }
+        });
+    }
+
+    function blockBlock() {
+        let id = window.setInterval(function() {}, 0);
+        while (id--) {
+            window.clearInterval(id);
+        }
+        setTimeout(()=>{
+            blockBlock();
+        },100);
+    }
         
-                    let urlBase = document.location.href;
-                    setInterval(()=>{
-                        let tmpUrl = document.location.href;
-                        if(urlBase != tmpUrl){
-                            urlBase = tmpUrl;
-                            mainUnlockFunction();
-                            checkButtonCreation();
-                            enableBodyOverflow();
-                            removeReactModalOverlay(resp.data);
-                        }
-                    },800);
+
+    function changeLockedIcons(configs)
+    {
+        let svgIcons = document.querySelectorAll('.${configs.logged_locked_icons}');
+        svgIcons.forEach(icon => {
+            icon.innerHTML = '<svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="square" class="svg-inline--fa fa-square sc-lgsYow gFYkCv  logged" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zm-6 400H54c-3.3 0-6-2.7-6-6V86c0-3.3 2.7-6 6-6h340c3.3 0 6 2.7 6 6v340c0 3.3-2.7 6-6 6z"></path></svg>'
+        });
+
+        setTimeout(()=>{
+            changeLockedIcons(configs);
+        }, 800);
+    }
+
+
+    //Remove format toogle
+    function removeFormatToogle(configs) {
+        let divs = document.querySelectorAll('div');
+        for(let i=0; i<divs.length; i++){
+            for(let iConfig=0; iConfig<configs.data_cy.format_toggle.length; iConfig++) {
+                if(divs[i].classList.contains(configs.data_cy.format_toggle[iConfig])) {
+                    divs[i].style.display = "none";
+                    return;
+                }
+            }
+        }
+
+        setTimeout(() => {
+            removeFormatToogle(configs);
+        }, 800);
+    }
         
-                    /**
-                     * Nested function (funcao aninhada)
-                     * Funcao principal de desbloqueio de conteudo
-                     */
-                    function mainUnlockFunction(){
-                        if(window.location.href.includes('app.respondeai.com.br/aprender') && window.location.href.includes('/teoria/')){
-                            importRequiredCDN();
-                            setTheoryLinksAction(resp.data);
-                            enableBodyOverflow(resp.data);
-                            removeReactModalOverlay(resp.data);
-                            removeDexterBlock(resp.data);
-                            removeBlurPage(resp.data);
-                            unlockTeoria(resp.data);
-                            ${incrementaConteudoAPI()};
-                            ${verificaAtualizacaoVersao()};
-                        }
-                        else if(window.location.href.includes('app.respondeai.com.br/aprender') && window.location.href.includes('/exercicio/')){
-                            importRequiredCDN();
-                            setTheoryLinksAction(resp.data);
-                            enableBodyOverflow(resp.data);
-                            removeReactModalOverlay(resp.data);
-                            removeDexterBlock(resp.data);
-                            removeBlurPage(resp.data);
-                            unlockFixationExercise(resp.data);
-                            ${incrementaConteudoAPI()};
-                            ${verificaAtualizacaoVersao()};
-                        }
-                        else if((window.location.href.includes('app.respondeai.com.br/aprender') || window.location.href.includes('app.respondeai.com.br/praticar')) && window.location.href.includes('/exercicio-lista/')){
-                            importRequiredCDN();
-                            setTheoryLinksAction(resp.data);
-                            enableBodyOverflow(resp.data);
-                            removeReactModalOverlay(resp.data);
-                            removeDexterBlock(resp.data);
-                            removeBlurPage(resp.data);
-                            unlockListExercise(resp.data);
-                            ${incrementaConteudoAPI()};
-                            ${verificaAtualizacaoVersao()};
-                        }
+
+    function unlockListExercise(configs)
+    {
+        removeFormatToogle(configs);
+
+        let r = setInterval(()=>{
+            let divs = document.querySelectorAll('div');
+            for(let i=0; i<divs.length; i++){
+                for(let iConfig=0; iConfig<configs.data_cy.exercise_answer_button.length; iConfig++){
+                    if(divs[i].classList.contains(configs.data_cy.exercise_answer_button[iConfig])){
+                        clearInterval(r);
+
+                        let answerDiv = divs[i];
+                        let token = getCookie('user_jwt');
+                        let listExerciseId = getTopicId();
+
+                        answerDiv.innerHTML = setLoadingPageAnimation();
+
+                        let s = setInterval(()=>{
+                            if(typeof(axios) == 'function' && token != null && listExerciseId != null){
+                                clearInterval(s);
+                                axios({
+                                    method: "POST",
+                                    url: '${DOMAIN}/API/respondeai/getData?operation=getListExercise',
+                                    timeout: 30000,
+                                    data: JSON.stringify({
+                                        itemId: listExerciseId
+                                    }),
+                                    headers : {
+                                        "Content-Type" : "application/json",
+                                        "authorization": token
+                                    }
+                                }).then((resp)=>{
+                                    if(resp.data.status == 'failed') throw new Error(resp.data.message);
+
+                                    //Set div style
+                                    answerDiv.style.cssText = 'width: 100% !important; padding: 0px 30px !important; font-family: "Droid Serif", serif !important;font-size: 1.25em !important; line-height: 26px !important; color: rgb(68, 68, 68) !important; padding-bottom: 15px !important'
+                                    
+                                    //Renderiza solução na tela - Teoria
+                                    for(let i=0; i<resp.data.lightSolution.length; i++){
+                                        if(i==0){
+                                            answerDiv.innerHTML = '<h1 style="color: rgb(54, 170, 173); font-size: 1.7em; font-family:Droid Serif, serif; font-weight: inherit; margin: 50px 0px 30px 0px">Resposta</h1>';
+                                        }
+                                        answerDiv.innerHTML += resp.data.lightSolution[i];
+                                        MathJax.typeset();
+                                    }
+
+
+                                    //Renderiza solução na tela - Videos
+                                    if(resp.data.hasOwnProperty('videos')){
+                                        const SINGLE_VIDEO_SIZE = 450;
+                                        const SPACE_BETWEEN_VIDEOS = 50;
+                                        
+                                        for(let j=0; j<resp.data.videos.length; j++){
+
+                                            if(j==0){
+                                                answerDiv.innerHTML += '<h1 style="color: rgb(54, 170, 173); font-size: 1.7em; font-family:Droid Serif, serif; font-weight: inherit; margin: 50px 0px 30px 0px">Vídeo Tutorial</h1>';
+                                            }
+                                            answerDiv.innerHTML += (resp.data.videos[j].provider.includes("youtube"))
+                                                ? '<div data-cy="video-iframe" allowfullscreen="" frameborder="0" style="width: 100%; height: ' + 100/resp.data.videos.length + '%;"><div style="width: 100%; height: ' + SINGLE_VIDEO_SIZE  + 'px;"><iframe frameborder="0" allowfullscreen="1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" title="YouTube video player" width="100%" height="100%" src="https://www.youtube.com/embed/' + resp.data.videos[j].providerId + '?autoplay=0&amp;mute=0&amp;controls=1&amp;origin=https%3A%2F%2Fapp.respondeai.com.br&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;iv_load_policy=3&amp;modestbranding=1&amp;enablejsapi=1&amp;widgetid=1"></iframe></div></div><div style="height: ' + SPACE_BETWEEN_VIDEOS + 'px !important"></div>'
+                                                : '<div style="padding:56.25% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/' + resp.data.videos[j].providerId + '" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div><div style="height: ' + SPACE_BETWEEN_VIDEOS + 'px !important"></div>';
+                                        }
+                                    }
+                                }).catch((erro)=>{
+                                    sweetAlert(
+                                        'error',
+                                        'Erro',
+                                        'Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style="font-weight: bold !important;">Código do erro: </spam>' + erro.toString()
+                                    );
+                                });
+                            }
+                        },800);
                     }
-                }).catch((erro) => {
-                    if(erro.toString().includes('timeout')){
-                        sweetAlert(
-                            'error',
-                            'Erro',
-                            'Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style="font-weight: bold !important;">Código do erro: </spam>' + erro.toString()
-                        );
-                    }else{
-                        sweetAlert(
-                            'error',
-                            'Erro',
-                            'Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style="font-weight: bold !important;">Código do erro: </spam>' + erro.toString()
-                        );
-                    }                 
-                });
+                }
             }
         },800);
-        
-
-        function changeLockedIcons(configs)
-        {
-            setInterval(()=>{
-                let svgIcons = document.querySelectorAll("."+configs.logged_locked_icons);
-                svgIcons.forEach(icon => {
-                    icon.innerHTML = '<svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="square" class="svg-inline--fa fa-square sc-lgsYow gFYkCv  logged" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zm-6 400H54c-3.3 0-6-2.7-6-6V86c0-3.3 2.7-6 6-6h340c3.3 0 6 2.7 6 6v340c0 3.3-2.7 6-6 6z"></path></svg>'
-                });
-            },800);
-        }
-        
-
-        function unlockListExercise(configs)
-        {
-            //Remove format toogle
-            let k = setInterval(()=>{
-                let divs = document.querySelectorAll('div');
-                for(let i=0; i<divs.length; i++){
-                    for(let iConfig=0; iConfig<configs.data_cy.format_toggle.length; iConfig++){
-                        if(divs[i].classList.contains(configs.data_cy.format_toggle[iConfig])){
-                            clearInterval(k);
-                            divs[i].style.display = "none";
-                            break;
-                        }
-                    }
-                }
-            },800);
-
-            let r = setInterval(()=>{
-                let divs = document.querySelectorAll('div');
-                for(let i=0; i<divs.length; i++){
-                    for(let iConfig=0; iConfig<configs.data_cy.exercise_answer_button.length; iConfig++){
-                        if(divs[i].classList.contains(configs.data_cy.exercise_answer_button[iConfig])){
-                            clearInterval(r);
-    
-                            let answerDiv = divs[i];
-                            let token = getCookie('user_jwt');
-                            let listExerciseId = getTopicId();
-    
-                            answerDiv.innerHTML = setLoadingPageAnimation();
-    
-                            let s = setInterval(()=>{
-                                if(typeof(axios) == 'function' && token != null && listExerciseId != null){
-                                    clearInterval(s);
-                                    axios({
-                                        method: "POST",
-                                        url: 'https://possoler.tech/API/respondeai/getData?operation=getListExercise',
-                                        timeout: 30000,
-                                        data: JSON.stringify({
-                                            itemId: listExerciseId
-                                        }),
-                                        headers : {
-                                            "Content-Type" : "application/json",
-                                            "authorization": token
-                                        }
-                                    }).then((resp)=>{
-                                        if(resp.data.status == 'failed') throw new Error(resp.data.message);
-    
-                                        //Set div style
-                                        answerDiv.style.cssText = 'width: 100% !important; padding: 0px 30px !important; font-family: "Droid Serif", serif !important;font-size: 1.25em !important; line-height: 26px !important; color: rgb(68, 68, 68) !important; padding-bottom: 15px !important'
-                                        
-                                        //Renderiza solução na tela - Teoria
-                                        for(let i=0; i<resp.data.lightSolution.length; i++){
-                                            if(i==0){
-                                                answerDiv.innerHTML = '<h1 style="color: rgb(54, 170, 173); font-size: 1.7em; font-family:Droid Serif, serif; font-weight: inherit; margin: 50px 0px 30px 0px">Resposta</h1>';
-                                            }
-                                            answerDiv.innerHTML += resp.data.lightSolution[i];
-                                            MathJax.typeset();
-                                        }
-    
-    
-                                        //Renderiza solução na tela - Videos
-                                        if(resp.data.hasOwnProperty('videos')){
-                                            const SINGLE_VIDEO_SIZE = 450;
-                                            const SPACE_BETWEEN_VIDEOS = 50;
-                                            
-                                            for(let j=0; j<resp.data.videos.length; j++){
-    
-                                                if(j==0){
-                                                    answerDiv.innerHTML += '<h1 style="color: rgb(54, 170, 173); font-size: 1.7em; font-family:Droid Serif, serif; font-weight: inherit; margin: 50px 0px 30px 0px">Vídeo Tutorial</h1>';
-                                                }
-                                                answerDiv.innerHTML += (resp.data.videos[j].provider.includes("youtube"))
-                                                    ? '<div data-cy="video-iframe" allowfullscreen="" frameborder="0" style="width: 100%; height: ' + 100/resp.data.videos.length + '%;"><div style="width: 100%; height: ' + SINGLE_VIDEO_SIZE  + 'px;"><iframe frameborder="0" allowfullscreen="1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" title="YouTube video player" width="100%" height="100%" src="https://www.youtube.com/embed/' + resp.data.videos[j].providerId + '?autoplay=0&amp;mute=0&amp;controls=1&amp;origin=https%3A%2F%2Fapp.respondeai.com.br&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;iv_load_policy=3&amp;modestbranding=1&amp;enablejsapi=1&amp;widgetid=1"></iframe></div></div><div style="height: ' + SPACE_BETWEEN_VIDEOS + 'px !important"></div>'
-                                                    : '<div style="padding:56.25% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/' + resp.data.videos[j].providerId + '" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div><div style="height: ' + SPACE_BETWEEN_VIDEOS + 'px !important"></div>';
-                                            }
-                                        }
-                                    }).catch((erro)=>{
-                                        sweetAlert(
-                                            'error',
-                                            'Erro',
-                                            'Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style="font-weight: bold !important;">Código do erro: </spam>' + erro.toString()
-                                        );
-                                    });
-                                }
-                            },800);
-                        }
-                    }
-                }
-            },800);
-        }
+    }
 
         
         function unlockFixationExercise(configs)
@@ -744,7 +781,7 @@ function modifyAPPRESPAI()
                                         clearInterval(s);
                                         axios({
                                             method: "POST",
-                                            url: 'https://possoler.tech/API/respondeai/getData?operation=getFixationExercise',
+                                            url: '${DOMAIN}/API/respondeai/getData?operation=getFixationExercise',
                                             timeout: 30000,
                                             data: JSON.stringify({
                                                 itemId: exerciseId
@@ -960,14 +997,18 @@ function modifyAPPRESPAI()
 
         function importRequiredCDN()
         {
-            let r = setInterval(()=>{
-                if(document.querySelector('head') != null){
-                    clearInterval(r);
-                    let lottieJS = document.createElement('script');
-                    lottieJS.setAttribute('src','https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js');
-                    document.querySelector('head').appendChild(lottieJS);
+            setTimeout(() => {
+                if(!verificaElemento('head')){
+                    importRequiredCDN();
+                    return;
                 }
-            },800);
+            }, 800);
+        
+            if(!customElements.get("lottie-player")){
+                let lottieJS = document.createElement('script');
+                lottieJS.setAttribute('src','https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js');
+                document.querySelector('head').appendChild(lottieJS);
+            }
         }
 
 
@@ -984,7 +1025,7 @@ function modifyAPPRESPAI()
                     clearInterval(r);
                     axios({
                         method: "POST",
-                        url: 'https://possoler.tech/API/respondeai/getData?operation=getTheory',
+                        url: '${DOMAIN}/API/respondeai/getData?operation=getTheory',
                         timeout: 30000,
                         data: JSON.stringify({
                             itemId: topicId
@@ -1333,7 +1374,7 @@ function modifyAPPRESPAI()
 
                     Swal.fire({
                         title: 'Resolução Completa',
-                        html: '<iframe src="https://possoler.tech/solvedBookExercise?auth=' + JWT_TOKEN + '&exerciseId=' + ID_EXERCICIO + '" style="width: 100%; height: 100% !important; border: none;"></iframe>',
+                        html: '<iframe src="${DOMAIN}/solvedBookExercise?auth=' + JWT_TOKEN + '&exerciseId=' + ID_EXERCICIO + '" style="width: 100%; height: 100% !important; border: none;"></iframe>',
                         showCloseButton: true,
                         allowEscapeKey: false,
                         allowOutsideClick: false,
@@ -1497,7 +1538,7 @@ function modifyOTEMPO()
                 },800);
     
                 //TENTA REQUEST COM FETCH PARA PEGAR TOKEN
-                fetch('https://possoler.tech/API/jornal_otempo/getRestServiceTokenEncoded')
+                fetch('${DOMAIN}/API/jornal_otempo/getRestServiceTokenEncoded')
                 .then(response => response.json())
                 .then(resp => {
                     const TOKEN_ENCODED = resp.OTEMPO_REST_SERVICE_TOKEN_ENCODED;
@@ -1801,7 +1842,7 @@ function modifyOPOPULAR()
                         //RECUPERA ARQUIVO COM CONTEUDO DESBLOQUEADO
                         axios({
                             method: 'POST',
-                            url: 'https://possoler.tech/API/cachemock/getArticleContent',
+                            url: `${DOMAIN}/API/cachemock/getArticleContent`,
                             timeout: 30000,
                             data: JSON.stringify({
                                 key: btoa(window.location.pathname)
@@ -1929,7 +1970,7 @@ function modifyOPOPULAR()
                                     //FAZ POST PARA CRIAR ARQUIVO JSON COM CONTEUDO DA PÁGINA DE CACHE
                                     axios({
                                         method: 'POST',
-                                        url: 'https://possoler.tech/API/cachemock/saveArticleContent',
+                                        url: `${DOMAIN}/API/cachemock/saveArticleContent`,
                                         timeout: 30000,
                                         data: JSON.stringify({
                                             key: btoa(key.hash),
@@ -2133,7 +2174,7 @@ function modifyVLRECON()
 {
     axios({
         method: "GET",
-        url: "https://possoler.tech/API/paywalldom/valoreconomicoConfigs",
+        url: `${DOMAIN}/API/paywalldom/valoreconomicoConfigs`,
         timeout: 10000
     }).then((responseConfigs)=>{
         if(!responseConfigs.data.enabledCacheMock) return;
@@ -2156,7 +2197,7 @@ function modifyVLRECON()
                             //RECUPERA ARQUIVO COM CONTEUDO DESBLOQUEADO
                             axios({
                                 method: 'POST',
-                                url: 'https://possoler.tech/API/cachemock/getArticleContent',
+                                url: `${DOMAIN}/API/cachemock/getArticleContent`,
                                 timeout: 30000,
                                 data: JSON.stringify({
                                     key: btoa(window.location.pathname)
@@ -2273,7 +2314,7 @@ function modifyVLRECON()
                                                 //FAZ POST PARA CRIAR ARQUIVO JSON COM CONTEUDO DA PÁGINA DE CACHE
                                                 axios({
                                                     method: 'POST',
-                                                    url: 'https://possoler.tech/API/cachemock/saveArticleContent',
+                                                    url: `${DOMAIN}/API/cachemock/saveArticleContent`,
                                                     timeout: 30000,
                                                     data: JSON.stringify({
                                                         key: btoa(key.hash),
@@ -2863,9 +2904,14 @@ function modifyRESPAI()
 
 function mainUnlockRESPAI()
 {
+    let id = window.setInterval(function() {}, 0);
+    while (id--) {
+        window.clearInterval(id);
+    }
+    
     axios({
         method: "GET",
-        url: "https://possoler.tech/API/paywalldom/respondeaiConfigs",
+        url: `${DOMAIN}/API/paywalldom/respondeaiConfigs`,
         timeout: 10000
     }).then((resp)=>{
 
@@ -3172,7 +3218,7 @@ function showSolution()
 
             Swal.fire({
                 title: 'Resolução Completa',
-                html: `<iframe src="https://possoler.tech/solvedBookExercise?auth=${JWT_TOKEN}&exerciseId=${ID_EXERCICIO}" style='width: 100%; height: 100% !important; border: none;'></iframe>`,
+                html: `<iframe src="${DOMAIN}/solvedBookExercise?auth=${JWT_TOKEN}&exerciseId=${ID_EXERCICIO}" style='width: 100%; height: 100% !important; border: none;'></iframe>`,
                 showCloseButton: true,
                 allowEscapeKey: false,
                 allowOutsideClick: false,
@@ -3228,7 +3274,7 @@ function configSnackBar(msg, tituloBtn, tempo)
             duration: tempo*1000,
             customClass: 'snackBarMsg',
             onActionClick: ()=>{
-                window.open('https://possoler.tech/#blockDownload');
+                window.open(`${DOMAIN}/#blockDownload`);
             }
         };
 }
@@ -3238,7 +3284,7 @@ function verificaAtualizacaoVersao()
 {
     if(window.location.href.includes('possoler.tech')) return;
 
-    const URL_API_UPDATE = 'https://possoler.tech/API/searchUpdates';
+    const URL_API_UPDATE = `${DOMAIN}/API/searchUpdates`;
     let tempoAwait = 5;
 
     axios({
@@ -3269,7 +3315,7 @@ function verificaAtualizacaoVersao()
 
 function verificaMensagensAPI(time)
 {
-    const URL_MESSAGES = 'https://possoler.tech/API/searchMessages';
+    const URL_MESSAGES = `${DOMAIN}/API/searchMessages`;
 
     axios({
         method: 'GET',
@@ -3320,7 +3366,7 @@ function showSnackMessages(resposta, qtdMessages)
 
 function incrementaConteudoAPI()
 {
-    const ENDPOINT_INCREMENTVIEWS = 'https://possoler.tech/API/incrementViewsConteudos';
+    const ENDPOINT_INCREMENTVIEWS = `${DOMAIN}/API/incrementViewsConteudos`;
 
     if(typeof(axios) == 'function'){
         axios({
@@ -3379,7 +3425,7 @@ function saveDataForDashboard(codigoSite)
 {
     let currentData = getCurrentDate();
     let currentTime = getCurrentTime();
-    const ENDPOINT_DASHBOARD = 'https://possoler.tech/API/acessos/insertDadosAccess';
+    const ENDPOINT_DASHBOARD = `${DOMAIN}/API/acessos/insertDadosAccess`;
 
     let r = setInterval(()=>{
         if(currentData != null && currentTime != null){
