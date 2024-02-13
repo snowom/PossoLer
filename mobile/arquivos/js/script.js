@@ -3249,24 +3249,10 @@ function checkButtonCreation()
             new RegExp('\/exercicio\/[0-9]+').test(fullURL))
             || (fullURL.includes("/conteudo/") && fullURL.includes("/livro/"))
         ){
+            incrementaConteudoAPI();
+            createButtonResposta();
+            saveDataForDashboard(8);
             verificaAtualizacaoVersao();
-
-            //RESPOSTA LIVRO - DOMINIO ANTIGO
-            if(fullURL.includes("/conteudo/") && fullURL.includes("/livro/")){
-                setInterval(()=>{
-                    removeShowCompleteSolutionButtons();
-                    let sections = document.querySelectorAll('section');
-                    for(let i = 0; i<sections.length; i++){
-                        sections[i].style.filter = 'unset'
-                    };
-                },800);
-                incrementaConteudoAPI();
-                saveDataForDashboard(8);
-            }else{
-                incrementaConteudoAPI();
-                createButtonResposta();
-                saveDataForDashboard(8);
-            }
         }
     }else{
         //REMOVE BOTÃO DE RESOLUÇÃO
