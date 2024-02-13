@@ -516,7 +516,7 @@ function modifyAPPRESPAI()
     main();
 
     /**
-     * Função aninhada para auardar carregamento de recursos
+     * Função aninhada para aguardar carregamento de recursos
      */
     function main() {
 
@@ -1231,36 +1231,42 @@ function modifyAPPRESPAI()
          */
         function setTheoryLinksAction(configs)
         {
-            let r = setInterval(()=>{
-                let divs = document.querySelectorAll('div');
-                for(let i=0; i<divs.length; i++){
-                    for(let iConfig=0; iConfig<configs.data_cy.side_menu.length; iConfig++){
-                        if(
-                            (divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == configs.data_cy.side_menu[iConfig]) || 
-                            (divs[i].classList.contains(configs.data_cy.side_menu[iConfig]))
-                        ){
-                            clearInterval(r);
-                            setTimeout(()=>{
-                                let links = document.querySelectorAll("a");
-                                for(let i=0; i<links.length; i++){
-                                    if(
-                                        links[i].getAttribute("href").includes("/aprender") && 
-                                        links[i].getAttribute("href").includes("/topico") &&
-                                        links[i].getAttribute("href").includes("/teoria") &&
-                                        links[i].getAttribute("href").includes("/exercicio/")
-                                    ){
-                                        links[i].addEventListener("click", (event)=>{
-                                            event.preventDefault();
-                                            window.location.assign('https://'+ window.location.hostname + links[i].getAttribute("href"));
-                                        });
-                                    }
+            let flag = false;
+
+            let divs = document.querySelectorAll('div');
+            for(let i=0; i<divs.length; i++) {
+                for(let iConfig=0; iConfig<configs.data_cy.side_menu.length; iConfig++) {
+                    if(
+                        (divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == configs.data_cy.side_menu[iConfig]) ||
+                        divs[i].classList.contains('${configs.data_cy.side_menu[iConfig]}')
+                    ){
+                        setTimeout(() => {
+                            let links = document.querySelectorAll("a");
+                            for(let i=0; i<links.length; i++){
+                                if(
+                                    links[i].getAttribute("href").includes("/aprender") &&
+                                    links[i].getAttribute("href").includes("/topico") &&
+                                    links[i].getAttribute("href").includes("/teoria") &&
+                                    links[i].getAttribute("href").includes("/exercicio/")
+                                ){
+                                    flag = true;
+                                    links[i].addEventListener("click", (event)=>{
+                                        event.preventDefault();
+                                        window.location.assign('https://${window.location.hostname}${links[i].getAttribute("href")}');
+                                    });
                                 }
-                            },2000);
-                            break;
-                        }
+                            }
+                        },2000);
+                        break;
                     }
                 }
-            },800);
+            }
+
+            if(!flag) {
+                setTimeout(() => {
+                    setTheoryLinksAction(configs);
+                }, 800);
+            }
         }
 
 
