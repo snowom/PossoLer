@@ -1275,15 +1275,17 @@ function modifyAPPRESPAI()
          */
         function removeBlurPage(configs)
         {
-            setInterval(()=>{
-                configs.blur_class.forEach((current_class) => {
-                    let blurElements = document.querySelectorAll('.'+current_class);
-                    blurElements.forEach((blurElement) => {
-                        blurElement.classList.remove(current_class);
-                        blurElement.style.filter = "none";
-                    })
-                });
-            },800);
+            configs.blur_class.forEach((current_class) => {
+                let blurElements = document.querySelectorAll('.${current_class}');
+                blurElements.forEach((blurElement) => {
+                    blurElement.classList.remove(current_class);
+                    blurElement.style.filter = "none";
+                })
+            });
+        
+            setTimeout(() => {
+                removeBlurPage(configs);
+            }, 800);
         }
 
 
