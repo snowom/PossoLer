@@ -597,13 +597,13 @@ function modifyAPPRESPAI()
                 sweetAlert(
                     'error',
                     'Erro',
-                    'Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}',
+                    'Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>' + erro.toString()'
                 );
             }else{
                 sweetAlert(
                     'error',
                     'Erro',
-                    'Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}'
+                    'Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>' + erro.toString()'
                 );
             }
         });
@@ -622,7 +622,7 @@ function modifyAPPRESPAI()
 
     function changeLockedIcons(configs)
     {
-        let svgIcons = document.querySelectorAll('.${configs.logged_locked_icons}');
+        let svgIcons = document.querySelectorAll('.' + configs.logged_locked_icons + '');
         svgIcons.forEach(icon => {
             icon.innerHTML = '<svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="square" class="svg-inline--fa fa-square sc-lgsYow gFYkCv  logged" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zm-6 400H54c-3.3 0-6-2.7-6-6V86c0-3.3 2.7-6 6-6h340c3.3 0 6 2.7 6 6v340c0 3.3-2.7 6-6 6z"></path></svg>'
         });
@@ -638,7 +638,7 @@ function modifyAPPRESPAI()
         let divs = document.querySelectorAll('div');
         for(let i=0; i<divs.length; i++){
             for(let iConfig=0; iConfig<configs.data_cy.format_toggle.length; iConfig++) {
-                if(divs[i].classList.contains(configs.data_cy.format_toggle[iConfig])) {
+                if(divs[i].classList.contains(' + configs.data_cy.format_toggle[iConfig] + ')) {
                     divs[i].style.display = "none";
                     return;
                 }
@@ -660,7 +660,7 @@ function modifyAPPRESPAI()
             let divs = document.querySelectorAll('div');
             for(let i=0; i<divs.length; i++){
                 for(let iConfig=0; iConfig<configs.data_cy.exercise_answer_button.length; iConfig++) {
-                    if(divs[i].classList.contains('${configs.data_cy.exercise_answer_button[iConfig]}')) {
+                    if(divs[i].classList.contains(' + configs.data_cy.exercise_answer_button[iConfig] + ')) {
 
                         let answerDiv = divs[i];
                         let token = getCookie('user_jwt');
@@ -727,27 +727,26 @@ function modifyAPPRESPAI()
     
                         answerDiv.innerHTML += (resp.data.videos[j].provider.includes("youtube"))
     
-                            ? '<div data-cy="video-iframe" allowfullscreen="" frameborder="0" style="width: 100%; height: ${100/resp.data.videos.length}%;">
-                                <div style="width: 100%; height: ${SINGLE_VIDEO_SIZE}px;">
-                                    <iframe frameborder="0" allowfullscreen="1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" title="YouTube video player" width="100%" height="100%" src="https://www.youtube.com/embed/${resp.data.videos[j].providerId}?autoplay=0&amp;mute=0&amp;controls=1&amp;origin=https%3A%2F%2Fapp.respondeai.com.br&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;iv_load_policy=3&amp;modestbranding=1&amp;enablejsapi=1&amp;widgetid=1"></iframe>
+                            ? '<div data-cy="video-iframe" allowfullscreen="" frameborder="0" style="width: 100%; height: ' + 100/resp.data.videos.length + '%;">
+                                <div style="width: 100%; height: ' + SINGLE_VIDEO_SIZE + 'px;">
+                                    <iframe frameborder="0" allowfullscreen="1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" title="YouTube video player" width="100%" height="100%" src="https://www.youtube.com/embed/' + resp.data.videos[j].providerId + '?autoplay=0&amp;mute=0&amp;controls=1&amp;origin=https%3A%2F%2Fapp.respondeai.com.br&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;iv_load_policy=3&amp;modestbranding=1&amp;enablejsapi=1&amp;widgetid=1"></iframe>
                                 </div>
                             </div>
-                            <div style="height: ${SPACE_BETWEEN_VIDEOS}px !important"></div>'
+                            <div style="height: ' + SPACE_BETWEEN_VIDEOS + 'px !important"></div>'
     
                             :'<div style="padding:56.25% 0 0 0;position:relative;">
-                                <iframe src="https://player.vimeo.com/video/${resp.data.videos[j].providerId}" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+                                <iframe src="https://player.vimeo.com/video/' + resp.data.videos[j].providerId + '" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
                             </div>
-                            <div style="height: ${SPACE_BETWEEN_VIDEOS}px !important"></div>';
+                            <div style="height: ' + SPACE_BETWEEN_VIDEOS + 'px !important"></div>';
                     }
                 }
             }).catch((erro)=>{
                 sweetAlert(
                     'error',
                     'Erro',
-                    'Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}'
+                    'Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>' + erro.toString()'
                 );
             });
-
         }
 
 
@@ -766,96 +765,18 @@ function modifyAPPRESPAI()
                 removeFormatToogle(configs);
             }, 800);
         }
-
-        let r = setInterval(()=>{
-            let divs = document.querySelectorAll('div');
-            for(let i=0; i<divs.length; i++){
-                for(let iConfig=0; iConfig<configs.data_cy.exercise_answer_button.length; iConfig++){
-                    if(divs[i].classList.contains(configs.data_cy.exercise_answer_button[iConfig])){
-                        clearInterval(r);
-
-                        
-
-                        
-
-                        let s = setInterval(()=>{
-                            if(typeof(axios) == 'function' && token != null && listExerciseId != null){
-                                clearInterval(s);
-                                axios({
-                                    method: "POST",
-                                    url: '${DOMAIN}/API/respondeai/getData?operation=getListExercise',
-                                    timeout: 30000,
-                                    data: JSON.stringify({
-                                        itemId: listExerciseId
-                                    }),
-                                    headers : {
-                                        "Content-Type" : "application/json",
-                                        "authorization": token
-                                    }
-                                }).then((resp)=>{
-                                    if(resp.data.status == 'failed') throw new Error(resp.data.message);
-
-                                    //Set div style
-                                    answerDiv.style.cssText = 'width: 100% !important; padding: 0px 30px !important; font-family: "Droid Serif", serif !important;font-size: 1.25em !important; line-height: 26px !important; color: rgb(68, 68, 68) !important; padding-bottom: 15px !important'
-                                    
-                                    //Renderiza solução na tela - Teoria
-                                    for(let i=0; i<resp.data.lightSolution.length; i++){
-                                        if(i==0){
-                                            answerDiv.innerHTML = '<h1 style="color: rgb(54, 170, 173); font-size: 1.7em; font-family:Droid Serif, serif; font-weight: inherit; margin: 50px 0px 30px 0px">Resposta</h1>';
-                                        }
-                                        answerDiv.innerHTML += resp.data.lightSolution[i];
-                                        MathJax.typeset();
-                                    }
-
-
-                                    //Renderiza solução na tela - Videos
-                                    if(resp.data.hasOwnProperty('videos')){
-                                        const SINGLE_VIDEO_SIZE = 450;
-                                        const SPACE_BETWEEN_VIDEOS = 50;
-                                        
-                                        for(let j=0; j<resp.data.videos.length; j++){
-
-                                            if(j==0){
-                                                answerDiv.innerHTML += '<h1 style="color: rgb(54, 170, 173); font-size: 1.7em; font-family:Droid Serif, serif; font-weight: inherit; margin: 50px 0px 30px 0px">Vídeo Tutorial</h1>';
-                                            }
-                                            answerDiv.innerHTML += (resp.data.videos[j].provider.includes("youtube"))
-                                                ? '<div data-cy="video-iframe" allowfullscreen="" frameborder="0" style="width: 100%; height: ' + 100/resp.data.videos.length + '%;"><div style="width: 100%; height: ' + SINGLE_VIDEO_SIZE  + 'px;"><iframe frameborder="0" allowfullscreen="1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" title="YouTube video player" width="100%" height="100%" src="https://www.youtube.com/embed/' + resp.data.videos[j].providerId + '?autoplay=0&amp;mute=0&amp;controls=1&amp;origin=https%3A%2F%2Fapp.respondeai.com.br&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;iv_load_policy=3&amp;modestbranding=1&amp;enablejsapi=1&amp;widgetid=1"></iframe></div></div><div style="height: ' + SPACE_BETWEEN_VIDEOS + 'px !important"></div>'
-                                                : '<div style="padding:56.25% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/' + resp.data.videos[j].providerId + '" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div><div style="height: ' + SPACE_BETWEEN_VIDEOS + 'px !important"></div>';
-                                        }
-                                    }
-                                }).catch((erro)=>{
-                                    sweetAlert(
-                                        'error',
-                                        'Erro',
-                                        'Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style="font-weight: bold !important;">Código do erro: </spam>' + erro.toString()
-                                    );
-                                });
-                            }
-                        },800);
-                    }
-                }
-            }
-        },800);
     }
 
         
         function unlockFixationExercise(configs)
         {
-            //Remove format toogle
-            let k = setInterval(()=>{
-                let divs = document.querySelectorAll('div');
-                for(let i=0; i<divs.length; i++){
-                    for(let iConfig=0; iConfig<configs.data_cy.format_toggle.length; iConfig++){
-                        if(divs[i].classList.contains(configs.data_cy.format_toggle[iConfig])){
-                            clearInterval(k);
-                            divs[i].style.display = "none";
-                            break;
-                        }
-                    }
-                }
-            },800);
+            main(configs);
+            removeFormatFromToogle(configs);
 
-            let r = setInterval(()=>{
+
+            function main(configs) {
+                let flag = false;
+
                 let divs = document.querySelectorAll('div');
                 for(let i=0; i<divs.length; i++){
                     for(let iConfig=0; iConfig<configs.data_cy.exercise_answer_button.length; iConfig++){
@@ -864,9 +785,9 @@ function modifyAPPRESPAI()
                                 (divs[i].classList.contains(configs.data_cy.exercise_answer_button[iConfig])) || 
                                 (divs[i].classList.contains(configs.data_cy.exercise_statement[jConfig]))
                             ){
-                                clearInterval(r);
+                                flag = true;
                                 let answerDiv;
-        
+
                                 if(divs[i].classList.contains(configs.data_cy.exercise_statement[jConfig])){
                                     divs[i].innerHTML += '<div id="tmpAnswer"></div>';
                                     answerDiv = document.getElementById("tmpAnswer");
@@ -885,69 +806,119 @@ function modifyAPPRESPAI()
                                 let exerciseId = getTopicId();
         
                                 answerDiv.innerHTML = setLoadingPageAnimation();
-        
-                                let s = setInterval(()=>{
-                                    if(typeof(axios) == 'function' && token != null && exerciseId != null){
-                                        clearInterval(s);
-                                        axios({
-                                            method: "POST",
-                                            url: '${DOMAIN}/API/respondeai/getData?operation=getFixationExercise',
-                                            timeout: 30000,
-                                            data: JSON.stringify({
-                                                itemId: exerciseId
-                                            }),
-                                            headers : {
-                                                "Content-Type" : "application/json",
-                                                "authorization": token
-                                            }
-                                        }).then((resp)=>{
-                                            if(resp.data.status == 'failed') throw new Error(resp.data.message);
-        
-                                            //Set div style
-                                            answerDiv.style.cssText = 'width: 100% !important; padding: 0px 30px !important; font-family: "Droid Serif", serif !important; font-size: 1.25em !important; line-height: 26px !important; color: rgb(68, 68, 68) !important; padding-bottom: 15px !important'
-        
-                                                console.log(resp.data);
-                                                //Renderiza solução na tela - Teoria
-                                                for(let i=0; i<resp.data.lightSolution.length; i++){
-                                                    if(i==0){
-                                                        answerDiv.innerHTML = '<h1 style="color: rgb(247, 172, 60); font-size: 1.7em; font-family:Droid Serif, serif; font-weight: inherit; margin: 50px 0px 30px 0px">Resposta</h1>';
-                                                    }
-                                                    answerDiv.innerHTML += resp.data.lightSolution[i];
-                                                    MathJax.typeset();
-                                                }
-        
-        
-                                                //Renderiza solução na tela - Videos
-                                                if(resp.data.hasOwnProperty('videos')){
-                                                    const SINGLE_VIDEO_SIZE = 450;
-                                                    const SPACE_BETWEEN_VIDEOS = 50;
-                                                
-                                                for(let j=0; j<resp.data.videos.length; j++){
-        
-                                                    if(j==0){
-                                                        answerDiv.innerHTML += '<h1 style="color: rgb(247, 172, 60); font-size: 1.7em; font-family:Droid Serif, serif; font-weight: inherit; margin: 50px 0px 30px 0px">Vídeo Tutorial</h1>';
-                                                    }
-        
-                                                    answerDiv.innerHTML += (resp.data.videos[j].provider.includes("youtube"))
-                                                        ? '<div data-cy="video-iframe" allowfullscreen="" frameborder="0" style="width: 100%; height: ' + 100/resp.data.videos.length + '%;"><div style="width: 100%; height: ' + SINGLE_VIDEO_SIZE + 'px;"><iframe frameborder="0" allowfullscreen="1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" title="YouTube video player" width="100%" height="100%" src="https://www.youtube.com/embed/' + resp.data.videos[j].providerId + '?autoplay=0&amp;mute=0&amp;controls=1&amp;origin=https%3A%2F%2Fapp.respondeai.com.br&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;iv_load_policy=3&amp;modestbranding=1&amp;enablejsapi=1&amp;widgetid=1"></iframe></div></div><div style="height: ' + SPACE_BETWEEN_VIDEOS + 'px !important"></div>'
-                                                        : '<div style="padding:56.25% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/' + resp.data.videos[j].providerId + '" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div><div style="height: ' + SPACE_BETWEEN_VIDEOS + 'px !important"></div>';    
-                                                }
-                                            }
-                                        }).catch((erro)=>{
-                                            sweetAlert(
-                                                'error',
-                                                'Erro',
-                                                'Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style="font-weight: bold !important;">Código do erro: </spam>' + erro.toString()
-                                            );
-                                        });
-                                    }
-                                },800);
-                                break;
+                                getFixationExercise(configs, token, exerciseId);
                             }
                         }
                     }
                 }
-            },800);
+                if(!flag) {
+                    setTimeout(() => {
+                        main(configs);
+                    },800);
+                }
+            }
+
+
+            //Remove format toogle
+            function removeFormatFromToogle(configs) {
+                let flag = false;
+
+                let divs = document.querySelectorAll('div');
+                for(let i=0; i<divs.length; i++){
+                    for(let iConfig=0; iConfig<configs.data_cy.format_toggle.length; iConfig++){
+                        if(divs[i].classList.contains(' + configs.data_cy.format_toggle[iConfig] + ')){
+                            flag = true;
+                            divs[i].style.display = "none";
+                            break;
+                        }
+                    }
+                }
+                if(!flag) {
+                    setTimeout(() => {
+                        removeFormatFromToogle(configs);
+                    },800);
+                }
+            }
+
+
+            function getFixationExercise(configs, token, exerciseId) {
+                if(typeof(axios) != 'function' || token == null || exerciseId == null){
+                    setTimeout(() => {
+                        getFixationExercise(configs, token, exerciseId);
+                        return;
+                    },800);
+                }
+
+                axios({
+                    method: "POST",
+                    url: "${DOMAIN}/API/respondeai/getData?operation=getFixationExercise",
+                    timeout: 30000,
+                    data: JSON.stringify({
+                        itemId: exerciseId
+                    }),
+                    headers: {
+                        "Content-Type" : "application/json",
+                        "authorization": token
+                    }
+                }).then((resp)=>{
+                    if(resp.data.status == 'failed') throw new Error(resp.data.message);
+
+                    //Set div style
+                    answerDiv.style.cssText = "
+                        width: 100% !important;
+                        padding: 0px 30px !important;
+                        font-family: "Droid Serif", serif !important;
+                        font-size: 1.25em !important;
+                        line-height: 26px !important;
+                        color: rgb(68, 68, 68) !important;
+                        padding-bottom: 15px !important"
+
+
+                    //Renderiza solução na tela - Teoria
+                    for(let i=0; i<resp.data.lightSolution.length; i++){
+                        if(i==0){
+                            answerDiv.innerHTML = "<h1 style="color: rgb(247, 172, 60); font-size: 1.7em; font-family:Droid Serif, serif; font-weight: inherit; margin: 50px 0px 30px 0px">Resposta</h1>";
+                        }
+                        answerDiv.innerHTML += resp.data.lightSolution[i];
+                        MathJax.typeset();
+                    }
+
+
+                    //Renderiza solução na tela - Videos
+                    if(resp.data.hasOwnProperty("videos")){
+                        const SINGLE_VIDEO_SIZE = 450;
+                        const SPACE_BETWEEN_VIDEOS = 50;
+
+                        importVimeoPlayerJS();
+
+                        for(let j=0; j<resp.data.videos.length; j++){
+
+                            if(j==0){
+                                answerDiv.innerHTML += "<h1 style="color: rgb(247, 172, 60); font-size: 1.7em; font-family:Droid Serif, serif; font-weight: inherit; margin: 50px 0px 30px 0px">Vídeo Tutorial</h1>";
+                            }
+
+                            answerDiv.innerHTML += (resp.data.videos[j].provider.includes("youtube"))
+                            ? '<div data-cy="video-iframe" allowfullscreen="" frameborder="0" style="width: 100%; height: ' + 100/resp.data.videos.length + '%;">
+                                <div style="width: 100%; height: ' + SINGLE_VIDEO_SIZE + 'px;">
+                                    <iframe frameborder="0" allowfullscreen="1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" title="YouTube video player" width="100%" height="100%" src="https://www.youtube.com/embed/' + resp.data.videos[j].providerId + '?autoplay=0&amp;mute=0&amp;controls=1&amp;origin=https%3A%2F%2Fapp.respondeai.com.br&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;iv_load_policy=3&amp;modestbranding=1&amp;enablejsapi=1&amp;widgetid=1"></iframe>
+                                </div>
+                            </div>
+                            <div style="height: ' + SPACE_BETWEEN_VIDEOS + 'px !important"></div>'
+
+                            :'<div style="padding:56.25% 0 0 0;position:relative;">
+                                <iframe src="https://player.vimeo.com/video/' + resp.data.videos[j].providerId + '" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+                            </div>
+                            <div style="height: ' + SPACE_BETWEEN_VIDEOS + 'px !important"></div>';
+                        }
+                    }
+                }).catch((erro)=>{
+                    sweetAlert(
+                        'error',
+                        'Erro',
+                        'Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>' + erro.toString()'
+                    );
+                });
+            }
         }
 
 
