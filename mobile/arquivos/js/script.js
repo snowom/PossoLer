@@ -609,6 +609,7 @@ function modifyAPPRESPAI()
         });
     }
 
+
     function blockBlock() {
         let id = window.setInterval(function() {}, 0);
         while (id--) {
@@ -617,6 +618,15 @@ function modifyAPPRESPAI()
         setTimeout(()=>{
             blockBlock();
         },100);
+    }
+
+
+    function chooseUnlockEndpoint(conteudoDesbloqueio) {
+        switch(conteudoDesbloqueio) {
+            case "theory": return "/API/respondeai/getTheory";
+            case "exercise": return "/API/respondeai/getExercise";
+            case "list-exercise": return "/API/respondeai/getListExercise";
+        }
     }
         
 
@@ -685,9 +695,11 @@ function modifyAPPRESPAI()
                 }, 800);
             }
 
+            const ENDPOINT = chooseUnlockEndpoint("list-exercise");
+
             axios({
                 method: "POST",
-                url: '${DOMAIN}/API/respondeai/getData?operation=getListExercise',
+                url: '${DOMAIN}' + ENDPOINT,
                 timeout: 30000,
                 data: JSON.stringify({
                     itemId: listExerciseId
@@ -849,9 +861,11 @@ function modifyAPPRESPAI()
                     },800);
                 }
 
+                const ENDPOINT = chooseUnlockEndpoint("exercise");
+
                 axios({
                     method: "POST",
-                    url: "${DOMAIN}/API/respondeai/getData?operation=getFixationExercise",
+                    url: "${DOMAIN}" + ENDPOINT,
                     timeout: 30000,
                     data: JSON.stringify({
                         itemId: exerciseId
@@ -1107,10 +1121,12 @@ function modifyAPPRESPAI()
                         return;
                     },800);
                 }
+
+                const ENDPOINT = chooseUnlockEndpoint("theory");
         
                 axios({
                     method: "POST",
-                    url: "https://possoler.tech/API/respondeai/getData?operation=getTheory",
+                    url: '${DOMAIN}' + ENDPOINT,
                     timeout: 30000,
                     data: JSON.stringify({
                         itemId: topicId
