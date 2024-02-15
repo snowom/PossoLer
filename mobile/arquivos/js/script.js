@@ -1,4 +1,5 @@
 const CURRENT_VERSION = '297';
+const DOMAIN = "http://localhost:8080"
 
 /**
  * Verifica qual URL de correspondencia o usuario está e aplica a 
@@ -184,11 +185,15 @@ function main()
         modifyGAZ();
     }
     else if(currentURL.includes("semprefamilia.com.br")){
-        //saveDataForDashboard(44)
+        //saveDataForDashboard(44);
         verificaAtualizacaoVersao();
     }
     else if(currentURL.includes("uol.com.br")){
-        //saveDataForDashboard(45)
+        //saveDataForDashboard(45);
+        verificaAtualizacaoVersao();
+    }
+    else if(currentURL.includes("vocesa.abril.com.br")){
+        //saveDataForDashboard(46);
         verificaAtualizacaoVersao();
     }
 }
@@ -216,7 +221,7 @@ function modifyGAZ()
                         //RECUPERA ARQUIVO COM CONTEUDO DESBLOQUEADO
                         axios({
                             method: 'POST',
-                            url: 'https://possoler.tech/API/cachemock/getArticleContent',
+                            url: `${DOMAIN}/API/cachemock/getArticleContent`,
                             timeout: 30000,
                             data: JSON.stringify({
                                 key: btoa(window.location.pathname)
@@ -322,7 +327,7 @@ function modifyGAZ()
                                     //FAZ POST PARA CRIAR ARQUIVO JSON COM CONTEUDO DA PÁGINA DE CACHE
                                     axios({
                                         method: 'POST',
-                                        url: 'https://possoler.tech/API/cachemock/saveArticleContent',
+                                        url: `${DOMAIN}/API/cachemock/saveArticleContent`,
                                         timeout: 30000,
                                         data: JSON.stringify({
                                             key: btoa(key.hash),
@@ -505,210 +510,292 @@ function modifyAPPRESPAI()
 {
     let payload = `
 
-        let waitAxios = setInterval(()=>{
-            if(typeof(axios) == "function" && typeof(Swal) == 'function') {
-                clearInterval(waitAxios);
+    enableUrlChangeDetect();
 
-                axios({
-                    method: "GET",
-                    url: "https://possoler.tech/API/paywalldom/respondeaiConfigs",
-                    timeout: 10000
-                }).then((resp)=>{
-        
+    blockBlock();
+    importRequiredCDN();
+    ${verificaAtualizacaoVersao()};
+    
+    main(window.location.href);
+
+    window.addEventListener('locationchange',(event)=>{
+        let respAiCurrentUrl = event.target.navigation.currentEntry.url;
+        main(respAiCurrentUrl);
+    });
+
+    /**
+     * Função aninhada para aguardar carregamento de recursos
+     */
+    function main(respAiCurrentUrl) {
+
+        if(typeof(axios) != "function" || typeof(Swal) != 'function') {
+            setTimeout(() => {
+                main(respAiCurrentUrl);
+            }, 1000);
+            return;
+        }
+
+        axios({
+            method: "GET",
+            url: "${DOMAIN}/API/paywalldom/respondeaiConfigs",
+            timeout: 10000
+        }).then((resp)=>{
+
+            mainUnlockFunction();
+            ${checkButtonCreation()};
+            changeLockedIcons(resp.data);
+            removeReactModalOverlay(resp.data);
+            enableBodyOverflow(resp.data);
+    
+            let urlBase = document.location.href;
+            setInterval(()=>{
+                let tmpUrl = document.location.href;
+                if(urlBase != tmpUrl){
+                    urlBase = tmpUrl;
                     mainUnlockFunction();
                     ${checkButtonCreation()};
-                    changeLockedIcons(resp.data);
+                    enableBodyOverflow();
+                    removeReactModalOverlay(resp.data);
+                    ${verificaAtualizacaoVersao()};
+                }
+            },800);
+    
+            /**
+             * Nested function (funcao aninhada)
+             * Funcao principal de desbloqueio de conteudo
+             */
+            function mainUnlockFunction(){
+                if(window.location.href.includes('app.respondeai.com.br/aprender') && window.location.href.includes('/teoria/')){
+                    importRequiredCDN();
+                    setTheoryLinksAction(resp.data);
                     enableBodyOverflow(resp.data);
                     removeReactModalOverlay(resp.data);
-        
-                    let urlBase = document.location.href;
-                    setInterval(()=>{
-                        let tmpUrl = document.location.href;
-                        if(urlBase != tmpUrl){
-                            urlBase = tmpUrl;
-                            mainUnlockFunction();
-                            checkButtonCreation();
-                            enableBodyOverflow();
-                            removeReactModalOverlay(resp.data);
-                        }
-                    },800);
-        
-                    /**
-                     * Nested function (funcao aninhada)
-                     * Funcao principal de desbloqueio de conteudo
-                     */
-                    function mainUnlockFunction(){
-                        if(window.location.href.includes('app.respondeai.com.br/aprender') && window.location.href.includes('/teoria/')){
-                            importRequiredCDN();
-                            setTheoryLinksAction(resp.data);
-                            enableBodyOverflow(resp.data);
-                            removeReactModalOverlay(resp.data);
-                            removeDexterBlock(resp.data);
-                            removeBlurPage(resp.data);
-                            unlockTeoria(resp.data);
-                            ${incrementaConteudoAPI()};
-                            ${verificaAtualizacaoVersao()};
-                        }
-                        else if(window.location.href.includes('app.respondeai.com.br/aprender') && window.location.href.includes('/exercicio/')){
-                            importRequiredCDN();
-                            setTheoryLinksAction(resp.data);
-                            enableBodyOverflow(resp.data);
-                            removeReactModalOverlay(resp.data);
-                            removeDexterBlock(resp.data);
-                            removeBlurPage(resp.data);
-                            unlockFixationExercise(resp.data);
-                            ${incrementaConteudoAPI()};
-                            ${verificaAtualizacaoVersao()};
-                        }
-                        else if((window.location.href.includes('app.respondeai.com.br/aprender') || window.location.href.includes('app.respondeai.com.br/praticar')) && window.location.href.includes('/exercicio-lista/')){
-                            importRequiredCDN();
-                            setTheoryLinksAction(resp.data);
-                            enableBodyOverflow(resp.data);
-                            removeReactModalOverlay(resp.data);
-                            removeDexterBlock(resp.data);
-                            removeBlurPage(resp.data);
-                            unlockListExercise(resp.data);
-                            ${incrementaConteudoAPI()};
-                            ${verificaAtualizacaoVersao()};
-                        }
-                    }
-                }).catch((erro) => {
-                    if(erro.toString().includes('timeout')){
-                        sweetAlert(
-                            'error',
-                            'Erro',
-                            'Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style="font-weight: bold !important;">Código do erro: </spam>' + erro.toString()
-                        );
-                    }else{
-                        sweetAlert(
-                            'error',
-                            'Erro',
-                            'Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style="font-weight: bold !important;">Código do erro: </spam>' + erro.toString()
-                        );
-                    }                 
-                });
+                    removeDexterBlock(resp.data);
+                    removeBlurPage(resp.data);
+                    unlockTeoria(resp.data);
+                    ${incrementaConteudoAPI()};
+                    ${verificaAtualizacaoVersao()};
+                }
+                else if(window.location.href.includes('app.respondeai.com.br/aprender') && window.location.href.includes('/exercicio/')){
+                    importRequiredCDN();
+                    setTheoryLinksAction(resp.data);
+                    enableBodyOverflow(resp.data);
+                    removeReactModalOverlay(resp.data);
+                    removeDexterBlock(resp.data);
+                    removeBlurPage(resp.data);
+                    unlockFixationExercise(resp.data);
+                    ${incrementaConteudoAPI()};
+                    ${verificaAtualizacaoVersao()};
+                }
+                else if((window.location.href.includes('app.respondeai.com.br/aprender') || window.location.href.includes('app.respondeai.com.br/praticar')) && window.location.href.includes('/exercicio-lista/')){
+                    importRequiredCDN();
+                    setTheoryLinksAction(resp.data);
+                    enableBodyOverflow(resp.data);
+                    removeReactModalOverlay(resp.data);
+                    removeDexterBlock(resp.data);
+                    removeBlurPage(resp.data);
+                    unlockListExercise(resp.data);
+                    ${incrementaConteudoAPI()};
+                    ${verificaAtualizacaoVersao()};
+                }
             }
-        },800);
+        }).catch((erro) => {
+            if(erro.toString().includes('timeout')){
+                sweetAlert(
+                    'error',
+                    'Erro',
+                    'Ops, tivemos um pequeno problema!<br>Por favor, tente novamente utilizando uma conexão mais rápida.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>' + erro.toString()'
+                );
+            }else{
+                sweetAlert(
+                    'error',
+                    'Erro',
+                    'Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>' + erro.toString()'
+                );
+            }
+        });
+    }
+
+
+    function blockBlock() {
+        let id = window.setInterval(function() {}, 0);
+        while (id--) {
+            window.clearInterval(id);
+        }
+        setTimeout(()=>{
+            blockBlock();
+        },100);
+    }
+
+
+    function chooseUnlockEndpoint(conteudoDesbloqueio) {
+        switch(conteudoDesbloqueio) {
+            case "theory": return "/API/respondeai/getTheory";
+            case "exercise": return "/API/respondeai/getExercise";
+            case "list-exercise": return "/API/respondeai/getListExercise";
+        }
+    }
         
 
-        function changeLockedIcons(configs)
-        {
-            setInterval(()=>{
-                let svgIcons = document.querySelectorAll("."+configs.logged_locked_icons);
-                svgIcons.forEach(icon => {
-                    icon.innerHTML = '<svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="square" class="svg-inline--fa fa-square sc-lgsYow gFYkCv  logged" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zm-6 400H54c-3.3 0-6-2.7-6-6V86c0-3.3 2.7-6 6-6h340c3.3 0 6 2.7 6 6v340c0 3.3-2.7 6-6 6z"></path></svg>'
-                });
-            },800);
+    function changeLockedIcons(configs)
+    {
+        let svgIcons = document.querySelectorAll('.' + configs.logged_locked_icons + '');
+        svgIcons.forEach(icon => {
+            icon.innerHTML = '<svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="square" class="svg-inline--fa fa-square sc-lgsYow gFYkCv  logged" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M400 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zm-6 400H54c-3.3 0-6-2.7-6-6V86c0-3.3 2.7-6 6-6h340c3.3 0 6 2.7 6 6v340c0 3.3-2.7 6-6 6z"></path></svg>'
+        });
+
+        setTimeout(()=>{
+            changeLockedIcons(configs);
+        }, 800);
+    }
+
+
+    //Remove format toogle
+    function removeFormatToogle(configs) {
+        let divs = document.querySelectorAll('div');
+        for(let i=0; i<divs.length; i++){
+            for(let iConfig=0; iConfig<configs.data_cy.format_toggle.length; iConfig++) {
+                if(divs[i].classList.contains(' + configs.data_cy.format_toggle[iConfig] + ')) {
+                    divs[i].style.display = "none";
+                    return;
+                }
+            }
         }
+
+        setTimeout(() => {
+            removeFormatToogle(configs);
+        }, 800);
+    }
         
 
-        function unlockListExercise(configs)
-        {
-            //Remove format toogle
-            let k = setInterval(()=>{
-                let divs = document.querySelectorAll('div');
-                for(let i=0; i<divs.length; i++){
-                    for(let iConfig=0; iConfig<configs.data_cy.format_toggle.length; iConfig++){
-                        if(divs[i].classList.contains(configs.data_cy.format_toggle[iConfig])){
-                            clearInterval(k);
-                            divs[i].style.display = "none";
-                            break;
-                        }
-                    }
-                }
-            },800);
+    function unlockListExercise(configs)
+    {
+        removeFormatToogle(configs);
+        main(configs);
 
-            let r = setInterval(()=>{
-                let divs = document.querySelectorAll('div');
-                for(let i=0; i<divs.length; i++){
-                    for(let iConfig=0; iConfig<configs.data_cy.exercise_answer_button.length; iConfig++){
-                        if(divs[i].classList.contains(configs.data_cy.exercise_answer_button[iConfig])){
-                            clearInterval(r);
-    
-                            let answerDiv = divs[i];
-                            let token = getCookie('user_jwt');
-                            let listExerciseId = getTopicId();
-    
-                            answerDiv.innerHTML = setLoadingPageAnimation();
-    
-                            let s = setInterval(()=>{
-                                if(typeof(axios) == 'function' && token != null && listExerciseId != null){
-                                    clearInterval(s);
-                                    axios({
-                                        method: "POST",
-                                        url: 'https://possoler.tech/API/respondeai/getData?operation=getListExercise',
-                                        timeout: 30000,
-                                        data: JSON.stringify({
-                                            itemId: listExerciseId
-                                        }),
-                                        headers : {
-                                            "Content-Type" : "application/json",
-                                            "authorization": token
-                                        }
-                                    }).then((resp)=>{
-                                        if(resp.data.status == 'failed') throw new Error(resp.data.message);
-    
-                                        //Set div style
-                                        answerDiv.style.cssText = 'width: 100% !important; padding: 0px 30px !important; font-family: "Droid Serif", serif !important;font-size: 1.25em !important; line-height: 26px !important; color: rgb(68, 68, 68) !important; padding-bottom: 15px !important'
-                                        
-                                        //Renderiza solução na tela - Teoria
-                                        for(let i=0; i<resp.data.lightSolution.length; i++){
-                                            if(i==0){
-                                                answerDiv.innerHTML = '<h1 style="color: rgb(54, 170, 173); font-size: 1.7em; font-family:Droid Serif, serif; font-weight: inherit; margin: 50px 0px 30px 0px">Resposta</h1>';
-                                            }
-                                            answerDiv.innerHTML += resp.data.lightSolution[i];
-                                            MathJax.typeset();
-                                        }
-    
-    
-                                        //Renderiza solução na tela - Videos
-                                        if(resp.data.hasOwnProperty('videos')){
-                                            const SINGLE_VIDEO_SIZE = 450;
-                                            const SPACE_BETWEEN_VIDEOS = 50;
-                                            
-                                            for(let j=0; j<resp.data.videos.length; j++){
-    
-                                                if(j==0){
-                                                    answerDiv.innerHTML += '<h1 style="color: rgb(54, 170, 173); font-size: 1.7em; font-family:Droid Serif, serif; font-weight: inherit; margin: 50px 0px 30px 0px">Vídeo Tutorial</h1>';
-                                                }
-                                                answerDiv.innerHTML += (resp.data.videos[j].provider.includes("youtube"))
-                                                    ? '<div data-cy="video-iframe" allowfullscreen="" frameborder="0" style="width: 100%; height: ' + 100/resp.data.videos.length + '%;"><div style="width: 100%; height: ' + SINGLE_VIDEO_SIZE  + 'px;"><iframe frameborder="0" allowfullscreen="1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" title="YouTube video player" width="100%" height="100%" src="https://www.youtube.com/embed/' + resp.data.videos[j].providerId + '?autoplay=0&amp;mute=0&amp;controls=1&amp;origin=https%3A%2F%2Fapp.respondeai.com.br&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;iv_load_policy=3&amp;modestbranding=1&amp;enablejsapi=1&amp;widgetid=1"></iframe></div></div><div style="height: ' + SPACE_BETWEEN_VIDEOS + 'px !important"></div>'
-                                                    : '<div style="padding:56.25% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/' + resp.data.videos[j].providerId + '" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div><div style="height: ' + SPACE_BETWEEN_VIDEOS + 'px !important"></div>';
-                                            }
-                                        }
-                                    }).catch((erro)=>{
-                                        sweetAlert(
-                                            'error',
-                                            'Erro',
-                                            'Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style="font-weight: bold !important;">Código do erro: </spam>' + erro.toString()
-                                        );
-                                    });
-                                }
-                            },800);
-                        }
+        function main(configs) {
+            let divs = document.querySelectorAll('div');
+            for(let i=0; i<divs.length; i++){
+                for(let iConfig=0; iConfig<configs.data_cy.exercise_answer_button.length; iConfig++) {
+                    if(divs[i].classList.contains(' + configs.data_cy.exercise_answer_button[iConfig] + ')) {
+
+                        let answerDiv = divs[i];
+                        let token = getCookie('user_jwt');
+                        let listExerciseId = getTopicId();
+
+                        answerDiv.innerHTML = setLoadingPageAnimation();
+                        getListExercise(token, listExerciseId, answerDiv);
                     }
                 }
-            },800);
+            }
+            setTimeout(() => {
+                main(configs);
+            }, 800);
         }
+
+
+        function getListExercise(token, listExerciseId, answerDiv) {
+            if(typeof(axios) == 'undefined' || token == null || listExerciseId == null) {
+                setTimeout(() => {
+                    getListExercise();
+                    return;          
+                }, 800);
+            }
+
+            const ENDPOINT = chooseUnlockEndpoint("list-exercise");
+
+            axios({
+                method: "POST",
+                url: '${DOMAIN}' + ENDPOINT,
+                timeout: 30000,
+                data: JSON.stringify({
+                    itemId: listExerciseId
+                }),
+                headers : {
+                    "Content-Type" : "application/json",
+                    "authorization": token
+                }
+            }).then((resp)=>{
+                if(resp.data.status == 'failed') throw new Error(resp.data.message);
+
+                //Set div style
+                answerDiv.style.cssText = 'width: 100% !important; padding: 0px 30px !important; font-family: "Droid Serif", serif !important;font-size: 1.25em !important; line-height: 26px !important; color: rgb(68, 68, 68) !important; padding-bottom: 15px !important'
+                
+                //Renderiza solução na tela - Teoria
+                for(let i=0; i<resp.data.lightSolution.length; i++){
+                    if(i==0){
+                        answerDiv.innerHTML = '<h1 style="color: rgb(54, 170, 173); font-size: 1.7em; font-family:Droid Serif, serif; font-weight: inherit; margin: 50px 0px 30px 0px">Resposta</h1>';
+                    }
+                    answerDiv.innerHTML += resp.data.lightSolution[i];
+                    MathJax.typeset();
+                }
+
+
+                //Renderiza solução na tela - Videos
+                if(resp.data.hasOwnProperty('videos')){
+                    const SINGLE_VIDEO_SIZE = 450;
+                    const SPACE_BETWEEN_VIDEOS = 50;
+
+                    importVimeoPlayerJS();
+                    
+                    for(let j=0; j<resp.data.videos.length; j++){
+
+                        if(j==0){
+                            answerDiv.innerHTML += '<h1 style="color: rgb(54, 170, 173); font-size: 1.7em; font-family:Droid Serif, serif; font-weight: inherit; margin: 50px 0px 30px 0px">Vídeo Tutorial</h1>';
+                        }
+    
+                        answerDiv.innerHTML += (resp.data.videos[j].provider.includes("youtube"))
+    
+                            ? '<div data-cy="video-iframe" allowfullscreen="" frameborder="0" style="width: 100%; height: ' + 100/resp.data.videos.length + '%;">
+                                <div style="width: 100%; height: ' + SINGLE_VIDEO_SIZE + 'px;">
+                                    <iframe frameborder="0" allowfullscreen="1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" title="YouTube video player" width="100%" height="100%" src="https://www.youtube.com/embed/' + resp.data.videos[j].providerId + '?autoplay=0&amp;mute=0&amp;controls=1&amp;origin=https%3A%2F%2Fapp.respondeai.com.br&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;iv_load_policy=3&amp;modestbranding=1&amp;enablejsapi=1&amp;widgetid=1"></iframe>
+                                </div>
+                            </div>
+                            <div style="height: ' + SPACE_BETWEEN_VIDEOS + 'px !important"></div>'
+    
+                            :'<div style="padding:56.25% 0 0 0;position:relative;">
+                                <iframe src="https://player.vimeo.com/video/' + resp.data.videos[j].providerId + '" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+                            </div>
+                            <div style="height: ' + SPACE_BETWEEN_VIDEOS + 'px !important"></div>';
+                    }
+                }
+            }).catch((erro)=>{
+                sweetAlert(
+                    'error',
+                    'Erro',
+                    'Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>' + erro.toString()'
+                );
+            });
+        }
+
+
+        //Remove format toogle
+        function removeFormatToogle(configs) {
+            let divs = document.querySelectorAll('div');
+            for(let i=0; i<divs.length; i++){
+                for(let iConfig=0; iConfig<configs.data_cy.format_toggle.length; iConfig++) {
+                    if(divs[i].classList.contains(configs.data_cy.format_toggle[iConfig])) {
+                        divs[i].style.display = "none";
+                        return;
+                    }
+                }
+            }
+            setTimeout(() => {
+                removeFormatToogle(configs);
+            }, 800);
+        }
+    }
 
         
         function unlockFixationExercise(configs)
         {
-            //Remove format toogle
-            let k = setInterval(()=>{
-                let divs = document.querySelectorAll('div');
-                for(let i=0; i<divs.length; i++){
-                    for(let iConfig=0; iConfig<configs.data_cy.format_toggle.length; iConfig++){
-                        if(divs[i].classList.contains(configs.data_cy.format_toggle[iConfig])){
-                            clearInterval(k);
-                            divs[i].style.display = "none";
-                            break;
-                        }
-                    }
-                }
-            },800);
+            main(configs);
+            removeFormatFromToogle(configs);
 
-            let r = setInterval(()=>{
+
+            function main(configs) {
+                let flag = false;
+
                 let divs = document.querySelectorAll('div');
                 for(let i=0; i<divs.length; i++){
                     for(let iConfig=0; iConfig<configs.data_cy.exercise_answer_button.length; iConfig++){
@@ -717,9 +804,9 @@ function modifyAPPRESPAI()
                                 (divs[i].classList.contains(configs.data_cy.exercise_answer_button[iConfig])) || 
                                 (divs[i].classList.contains(configs.data_cy.exercise_statement[jConfig]))
                             ){
-                                clearInterval(r);
+                                flag = true;
                                 let answerDiv;
-        
+
                                 if(divs[i].classList.contains(configs.data_cy.exercise_statement[jConfig])){
                                     divs[i].innerHTML += '<div id="tmpAnswer"></div>';
                                     answerDiv = document.getElementById("tmpAnswer");
@@ -738,217 +825,265 @@ function modifyAPPRESPAI()
                                 let exerciseId = getTopicId();
         
                                 answerDiv.innerHTML = setLoadingPageAnimation();
-        
-                                let s = setInterval(()=>{
-                                    if(typeof(axios) == 'function' && token != null && exerciseId != null){
-                                        clearInterval(s);
-                                        axios({
-                                            method: "POST",
-                                            url: 'https://possoler.tech/API/respondeai/getData?operation=getFixationExercise',
-                                            timeout: 30000,
-                                            data: JSON.stringify({
-                                                itemId: exerciseId
-                                            }),
-                                            headers : {
-                                                "Content-Type" : "application/json",
-                                                "authorization": token
-                                            }
-                                        }).then((resp)=>{
-                                            if(resp.data.status == 'failed') throw new Error(resp.data.message);
-        
-                                            //Set div style
-                                            answerDiv.style.cssText = 'width: 100% !important; padding: 0px 30px !important; font-family: "Droid Serif", serif !important; font-size: 1.25em !important; line-height: 26px !important; color: rgb(68, 68, 68) !important; padding-bottom: 15px !important'
-        
-                                                console.log(resp.data);
-                                                //Renderiza solução na tela - Teoria
-                                                for(let i=0; i<resp.data.lightSolution.length; i++){
-                                                    if(i==0){
-                                                        answerDiv.innerHTML = '<h1 style="color: rgb(247, 172, 60); font-size: 1.7em; font-family:Droid Serif, serif; font-weight: inherit; margin: 50px 0px 30px 0px">Resposta</h1>';
-                                                    }
-                                                    answerDiv.innerHTML += resp.data.lightSolution[i];
-                                                    MathJax.typeset();
-                                                }
-        
-        
-                                                //Renderiza solução na tela - Videos
-                                                if(resp.data.hasOwnProperty('videos')){
-                                                    const SINGLE_VIDEO_SIZE = 450;
-                                                    const SPACE_BETWEEN_VIDEOS = 50;
-                                                
-                                                for(let j=0; j<resp.data.videos.length; j++){
-        
-                                                    if(j==0){
-                                                        answerDiv.innerHTML += '<h1 style="color: rgb(247, 172, 60); font-size: 1.7em; font-family:Droid Serif, serif; font-weight: inherit; margin: 50px 0px 30px 0px">Vídeo Tutorial</h1>';
-                                                    }
-        
-                                                    answerDiv.innerHTML += (resp.data.videos[j].provider.includes("youtube"))
-                                                        ? '<div data-cy="video-iframe" allowfullscreen="" frameborder="0" style="width: 100%; height: ' + 100/resp.data.videos.length + '%;"><div style="width: 100%; height: ' + SINGLE_VIDEO_SIZE + 'px;"><iframe frameborder="0" allowfullscreen="1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" title="YouTube video player" width="100%" height="100%" src="https://www.youtube.com/embed/' + resp.data.videos[j].providerId + '?autoplay=0&amp;mute=0&amp;controls=1&amp;origin=https%3A%2F%2Fapp.respondeai.com.br&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;iv_load_policy=3&amp;modestbranding=1&amp;enablejsapi=1&amp;widgetid=1"></iframe></div></div><div style="height: ' + SPACE_BETWEEN_VIDEOS + 'px !important"></div>'
-                                                        : '<div style="padding:56.25% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/' + resp.data.videos[j].providerId + '" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div><div style="height: ' + SPACE_BETWEEN_VIDEOS + 'px !important"></div>';    
-                                                }
-                                            }
-                                        }).catch((erro)=>{
-                                            sweetAlert(
-                                                'error',
-                                                'Erro',
-                                                'Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style="font-weight: bold !important;">Código do erro: </spam>' + erro.toString()
-                                            );
-                                        });
-                                    }
-                                },800);
-                                break;
+                                getFixationExercise(configs, token, exerciseId);
                             }
                         }
                     }
                 }
-            },800);
+                if(!flag) {
+                    setTimeout(() => {
+                        main(configs);
+                    },800);
+                }
+            }
+
+
+            //Remove format toogle
+            function removeFormatFromToogle(configs) {
+                let flag = false;
+
+                let divs = document.querySelectorAll('div');
+                for(let i=0; i<divs.length; i++){
+                    for(let iConfig=0; iConfig<configs.data_cy.format_toggle.length; iConfig++){
+                        if(divs[i].classList.contains(' + configs.data_cy.format_toggle[iConfig] + ')){
+                            flag = true;
+                            divs[i].style.display = "none";
+                            break;
+                        }
+                    }
+                }
+                if(!flag) {
+                    setTimeout(() => {
+                        removeFormatFromToogle(configs);
+                    },800);
+                }
+            }
+
+
+            function getFixationExercise(configs, token, exerciseId) {
+                if(typeof(axios) != 'function' || token == null || exerciseId == null){
+                    setTimeout(() => {
+                        getFixationExercise(configs, token, exerciseId);
+                        return;
+                    },800);
+                }
+
+                const ENDPOINT = chooseUnlockEndpoint("exercise");
+
+                axios({
+                    method: "POST",
+                    url: "${DOMAIN}" + ENDPOINT,
+                    timeout: 30000,
+                    data: JSON.stringify({
+                        itemId: exerciseId
+                    }),
+                    headers: {
+                        "Content-Type" : "application/json",
+                        "authorization": token
+                    }
+                }).then((resp)=>{
+                    if(resp.data.status == 'failed') throw new Error(resp.data.message);
+
+                    //Set div style
+                    answerDiv.style.cssText = "
+                        width: 100% !important;
+                        padding: 0px 30px !important;
+                        font-family: "Droid Serif", serif !important;
+                        font-size: 1.25em !important;
+                        line-height: 26px !important;
+                        color: rgb(68, 68, 68) !important;
+                        padding-bottom: 15px !important"
+
+
+                    //Renderiza solução na tela - Teoria
+                    for(let i=0; i<resp.data.lightSolution.length; i++){
+                        if(i==0){
+                            answerDiv.innerHTML = "<h1 style="color: rgb(247, 172, 60); font-size: 1.7em; font-family:Droid Serif, serif; font-weight: inherit; margin: 50px 0px 30px 0px">Resposta</h1>";
+                        }
+                        answerDiv.innerHTML += resp.data.lightSolution[i];
+                        MathJax.typeset();
+                    }
+
+
+                    //Renderiza solução na tela - Videos
+                    if(resp.data.hasOwnProperty("videos")){
+                        const SINGLE_VIDEO_SIZE = 450;
+                        const SPACE_BETWEEN_VIDEOS = 50;
+
+                        importVimeoPlayerJS();
+
+                        for(let j=0; j<resp.data.videos.length; j++){
+
+                            if(j==0){
+                                answerDiv.innerHTML += "<h1 style="color: rgb(247, 172, 60); font-size: 1.7em; font-family:Droid Serif, serif; font-weight: inherit; margin: 50px 0px 30px 0px">Vídeo Tutorial</h1>";
+                            }
+
+                            answerDiv.innerHTML += (resp.data.videos[j].provider.includes("youtube"))
+                            ? '<div data-cy="video-iframe" allowfullscreen="" frameborder="0" style="width: 100%; height: ' + 100/resp.data.videos.length + '%;">
+                                <div style="width: 100%; height: ' + SINGLE_VIDEO_SIZE + 'px;">
+                                    <iframe frameborder="0" allowfullscreen="1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" title="YouTube video player" width="100%" height="100%" src="https://www.youtube.com/embed/' + resp.data.videos[j].providerId + '?autoplay=0&amp;mute=0&amp;controls=1&amp;origin=https%3A%2F%2Fapp.respondeai.com.br&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;iv_load_policy=3&amp;modestbranding=1&amp;enablejsapi=1&amp;widgetid=1"></iframe>
+                                </div>
+                            </div>
+                            <div style="height: ' + SPACE_BETWEEN_VIDEOS + 'px !important"></div>'
+
+                            :'<div style="padding:56.25% 0 0 0;position:relative;">
+                                <iframe src="https://player.vimeo.com/video/' + resp.data.videos[j].providerId + '" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+                            </div>
+                            <div style="height: ' + SPACE_BETWEEN_VIDEOS + 'px !important"></div>';
+                        }
+                    }
+                }).catch((erro)=>{
+                    sweetAlert(
+                        'error',
+                        'Erro',
+                        'Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>' + erro.toString()'
+                    );
+                });
+            }
         }
 
 
         function unlockTeoria(configs)
         {
-            let r = setInterval(()=>{
+            main(configs);
+
+            function main(configs) {
+                let flag = false;
                 let divs = document.querySelectorAll('div');
+
                 for(let i=0; i<divs.length; i++){
                     for(let iConfig=0; iConfig<configs.data_cy.format_toggle.length; iConfig++){
-                        if(divs[i].classList.contains(configs.data_cy.format_toggle[iConfig])){
-                            clearInterval(r);
-    
-                            //VERIFICA SE NA 1 EXEC O CONTEUDO ESTA BLOQUEADO - TEXTO
-                            //CASO POSITIVO, CHAMA API E MONTA TEXTO
-                            let s = setInterval(()=>{
-                                let divsSteps = document.querySelectorAll('div');
-                                for(let j=0; j<divsSteps.length; j++){
-                                    for(let iConfig2=0; iConfig2<configs.data_cy.theory_text_content.length; iConfig2++){
-                                        if(divsSteps[j].classList.contains(configs.data_cy.theory_text_content[iConfig2])){
-                                            clearInterval(s);
-                                            let divStepsContainer = divsSteps[j].children[0];
-                                            try{
-                                                if(
-                                                    divStepsContainer.children[0].isEqualNode(divStepsContainer.children[1]) &&
-                                                    divStepsContainer.children[1].isEqualNode(divStepsContainer.children[2]) && 
-                                                    divStepsContainer.children[2].isEqualNode(divStepsContainer.children[3]) &&
-                                                    divStepsContainer.children[3].isEqualNode(divStepsContainer.children[4]) &&
-                                                    divStepsContainer.children[4].isEqualNode(divStepsContainer.children[5])
-                                                ){
-                                                    //SETTA MSG DE LOADING
-                                                    divsSteps[j].innerHTML = setLoadingPageAnimation();
-            
-                                                    //CHAMA API PARA DESBLOQUEAR CONTEUDO
-                                                    callAPITheoryUnlocked('texto', configs);
-                                                    container = divsSteps[j];
-                                                    break;
-                                                }
-                                            }catch(exception){
-                                                
-                                            }
-                                        }
-                                    }
-                                }
-                            },800);
-    
-    
-                            //VERIFICA SE NA 1 EXEC O CONTEUDO ESTA BLOQUEADO - VIDEO
-                            //CASO POSITIVO, CHAMA API E MONTA VIDEO
-                            let v = setInterval(()=>{
-                                let divsVideo = document.querySelectorAll('div');
-                                for(let j=0; j<divsVideo.length; j++){
-                                    for(let iConfig2=0; iConfig2<configs.data_cy.theory_video_content.length; iConfig2++){
-                                        if(divsVideo[j].classList.contains(configs.data_cy.theory_video_content[iConfig2])){
-                                            clearInterval(v);
-                                            if(divsVideo[j].children.length == 0)
-                                            {
-                                                //SETTA MSG DE LOADING
-                                                divsVideo[j].innerHTML = setLoadingPageAnimation();
-        
-                                                //CHAMA API PARA DESBLOQUEAR CONTEUDO
-                                                callAPITheoryUnlocked('video', configs);
-                                                break;
-                                            }
-                                        }
-                                    }
-                                }
-                            },800);
-    
-    
-                            //DEFINE NOVA ACAO AO CLICAR NO BOTAO
+                        if(divs[i].classList.contains(' + configs.data_cy.format_toggle[iConfig] + ')){
+                            flag = true;
+                            montaConteudoTexto(configs);
+                            montaConteudoVideo(configs);
+
+                            // DEFINE NOVA ACAO AO CLICAR NO BOTAO
                             divs[i].addEventListener("click", ()=>{
                                 let nodes = divs[i].childNodes;
                                 for(let i=0; i<nodes.length; i++){
                                     if(nodes[i].nodeName == 'P' && nodes[i].textContent == 'Alternar para texto >>'){
-                                        
-                                        //PROCURA DIV PARA RECEBER CONTEUDO
-                                        let s = setInterval(()=>{
-                                            let divsSteps = document.querySelectorAll('div');
-                                            for(let j=0; j<divsSteps.length; j++){
-                                                for(let iConfig2=0; iConfig2<configs.data_cy.theory_text_content.length; iConfig2++){
-                                                    if(divsSteps[j].classList.contains(configs.data_cy.theory_text_content[iConfig2])){
-                                                        clearInterval(s);
-        
-                                                        let divStepsContainer = divsSteps[j].children[0];
-                                                        try{
-                                                            if(
-                                                                divStepsContainer.children[0].isEqualNode(divStepsContainer.children[1]) &&
-                                                                divStepsContainer.children[1].isEqualNode(divStepsContainer.children[2]) && 
-                                                                divStepsContainer.children[2].isEqualNode(divStepsContainer.children[3]) &&
-                                                                divStepsContainer.children[3].isEqualNode(divStepsContainer.children[4]) &&
-                                                                divStepsContainer.children[4].isEqualNode(divStepsContainer.children[5])
-                                                            ){
-                                                                divsSteps[j].innerHTML = setLoadingPageAnimation();
-                                                                callAPITheoryUnlocked("texto", configs);
-                                                                break;
-                                                            }
-                                                        }catch(exception){
-                                                            
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        },800);
-                                        break;
+                                        procuraDivRecipiente(configs);
                                     }
                                     if(nodes[i].nodeName == 'P' && nodes[i].textContent == 'Alternar para video >>'){
-                                        callAPITheoryUnlocked("video");
-                                        if(verificaElemento("#msgLottieDesbloqueio")){
-                                            document.getElementById("msgLottieDesbloqueio").innerHTML = '<p class="lead">Aguarde um momento...<br>Estamos removendo os bloqueios para você...</p>'
-                                        }
-                                        break;
+                                        callAPITheoryUnlocked("video", configs);
                                     }
                                 }
                             });
                             break;
                         }else{
-                            //PROCURA DIV PARA RECEBER CONTEUDO
-                            let s = setInterval(()=>{
-                                let divsSteps = document.querySelectorAll('div');
-                                for(let j=0; j<divsSteps.length; j++){
-                                    for(let iConfig2=0; iConfig2<configs.data_cy.theory_text_content.length; iConfig2++){
-                                        if(divsSteps[j].classList.contains(configs.data_cy.theory_text_content[iConfig2])){
-                                            clearInterval(s);
-        
-                                            let divStepsContainer = divsSteps[j].children[0];
-                                            try{
-                                                if(
-                                                    divStepsContainer.children[0].isEqualNode(divStepsContainer.children[1]) &&
-                                                    divStepsContainer.children[1].isEqualNode(divStepsContainer.children[2]) && 
-                                                    divStepsContainer.children[2].isEqualNode(divStepsContainer.children[3]) &&
-                                                    divStepsContainer.children[3].isEqualNode(divStepsContainer.children[4]) &&
-                                                    divStepsContainer.children[4].isEqualNode(divStepsContainer.children[5])
-                                                ){
-                                                    divsSteps[j].innerHTML = setLoadingPageAnimation();
-                                                    callAPITheoryUnlocked("texto", configs);
-                                                    break;
-                                                }
-                                            }catch(exception){
-                                                
-                                            }
-                                        }
-                                    }
-                                }
-                            },800);
+                            procuraDivRecipiente(configs);
                         }
                     }
                 }
-            },800);
+            }
+
+            if(!flag) {
+                setTimeout(() => {
+                    main(configs);
+                }, 800);
+            }
+
+
+            function montaConteudoTexto(configs) {
+                let flag = false;
+                let divsSteps = document.querySelectorAll('div');
+                for(let j=0; j<divsSteps.length; j++){
+                    for(let iConfig2=0; iConfig2<configs.data_cy.theory_text_content.length; iConfig2++){
+                        if(divsSteps[j].classList.contains(' + configs.data_cy.theory_text_content[iConfig2] + ')){
+                            let divStepsContainer = divsSteps[j].children[0];
+                            try{
+                                if(
+                                    divStepsContainer.children[0].isEqualNode(divStepsContainer.children[1]) &&
+                                    divStepsContainer.children[1].isEqualNode(divStepsContainer.children[2]) &&
+                                    divStepsContainer.children[2].isEqualNode(divStepsContainer.children[3]) &&
+                                    divStepsContainer.children[3].isEqualNode(divStepsContainer.children[4]) &&
+                                    divStepsContainer.children[4].isEqualNode(divStepsContainer.children[5])
+                                ){
+                                    flag = true;
+        
+                                    //SETTA MSG DE LOADING
+                                    divsSteps[j].innerHTML = setLoadingPageAnimation();
+        
+                                    //CHAMA API PARA DESBLOQUEAR CONTEUDO
+                                    callAPITheoryUnlocked('texto', configs);
+                                    container = divsSteps[j];
+                                    break;
+                                }
+                            }catch(erro){
+        
+                            }
+                            break;
+                        }
+                    }
+                }
+
+                if(!flag) {
+                    setTimeout(() => {
+                        montaConteudoTexto(configs);
+                    },800);
+                }
+            }
+
+
+            function montaConteudoVideo(configs) {
+                let flag = false;
+                let divsVideo = document.querySelectorAll('div');
+        
+                for(let j=0; j<divsVideo.length; j++){
+                    for(let iConfig2=0; iConfig2<configs.data_cy.theory_video_content.length; iConfig2++) {
+                        if(divsVideo[j].classList.contains(' + configs.data_cy.theory_video_content[iConfig2] + ')) {
+                            if(divsVideo[j].children.length == 0) {
+                                flag = true;
+                                divsVideo[j].innerHTML = setLoadingPageAnimation();
+                                callAPITheoryUnlocked('video', configs);
+                                break;
+                            }
+                        }
+                    }
+                }
+                if(!flag) {
+                    setTimeout(() => {
+                        montaConteudoVideo(configs);
+                    },800);
+                }
+            }
+
+
+            function procuraDivRecipiente(configs) {
+                let flag = false;
+        
+                //PROCURA DIV PARA RECEBER CONTEUDO
+                let divsSteps = document.querySelectorAll('div');
+                for(let j=0; j<divsSteps.length; j++){
+                    for(let iConfig2=0; iConfig2<configs.data_cy.theory_text_content.length; iConfig2++){
+                        if(divsSteps[j].classList.contains(' + configs.data_cy.theory_text_content[iConfig2] + ')){
+                            flag = true;
+                            let divStepsContainer = divsSteps[j].children[0];
+                            try{
+                                if(
+                                    divStepsContainer.children[0].isEqualNode(divStepsContainer.children[1]) &&
+                                    divStepsContainer.children[1].isEqualNode(divStepsContainer.children[2]) &&
+                                    divStepsContainer.children[2].isEqualNode(divStepsContainer.children[3]) &&
+                                    divStepsContainer.children[3].isEqualNode(divStepsContainer.children[4]) &&
+                                    divStepsContainer.children[4].isEqualNode(divStepsContainer.children[5])
+                                ){
+                                    divsSteps[j].innerHTML = setLoadingPageAnimation();
+                                    callAPITheoryUnlocked("texto", configs);
+                                    break;
+                                }
+                            }catch(erro){
+        
+                            }
+                        }
+                    }
+                }
+                if(!flag) {
+                    setTimeout(() => {
+                        procuraDivRecipiente(configs);
+                    },800);
+                }
+            }
         }
 
 
@@ -960,14 +1095,18 @@ function modifyAPPRESPAI()
 
         function importRequiredCDN()
         {
-            let r = setInterval(()=>{
-                if(document.querySelector('head') != null){
-                    clearInterval(r);
-                    let lottieJS = document.createElement('script');
-                    lottieJS.setAttribute('src','https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js');
-                    document.querySelector('head').appendChild(lottieJS);
+            setTimeout(() => {
+                if(!verificaElemento('head')){
+                    importRequiredCDN();
+                    return;
                 }
-            },800);
+            }, 800);
+        
+            if(!customElements.get("lottie-player")){
+                let lottieJS = document.createElement('script');
+                lottieJS.setAttribute('src','https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js');
+                document.querySelector('head').appendChild(lottieJS);
+            }
         }
 
 
@@ -977,89 +1116,132 @@ function modifyAPPRESPAI()
          */
         function callAPITheoryUnlocked(typeContent, configs)
         {
-            let token = getCookie('user_jwt');
-            let topicId = getTopicId();
-            let r = setInterval(()=>{
-                if(typeof(axios) == 'function' && token != null && topicId != null){
-                    clearInterval(r);
-                    axios({
-                        method: "POST",
-                        url: 'https://possoler.tech/API/respondeai/getData?operation=getTheory',
-                        timeout: 30000,
-                        data: JSON.stringify({
-                            itemId: topicId
-                        }),
-                        headers: {
-                            "Content-Type" : "application/json",
-                            "authorization": token
-                        }
-                    }).then((resp)=>{
+            main(typeContent, configs);
 
-                        if(resp.data.status == 'failed')
-                            throw new Error(resp.data.message);
 
-                        if(typeContent == 'texto'){
-                            let r = setInterval(()=>{
-                                let divs = document.querySelectorAll('div');
-                                for(let i=0; i<divs.length; i++){
-                                    for(let iConfig2=0; iConfig2<configs.data_cy.theory_text_content.length; iConfig2++){
-                                        if(divs[i].classList.contains(configs.data_cy.theory_text_content[iConfig2]) && typeof(MathJax) == "object"){
-                                            clearInterval(r);
-                                            divs[i].innerHTML = '<div class="sc-jTzLTM fFEUnb rendered"><div>' + resp.data.lightBody + '</div></div>';
-                                            MathJax.typeset();
-                                            return;
-                                        }
-                                    }
-                                }
-                            },800);
-                        }
-                        else if(typeContent == 'video'){
-                            const SINGLE_VIDEO_SIZE = 450;
-                            const SPACE_BETWEEN_VIDEOS = 50;
-
-                            let r = setInterval(()=>{
-                                let divs = document.querySelectorAll('div');
-                                for(let i=0; i<divs.length; i++){
-                                    for(let iConfig2=0; iConfig2<configs.data_cy.theory_video_content.length; iConfig2++){
-                                        if(divs[i].classList.contains(configs.data_cy.theory_video_content[iConfig2])){
-                                            clearInterval(r);
-                                            if(divs[i].children[0].id == "containerLootieLoading")
-                                            {
-                                                if(resp.data.hasOwnProperty('videos'))
-                                                {
-                                                    //REMOVE ANIMACAO DE CARREGAMENTO
-                                                    document.getElementById("containerLootieLoading").remove();
-    
-                                                    //SETA TAMANHO DA PAGINA
-                                                    divs[i].style.cssText += 'height: ' + ((SINGLE_VIDEO_SIZE*resp.data.videos.length) + (SPACE_BETWEEN_VIDEOS*resp.data.videos.length)) + 'px !important';
-    
-                                                    //ITERA SOBRE OBJETO DE RESPOSTA PARA MONTAR PAGINA
-                                                    for(let j=0; j<resp.data.videos.length; j++){
-                                                        divs[i].innerHTML += (resp.data.videos[j].provider.includes("youtube"))
-                                                            ? '<div data-cy="video-iframe" allowfullscreen="" frameborder="0" style="width: 100%; height: ' + 100/resp.data.videos.length + '%;"><div style="width: 100%; height: ' + SINGLE_VIDEO_SIZE  + 'px;"><iframe frameborder="0" allowfullscreen="1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" title="YouTube video player" width="100%" height="100%" src="https://www.youtube.com/embed/' + resp.data.videos[j].providerId + '?autoplay=0&amp;mute=0&amp;controls=1&amp;origin=https%3A%2F%2Fapp.respondeai.com.br&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;iv_load_policy=3&amp;modestbranding=1&amp;enablejsapi=1&amp;widgetid=1"></iframe></div></div><div style="height: ' + SPACE_BETWEEN_VIDEOS + 'px !important"></div>'
-                                                            : '<div style="padding:56.25% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/' + resp.data.videos[j].providerId + '" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div><div style="height: ' + SPACE_BETWEEN_VIDEOS + 'px !important"></div>';
-                                                    }
-                                                }else{
-                                                    throw new Error('Falha ao obter objeto "videos"');
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            },800);
-                        }
-                    }).catch((erro)=>{
-                        sweetAlert(
-                            'error',
-                            'Erro',
-                            'Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style="font-weight: bold !important;">Código do erro: </spam>' + erro.toString()
-                        );
-                        if(verificaElemento("#msgLottieDesbloqueio")){
-                            document.getElementById("msgLottieDesbloqueio").innerHTML = '<p>Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.</p><p><spam style="font-weight: bold !important;">Código do erro: </spam>' + erro.toString() + '</p>'
-                        }
-                    })
+            function main(typeContent, configs) {
+                let token = getCookie('user_jwt');
+                let topicId = getTopicId();
+                if(typeof(axios) != 'function' || token == null || topicId == null){
+                    setTimeout(() => {
+                        main(typeContent, configs);
+                        return;
+                    },800);
                 }
-            },800);
+
+                const ENDPOINT = chooseUnlockEndpoint("theory");
+        
+                axios({
+                    method: "POST",
+                    url: '${DOMAIN}' + ENDPOINT,
+                    timeout: 30000,
+                    data: JSON.stringify({
+                        itemId: topicId
+                    }),
+                    headers: {
+                        "Content-Type" : "application/json",
+                        "authorization": token
+                    }
+                }).then((resp)=>{
+        
+                    if(resp.data.status == 'failed')
+                        throw new Error(resp.data.message);
+        
+                    if(typeContent == 'texto'){
+                        setTextTheoryUnlocked(resp);
+                    }
+                    else if(typeContent == 'video'){
+                        setVideoTheoryUnlocked(resp);
+                    }
+                }).catch((erro)=>{
+                    sweetAlert(
+                        'error',
+                        'Erro',
+                        'Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>' + erro.toString()'
+                    );
+                    if(verificaElemento("#msgLottieDesbloqueio")){
+                        document.getElementById("msgLottieDesbloqueio").innerHTML = '
+                            <p>Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.</p>
+                            <p><spam style='font-weight: bold !important;'>Código do erro: </spam>' + erro.toString() + '</p>'
+                    }
+                })
+            }
+
+
+            function setTextTheoryUnlocked(resp) {
+                let flag = false;
+                let divs = document.querySelectorAll('div');
+                for(let i=0; i<divs.length; i++){
+                    for(let iConfig2=0; iConfig2<configs.data_cy.theory_text_content.length; iConfig2++){
+                        if(divs[i].classList.contains(' + configs.data_cy.theory_text_content[iConfig2] +') && typeof(MathJax) == "object"){
+                            flag = true;
+                            divs[i].innerHTML = '
+                                <div class="sc-jTzLTM fFEUnb rendered">
+                                    <div>' + resp.data.lightBody + '</div>
+                                </div>';
+                            MathJax.typeset();
+                            return;
+                        }
+                    }
+                }
+                if(!flag) {
+                    setTimeout(() => {
+                        setTextTheoryUnlocked(resp);
+                    });
+                }
+            }
+
+
+            function setVideoTheoryUnlocked(resp) {
+                const SINGLE_VIDEO_SIZE = 450;
+                const SPACE_BETWEEN_VIDEOS = 50;
+                let flag = false;
+        
+                let divs = document.querySelectorAll('div');
+                for(let i=0; i<divs.length; i++){
+                    for(let iConfig2=0; iConfig2<configs.data_cy.theory_video_content.length; iConfig2++) {
+                        if(divs[i].classList.contains(' + configs.data_cy.theory_video_content[iConfig2] +')) {
+                            flag = true;
+                            if(divs[i].children[0].id == "containerLootieLoading") {
+                                if(resp.data.hasOwnProperty('videos')) {
+                                    importVimeoPlayerJS();
+        
+                                    //REMOVE ANIMACAO DE CARREGAMENTO
+                                    document.getElementById("containerLootieLoading").remove();
+        
+                                    //SETA TAMANHO DA PAGINA
+                                    divs[i].style.cssText += 'height: ' + (SINGLE_VIDEO_SIZE*resp.data.videos.length) + (SPACE_BETWEEN_VIDEOS*resp.data.videos.length) + 'px !important';
+        
+                                    //ITERA SOBRE OBJETO DE RESPOSTA PARA MONTAR PAGINA
+                                    for(let j=0; j<resp.data.videos.length; j++){
+        
+                                        divs[i].innerHTML += (resp.data.videos[j].provider.includes("youtube"))
+        
+                                        ? '<div data-cy="video-iframe" allowfullscreen="" frameborder="0" style="width: 100%; height: ' + 100/resp.data.videos.length + '%;">
+                                                <div style="width: 100%; height: 100%;">
+                                                    <iframe frameborder="0" allowfullscreen="1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" title="YouTube video player" width="100%" height="100%" src="https://www.youtube.com/embed/' + resp.data.videos[j].providerId + '?autoplay=0&amp;mute=0&amp;controls=1&amp;origin=https%3A%2F%2Fapp.respondeai.com.br&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;iv_load_policy=3&amp;modestbranding=1&amp;enablejsapi=1&amp;widgetid=1"></iframe>
+                                                </div>
+                                            </div>
+                                            <div style="height: ' + SPACE_BETWEEN_VIDEOS + 'px !important"></div>'
+        
+                                        : '<div style="padding:56.25% 0 0 0;position:relative;">
+                                             <iframe src="https://player.vimeo.com/video/' + resp.data.videos[j].providerId + '" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+                                           </div>
+                                           <div style="height: ' + SPACE_BETWEEN_VIDEOS + 'px !important"></div>';
+                                    }
+                                }else{
+                                    throw new Error("Falha ao obter objeto \"videos\"");
+                                }
+                                if(!flag) {
+                                    setTimeout(() => {
+                                        setVideoTheoryUnlocked();
+                                    });
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
 
@@ -1080,36 +1262,42 @@ function modifyAPPRESPAI()
          */
         function setTheoryLinksAction(configs)
         {
-            let r = setInterval(()=>{
-                let divs = document.querySelectorAll('div');
-                for(let i=0; i<divs.length; i++){
-                    for(let iConfig=0; iConfig<configs.data_cy.side_menu.length; iConfig++){
-                        if(
-                            (divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == configs.data_cy.side_menu[iConfig]) || 
-                            (divs[i].classList.contains(configs.data_cy.side_menu[iConfig]))
-                        ){
-                            clearInterval(r);
-                            setTimeout(()=>{
-                                let links = document.querySelectorAll("a");
-                                for(let i=0; i<links.length; i++){
-                                    if(
-                                        links[i].getAttribute("href").includes("/aprender") && 
-                                        links[i].getAttribute("href").includes("/topico") &&
-                                        links[i].getAttribute("href").includes("/teoria") &&
-                                        links[i].getAttribute("href").includes("/exercicio/")
-                                    ){
-                                        links[i].addEventListener("click", (event)=>{
-                                            event.preventDefault();
-                                            window.location.assign('https://'+ window.location.hostname + links[i].getAttribute("href"));
-                                        });
-                                    }
+            let flag = false;
+
+            let divs = document.querySelectorAll('div');
+            for(let i=0; i<divs.length; i++) {
+                for(let iConfig=0; iConfig<configs.data_cy.side_menu.length; iConfig++) {
+                    if(
+                        (divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == configs.data_cy.side_menu[iConfig]) ||
+                        divs[i].classList.contains("' + configs.data_cy.side_menu[iConfig] +'")
+                    ){
+                        setTimeout(() => {
+                            let links = document.querySelectorAll("a");
+                            for(let i=0; i<links.length; i++){
+                                if(
+                                    links[i].getAttribute("href").includes("/aprender") &&
+                                    links[i].getAttribute("href").includes("/topico") &&
+                                    links[i].getAttribute("href").includes("/teoria") &&
+                                    links[i].getAttribute("href").includes("/exercicio/")
+                                ){
+                                    flag = true;
+                                    links[i].addEventListener("click", (event)=>{
+                                        event.preventDefault();
+                                        window.location.assign('https://' + window.location.hostname + links[i].getAttribute("href") + ');
+                                    });
                                 }
-                            },2000);
-                            break;
-                        }
+                            }
+                        },2000);
+                        break;
                     }
                 }
-            },800);
+            }
+
+            if(!flag) {
+                setTimeout(() => {
+                    setTheoryLinksAction(configs);
+                }, 800);
+            }
         }
 
 
@@ -1118,15 +1306,17 @@ function modifyAPPRESPAI()
          */
         function removeBlurPage(configs)
         {
-            setInterval(()=>{
-                configs.blur_class.forEach((current_class) => {
-                    let blurElements = document.querySelectorAll('.'+current_class);
-                    blurElements.forEach((blurElement) => {
-                        blurElement.classList.remove(current_class);
-                        blurElement.style.filter = "none";
-                    })
-                });
-            },800);
+            configs.blur_class.forEach((current_class) => {
+                let blurElements = document.querySelectorAll('.' + current_class + '');
+                blurElements.forEach((blurElement) => {
+                    blurElement.classList.remove(current_class);
+                    blurElement.style.filter = "none";
+                })
+            });
+        
+            setTimeout(() => {
+                removeBlurPage(configs);
+            }, 800);
         }
 
 
@@ -1135,14 +1325,16 @@ function modifyAPPRESPAI()
          */
         function enableBodyOverflow(configs)
         {
-            let r = setInterval(()=>{
-                for(let i=0; i<configs.logged_enable_scroll_page.length; i++){
-                    if(verificaElemento('.'+configs.logged_enable_scroll_page[i])){
-                        clearInterval(r);
-                        document.body.style.overflow = "auto"
-                    }
+            for(let i=0; i<configs.logged_enable_scroll_page.length; i++){
+                if(verificaElemento('.' + configs.logged_enable_scroll_page[i] + '')){
+                    document.body.style.overflow = "auto"
+                    return;
                 }
-            },800);
+            }
+
+            setTimeout(() => {
+                enableBodyOverflow(configs);
+            }, 800);
         }
 
 
@@ -1150,7 +1342,7 @@ function modifyAPPRESPAI()
         {
             let r = setInterval(()=>{
                 for(let i=0; i<configs.logged_react_modal.length; i++) {
-                    let reactModalOverlay = document.querySelectorAll('.'+configs.logged_react_modal);
+                    let reactModalOverlay = document.querySelectorAll('.' + configs.logged_react_modal + '');
                     if(reactModalOverlay.length > 0){
                         clearInterval(r);
                         reactModalOverlay.forEach((element) => {
@@ -1168,15 +1360,16 @@ function modifyAPPRESPAI()
          */
         function removeDexterBlock(configs)
         {
-            let r = setInterval(()=>{
-                for(let iConfig=0; iConfig<configs.logged_dexter_block.length; iConfig++){
-                    if(verificaElemento('.'+ configs.logged_dexter_block[iConfig])){
-                        clearInterval(r);
-                        document.querySelector('.' + configs.logged_dexter_block[iConfig]).remove();
-                        return;
-                    }
+            for(let iConfig=0; iConfig<configs.logged_dexter_block.length; iConfig++){
+                if(verificaElemento('.' + configs.logged_dexter_block[iConfig] + '')){
+                    document.querySelector('.' + configs.logged_dexter_block[iConfig] + '').remove();
+                    return;
                 }
-            },800);
+            }
+        
+            setTimeout(() => {
+                removeDexterBlock(configs);
+            }, 800);
         }
         
         /**
@@ -1298,27 +1491,43 @@ function modifyAPPRESPAI()
 
         function createButtonResposta()
         {
-            let r = setInterval(()=>{
-                if(document.body != null && document.body != undefined && typeof(Swal) == 'function'){
-                    clearInterval(r);
+            if(document.body == null || document.body == undefined || typeof(Swal) != 'function'){
+                setTimeout(() => {
+                    createButtonResposta();
+                    return;
+                },800);
+            }
 
-                    if(document.getElementById('btnResposta') == null || document.getElementById('btnResposta') == undefined){
-                        let btnResposta = document.createElement('button');
-                        btnResposta.setAttribute('id','btnResposta');
-                        btnResposta.setAttribute('title','Ver Resolução');
-                        btnResposta.innerText = 'Ver resolução do exercício';
-                        document.body.appendChild(btnResposta);
 
-                        //SET ESTILO BOTAO
-                        btnResposta.style.cssText = 'position: fixed; bottom: 20px; left: 30px; z-index: 1050; border: none; outline: none; background-color: #28a745; color: white; cursor: pointer; padding: 15px; border-radius: 5px; font-size: 18px; -webkit-box-shadow: 10px 5px 5px 0 rgb(0 0 0 / 20%), 10px 5px 10px 0 rgb(0 0 0 / 10%); box-shadow: 10px 5px 5px 0 rgb(0 0 0 / 20%), 10px 5px 10px 0 rgb(0 0 0 / 10%); -webkit-transition: opacity 600ms, visibility 600ms; transition: opacity 600ms, visibility 600ms; opacity: 1;';
+            let btnResposta = document.createElement('button');
+            btnResposta.setAttribute('id','btnResposta');
+            btnResposta.setAttribute('title','Ver Resolução');
+            btnResposta.innerText = 'Ver resolução do exercício';
+            document.body.appendChild(btnResposta);
 
-                        //ADD EVENTO NO BOTAO
-                        document.getElementById('btnResposta').addEventListener('click', ()=>{
-                            showSolution();
-                        });
-                    }
-                }
-            },800);
+            //SET ESTILO BOTAO
+            btnResposta.style.cssText = 'position: fixed;
+            bottom: 20px;
+            left: 30px;
+            z-index: 1050;
+            border: none;
+            outline: none;
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 18px;
+            -webkit-box-shadow: 10px 5px 5px 0 rgb(0 0 0 / 20%), 10px 5px 10px 0 rgb(0 0 0 / 10%);
+            box-shadow: 10px 5px 5px 0 rgb(0 0 0 / 20%), 10px 5px 10px 0 rgb(0 0 0 / 10%);
+            -webkit-transition: opacity 600ms, visibility 600ms;
+            transition: opacity 600ms, visibility 600ms;
+            opacity: 1;';
+
+            //ADD EVENTO NO BOTAO
+            document.getElementById('btnResposta').addEventListener('click', ()=>{
+                showSolution();
+            });
         }
         
         
@@ -1327,26 +1536,27 @@ function modifyAPPRESPAI()
             let JWT_TOKEN = getCookie('user_jwt');
             let ID_EXERCICIO = getExerciseId();
 
-            let wait = setInterval(()=>{
-                if(JWT_TOKEN != null && ID_EXERCICIO != null){
-                    clearInterval(wait);
+            if(JWT_TOKEN == null || ID_EXERCICIO == null){
+                setTimeout(() => {
+                    showSolution();
+                    return;
+                },800);
+            }
 
-                    Swal.fire({
-                        title: 'Resolução Completa',
-                        html: '<iframe src="https://possoler.tech/solvedBookExercise?auth=' + JWT_TOKEN + '&exerciseId=' + ID_EXERCICIO + '" style="width: 100%; height: 100% !important; border: none;"></iframe>',
-                        showCloseButton: true,
-                        allowEscapeKey: false,
-                        allowOutsideClick: false,
-                        showConfirmButton: false,
-                        customClass: {
-                            popup: 'respai',
-                            content: 'contentSolution',
-                            htmlContainer: 'contentSolution',
-                            header: 'headerPopup'
-                        }
-                    });
+            Swal.fire({
+                title: 'Resolução Completa',
+                html: '<iframe src="${DOMAIN}/solvedBookExercise?auth=' + JWT_TOKEN + '&exerciseId=' + ID_EXERCICIO + '" style='width: 100%; height: 100% !important; border: none;'></iframe>',
+                showCloseButton: true,
+                allowEscapeKey: false,
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                customClass: {
+                    popup: 'respai',
+                    content: 'contentSolution',
+                    htmlContainer: 'contentSolution',
+                    header: 'headerPopup'
                 }
-            },800);
+            });
         }
 
 
@@ -1497,7 +1707,7 @@ function modifyOTEMPO()
                 },800);
     
                 //TENTA REQUEST COM FETCH PARA PEGAR TOKEN
-                fetch('https://possoler.tech/API/jornal_otempo/getRestServiceTokenEncoded')
+                fetch('${DOMAIN}/API/jornal_otempo/getRestServiceTokenEncoded')
                 .then(response => response.json())
                 .then(resp => {
                     const TOKEN_ENCODED = resp.OTEMPO_REST_SERVICE_TOKEN_ENCODED;
@@ -1801,7 +2011,7 @@ function modifyOPOPULAR()
                         //RECUPERA ARQUIVO COM CONTEUDO DESBLOQUEADO
                         axios({
                             method: 'POST',
-                            url: 'https://possoler.tech/API/cachemock/getArticleContent',
+                            url: `${DOMAIN}/API/cachemock/getArticleContent`,
                             timeout: 30000,
                             data: JSON.stringify({
                                 key: btoa(window.location.pathname)
@@ -1929,7 +2139,7 @@ function modifyOPOPULAR()
                                     //FAZ POST PARA CRIAR ARQUIVO JSON COM CONTEUDO DA PÁGINA DE CACHE
                                     axios({
                                         method: 'POST',
-                                        url: 'https://possoler.tech/API/cachemock/saveArticleContent',
+                                        url: `${DOMAIN}/API/cachemock/saveArticleContent`,
                                         timeout: 30000,
                                         data: JSON.stringify({
                                             key: btoa(key.hash),
@@ -2133,7 +2343,7 @@ function modifyVLRECON()
 {
     axios({
         method: "GET",
-        url: "https://possoler.tech/API/paywalldom/valoreconomicoConfigs",
+        url: `${DOMAIN}/API/paywalldom/valoreconomicoConfigs`,
         timeout: 10000
     }).then((responseConfigs)=>{
         if(!responseConfigs.data.enabledCacheMock) return;
@@ -2156,7 +2366,7 @@ function modifyVLRECON()
                             //RECUPERA ARQUIVO COM CONTEUDO DESBLOQUEADO
                             axios({
                                 method: 'POST',
-                                url: 'https://possoler.tech/API/cachemock/getArticleContent',
+                                url: `${DOMAIN}/API/cachemock/getArticleContent`,
                                 timeout: 30000,
                                 data: JSON.stringify({
                                     key: btoa(window.location.pathname)
@@ -2273,7 +2483,7 @@ function modifyVLRECON()
                                                 //FAZ POST PARA CRIAR ARQUIVO JSON COM CONTEUDO DA PÁGINA DE CACHE
                                                 axios({
                                                     method: 'POST',
-                                                    url: 'https://possoler.tech/API/cachemock/saveArticleContent',
+                                                    url: `${DOMAIN}/API/cachemock/saveArticleContent`,
                                                     timeout: 30000,
                                                     data: JSON.stringify({
                                                         key: btoa(key.hash),
@@ -2863,9 +3073,14 @@ function modifyRESPAI()
 
 function mainUnlockRESPAI()
 {
+    let id = window.setInterval(function() {}, 0);
+    while (id--) {
+        window.clearInterval(id);
+    }
+
     axios({
         method: "GET",
-        url: "https://possoler.tech/API/paywalldom/respondeaiConfigs",
+        url: `${DOMAIN}/API/paywalldom/respondeaiConfigs`,
         timeout: 10000
     }).then((resp)=>{
 
@@ -3085,24 +3300,10 @@ function checkButtonCreation()
             new RegExp('\/exercicio\/[0-9]+').test(fullURL))
             || (fullURL.includes("/conteudo/") && fullURL.includes("/livro/"))
         ){
+            incrementaConteudoAPI();
+            createButtonResposta();
+            saveDataForDashboard(8);
             verificaAtualizacaoVersao();
-
-            //RESPOSTA LIVRO - DOMINIO ANTIGO
-            if(fullURL.includes("/conteudo/") && fullURL.includes("/livro/")){
-                setInterval(()=>{
-                    removeShowCompleteSolutionButtons();
-                    let sections = document.querySelectorAll('section');
-                    for(let i = 0; i<sections.length; i++){
-                        sections[i].style.filter = 'unset'
-                    };
-                },800);
-                incrementaConteudoAPI();
-                saveDataForDashboard(8);
-            }else{
-                incrementaConteudoAPI();
-                createButtonResposta();
-                saveDataForDashboard(8);
-            }
         }
     }else{
         //REMOVE BOTÃO DE RESOLUÇÃO
@@ -3172,7 +3373,7 @@ function showSolution()
 
             Swal.fire({
                 title: 'Resolução Completa',
-                html: `<iframe src="https://possoler.tech/solvedBookExercise?auth=${JWT_TOKEN}&exerciseId=${ID_EXERCICIO}" style='width: 100%; height: 100% !important; border: none;'></iframe>`,
+                html: `<iframe src="${DOMAIN}/solvedBookExercise?auth=${JWT_TOKEN}&exerciseId=${ID_EXERCICIO}" style='width: 100%; height: 100% !important; border: none;'></iframe>`,
                 showCloseButton: true,
                 allowEscapeKey: false,
                 allowOutsideClick: false,
@@ -3228,7 +3429,7 @@ function configSnackBar(msg, tituloBtn, tempo)
             duration: tempo*1000,
             customClass: 'snackBarMsg',
             onActionClick: ()=>{
-                window.open('https://possoler.tech/#blockDownload');
+                window.open(`${DOMAIN}/#blockDownload`);
             }
         };
 }
@@ -3238,7 +3439,7 @@ function verificaAtualizacaoVersao()
 {
     if(window.location.href.includes('possoler.tech')) return;
 
-    const URL_API_UPDATE = 'https://possoler.tech/API/searchUpdates';
+    const URL_API_UPDATE = `${DOMAIN}/API/searchUpdates`;
     let tempoAwait = 5;
 
     axios({
@@ -3269,7 +3470,7 @@ function verificaAtualizacaoVersao()
 
 function verificaMensagensAPI(time)
 {
-    const URL_MESSAGES = 'https://possoler.tech/API/searchMessages';
+    const URL_MESSAGES = `${DOMAIN}/API/searchMessages`;
 
     axios({
         method: 'GET',
@@ -3320,7 +3521,7 @@ function showSnackMessages(resposta, qtdMessages)
 
 function incrementaConteudoAPI()
 {
-    const ENDPOINT_INCREMENTVIEWS = 'https://possoler.tech/API/incrementViewsConteudos';
+    const ENDPOINT_INCREMENTVIEWS = `${DOMAIN}/API/incrementViewsConteudos`;
 
     if(typeof(axios) == 'function'){
         axios({
@@ -3379,7 +3580,7 @@ function saveDataForDashboard(codigoSite)
 {
     let currentData = getCurrentDate();
     let currentTime = getCurrentTime();
-    const ENDPOINT_DASHBOARD = 'https://possoler.tech/API/acessos/insertDadosAccess';
+    const ENDPOINT_DASHBOARD = `${DOMAIN}/API/acessos/insertDadosAccess`;
 
     let r = setInterval(()=>{
         if(currentData != null && currentTime != null){
