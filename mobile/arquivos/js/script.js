@@ -510,19 +510,27 @@ function modifyAPPRESPAI()
 {
     let payload = `
 
+    enableUrlChangeDetect();
+
     blockBlock();
     importRequiredCDN();
     ${verificaAtualizacaoVersao()};
-    main();
+    
+    main(window.location.href);
+
+    window.addEventListener('locationchange',(event)=>{
+        let respAiCurrentUrl = event.target.navigation.currentEntry.url;
+        main(respAiCurrentUrl);
+    });
 
     /**
      * Função aninhada para aguardar carregamento de recursos
      */
-    function main() {
+    function main(respAiCurrentUrl) {
 
-        if(!typeof(axios) == "undefined" || typeof(Swal) == 'undefined') {
+        if(typeof(axios) != "function" || typeof(Swal) != 'function') {
             setTimeout(() => {
-                main();
+                main(respAiCurrentUrl);
             }, 1000);
             return;
         }
@@ -534,7 +542,6 @@ function modifyAPPRESPAI()
         }).then((resp)=>{
 
             mainUnlockFunction();
-            enableUrlChangeDetect();
             ${checkButtonCreation()};
             changeLockedIcons(resp.data);
             removeReactModalOverlay(resp.data);
@@ -946,7 +953,7 @@ function modifyAPPRESPAI()
 
                 for(let i=0; i<divs.length; i++){
                     for(let iConfig=0; iConfig<configs.data_cy.format_toggle.length; iConfig++){
-                        if(divs[i].classList.contains('${configs.data_cy.format_toggle[iConfig]}')){
+                        if(divs[i].classList.contains(' + configs.data_cy.format_toggle[iConfig] + ')){
                             flag = true;
                             montaConteudoTexto(configs);
                             montaConteudoVideo(configs);
@@ -983,7 +990,7 @@ function modifyAPPRESPAI()
                 let divsSteps = document.querySelectorAll('div');
                 for(let j=0; j<divsSteps.length; j++){
                     for(let iConfig2=0; iConfig2<configs.data_cy.theory_text_content.length; iConfig2++){
-                        if(divsSteps[j].classList.contains('${configs.data_cy.theory_text_content[iConfig2]}')){
+                        if(divsSteps[j].classList.contains(' + configs.data_cy.theory_text_content[iConfig2] + ')){
                             let divStepsContainer = divsSteps[j].children[0];
                             try{
                                 if(
@@ -1025,7 +1032,7 @@ function modifyAPPRESPAI()
         
                 for(let j=0; j<divsVideo.length; j++){
                     for(let iConfig2=0; iConfig2<configs.data_cy.theory_video_content.length; iConfig2++) {
-                        if(divsVideo[j].classList.contains('${configs.data_cy.theory_video_content[iConfig2]}')) {
+                        if(divsVideo[j].classList.contains(' + configs.data_cy.theory_video_content[iConfig2] + ')) {
                             if(divsVideo[j].children.length == 0) {
                                 flag = true;
                                 divsVideo[j].innerHTML = setLoadingPageAnimation();
@@ -1050,7 +1057,7 @@ function modifyAPPRESPAI()
                 let divsSteps = document.querySelectorAll('div');
                 for(let j=0; j<divsSteps.length; j++){
                     for(let iConfig2=0; iConfig2<configs.data_cy.theory_text_content.length; iConfig2++){
-                        if(divsSteps[j].classList.contains('${configs.data_cy.theory_text_content[iConfig2]}')){
+                        if(divsSteps[j].classList.contains(' + configs.data_cy.theory_text_content[iConfig2] + ')){
                             flag = true;
                             let divStepsContainer = divsSteps[j].children[0];
                             try{
@@ -1150,12 +1157,12 @@ function modifyAPPRESPAI()
                     sweetAlert(
                         'error',
                         'Erro',
-                        'Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}'
+                        'Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.<br><br><spam style='font-weight: bold !important;'>Código do erro: </spam>' + erro.toString()'
                     );
                     if(verificaElemento("#msgLottieDesbloqueio")){
                         document.getElementById("msgLottieDesbloqueio").innerHTML = '
                             <p>Ops, tivemos um pequeno problema!<br>Por favor, tente novamente mais tarde.</p>
-                            <p><spam style='font-weight: bold !important;'>Código do erro: </spam>${erro.toString()}</p>'
+                            <p><spam style='font-weight: bold !important;'>Código do erro: </spam>' + erro.toString() + '</p>'
                     }
                 })
             }
@@ -1166,11 +1173,11 @@ function modifyAPPRESPAI()
                 let divs = document.querySelectorAll('div');
                 for(let i=0; i<divs.length; i++){
                     for(let iConfig2=0; iConfig2<configs.data_cy.theory_text_content.length; iConfig2++){
-                        if(divs[i].classList.contains('${configs.data_cy.theory_text_content[iConfig2]}') && typeof(MathJax) == "object"){
+                        if(divs[i].classList.contains(' + configs.data_cy.theory_text_content[iConfig2] +') && typeof(MathJax) == "object"){
                             flag = true;
                             divs[i].innerHTML = '
                                 <div class="sc-jTzLTM fFEUnb rendered">
-                                    <div>${resp.data.lightBody}</div>
+                                    <div>' + resp.data.lightBody + '</div>
                                 </div>';
                             MathJax.typeset();
                             return;
@@ -1193,7 +1200,7 @@ function modifyAPPRESPAI()
                 let divs = document.querySelectorAll('div');
                 for(let i=0; i<divs.length; i++){
                     for(let iConfig2=0; iConfig2<configs.data_cy.theory_video_content.length; iConfig2++) {
-                        if(divs[i].classList.contains('${configs.data_cy.theory_video_content[iConfig2]}')) {
+                        if(divs[i].classList.contains(' + configs.data_cy.theory_video_content[iConfig2] +')) {
                             flag = true;
                             if(divs[i].children[0].id == "containerLootieLoading") {
                                 if(resp.data.hasOwnProperty('videos')) {
@@ -1203,24 +1210,24 @@ function modifyAPPRESPAI()
                                     document.getElementById("containerLootieLoading").remove();
         
                                     //SETA TAMANHO DA PAGINA
-                                    divs[i].style.cssText += 'height: ${(SINGLE_VIDEO_SIZE*resp.data.videos.length) + (SPACE_BETWEEN_VIDEOS*resp.data.videos.length)}px !important';
+                                    divs[i].style.cssText += 'height: ' + (SINGLE_VIDEO_SIZE*resp.data.videos.length) + (SPACE_BETWEEN_VIDEOS*resp.data.videos.length) + 'px !important';
         
                                     //ITERA SOBRE OBJETO DE RESPOSTA PARA MONTAR PAGINA
                                     for(let j=0; j<resp.data.videos.length; j++){
         
                                         divs[i].innerHTML += (resp.data.videos[j].provider.includes("youtube"))
         
-                                        ? '<div data-cy="video-iframe" allowfullscreen="" frameborder="0" style="width: 100%; height: ${100/resp.data.videos.length}%;">
+                                        ? '<div data-cy="video-iframe" allowfullscreen="" frameborder="0" style="width: 100%; height: ' + 100/resp.data.videos.length + '%;">
                                                 <div style="width: 100%; height: 100%;">
-                                                    <iframe frameborder="0" allowfullscreen="1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" title="YouTube video player" width="100%" height="100%" src="https://www.youtube.com/embed/${resp.data.videos[j].providerId}?autoplay=0&amp;mute=0&amp;controls=1&amp;origin=https%3A%2F%2Fapp.respondeai.com.br&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;iv_load_policy=3&amp;modestbranding=1&amp;enablejsapi=1&amp;widgetid=1"></iframe>
+                                                    <iframe frameborder="0" allowfullscreen="1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" title="YouTube video player" width="100%" height="100%" src="https://www.youtube.com/embed/' + resp.data.videos[j].providerId + '?autoplay=0&amp;mute=0&amp;controls=1&amp;origin=https%3A%2F%2Fapp.respondeai.com.br&amp;playsinline=1&amp;showinfo=0&amp;rel=0&amp;iv_load_policy=3&amp;modestbranding=1&amp;enablejsapi=1&amp;widgetid=1"></iframe>
                                                 </div>
                                             </div>
-                                            <div style="height: ${SPACE_BETWEEN_VIDEOS}px !important"></div>'
+                                            <div style="height: ' + SPACE_BETWEEN_VIDEOS + 'px !important"></div>'
         
                                         : '<div style="padding:56.25% 0 0 0;position:relative;">
-                                             <iframe src="https://player.vimeo.com/video/${resp.data.videos[j].providerId}" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+                                             <iframe src="https://player.vimeo.com/video/' + resp.data.videos[j].providerId + '" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
                                            </div>
-                                           <div style="height: ${SPACE_BETWEEN_VIDEOS}px !important"></div>';
+                                           <div style="height: ' + SPACE_BETWEEN_VIDEOS + 'px !important"></div>';
                                     }
                                 }else{
                                     throw new Error("Falha ao obter objeto \"videos\"");
@@ -1262,7 +1269,7 @@ function modifyAPPRESPAI()
                 for(let iConfig=0; iConfig<configs.data_cy.side_menu.length; iConfig++) {
                     if(
                         (divs[i].hasAttribute('data-cy') && divs[i].getAttribute('data-cy') == configs.data_cy.side_menu[iConfig]) ||
-                        divs[i].classList.contains('${configs.data_cy.side_menu[iConfig]}')
+                        divs[i].classList.contains("' + configs.data_cy.side_menu[iConfig] +'")
                     ){
                         setTimeout(() => {
                             let links = document.querySelectorAll("a");
@@ -1276,7 +1283,7 @@ function modifyAPPRESPAI()
                                     flag = true;
                                     links[i].addEventListener("click", (event)=>{
                                         event.preventDefault();
-                                        window.location.assign('https://${window.location.hostname}${links[i].getAttribute("href")}');
+                                        window.location.assign('https://' + window.location.hostname + links[i].getAttribute("href") + ');
                                     });
                                 }
                             }
@@ -1300,7 +1307,7 @@ function modifyAPPRESPAI()
         function removeBlurPage(configs)
         {
             configs.blur_class.forEach((current_class) => {
-                let blurElements = document.querySelectorAll('.${current_class}');
+                let blurElements = document.querySelectorAll('.' + current_class + '');
                 blurElements.forEach((blurElement) => {
                     blurElement.classList.remove(current_class);
                     blurElement.style.filter = "none";
@@ -1319,7 +1326,7 @@ function modifyAPPRESPAI()
         function enableBodyOverflow(configs)
         {
             for(let i=0; i<configs.logged_enable_scroll_page.length; i++){
-                if(verificaElemento('.${configs.logged_enable_scroll_page[i]}')){
+                if(verificaElemento('.' + configs.logged_enable_scroll_page[i] + '')){
                     document.body.style.overflow = "auto"
                     return;
                 }
@@ -1335,7 +1342,7 @@ function modifyAPPRESPAI()
         {
             let r = setInterval(()=>{
                 for(let i=0; i<configs.logged_react_modal.length; i++) {
-                    let reactModalOverlay = document.querySelectorAll('.'+configs.logged_react_modal);
+                    let reactModalOverlay = document.querySelectorAll('.' + configs.logged_react_modal + '');
                     if(reactModalOverlay.length > 0){
                         clearInterval(r);
                         reactModalOverlay.forEach((element) => {
@@ -1354,8 +1361,8 @@ function modifyAPPRESPAI()
         function removeDexterBlock(configs)
         {
             for(let iConfig=0; iConfig<configs.logged_dexter_block.length; iConfig++){
-                if(verificaElemento('.${configs.logged_dexter_block[iConfig]}')){
-                    document.querySelector('.${configs.logged_dexter_block[iConfig]}').remove();
+                if(verificaElemento('.' + configs.logged_dexter_block[iConfig] + '')){
+                    document.querySelector('.' + configs.logged_dexter_block[iConfig] + '').remove();
                     return;
                 }
             }
