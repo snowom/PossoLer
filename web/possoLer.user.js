@@ -932,7 +932,7 @@ function mountVideoTipsLabel() {
     <p id="dicaTutorial" style="text-align: center !important; margin: 25px 0px !important;">
         <em style="color: #000 !important">
             <strong>Dica: </strong>
-            <span>Toque e arraste horizontalmente para mudar de video aula</span>
+            <span>Clique e arraste horizontalmente para mudar de video aula</span>
         </em>
     </p>`;
 }
@@ -949,7 +949,7 @@ function importVideoTipsLabelCssRules() {
     var videoTipsLabelRules = document.createElement('style');
     videoTipsLabelRules.setAttribute('id', 'videoTipsLabelRules');
     document.head.appendChild(videoTipsLabelRules);
-    videoTipsLabelRules.innerText = '#dicaTutorial{display: none;} @media screen and (max-width: 759px) {.glide__arrows{display: none;}#dicaTutorial{display: block;}}';
+    videoTipsLabelRules.innerText = '#dicaTutorial{display: block;} @media screen and (max-width: 759px) {.glide__arrows{display: none;}#dicaTutorial{display: block;}}';
 }
 
 

@@ -1,5 +1,5 @@
 const CURRENT_VERSION = '297';
-const DOMAIN = "http://localhost:8080"
+const DOMAIN = "https://possoler.tech"
 
 /**
  * Verifica qual URL de correspondencia o usuario está e aplica a 
