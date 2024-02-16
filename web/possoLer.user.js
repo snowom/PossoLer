@@ -1270,7 +1270,6 @@ function unlockFixationExercise(configs)
 
 function unlockTeoria(configs)
 {
-    removeFormatToogle(configs)
     main(configs);
 
 
@@ -1294,6 +1293,9 @@ function unlockTeoria(configs)
                             divStepsContainer.children[3].isEqualNode(divStepsContainer.children[4]) &&
                             divStepsContainer.children[4].isEqualNode(divStepsContainer.children[5])
                         ){
+                            // REMOVE FORMAT TOOGLE CASO BLOQUEADO
+                            removeFormatToogle(configs);
+                            
                             //SETTA MSG DE LOADING
                             divStepsContainer.innerHTML = setLoadingPageAnimation();
 
