@@ -68,6 +68,7 @@
 // @require      http://localhost:8080/API/getCDN?file=exame
 // @require      http://localhost:8080/API/getCDN?file=jota
 // @require      http://localhost:8080/API/getCDN?file=nytimes
+// @require      http://localhost:8080/API/getCDN?file=elpais
 // @grant        GM_webRequest
 // @grant        GM_setValue
 // @grant        GM_getValue
@@ -1202,11 +1203,6 @@ function removeCommentDiv()
 
 
 
-/* ============================== VALOR ECONOMICO V2 ============================== */
-
-
-
-
 /* ====================== GAUCHA ZH =========================== */
 
 function modifyGZH()
@@ -1253,37 +1249,6 @@ function enableUrlChangeDetect()
         window.dispatchEvent(new Event('locationchange'))
     });
 }
-
-
-
-/* ====================== EL PAIS =========================== */
-
-function modifyELPAIS()
-{
-    verificaAtualizacaoVersao();
-    let r = setInterval(() => {
-        if(verificaElemento('#ctn_freemium_article')){
-            clearInterval(r);
-            document.querySelector('#ctn_freemium_article').remove();
-        }
-    },800);
-
-    setInterval(()=>{
-        if(document.getElementById("elpais_gpt-INTEXT") != null){
-            document.getElementById("elpais_gpt-INTEXT").style.height = "unset";
-        }
-    },800);
-}
-
-
-/* ========================= NEWYORK TIMES =========================== */
-
-
-
-
-/* ======================= JOTA ================================= */
-
-
 
 
 
