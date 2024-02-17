@@ -460,3 +460,14 @@ function removeAds(adsConfig)
         }
     }
 }
+
+
+function elementExistInList(elementList)
+{
+    for(let i=0; i<elementList.length; i++) {
+        if(document.querySelector(`.${elementList[i]}`) != null){
+            return true;
+        }
+    }
+    return false;
+}
