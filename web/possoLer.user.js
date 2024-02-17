@@ -74,6 +74,7 @@
 // @require      http://localhost:8080/API/getCDN?file=diariosm
 // @require      http://localhost:8080/API/getCDN?file=otempomg
 // @require      http://localhost:8080/API/getCDN?file=jornaldocomercio
+// @require      http://localhost:8080/API/getCDN?file=opovo
 // @grant        GM_webRequest
 // @grant        GM_setValue
 // @grant        GM_getValue
@@ -594,23 +595,6 @@ function SwalGotoHome(icon, title, msg, homeLink)
 
 
 /* ============================== APP RESPONDE AI ============================== */
-
-
-
-
-/* ============================== JORNAL O POVO ============================== */
-
-function modifyOPOVO()
-{
-    if(window.location.href == "https://mais.opovo.com.br/"){
-        window.location.assign("https://mais.opovo.com.br/home");
-    }
-    verificaAtualizacaoVersao();
-}
-
-
-
-/* ============================== JORNAL DO COMERCIO - PE ============================== */
 
 
 
