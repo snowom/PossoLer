@@ -79,6 +79,7 @@
 // @require      http://localhost:8080/API/getCDN?file=possoler
 // @require      http://localhost:8080/API/getCDN?file=att_versao
 // @require      http://localhost:8080/API/getCDN?file=check_messages
+// @require      http://localhost:8080/API/getCDN?file=count_content
 // @grant        GM_webRequest
 // @grant        GM_setValue
 // @grant        GM_getValue
@@ -360,44 +361,6 @@ function importCDNSnackBar()
     sweetAlertJS.setAttribute('src', 'https://cdn.jsdelivr.net/npm/sweetalert2@10');
     document.head.appendChild(sweetAlertJS);
 }
-
-
-
-
-
-
-
-/* ========================== API INCREMENTO DE NOTICIAS E CONTEUDOS LIBERADOS ====================== */
-
-function incrementaConteudoAPI()
-{
-    const ENDPOINT_INCREMENTVIEWS = 'https://possoler.tech/API/incrementViewsConteudos';
-
-    if(typeof(axios) == 'function'){
-        axios({
-            method: 'POST',
-            url: ENDPOINT_INCREMENTVIEWS,
-            timeout: 60000
-        }).then((resposta)=>{
-            console.log('Contabilizar noticia API = ' + resposta.data.status);
-        }).catch((erro)=>{
-            console.log('ERRO Contabilizar noticia API');
-            console.log(erro);
-        });
-    }else if(self.fetch){
-        fetch(ENDPOINT_INCREMENTVIEWS)
-        .then(response => response.text())
-        .then(pageSource => {
-            console.log('Contabilizar noticia API = SUCESSO');
-        }).catch((erro)=>{
-            console.log('ERRO Contabilizar noticia API');
-            console.log(erro);
-        });
-    }else{
-        console.log('[INCREMENT API FAIL]');
-    }
-}
-
 
 
 /* ========================== API INCREMENTO DE INFOS DASHBOARD SITE ====================== */
