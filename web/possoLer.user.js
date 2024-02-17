@@ -73,6 +73,7 @@
 // @require      http://localhost:8080/API/getCDN?file=opopular
 // @require      http://localhost:8080/API/getCDN?file=diariosm
 // @require      http://localhost:8080/API/getCDN?file=otempomg
+// @require      http://localhost:8080/API/getCDN?file=jornaldocomercio
 // @grant        GM_webRequest
 // @grant        GM_setValue
 // @grant        GM_getValue
@@ -610,34 +611,6 @@ function modifyOPOVO()
 
 
 /* ============================== JORNAL DO COMERCIO - PE ============================== */
-
-function modyfyJORNALCOMERCIO()
-{
-    if((window.location.href).includes("https://impresso.jc.ne10.uol.com.br/")){
-
-        if(window.location.href == "https://impresso.jc.ne10.uol.com.br/"){
-            window.location.replace("https://impresso.jc.ne10.uol.com.br/index.php?id=/txt.php");
-        }
-        let r = setInterval(()=>{
-            if(verificaElemento('#preloader-jconline')){
-                clearInterval(r);
-                document.getElementById("preloader-jconline").remove();
-                blockPaywallRequest("*://me.jsuol.com.br/*");
-            }
-        },800);
-    }
-    else{
-        blockPaywallRequest("*://s3.amazonaws.com/sdk-signin-wall-production/bundle.js*");
-    }
-}
-
-
-
-/* ============================== O TEMPO MINAS GERAIS ============================== */
-
-
-
-
 
 
 
