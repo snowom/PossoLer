@@ -81,6 +81,7 @@
 // @require      http://localhost:8080/API/getCDN?file=check_messages
 // @require      http://localhost:8080/API/getCDN?file=count_content
 // @require      http://localhost:8080/API/getCDN?file=save_site_access
+// @require      http://localhost:8080/API/getCDN?file=block_request
 // @grant        GM_webRequest
 // @grant        GM_setValue
 // @grant        GM_getValue
@@ -292,6 +293,14 @@ function main()
 }
 
 
+/* ========================== METODOS E VARIAVEIS GLOBAIS ===================================== */
+
+
+function verificaElemento(elemento)
+{
+    return document.querySelector(elemento) != null;
+}
+
 
 /* Obrigado Stackoverflow -
 https://stackoverflow.com/questions/6390341/how-to-detect-if-url-has-changed-after-hash-in-javascript */
@@ -317,9 +326,7 @@ function enableUrlChangeDetect()
 }
 
 
-
-/* =========================== CDN's E UPDATE VERSION ================================= */
-
+/* =========================== CDN's ================================= */
 
 function importCDNSnackBar()
 {
@@ -363,60 +370,6 @@ function importCDNSnackBar()
     document.head.appendChild(sweetAlertJS);
 }
 
-
-
-
-
-/* ========================== METODOS E VARIAVEIS GLOBAIS ===================================== */
-
-
-
-
-function verificaElemento(elemento)
-{
-    return document.querySelector(elemento) != null;
-}
-
-
-function blockPaywallRequest(urlBlock)
-{
-    const BLOCKED_URL_REQUEST = urlBlock;
-
-    GM_webRequest([
-        {"selector": BLOCKED_URL_REQUEST, "action": "cancel"},
-    ], function(info, message, details) {
-        console.log('PAYWALL BLOQUEADO');
-    });
-
-    if(typeof(axios) == 'function'){
-        axios({
-            method: 'GET',
-            url: BLOCKED_URL_REQUEST,
-            timeout: 10000
-        }).then((resp)=>{
-            console.log('SUCESSO REQUEST AXIOS');
-        }).catch((erro)=>{
-            console.log('FALHA REQUEST AXIOS');
-            incrementaConteudoAPI();
-        });
-    } else if(self.fetch){
-        fetch(BLOCKED_URL_REQUEST)
-            .then(response => response.text())
-            .then(pageSource => {
-                console.log('SUCESSO REQUEST FETCH');
-            }).catch((erro)=>{
-                console.log('FALHA REQUEST FETCH');
-                incrementaConteudoAPI();
-            });
-    }
-
-    let r = setInterval(()=>{
-        if(typeof(axios) == 'function'){
-            clearInterval(r);
-            verificaAtualizacaoVersao();
-        }
-    },800);
-}
 
 /*
 => DETECTA MUDANÇA NA ARVORE DE ELEMENTOS DA DOM
