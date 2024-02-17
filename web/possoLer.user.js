@@ -76,6 +76,7 @@
 // @require      http://localhost:8080/API/getCDN?file=jornaldocomercio
 // @require      http://localhost:8080/API/getCDN?file=opovo
 // @require      http://localhost:8080/API/getCDN?file=gaz
+// @require      http://localhost:8080/API/getCDN?file=possoler
 // @grant        GM_webRequest
 // @grant        GM_setValue
 // @grant        GM_getValue
@@ -310,24 +311,6 @@ function enableUrlChangeDetect()
         window.dispatchEvent(new Event('locationchange'))
     });
 }
-
-
-
-/* ============================ POSSO LER ============================= */
-
-function modifyPossoLer()
-{
-    const codigo =
-    `if(typeof(VERSAO_ATUAL) == 'undefined'){var VERSAO_ATUAL = '${CURRENT_VERSION}';}`;
-
-    var currentVersionJS = document.createElement('script');
-    currentVersionJS.setAttribute('type', 'text/javascript');
-    currentVersionJS.setAttribute('id', 'versaoatual');
-    document.head.appendChild(currentVersionJS);
-    currentVersionJS.innerText = codigo;
-}
-
-
 
 
 
