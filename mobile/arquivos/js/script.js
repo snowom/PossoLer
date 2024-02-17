@@ -2244,6 +2244,7 @@ function modifyGZH()
     //bloqueado por negação de requisição!
     //Olhar em js/background/denyRequests.js
 
+    removeHiddenClass();
     verificaAtualizacaoVersao();
     let urlBase = document.location.href;
 
@@ -2255,6 +2256,20 @@ function modifyGZH()
             verificaAtualizacaoVersao();
             saveDataForDashboard(22);
         }
+    },800);
+}
+
+
+function removeHiddenClass() {
+    setInterval(() => {
+        let hiddenElements = document.querySelectorAll(".hidden");
+        hiddenElements.forEach((element) => {
+            element.classList.remove("hidden");
+        });
+
+        let paywallTemplate = document.getElementById("paywallTemplate");
+        if(paywallTemplate) paywallTemplate.remove();
+
     },800);
 }
 

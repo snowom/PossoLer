@@ -383,3 +383,4 @@
 # Ajuste Bypass Estadão;
 # Adicionado Você SA;
 # Ajuste Bypass Responde Aí - Usuários não logados;
+# Ajuste Bypass Gaucha ZH;
