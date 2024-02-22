@@ -1119,20 +1119,22 @@ function showSolution()
         },800);
     }
 
-    Swal.fire({
-        title: 'Resolução Completa',
-        html: `<iframe src="${DOMAIN}/solvedBookExercise?auth=${JWT_TOKEN}&exerciseId=${ID_EXERCICIO}" style='width: 100%; height: 100% !important; border: none;'></iframe>`,
-        showCloseButton: true,
-        allowEscapeKey: false,
-        allowOutsideClick: false,
-        showConfirmButton: false,
-        customClass: {
-            popup: 'respai',
-            content: 'contentSolution',
-            htmlContainer: 'contentSolution',
-            header: 'headerPopup'
-        }
-    });
+    window.open(`${DOMAIN}/solvedBookExercise?auth=${JWT_TOKEN}&exerciseId=${ID_EXERCICIO}`, '_blank');
+
+    // Swal.fire({
+    //     title: 'Resolução Completa',
+    //     html: `<iframe src="${DOMAIN}/solvedBookExercise?auth=${JWT_TOKEN}&exerciseId=${ID_EXERCICIO}" style='width: 100%; height: 100% !important; border: none;'></iframe>`,
+    //     showCloseButton: true,
+    //     allowEscapeKey: false,
+    //     allowOutsideClick: false,
+    //     showConfirmButton: false,
+    //     customClass: {
+    //         popup: 'respai',
+    //         content: 'contentSolution',
+    //         htmlContainer: 'contentSolution',
+    //         header: 'headerPopup'
+    //     }
+    // });
 }
 
 
