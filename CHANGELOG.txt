@@ -376,3 +376,11 @@
 [26/06/2023]
 # Ajuste Bypass Revista Exame;
 # Ajuste Bypass Veja;
+
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-= v2.9.8 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+[07/11/2023]
+# Ajuste Bypass Estadão;
+# Adicionado Você SA;
+# Ajuste Bypass Responde Aí - Usuários não logados;
+# Ajuste Bypass Gaucha ZH;

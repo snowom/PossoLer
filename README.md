@@ -11,8 +11,8 @@
 <br>
 <br>
 <img src="https://img.shields.io/badge/License-MIT-orange.svg"/>
-<img src="https://img.shields.io/badge/Versão atual-2.9.7-green.svg"/>
-<img src="https://img.shields.io/badge/Data atualização-16/08/2023-blue.svg"/>
+<img src="https://img.shields.io/badge/Versão atual-2.9.8-green.svg"/>
+<img src="https://img.shields.io/badge/Data atualização-22/02/2024-blue.svg"/>
 <img src="https://img.shields.io/badge/Tecnologia-Javascript-yellow.svg"/>
 <br>
 <br>
@@ -60,6 +60,7 @@
 * [GAZ](https://www.gaz.com.br/) - Ler sobre <i>**Cache Mock**</i> na seção de <i>Perguntas Frequentes</i>
 * [Uol Tab](https://tab.uol.com.br/)
 * [Sempre Familia](https://www.semprefamilia.com.br/)
+* [Você SA](https://vocesa.abril.com.br/)
 
 ## Perguntas Frequentes
 
