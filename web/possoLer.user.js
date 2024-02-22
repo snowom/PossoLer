@@ -61,27 +61,27 @@
 // @require      https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js
 // @require      https://possoler.tech/API/getCDN?file=snackjs
 // @require      https://possoler.tech/API/getCDN?file=blockCorePaywall
-// @require      http://localhost:8080/API/getCDN?file=glidejs
-// @require      http://localhost:8080/API/getCDN?file=app_respondeai
-// @require      http://localhost:8080/API/getCDN?file=respondeai
-// @require      http://localhost:8080/API/getCDN?file=valorecon
-// @require      http://localhost:8080/API/getCDN?file=exame
-// @require      http://localhost:8080/API/getCDN?file=jota
-// @require      http://localhost:8080/API/getCDN?file=nytimes
-// @require      http://localhost:8080/API/getCDN?file=elpais
-// @require      http://localhost:8080/API/getCDN?file=gauchazh
-// @require      http://localhost:8080/API/getCDN?file=opopular
-// @require      http://localhost:8080/API/getCDN?file=diariosm
-// @require      http://localhost:8080/API/getCDN?file=otempomg
-// @require      http://localhost:8080/API/getCDN?file=jornaldocomercio
-// @require      http://localhost:8080/API/getCDN?file=opovo
-// @require      http://localhost:8080/API/getCDN?file=gaz
-// @require      http://localhost:8080/API/getCDN?file=possoler
-// @require      http://localhost:8080/API/getCDN?file=att_versao
-// @require      http://localhost:8080/API/getCDN?file=check_messages
-// @require      http://localhost:8080/API/getCDN?file=count_content
-// @require      http://localhost:8080/API/getCDN?file=save_site_access
-// @require      http://localhost:8080/API/getCDN?file=block_request
+// @require      https://possoler.tech/API/getCDN?file=glidejs
+// @require      https://possoler.tech/API/getCDN?file=app_respondeai
+// @require      https://possoler.tech/API/getCDN?file=respondeai
+// @require      https://possoler.tech/API/getCDN?file=valorecon
+// @require      https://possoler.tech/API/getCDN?file=exame
+// @require      https://possoler.tech/API/getCDN?file=jota
+// @require      https://possoler.tech/API/getCDN?file=nytimes
+// @require      https://possoler.tech/API/getCDN?file=elpais
+// @require      https://possoler.tech/API/getCDN?file=gauchazh
+// @require      https://possoler.tech/API/getCDN?file=opopular
+// @require      https://possoler.tech/API/getCDN?file=diariosm
+// @require      https://possoler.tech/API/getCDN?file=otempomg
+// @require      https://possoler.tech/API/getCDN?file=jornaldocomercio
+// @require      https://possoler.tech/API/getCDN?file=opovo
+// @require      https://possoler.tech/API/getCDN?file=gaz
+// @require      https://possoler.tech/API/getCDN?file=possoler
+// @require      https://possoler.tech/API/getCDN?file=att_versao
+// @require      https://possoler.tech/API/getCDN?file=check_messages
+// @require      https://possoler.tech/API/getCDN?file=count_content
+// @require      https://possoler.tech/API/getCDN?file=save_site_access
+// @require      https://possoler.tech/API/getCDN?file=block_request
 // @grant        GM_webRequest
 // @grant        GM_setValue
 // @grant        GM_getValue
@@ -93,7 +93,7 @@
 
 importCDNSnackBar();
 let currentURL = window.location.hostname;
-const DOMAIN = "http://localhost:8080";
+const DOMAIN = "https://possoler.tech";
 const CURRENT_VERSION = '298';
 
 
@@ -279,15 +279,15 @@ function main()
         modifyGAZ();
     }
     else if(currentURL.includes("semprefamilia.com.br")){
-        //saveDataForDashboard(44)
+        saveDataForDashboard(44)
         blockPaywallRequest("*://cdn.tinypass.com/api/tinypass.min.js*");
     }
     else if(currentURL.includes("uol.com.br")){
-        //saveDataForDashboard(45)
+        saveDataForDashboard(45)
         blockPaywallRequest("*://cdn.tinypass.com/api/tinypass.min.js*");
     }
     else if(currentURL.includes("vocesa.abril.com.br")){
-        //saveDataForDashboard(46)
+        saveDataForDashboard(46)
         blockPaywallRequest("*://vocesa.abril.com.br/wp-content/plugins/abril-plugins/abril-paywall*");
     }
 }

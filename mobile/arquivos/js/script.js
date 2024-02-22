@@ -1,4 +1,4 @@
-const CURRENT_VERSION = '297';
+const CURRENT_VERSION = '298';
 const DOMAIN = "https://possoler.tech"
 
 /**
@@ -185,15 +185,15 @@ function main()
         modifyGAZ();
     }
     else if(currentURL.includes("semprefamilia.com.br")){
-        //saveDataForDashboard(44);
+        saveDataForDashboard(44);
         verificaAtualizacaoVersao();
     }
     else if(currentURL.includes("uol.com.br")){
-        //saveDataForDashboard(45);
+        saveDataForDashboard(45);
         verificaAtualizacaoVersao();
     }
     else if(currentURL.includes("vocesa.abril.com.br")){
-        //saveDataForDashboard(46);
+        saveDataForDashboard(46);
         verificaAtualizacaoVersao();
     }
 }
